@@ -35,8 +35,6 @@
 
 <body>
 
-   
-
     <!-- Header Start -->
     <div id="header-placeholder"></div>
     <!-- Header End -->
@@ -44,39 +42,26 @@
     <!-- Add margin to prevent content from hiding behind navbar -->
     <div style="margin-top: 100px;"></div>
 
-
-    <div class="container-fluid py-5 d-flex justify-content-between"
-        style="background: url('img/Al-Salam-Insida.jpg') no-repeat center center; background-size: cover;">
-        <div class="container" style="max-width: 400px;">
-        </div>
-        <div class="container" style="max-width: 400px;">
-            <div class="card shadow">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <h1 class="display-6 fw-bold">Prayer Times</h1>
-
-                        <table class="table table-bordered table-hover">
-                            <thead class="table-light">
-                                <tr>
-                                    <th scope="col">Prayer</th>
-                                    <th scope="col">Time</th>
-                                    <th scope="col">Iqamah</th>
-                                </tr>
-                            </thead>
-                            <tbody id="prayer-times">
-                                
-                            </tbody>
-                        </table>
+    <div class="container-fluid hero" >
+        <div class="container py-5">
+            <div class="row no-gutters">
+                <div class="col-md-6" style="flex: 7; ">
+                         <div class="hero-leftside" >
+                            <img src="img/Al-Salam-Insida.jpg" alt="Al-Salam Insida">
+                        </div>
+                </div>
+                <div class="col-md-6" style="flex: 3; ">
+                    <div class="hero-rightside" >
+                        <iframe src="https://time.my-masjid.com/timinginfoscreen/ee787ee0-549f-43f3-9fe4-9c8bc3c295f7"
+                        scrolling="no">
+                        </iframe>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    
     <script src="js/mymasjid_prayer_times.js"></script>
-
-
-
-
 
     <section id="OmOss">
 

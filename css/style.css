@@ -201,27 +201,55 @@ h6,
 /*** Navbar End ***/
 
 /*** Hero Header ***/
-.hero-header {
-    margin-bottom: 6rem;
-    padding-top: 15rem;
-    padding-bottom: 6rem;
-    background: url("../img/Al-Salam-Insida.jpg"), center center no-repeat;
-    background-size: cover;
+
+/* General container settings */
+.container-fluid.hero {
+    width: 100%;
+    display: flex;
+    align-items: center; /* Center content vertically */
+    justify-content: center; /* Center content horizontally */
 }
 
-.hero-header .hero-header-inner {
-    padding: 3rem;
-    background: rgba(255, 255, 255, .5);
+/* Left side styles */
+.hero-leftside, .hero-rightside {
+    display: flex;
+    height: 33.4em; /* Ensure it stretches fully */
+    transform: scale(1.2); /* Slightly shrink the content */
+    transform-origin: top left; /* Set scaling origin */
 }
 
-@media (max-width: 992px) {
-    .hero-header {
-        padding-top: 12rem;
+.hero-leftside img {
+    display: flex;
+    max-width: 100%; /* Make image responsive */
+    border-radius: 40px; /* Example of rounded corners */
+    outline: thick solid #ffffff;
+    outline-width: 1.0em;
+    outline-offset: -0.8em;
+}
+
+.hero-rightside iframe {
+    display: flex;
+    width: 400px; /* Make iframe responsive */
+    border-radius: 40px; /* Example of rounded corners */
+    outline: thick solid #ffffff;
+    outline-width: 1.0em;
+    outline-offset: -0.8em;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .row.no-gutters {
+        display: flex;
+        flex-direction: column-reverse; /* Stack elements vertically */
     }
-}
 
-.hero-header .breadcrumb-item {
-    font-size: 18px;
+    .hero-leftside img, .hero-rightside iframe {
+        width: 90%; /* Ensure full width on small screens */
+    }
+
+    .hero-rightside iframe {
+        aspect-ratio:calc(16/9); /* Maintain aspect ratio */
+    }
 }
 
 /*** Hero Header ***/
