@@ -42,71 +42,69 @@
     <div style="margin-top: 100px;"></div>
 
 
-
-
-
-
-
-    
-
-    <!-- Add margin to prevent content from hiding behind navbar -->
-    <div style="margin-top: 100px;"></div>
-
-<!-- Donations Section with White Background for Logos and Consistent Button Styling -->
-<div class="container mt-5 pt-5 text-center">
-    <div style="max-width: 100%; margin: 0 auto; padding: 15px; background-color: #f9f9f9; border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-        <h3 class="mb-4">Donationsalternativ</h3>
-        <div class="row">
-            <!-- Engångs Donering Box -->
-            <div class="col-md-6 mb-3">
-                <div style="border: 2px solid #ddd; border-radius: 10px; padding: 20px; background-color: #ffffff; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-                    <h4>Engångs Donering</h4>
-                    <p>Stödja moskén genom att göra engångdonation "sadaqa".</p>
-                    <div class="row">
-                        <!-- Swish Button Section -->
-                        <div class="col-6 d-flex flex-column align-items-center">
-                            <div style="border: 3px solid #ffc107; border-radius: 50%; padding: 20px; display: inline-block;">
-                                <img src="img/swishwakfQR.png" alt="Swish Logo" style="width: 100%;  border-radius: 20%; height: auto;">
-                            </div>
-                            <button class="btn d-flex align-items-center justify-content-center" style="background-color: #1799e1; color: white; border-radius: 50px; padding: 10px 20px; border: none; width: 100%; max-width: 150px; margin-top: 10px;">
-                                Swisha
-                            </button>
-                        </div>
-                        <!-- Other Payments Button Section -->
-                        <div class="col-6 d-flex flex-column align-items-center">
-                            <div style="border: 3px solid #ffc107; border-radius: 50%; padding: 8px; display: inline-block; margin-bottom: 10px;">
-                                <img src="img/pay.png" alt="Other Payments Logo" style="width: 100%; border-radius: 10%; height: auto;">
-                            </div>
-                            <script async src="https://js.stripe.com/v3/buy-button.js"> </script>
-                            <stripe-buy-button
-                                buy-button-id="buy_btn_1Qif7A4NRiKXf2Acps6r0nnB"
-                                publishable-key="pk_test_51Qif184NRiKXf2AcFLKJf95efg4T3AdVCjOfXnjf9WusKP34BznXlDlDcvC3OV9lfAHvyQtB7YIBlFzJJbsjdC9V009OSPHbSu">
-                            </stripe-buy-button>
-                        </div>
-                    </div>
-                </div>
+    <div class="container mt-5 pt-5 text-center">
+        <div class="donations-section">
+            <h3 class="mb-4">Donation Options</h3>
+            <div class="tabs-group">
+                <button class="tab-button active" id="one-time">One-Time</button>
+                <button class="tab-button" id="monthly">Monthly</button>
+                <button class="tab-button" id="yearly">Yearly</button>
             </div>
-            <!-- Månatlig Donering Box -->
-            <div class="col-md-6 mb-3">
-                <div style="border: 2px solid #ddd; border-radius: 10px; padding: 20px; background-color: #ffffff; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-                    <h4>Månatlig Donering</h4>
-                    <p>Stödja mosken varje månad genom automatisk återkommande sadaqa.</p>
-                    <div class="d-flex flex-column align-items-center">
-                        <div style="border: 3px solid #ffc107; border-radius: 50%; padding: 3px; display: inline-block; margin-bottom: 10px;">
-                            <img src="img/sadaka.png" alt="Monthly Donation Icon" style="width: 100%; border-radius: 10%; height: auto;">
-                        </div>
-                        <script async src="https://js.stripe.com/v3/buy-button.js"> </script>
-                        <stripe-buy-button 
-                            buy-button-id="buy_btn_1Qo28M4NRiKXf2AcbvCLA9oM"
-                            publishable-key="pk_test_51Qif184NRiKXf2AcFLKJf95efg4T3AdVCjOfXnjf9WusKP34BznXlDlDcvC3OV9lfAHvyQtB7YIBlFzJJbsjdC9V009OSPHbSu">
-                        </stripe-buy-button>
-                    </div>
+        </div>
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-4 donation-box" id="card-one">
+                <div class="row">
+                    <h4>Sadaqa via Swish</h4>
+                    <p>Stödja moskén genom att swisha engångdonation "sadaqa".</p>
                 </div>
+                <div class="circle-border">
+                    <img src="img/swishwakfQR.png" alt="Swish Logo" class="donation-img">
+                </div>
+                <button class="donation-btn">Swisha</button>
+            </div>
+
+            <div class="col-lg-4 donation-box" id="card-two">
+                <div class="row">
+                    <h4>Sadaqa via andra betalningssätt</h4>
+                    <p>Stödja moskén genom att använda andra betalnings metoder.</p>
+                </div>
+                <div class="circle-border">
+                    <img src="img/pay.png" alt="International Donation Logo" class="donation-img">
+                </div>
+                <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+                <stripe-buy-button style="object-fit: scale-down;" buy-button-id="buy_btn_1Qif7A4NRiKXf2Acps6r0nnB"
+                    publishable-key="pk_test_51Qif184NRiKXf2AcFLKJf95efg4T3AdVCjOfXnjf9WusKP34BznXlDlDcvC3OV9lfAHvyQtB7YIBlFzJJbsjdC9V009OSPHbSu">
+                </stripe-buy-button>
+            </div>
+
+            <div class="col-lg-4 donation-box" id="card-three">
+                <div class="row">
+                    <h4>Månatlig Sadaqa</h4>
+                    <p>Stödja moskén via automatisk återkommande sadaqa varje månad.</p>
+                </div>
+                <div class="circle-border">
+                    <img src="img/sadaka.png" alt="Monthly Donation Icon" class="donation-img">
+                </div>
+                <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+                <stripe-buy-button buy-button-id="buy_btn_1Qo28M4NRiKXf2AcbvCLA9oM"
+                    publishable-key="pk_test_51Qif184NRiKXf2AcFLKJf95efg4T3AdVCjOfXnjf9WusKP34BznXlDlDcvC3OV9lfAHvyQtB7YIBlFzJJbsjdC9V009OSPHbSu">
+                </stripe-buy-button>
+            </div>
+
+            <div class="col-lg-4 donation-box" id="card-four">
+                <div class="row">
+                    <h4>Sadaqa via Skattsedel</h4>
+                    <p>Stödja moskén genom att ge din moskéavgiften via skattsedel varje år.</p>
+                </div>
+                <div class="circle-border">
+                    <img src="img/skattsedel.png" alt="Tax Donation Icon" class="donation-img">
+                </div>
+                <button class="donation-btn" onclick="showPopup()">Fyll i blanketten</button>
             </div>
         </div>
     </div>
-</div>
-    
 
     <!-- Footer Start -->
     <div id="footer-placeholder"></div>
@@ -122,6 +120,58 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+
+    <script>
+        function showPopup() {
+            document.getElementById('popup').style.display = 'flex';
+        }
+
+        function hidePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        function redirectToLink() {
+            window.location.href = 'https://app.assently.com/t/633yg2'; // Your link here
+        }
+    </script>
+
+    <script>
+        const buttons = document.querySelectorAll('.tab-button');
+        const cards = [
+            document.querySelector('#card-one'),
+            document.querySelector('#card-two'),
+            document.querySelector('#card-three'),
+            document.querySelector('#card-four')
+        ];
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                buttons.forEach(btn => btn.classList.remove('active')); // Remove active class from other buttons
+                button.classList.add('active'); // Highlight clicked button
+
+                // Show/hide cards based on active button
+                if (button.id === 'one-time') {
+                    cards[0].classList.add('visible'); // Show first card
+                    cards[1].classList.add('visible'); // Show last card
+                    cards[2].classList.remove('visible'); // Hide middle card
+                    cards[3].classList.remove('visible'); // Hide middle card
+                } else if (button.id === 'monthly') {
+                    cards[0].classList.remove('visible'); // Hide middle card
+                    cards[1].classList.remove('visible'); // Show last card
+                    cards[2].classList.add('visible'); // Hide middle card
+                    cards[3].classList.remove('visible'); // Hide middle card
+                } else if (button.id === 'yearly') {
+                    cards[0].classList.remove('visible'); // Hide middle card
+                    cards[1].classList.remove('visible'); // Show last card
+                    cards[2].classList.remove('visible'); // Hide middle card
+                    cards[3].classList.add('visible'); // Hide middle card
+                }
+            });
+        });
+
+        // Initial state: Show first and last cards
+        document.querySelector('#one-time').click(); // Simulate click on "One-Time"
+    </script>
 
     <!-- Load Header and Footer -->
     <script>
