@@ -34,12 +34,12 @@
 </head>
 
 <body>
- <!-- Header Start -->
- <div id="header-placeholder"></div>
- <!-- Header End -->
+    <!-- Header Start -->
+    <div id="header-placeholder"></div>
+    <!-- Header End -->
 
- <!-- Add margin to prevent content from hiding behind navbar -->
- <div style="margin-top: 100px;"></div>
+    <!-- Add margin to prevent content from hiding behind navbar -->
+    <div style="margin-top: 100px;"></div>
 
 
 
@@ -49,72 +49,12 @@
         <div class="text-center mb-5">
             <h1 class="display-4">Äktenskapsansökan</h1>
             <p class="lead">Fyll i formuläret nedan för att ansöka om äktenskapsceremoni</p>
+            <script type="text/javascript" src="https://form.jotform.com/jsform/250946841378367"></script>
         </div>
-        <form id="marriageForm" action="submit_marriage_application.php" method="post" class="needs-validation"
-            novalidate>
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label for="groomName" class="form-label">Brudgummens Namn</label>
-                    <input type="text" class="form-control" id="groomName" name="groomName" required>
-                    <div class="invalid-feedback">
-                        Vänligen fyll i brudgummens namn.
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <label for="brideName" class="form-label">Brudens Namn</label>
-                    <input type="text" class="form-control" id="brideName" name="brideName" required>
-                    <div class="invalid-feedback">
-                        Vänligen fyll i brudens namn.
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <label for="groomEmail" class="form-label">Brudgummens E-post</label>
-                    <input type="email" class="form-control" id="groomEmail" name="groomEmail" required>
-                    <div class="invalid-feedback">
-                        Vänligen fyll i en giltig e-postadress.
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <label for="brideEmail" class="form-label">Brudens E-post</label>
-                    <input type="email" class="form-control" id="brideEmail" name="brideEmail" required>
-                    <div class="invalid-feedback">
-                        Vänligen fyll i en giltig e-postadress.
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <label for="groomPhone" class="form-label">Brudgummens Telefonnummer</label>
-                    <input type="tel" class="form-control" id="groomPhone" name="groomPhone" required>
-                    <div class="invalid-feedback">
-                        Vänligen fyll i ett giltigt telefonnummer.
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <label for="bridePhone" class="form-label">Brudens Telefonnummer</label>
-                    <input type="tel" class="form-control" id="bridePhone" name="bridePhone" required>
-                    <div class="invalid-feedback">
-                        Vänligen fyll i ett giltigt telefonnummer.
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <label for="weddingDate" class="form-label">Datum för Äktenskap</label>
-                    <input type="date" class="form-control" id="weddingDate" name="weddingDate" required>
-                    <div class="invalid-feedback">
-                        Vänligen välj ett datum.
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <label for="additionalInfo" class="form-label">Ytterligare Information</label>
-                    <textarea class="form-control" id="additionalInfo" name="additionalInfo" rows="4"></textarea>
-                </div>
-                <div class="col-12 text-center">
-                    <button class="btn btn-primary" type="submit">Skicka Ansökan</button>
-                </div>
-            </div>
-        </form>
+        
     </div>
+
     <!-- Marriage Application Form End -->
-
-
 
 
     <!-- Footer Start -->
@@ -137,6 +77,72 @@
         $(function () {
             $("#header-placeholder").load("header.html");
             $("#footer-placeholder").load("footer.html");
+        });
+    </script>
+    <script>
+        // Function to handle file uploads for multiple buttons
+        function setupFileUpload(buttonId, inputId, displayId) {
+            const button = document.getElementById(buttonId);
+            const input = document.getElementById(inputId);
+            const display = document.getElementById(displayId);
+
+            button.addEventListener("click", function () {
+                input.click();
+            });
+
+            input.addEventListener("change", function () {
+                const fileName = input.files.length ? input.files[0].name : "Inga filer uppladdade";
+                display.textContent = "Uppladdad fil: " + fileName;
+            });
+        }
+
+        // Setup individual file uploads
+        setupFileUpload("uploadButton1", "documentUpload1", "fileNameDisplay1");
+        setupFileUpload("uploadButton2", "documentUpload2", "fileNameDisplay2");
+        setupFileUpload("uploadButton3", "documentUpload3", "fileNameDisplay3");
+        setupFileUpload("uploadButton4", "documentUpload4", "fileNameDisplay4");
+    </script>
+
+    <script>
+        const form = document.getElementById("marriageForm");
+
+        form.addEventListener("submitButton", function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+
+            formData.append("access_key", "77718218-c0f9-457e-b06c-bb88c6f50a44");
+            formData.append("subject", "Ny äktenskapsansökan");
+            formData.append("from_name", "Al-Salam Moské website");
+
+            const file = document.getElementById("attachment");
+            const filesize = file.files[0].size / 1024;
+
+            if (filesize > 4000) {
+                alert("Please upload file less than 4 MB");
+                return;
+            }
+
+            // Don't add `headers` or `content-type` in this fetch call
+            // Since it contains attachments, the browser auto-adds them. 
+            fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                body: formData
+            })
+                .then(async (response) => {
+                    let json = await response.json();
+                    if (response.status == 200) {
+                        console.log(json.message);
+                    } else {
+                        console.log(response);
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+                .then(function () {
+                    form.reset();
+                });
         });
     </script>
 </body>

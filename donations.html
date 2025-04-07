@@ -38,10 +38,6 @@
     <div id="header-placeholder"></div>
     <!-- Header End -->
 
-    <!-- Add margin to prevent content from hiding behind navbar -->
-    <div style="margin-top: 100px;"></div>
-
-
     <div class="container mt-5 pt-5 text-center">
         <div class="donations-section">
             <h3 class="mb-4">Donation Options</h3>
@@ -102,6 +98,25 @@
                     <img src="img/skattsedel.png" alt="Tax Donation Icon" class="donation-img">
                 </div>
                 <button class="donation-btn" onclick="showPopup()">Fyll i blanketten</button>
+            </div>
+
+            <div id="popup" class="popup">
+                <div class="popup-content">
+                    <!-- Close Button -->
+                    <button class="close-btn" onclick="hidePopup()">X</button>
+                    <!-- Popup Information -->
+                    <h4 style="text-align: center;">Information om Ansökan</h4>
+                    <p>Innan du fyller i ansökan i nästa steg behöver du veta följande:</p>
+                    <ul>
+                        <li>Lämna referensnummer fältet tom.</li>
+                        <li>Checka <strong>INTE</strong> av boxen som säger att du vill ha 100% av din medlemsavigft går
+                            till FIFS.</li>
+                        </li>
+                        <li>Fyll i föreningsnamn som: <span style="color: blue;">Al Salam Center i Helsingborg</span>
+                    </ul>
+                    <!-- Redirect Button -->
+                    <button class="donation-btn" onclick="redirectToLink()">Fortsätt till Ansökan</button>
+                </div>
             </div>
         </div>
     </div>
