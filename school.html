@@ -132,7 +132,7 @@
                     </div>
 
                 </div>
-                <button type="submit" class="btn btn-primary">Registrera</button>
+                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Registrera</button>
             </form>
         </div>
     </div>
@@ -172,11 +172,15 @@
                     body: data,
                 })
                     .then(() => {
-                        alert("Success!");
+                        window.location.href = 'https://donate.stripe.com/test_cN27vE9VAeyoc9ieUW?'; // Redirect to your link
                     })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("Submission failed. Please try again.");
+                    });
+
             });
         });
-
     </script>
 </body>
 
