@@ -34,39 +34,103 @@
 </head>
 
 <body>
- <!-- Header Start -->
- <div id="header-placeholder"></div>
- <!-- Header End -->
+    <!-- Header Start -->
+    <div id="header-placeholder"></div>
+    <!-- Header End -->
 
- <!-- Add margin to prevent content from hiding behind navbar -->
- <div style="margin-top: 100px;"></div>
-
-
-
+    <!-- Add margin to prevent content from hiding behind navbar -->
+    <div style="margin-top: 100px;"></div>
 
     <div class="container mt-5 pt-5 d-flex justify-content-center">
-        <div class="col-md-6">
-            <h2>Registreringsformulär för Studenter</h2>
-            <form>
-                <div class="mb-3">
-                    <label for="studentName" class="form-label">Studentens Namn</label>
-                    <input type="text" class="form-control" id="studentName" required>
-                </div>
-                <div class="mb-3">
-                    <label for="studentAge" class="form-label">Studentens Ålder</label>
-                    <input type="number" class="form-control" id="studentAge" required>
-                </div>
-                <div class="mb-3">
-                    <label for="parentName" class="form-label">Förälders Namn</label>
-                    <input type="text" class="form-control" id="parentName" required>
-                </div>
-                <div class="mb-3">
-                    <label for="parentEmail" class="form-label">Förälders E-post</label>
-                    <input type="email" class="form-control" id="parentEmail" required>
-                </div>
-                <div class="mb-3">
-                    <label for="parentPhone" class="form-label">Förälders Telefon</label>
-                    <input type="tel" class="form-control" id="parentPhone" required>
+        <div class="col-md-8">
+            <h2>Registreringsformulär</h2>
+            <form id="schoolsform" method="POST"
+                action="https://script.google.com/macros/s/AKfycby_E_NRU7MBYK4Y0XdWnT_rTilTrCXh5MbgJ-Kf5jqU0j0tmWC4iE9pnsxTKN_7KsGWQQ/exec">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="efternamn" class="form-label">Barnets efternamn</label>
+                        <input type="text" class="form-control" name="Barnets efternamn" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="barnetsNamn" class="form-label">Barnets namn</label>
+                        <input type="text" class="form-control" name="Barnetsnamn" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="Personnummer" class="form-label">Barnets personnummer</label>
+                        <input type="text" class="form-control" name="Barnets personnummer" required
+                            pattern="\d{10}|\d{12}" title="Personnummer must be 10 or 12 digits">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="registreringsDatum" class="form-label">Registreringsdatum</label>
+                        <input type="date" class="form-control" name="RegistreringsDatum" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="pappansNamn" class="form-label">Pappans namn</label>
+                        <input type="text" class="form-control" name="Pappans namn" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="mammansNamn" class="form-label">Mammans namn</label>
+                        <input type="text" class="form-control" name="Mammans namn" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="pappansPersonnummer" class="form-label">Pappans personnummer</label>
+                        <input type="text" class="form-control" name="Pappans personnummer" required
+                            pattern="\d{10}|\d{12}" title="Personnummer must be 10 or 12 digits">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="mammansPersonnummer" class="form-label">Mammans personnummer</label>
+                        <input type="text" class="form-control" name="Mammans Personnummer" required
+                            pattern="\d{10}|\d{12}" title="Personnummer must be 10 or 12 digits">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="pappansMobilnummer" class="form-label">Pappans mobilnummer</label>
+                        <input type="text" class="form-control" name="Pappans mobilnummer" required pattern="07\d{8}"
+                            title="Mobilnummer must start with '07' and contain 10 digits">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="mammansMobilnummer" class="form-label">Mammans mobilnummer</label>
+                        <input type="text" class="form-control" name="Mammans mobilnummer" required pattern="07\d{8}"
+                            title="Mobilnummer must start with '07' and contain 10 digits">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="pappansEpost" class="form-label">Pappans e-post</label>
+                        <input type="email" class="form-control" name="Pappans e-post" required
+                            title="Ange en giltig e-postadress">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="mammansEpost" class="form-label">Mammans e-post</label>
+                        <input type="email" class="form-control" name="Mammans e-post" required
+                            title="Ange en giltig e-postadress">
+                    </div>
+                    <div class="row">
+                        <!-- Parent to Contact -->
+                        <div class="col-md-6">
+                            <label class="form-label">Vilken förälder ska vara kontaktpersonen:</label>
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" name="kontaktForälder" id="kontaktPappa"
+                                    required>
+                                <label for="kontaktPappa" class="form-check-label">Pappa</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" name="kontaktForälder" id="kontaktMamma">
+                                <label for="kontaktMamma" class="form-check-label">Mamma</label>
+                            </div>
+                        </div>
+
+                        <!-- School Day -->
+                        <div class="col-md-6">
+                            <label class="form-label">Välj dag för skola (Lördag eller Söndag):</label>
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" name="skoldag" id="skoldagLördag" required>
+                                <label for="skoldagLördag" class="form-check-label">Lördag</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" name="skoldag" id="skoldagSöndag">
+                                <label for="skoldagSöndag" class="form-check-label">Söndag</label>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <button type="submit" class="btn btn-primary">Registrera</button>
             </form>
@@ -95,6 +159,24 @@
             $("#header-placeholder").load("header.html");
             $("#footer-placeholder").load("footer.html");
         });
+    </script>
+    <script>
+        window.addEventListener("load", function () {
+            const form = document.getElementById('schoolsform');
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
+                const data = new FormData(form);
+                const action = e.target.action;
+                fetch(action, {
+                    method: 'POST',
+                    body: data,
+                })
+                    .then(() => {
+                        alert("Success!");
+                    })
+            });
+        });
+
     </script>
 </body>
 
