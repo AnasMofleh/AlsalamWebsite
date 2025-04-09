@@ -1,36 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<!-- Default lang/dir set in header.html, updated by translate.js -->
+<html>
 <head>
-    <meta charset="utf-8">
-    <title>Al-Salam Moské</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
-
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Pacifico&display=swap"
-        rel="stylesheet">
-
-    <!-- Icon Font Stylesheet -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Libraries Stylesheet -->
-    <link href="lib/animate/animate.min.css" rel="stylesheet">
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
-
-
-
+     <!-- Meta, CSS links etc. are loaded via header.html -->
+     <title>Al-Salam Moské - Skolan</title> <!-- Static title, or translate server-side -->
 </head>
 
 <body>
@@ -38,105 +11,106 @@
     <div id="header-placeholder"></div>
     <!-- Header End -->
 
-    <!-- Add margin to prevent content from hiding behind navbar -->
-    <div style="margin-top: 100px;"></div>
-
+    <!-- Form Section -->
     <div class="container mt-5 pt-5 d-flex justify-content-center">
         <div class="col-md-8">
-            <h2>Registreringsformulär</h2>
+            <h2 data-translate="school.formTitle">Registreringsformulär</h2>
             <form id="schoolsform" method="POST"
                 action="https://script.google.com/macros/s/AKfycby_E_NRU7MBYK4Y0XdWnT_rTilTrCXh5MbgJ-Kf5jqU0j0tmWC4iE9pnsxTKN_7KsGWQQ/exec">
                 <div class="row">
+                    <!-- Child Info -->
                     <div class="col-md-6 mb-3">
-                        <label for="efternamn" class="form-label">Barnets efternamn</label>
-                        <input type="text" class="form-control" name="Barnets efternamn" required>
+                        <label for="efternamn" class="form-label" data-translate="school.childLastNameLabel">Barnets efternamn</label>
+                        <input type="text" class="form-control" id="efternamn" name="Barnets efternamn" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="barnetsNamn" class="form-label">Barnets namn</label>
-                        <input type="text" class="form-control" name="Barnetsnamn" required>
+                        <label for="barnetsNamn" class="form-label" data-translate="school.childFirstNameLabel">Barnets namn</label>
+                        <input type="text" class="form-control" id="barnetsNamn" name="Barnetsnamn" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="Personnummer" class="form-label">Barnets personnummer</label>
-                        <input type="text" class="form-control" name="Barnets personnummer" required
-                            pattern="\d{10}|\d{12}" title="Personnummer must be 10 or 12 digits">
+                        <label for="Personnummer" class="form-label" data-translate="school.childPersonnummerLabel">Barnets personnummer</label>
+                        <input type="text" class="form-control" id="Personnummer" name="Barnets personnummer" required
+                            pattern="\d{10}|\d{12}" data-translate-title="school.childPersonnummerTitle" title="Personnummer must be 10 or 12 digits">
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="registreringsDatum" class="form-label">Registreringsdatum</label>
-                        <input type="date" class="form-control" name="RegistreringsDatum" required>
+                        <label for="registreringsDatum" class="form-label" data-translate="school.registrationDateLabel">Registreringsdatum</label>
+                        <input type="date" class="form-control" id="registreringsDatum" name="RegistreringsDatum" required>
+                    </div>
+
+                    <!-- Parent Info -->
+                    <div class="col-md-6 mb-3">
+                        <label for="pappansNamn" class="form-label" data-translate="school.fatherNameLabel">Pappans namn</label>
+                        <input type="text" class="form-control" id="pappansNamn" name="Pappans namn" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="pappansNamn" class="form-label">Pappans namn</label>
-                        <input type="text" class="form-control" name="Pappans namn" required>
+                        <label for="mammansNamn" class="form-label" data-translate="school.motherNameLabel">Mammans namn</label>
+                        <input type="text" class="form-control" id="mammansNamn" name="Mammans namn" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="mammansNamn" class="form-label">Mammans namn</label>
-                        <input type="text" class="form-control" name="Mammans namn" required>
+                        <label for="pappansPersonnummer" class="form-label" data-translate="school.fatherPersonnummerLabel">Pappans personnummer</label>
+                        <input type="text" class="form-control" id="pappansPersonnummer" name="Pappans personnummer" required
+                            pattern="\d{10}|\d{12}" data-translate-title="school.fatherPersonnummerTitle" title="Personnummer must be 10 or 12 digits">
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="pappansPersonnummer" class="form-label">Pappans personnummer</label>
-                        <input type="text" class="form-control" name="Pappans personnummer" required
-                            pattern="\d{10}|\d{12}" title="Personnummer must be 10 or 12 digits">
+                        <label for="mammansPersonnummer" class="form-label" data-translate="school.motherPersonnummerLabel">Mammans personnummer</label>
+                        <input type="text" class="form-control" id="mammansPersonnummer" name="Mammans Personnummer" required
+                            pattern="\d{10}|\d{12}" data-translate-title="school.motherPersonnummerTitle" title="Personnummer must be 10 or 12 digits">
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="mammansPersonnummer" class="form-label">Mammans personnummer</label>
-                        <input type="text" class="form-control" name="Mammans Personnummer" required
-                            pattern="\d{10}|\d{12}" title="Personnummer must be 10 or 12 digits">
+                        <label for="pappansMobilnummer" class="form-label" data-translate="school.fatherMobileLabel">Pappans mobilnummer</label>
+                        <input type="text" class="form-control" id="pappansMobilnummer" name="Pappans mobilnummer" required pattern="07\d{8}"
+                            data-translate-title="school.fatherMobileTitle" title="Mobilnummer must start with '07' and contain 10 digits">
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="pappansMobilnummer" class="form-label">Pappans mobilnummer</label>
-                        <input type="text" class="form-control" name="Pappans mobilnummer" required pattern="07\d{8}"
-                            title="Mobilnummer must start with '07' and contain 10 digits">
+                        <label for="mammansMobilnummer" class="form-label" data-translate="school.motherMobileLabel">Mammans mobilnummer</label>
+                        <input type="text" class="form-control" id="mammansMobilnummer" name="Mammans mobilnummer" required pattern="07\d{8}"
+                            data-translate-title="school.motherMobileTitle" title="Mobilnummer must start with '07' and contain 10 digits">
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="mammansMobilnummer" class="form-label">Mammans mobilnummer</label>
-                        <input type="text" class="form-control" name="Mammans mobilnummer" required pattern="07\d{8}"
-                            title="Mobilnummer must start with '07' and contain 10 digits">
+                        <label for="pappansEpost" class="form-label" data-translate="school.fatherEmailLabel">Pappans e-post</label>
+                        <input type="email" class="form-control" id="pappansEpost" name="Pappans e-post" required
+                            data-translate-title="school.fatherEmailTitle" title="Ange en giltig e-postadress">
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="pappansEpost" class="form-label">Pappans e-post</label>
-                        <input type="email" class="form-control" name="Pappans e-post" required
-                            title="Ange en giltig e-postadress">
+                        <label for="mammansEpost" class="form-label" data-translate="school.motherEmailLabel">Mammans e-post</label>
+                        <input type="email" class="form-control" id="mammansEpost" name="Mammans e-post" required
+                            data-translate-title="school.motherEmailTitle" title="Ange en giltig e-postadress">
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="mammansEpost" class="form-label">Mammans e-post</label>
-                        <input type="email" class="form-control" name="Mammans e-post" required
-                            title="Ange en giltig e-postadress">
-                    </div>
-                    <div class="row">
+
+                     <!-- Radio Buttons Row -->
+                    <div class="row mt-3"> <!-- Added margin top for spacing -->
                         <!-- Parent to Contact -->
                         <div class="col-md-6">
-                            <label class="form-label">Vilken förälder ska vara kontaktpersonen:</label>
+                            <label class="form-label d-block" data-translate="school.contactParentLabel">Vilken förälder ska vara kontaktpersonen:</label> <!-- Added d-block -->
                             <div class="form-check">
-                                <input type="radio" class="form-check-input" name="kontaktForälder" id="kontaktPappa"
-                                    required>
-                                <label for="kontaktPappa" class="form-check-label">Pappa</label>
+                                <input type="radio" class="form-check-input" name="kontaktForälder" id="kontaktPappa" value="Pappa" required>
+                                <label for="kontaktPappa" class="form-check-label" data-translate="school.contactParentFather">Pappa</label>
                             </div>
                             <div class="form-check">
-                                <input type="radio" class="form-check-input" name="kontaktForälder" id="kontaktMamma">
-                                <label for="kontaktMamma" class="form-check-label">Mamma</label>
+                                <input type="radio" class="form-check-input" name="kontaktForälder" id="kontaktMamma" value="Mamma">
+                                <label for="kontaktMamma" class="form-check-label" data-translate="school.contactParentMother">Mamma</label>
                             </div>
                         </div>
 
                         <!-- School Day -->
                         <div class="col-md-6">
-                            <label class="form-label">Välj dag för skola (Lördag eller Söndag):</label>
+                            <label class="form-label d-block" data-translate="school.schoolDayLabel">Välj dag för skola (Lördag eller Söndag):</label> <!-- Added d-block -->
                             <div class="form-check">
-                                <input type="radio" class="form-check-input" name="skoldag" id="skoldagLördag" required>
-                                <label for="skoldagLördag" class="form-check-label">Lördag</label>
+                                <input type="radio" class="form-check-input" name="skoldag" id="skoldagLördag" value="Lördag" required>
+                                <label for="skoldagLördag" class="form-check-label" data-translate="school.schoolDaySaturday">Lördag</label>
                             </div>
                             <div class="form-check">
-                                <input type="radio" class="form-check-input" name="skoldag" id="skoldagSöndag">
-                                <label for="skoldagSöndag" class="form-check-label">Söndag</label>
+                                <input type="radio" class="form-check-input" name="skoldag" id="skoldagSöndag" value="Söndag">
+                                <label for="skoldagSöndag" class="form-check-label" data-translate="school.schoolDaySunday">Söndag</label>
                             </div>
                         </div>
                     </div>
 
-                </div>
-                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Registrera</button>
+                </div> <!-- End of main form row -->
+                <button type="submit" class="btn btn-primary" style="margin-top: 20px;" data-translate="school.submitButton">Registrera</button>
             </form>
         </div>
     </div>
-
 
     <!-- Footer Start -->
     <div id="footer-placeholder"></div>
@@ -151,37 +125,118 @@
     <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
     <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+    <script src="js/main.js"></script> <!-- Load main JS first -->
 
-    <!-- Load Header and Footer -->
+     <!-- Load Header and Footer & Initialize Translation -->
     <script>
         $(function () {
-            $("#header-placeholder").load("header.html");
-            $("#footer-placeholder").load("footer.html");
+            // Using the same loading logic as index.html for consistency
+            let headerLoaded = false;
+            let footerLoaded = false;
+            let initialLangApplied = false;
+
+            function applyInitialLanguage() {
+                if (headerLoaded && footerLoaded && !initialLangApplied) {
+                     if (window.translatePage) {
+                        const savedLang = localStorage.getItem('selectedLanguage') || 'sv';
+                         if (window.translations && window.translations[savedLang]) {
+                             window.translatePage(savedLang);
+                             initialLangApplied = true;
+                         } else { setTimeout(applyInitialLanguage, 100); }
+                    } else { setTimeout(applyInitialLanguage, 100); }
+                }
+            }
+
+            $("#header-placeholder").load("header.html", function(response, status, xhr) {
+                if (status == "success") {
+                    headerLoaded = true;
+                    if (window.initializeLanguageSwitcher) window.initializeLanguageSwitcher();
+                    applyInitialLanguage();
+                } else { console.error("Error loading header.html:", status); }
+            });
+
+            $("#footer-placeholder").load("footer.html", function(response, status, xhr) {
+                 if (status == "success") {
+                    footerLoaded = true;
+                    applyInitialLanguage();
+                 } else { console.error("Error loading footer.html:", status); }
+            });
+
+             document.addEventListener('languageChanged', function(e) {
+                 console.log("Language changed event received for:", e.detail.lang);
+                 // Re-translate form elements if needed, though translatePage should cover it
+             });
         });
     </script>
+
+    <!-- Form Submission Script -->
     <script>
         window.addEventListener("load", function () {
             const form = document.getElementById('schoolsform');
-            form.addEventListener("submit", function (e) {
-                e.preventDefault();
-                const data = new FormData(form);
-                const action = e.target.action;
-                fetch(action, {
-                    method: 'POST',
-                    body: data,
-                })
-                    .then(() => {
-                        window.location.href = 'https://donate.stripe.com/test_cN27vE9VAeyoc9ieUW?'; // Redirect to your link
+            if (form) { // Check if form exists before adding listener
+                form.addEventListener("submit", function (e) {
+                    e.preventDefault();
+                    const data = new FormData(form);
+                    const action = e.target.action;
+                    fetch(action, {
+                        method: 'POST',
+                        body: data,
+                    })
+                    .then(response => {
+                         // Check if the fetch was successful (status 200-299)
+                         // Google Apps Script redirects often return 302, fetch might follow it
+                         // Or the script might return a JSON response indicating success/failure
+                         // Adjust this logic based on how your Google Apps Script actually responds
+                        if (!response.ok && response.type !== 'opaque') { // Opaque means cross-origin redirect often
+                             // Handle actual network errors or bad responses from GAS if it returns JSON errors
+                             // For now, assume redirect means success for simplicity
+                             // throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                         // Assuming redirect implies success or Google Script handles success message
+                        window.location.href = 'school-success.html'; // Redirect to your success page
+                        // Or use the Stripe link if payment is next step:
+                        // window.location.href = 'https://donate.stripe.com/test_cN27vE9VAeyoc9ieUW?';
                     })
                     .catch(error => {
-                        console.error("Error:", error);
-                        alert("Submission failed. Please try again.");
-                    });
+                        console.error("Submission Error:", error);
 
-            });
+                        // --- Translate Alert ---
+                         // Helper function to get nested translation values
+                         function getKeyValue(obj, keyString) {
+                            if (!keyString || typeof keyString !== 'string') return null;
+                            const keys = keyString.split('.');
+                            let value = obj;
+                            for (const key of keys) {
+                                if (value && typeof value === 'object' && key in value) {
+                                    value = value[key];
+                                } else { return null; }
+                            }
+                            return typeof value === 'string' ? value : null;
+                         }
+
+                         let currentLang = 'sv'; // Default
+                         try {
+                             currentLang = localStorage.getItem('selectedLanguage') || 'sv';
+                         } catch (e) { /* ignore */ }
+
+                         const errorKey = "school.submissionError";
+                         let errorMessage = "Submission failed. Please try again."; // Hardcoded fallback
+
+                         if(window.translations && window.translations[currentLang]) {
+                             errorMessage = getKeyValue(window.translations[currentLang], errorKey) || errorMessage;
+                         } else if (window.translations && window.translations.en) {
+                             errorMessage = getKeyValue(window.translations.en, errorKey) || errorMessage; // Fallback to English
+                         }
+                         alert(errorMessage);
+                        // --- End Translate Alert ---
+                    });
+                });
+            } else {
+                console.error("School registration form not found.");
+            }
         });
     </script>
-</body>
+    <!-- Translation scripts are loaded within header.html -->
 
+</body>
 </html>
