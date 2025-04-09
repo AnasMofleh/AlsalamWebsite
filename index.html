@@ -1,56 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<!-- Default lang/dir set in header.html, updated by translate.js -->
+<html>
 <head>
-    <meta charset="utf-8">
-    <title>Al-Salam Moské</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
-
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Pacifico&display=swap"
-        rel="stylesheet">
-
-    <!-- Icon Font Stylesheet -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Libraries Stylesheet -->
-    <link href="lib/animate/animate.min.css" rel="stylesheet">
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
+    <!-- Meta, CSS links etc. are loaded via header.html -->
+    <title>Al-Salam Moské</title> <!-- Static title, or translate server-side -->
 </head>
-
 <body>
 
     <!-- Header Start -->
     <div id="header-placeholder"></div>
     <!-- Header End -->
 
-    <!-- Add margin to prevent content from hiding behind navbar -->
-    <div style="margin-top: 100px;"></div>
-
+    <!-- Hero Section -->
     <div class="container-fluid hero">
         <div class="container py-5">
             <div class="row no-gutters">
                 <div class="col-md-6" style="flex: 7; ">
                     <div class="hero-leftside">
+                        <!-- Alt text could be translated if needed, using JS manipulation after load or server-side -->
                         <img src="img/Al-Salam-Insida.jpg" alt="Al-Salam Insida">
                     </div>
                 </div>
                 <div class="col-md-6" style="flex: 3; ">
                     <div class="hero-rightside">
+                        <!-- Prayer times widget - Language might be controllable via widget settings or defaults to user's browser -->
                         <iframe src="https://time.my-masjid.com/timinginfoscreen/ee787ee0-549f-43f3-9fe4-9c8bc3c295f7"
-                            scrolling="no">
+                            scrolling="no" title="Prayer Times">
                         </iframe>
                     </div>
                 </div>
@@ -58,211 +33,153 @@
         </div>
     </div>
 
-    <script src="js/mymasjid_prayer_times.js"></script>
+    <!-- MyMasjid Prayer Times Script (keep if needed) -->
+    <!-- <script src="js/mymasjid_prayer_times.js"></script> -->
 
+    <!-- About Section -->
     <section id="OmOss">
-        <!-- About Satrt -->
         <div class="container-fluid about py-5">
             <div class="container py-5">
                 <div class="row g-5 mb-5">
                     <div class="col-xl-6">
                         <div class="row g-4">
                             <div class="col-6">
-                                <img src="img/about-1.jpg" class="img-fluid h-100 wow zoomIn" data-wow-delay="0.1s"
-                                    alt="">
+                                <img src="img/about-1.jpg" class="img-fluid h-100 wow zoomIn" data-wow-delay="0.1s" alt="About Image 1">
                             </div>
                             <div class="col-6">
-                                <img src="img/about-2.jpg" class="img-fluid pb-3 wow zoomIn" data-wow-delay="0.1s"
-                                    alt="">
-                                <img src="img/about-3.jpg" class="img-fluid pt-3 wow zoomIn" data-wow-delay="0.1s"
-                                    alt="">
+                                <img src="img/about-2.jpg" class="img-fluid pb-3 wow zoomIn" data-wow-delay="0.1s" alt="About Image 2">
+                                <img src="img/about-3.jpg" class="img-fluid pt-3 wow zoomIn" data-wow-delay="0.1s" alt="About Image 3">
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-6 wow fadeIn" data-wow-delay="0.5s">
-                        <h1 class="display-5 pb-4 m-0">Om Oss</h1>
-                        <p class="text-secondary" style="line-height: 2;">
-                            Al Salam i Helsingborg är en islamisk förening och moksé. Ett center för muslimer att vända
-                            sig i alla aspekter av sitt liv, från bön och jummah till giftemål, kunskap, vägledning i
-                            sakfrågor
-                            i fiqh, till koranskola och arbaiska för barnen.</p>
-                        <h2 class="display-6 pb-4 m-0">Vår Vision</h2>
-
-                        <p class="text-secondary" style="line-height: 2;">
-                            muslimerna ska känna sig hemma i landet, kunna praktisera och utöva relgionen
-                            fullt ut som Svenska Muslimer.</p>
-
-
-
+                        <h1 class="display-5 pb-4 m-0" data-translate="index.about.title">Om Oss</h1>
+                        <p class="text-secondary" style="line-height: 2;" data-translate="index.about.description">
+                            Al Salam i Helsingborg är en islamisk förening...
+                        </p>
+                        <h2 class="display-6 pb-4 m-0" data-translate="index.about.visionTitle">Vår Vision</h2>
+                        <p class="text-secondary" style="line-height: 2;" data-translate="index.about.visionDescription">
+                            muslimerna ska känna sig hemma i landet...
+                        </p>
                     </div>
-
                 </div>
             </div>
-            <!-- About End -->
         </div>
     </section>
 
-    <!-- Activities Start -->
+    <!-- Values Section -->
     <div class="container-fluid activities py-5">
         <div class="container py-5">
             <div class="mx-auto text-center mb-5 wow fadeIn" data-wow-delay="0.1s" style="max-width: 700px;">
-                <h1 class="display-3">
+                <h1 class="display-3" data-translate="index.values.title">
                     Vår Värdegrund
                 </h1>
             </div>
             <div class="row g-4">
                 <div class="col-lg-6 col-xl-4">
                     <div class="activities-item p-4 wow fadeIn" data-wow-delay="0.1s">
-                        <i class="fa fa-mosque fa-4x text-dark"></i>
+                        <i class="fa fa-mosque fa-4x text-dark" aria-hidden="true"></i>
                         <div class="ms-4">
-                            <h4>Kunskap</h4>
-                            <p class="mb-4">En viktig del
-                                av varje muslims resa är
-                                sökandet av kunskap.
-                            </p>
+                            <h4 data-translate="index.values.knowledgeTitle">Kunskap</h4>
+                            <p class="mb-4" data-translate="index.values.knowledgeDescription">En viktig del...</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-xl-4">
+                 <div class="col-lg-6 col-xl-4">
                     <div class="activities-item p-4 wow fadeIn" data-wow-delay="0.3s">
-                        <i class="fa fa-users fa-4x text-dark"></i>
+                        <i class="fa fa-users fa-4x text-dark" aria-hidden="true"></i>
                         <div class="ms-4">
-                            <h4>Gemenskap</h4>
-                            <p class="mb-4">Vi ber tillsammans, vi bryter
-                                vår fasta tillsammans, Islam
-                                ger en gemenskap.
-                            </p>
+                            <h4 data-translate="index.values.communityTitle">Gemenskap</h4>
+                            <p class="mb-4" data-translate="index.values.communityDescription">Vi ber tillsammans...</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-xl-4">
+                 <div class="col-lg-6 col-xl-4">
                     <div class="activities-item p-4 wow fadeIn" data-wow-delay="0.5s">
-                        <i class="fa fa-quran fa-4x text-dark"></i>
+                        <i class="fa fa-quran fa-4x text-dark" aria-hidden="true"></i>
                         <div class="ms-4">
-                            <h4>Böner</h4>
-                            <p class="mb-4">Moskén är öppen för de 5 dagliga bönerna.
-                            </p>
+                            <h4 data-translate="index.values.prayerTitle">Böner</h4>
+                            <p class="mb-4" data-translate="index.values.prayerDescription">Moskén är öppen...</p>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 
-
-
-    <!-- Activities Start -->
+    <!-- Services Section -->
     <div class="container-fluid sermon py-5" id="Services">
-        <div class="container py-5">
-            <div class="text-center mx-auto mb-5 wow fadeIn" data-wow-delay="0.1s" style="max-width: 700px;">
-                <h1 class="display-3">Tjänster</h1>
+         <div class="container py-5">
+             <div class="text-center mx-auto mb-5 wow fadeIn" data-wow-delay="0.1s" style="max-width: 700px;">
+                <h1 class="display-3" data-translate="index.services.title">Tjänster</h1>
             </div>
-            <div class="row g-4 justify-content-center">
-                <div class="col-lg-6 col-xl-4">
+             <div class="row g-4 justify-content-center">
+                 <!-- Marriage -->
+                 <div class="col-lg-6 col-xl-4">
                     <div class="sermon-item wow fadeIn" data-wow-delay="0.1s">
                         <div class="overflow-hidden p-4 pb-0">
-                            <img src="img/marrigecontract.jpg" class="img-fluid w-100" alt="">
+                            <img src="img/marrigecontract.jpg" class="img-fluid w-100" alt="Marriage Contract Image">
                         </div>
                         <div class="p-4">
-
-                            <a href="marrige.html" class="d-inline-block h4 lh-sm mb-3">Äktenskapskontrakt</a>
-                            <p class="mb-0">Nikah – Islamiskt äktenskapskontrakt utförs av Sheiykh Samir. Ni behöver
-                                boka en tid på förväg, vänligen skriv ett mail.</p>
+                            <a href="marrige.html" class="d-inline-block h4 lh-sm mb-3" data-translate="index.services.marriageTitle">Äktenskapskontrakt</a>
+                            <p class="mb-0" data-translate="index.services.marriageDescription">Nikah – Islamiskt äktenskapskontrakt...</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-xl-4">
-                    <div class="sermon-item wow fadeIn" data-wow-delay="0.3s">
-                        <div class="overflow-hidden p-4 pb-0">
-                            <img src="img/fatwa.jpg" class="img-fluid w-100" alt="">
-                        </div>
+                 <!-- Fatwa -->
+                 <div class="col-lg-6 col-xl-4">
+                     <div class="sermon-item wow fadeIn" data-wow-delay="0.3s">
+                         <div class="overflow-hidden p-4 pb-0">
+                             <img src="img/fatwa.jpg" class="img-fluid w-100" alt="Fatwa Image">
+                         </div>
                         <div class="p-4">
-
-                            <a href="mailto:alsalam.center@outlook.com" class="d-inline-block h4 lh-sm mb-3">Fatwaa</a>
-                            <p class="mb-0">Behöver det rådfråga gällande en islamisk fiqh fråga så kan ni kontakta
-                                oss via mejl.</p>
+                            <!-- Link kept static, text translated -->
+                            <a href="mailto:alsalam.center@outlook.com" class="d-inline-block h4 lh-sm mb-3" data-translate="index.services.fatwaTitle">Fatwaa</a>
+                            <p class="mb-0" data-translate="index.services.fatwaDescription">Behöver det rådfråga...</p>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-6 col-xl-4">
-                    <div class="sermon-item wow fadeIn" data-wow-delay="0.5s">
-                        <div class="overflow-hidden p-4 pb-0">
-                            <img src="img/familjconsulting.JPG" class="img-fluid w-100" alt="">
-                        </div>
-                        <div class="p-4">
-
-                            <a href="mailto:alsalam.center@outlook.com" class="d-inline-block h4 lh-sm mb-3">Familj rådgivning</a>
-                            <p class="mb-0">Behövs det hjälp eller rådgivning i ett ärende eller en konflikt inom familj
-                                är ni välkomna att kontakta oss på vår mejl.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-xl-4">
-                    <div class="sermon-item wow fadeIn" data-wow-delay="0.1s">
-                        <div class="overflow-hidden p-4 pb-0">
-                            <img src="img/school.jpg" class="img-fluid w-100" alt="">
-                        </div>
-                        <div class="p-4">
-
-                            <a href="school.html" class="d-inline-block h4 lh-sm mb-3">
-                                Koran och Arabiska skola
-                            </a>
-                            <p class="mb-0">På helgerna finns det möjlighet för barnen att skrivas in i koran och
-                                arabiska skolan. </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-xl-4">
-                    <div class="sermon-item wow fadeIn" data-wow-delay="0.1s">
-                        <div class="overflow-hidden p-4 pb-0">
-                            <img src="img/jumaa.jpg" class="img-fluid w-100" alt="">
-                        </div>
-                        <div class="p-4">
-
-                            <a class="d-inline-block h4 lh-sm mb-3">Jummah Predikan</a>
-                            <p class="mb-0">Utför Predikan som hålls i moskén varje Jummah (fredag), börjar vid
-                                tiden för dhur bönen.</p>
-                        </div>
-                    </div>
-                </div>
-
+                 </div>
+                 <!-- Counseling -->
+                  <div class="col-lg-6 col-xl-4">
+                     <div class="sermon-item wow fadeIn" data-wow-delay="0.5s">
+                         <div class="overflow-hidden p-4 pb-0">
+                             <img src="img/familjconsulting.JPG" class="img-fluid w-100" alt="Family Counseling Image">
+                         </div>
+                         <div class="p-4">
+                              <!-- Link kept static, text translated -->
+                              <a href="mailto:alsalam.center@outlook.com" class="d-inline-block h4 lh-sm mb-3" data-translate="index.services.counselingTitle">Familj rådgivning</a>
+                              <p class="mb-0" data-translate="index.services.counselingDescription">Behövs det hjälp...</p>
+                         </div>
+                     </div>
+                 </div>
+                 <!-- School -->
+                 <div class="col-lg-6 col-xl-4">
+                      <div class="sermon-item wow fadeIn" data-wow-delay="0.1s">
+                          <div class="overflow-hidden p-4 pb-0">
+                              <img src="img/school.jpg" class="img-fluid w-100" alt="School Image">
+                          </div>
+                          <div class="p-4">
+                              <a href="school.html" class="d-inline-block h4 lh-sm mb-3" data-translate="index.services.schoolTitle">Koran och Arabiska skola</a>
+                              <p class="mb-0" data-translate="index.services.schoolDescription">På helgerna finns det...</p>
+                          </div>
+                      </div>
+                 </div>
+                 <!-- Jummah -->
+                  <div class="col-lg-6 col-xl-4">
+                      <div class="sermon-item wow fadeIn" data-wow-delay="0.1s">
+                           <div class="overflow-hidden p-4 pb-0">
+                               <img src="img/jumaa.jpg" class="img-fluid w-100" alt="Jummah Image">
+                           </div>
+                          <div class="p-4">
+                              <!-- This is not a link, just text -->
+                              <span class="d-inline-block h4 lh-sm mb-3" data-translate="index.services.jummahTitle">Jummah Predikan</span>
+                              <p class="mb-0" data-translate="index.services.jummahDescription">Utför Predikan som hålls...</p>
+                          </div>
+                      </div>
+                  </div>
             </div>
-        </div>
+         </div>
     </div>
-    <!-- Activities End -->
-
-    <!-- Team Start 
-    <div class="container-fluid team py-5">
-        <div class="container py-5">
-
-            <div class="row g-5">
-                <div class="col-lg-4 col-xl-5">
-                    <div class="team-img wow zoomIn" data-wow-delay="0.1s">
-                        <img src="img/SH-Samir.jpg" class="img-fluid" alt="">
-                    </div>
-                </div>
-                <div class="col-lg-8 col-xl-7">
-                    <div class="team-item wow fadeIn" data-wow-delay="0.1s">
-                        <h1>Träffa Vår Imam Samir Elrifai</h1>
-                        <p class="lead">Sheiykh Samir Elrifai är vår Imam som är här för att hjälpa med alla era
-                            behov, från äktenskapskontrakt och fatwaa till familjerådgivning och undervisning i
-                            koran och arabiska.</p>
-                        <p class="lead">Han har studerat islamiska studier och har en lång erfarenhet av att hjälpa
-                            muslimer i olika aspekter av deras liv. Han är tillgänglig för att svara på frågor och
-                            ge råd.</p>
-                        <p class="lead">För att boka en tid med Sheiykh Samir, vänligen kontakta oss via e-post
-                            eller telefon.</p>
-
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    -->
-    <!-- Team End -->
-
 
 
     <!-- Footer Start -->
@@ -280,13 +197,76 @@
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
 
-    <!-- Load Header and Footer -->
+
+    <!-- Load Header and Footer & Initialize Translation -->
     <script>
         $(function () {
-            $("#header-placeholder").load("header.html");
-            $("#footer-placeholder").load("footer.html");
+            let headerLoaded = false;
+            let footerLoaded = false;
+            let initialLangApplied = false;
+
+            function applyInitialLanguage() {
+                if (headerLoaded && footerLoaded && !initialLangApplied) {
+                     if (window.translatePage) {
+                        const savedLang = localStorage.getItem('selectedLanguage') || 'sv';
+                        // Ensure language files are loaded before translating
+                        if (window.translations && window.translations[savedLang]) {
+                             window.translatePage(savedLang);
+                             initialLangApplied = true; // Prevent re-applying on potential resize/reloads
+                             console.log("Initial language applied:", savedLang);
+                        } else {
+                            // Fallback if translation object isn't ready (should be rare)
+                            setTimeout(applyInitialLanguage, 100);
+                            console.log("Waiting for translations...");
+                        }
+                    } else {
+                        // Fallback if translatePage isn't ready
+                        setTimeout(applyInitialLanguage, 100);
+                         console.log("Waiting for translatePage function...");
+                    }
+                }
+            }
+
+            // Load Header
+            $("#header-placeholder").load("header.html", function(response, status, xhr) {
+                if (status == "error") {
+                    console.error("Error loading header.html: " + xhr.status + " " + xhr.statusText);
+                } else {
+                    headerLoaded = true;
+                    if (window.initializeLanguageSwitcher) {
+                         window.initializeLanguageSwitcher(); // Attach listeners to buttons in header
+                         console.log("Header loaded, switcher initialized.");
+                    }
+                    applyInitialLanguage(); // Attempt to apply language
+                }
+            });
+
+            // Load Footer
+            $("#footer-placeholder").load("footer.html", function(response, status, xhr) {
+                 if (status == "error") {
+                     console.error("Error loading footer.html: " + xhr.status + " " + xhr.statusText);
+                 } else {
+                    footerLoaded = true;
+                    console.log("Footer loaded.");
+                    applyInitialLanguage(); 
+                 }
+            });
+
+             // Optional: Listen for language changes initiated from the switcher
+             document.addEventListener('languageChanged', function(e) {
+                 console.log("Language changed event received for:", e.detail.lang);
+                 // If you need to re-translate dynamic content NOT in header/footer, do it here.
+                 // Example: Re-apply to elements specifically within the main content area if needed.
+                 // const mainContentElements = document.querySelectorAll('main [data-translate]'); // Adjust selector
+                 // mainContentElements.forEach(el => translateElement(el, window.translations[e.detail.lang]));
+             });
+
+              // Ensure translateElement is available if needed by the event listener above
+              // It's defined within translate.js's IIFE but not globally exposed by default.
+              // If needed, expose it like: window.translateElement = function(...) in translate.js
         });
     </script>
-</body>
+    <!-- Translation scripts (sv.js, en.js, ar.js, translate.js) are loaded within header.html -->
 
+</body>
 </html>
