@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<!-- Default lang/dir set in header.html, updated by translate.js -->
+<html>
 <head>
     <meta charset="utf-8">
     <title>Al-Salam Moské</title>
@@ -389,10 +389,46 @@
 
     <script>
         $(function () {
-            $("#header-placeholder").load("header.html");
-            $("#footer-placeholder").load("footer.html");
+            // Using the same loading logic as index.html for consistency
+            let headerLoaded = false;
+            let footerLoaded = false;
+            let initialLangApplied = false;
+
+            function applyInitialLanguage() {
+                if (headerLoaded && footerLoaded && !initialLangApplied) {
+                     if (window.translatePage) {
+                        const savedLang = localStorage.getItem('selectedLanguage') || 'sv';
+                         if (window.translations && window.translations[savedLang]) {
+                             window.translatePage(savedLang);
+                             initialLangApplied = true;
+                         } else { setTimeout(applyInitialLanguage, 100); }
+                    } else { setTimeout(applyInitialLanguage, 100); }
+                }
+            }
+
+            $("#header-placeholder").load("header.html", function(response, status, xhr) {
+                if (status == "success") {
+                    headerLoaded = true;
+                    if (window.initializeLanguageSwitcher) window.initializeLanguageSwitcher();
+                    applyInitialLanguage();
+                } else { console.error("Error loading header.html:", status); }
+            });
+
+            $("#footer-placeholder").load("footer.html", function(response, status, xhr) {
+                 if (status == "success") {
+                    footerLoaded = true;
+                    applyInitialLanguage();
+                 } else { console.error("Error loading footer.html:", status); }
+            });
+
+             document.addEventListener('languageChanged', function(e) {
+                 console.log("Language changed event received for:", e.detail.lang);
+                 // Re-translate form elements if needed, though translatePage should cover it
+             });
         });
     </script>
+
+    <!-- Form Submission Script -->
     <script>
         $(document).ready(function () {
             const modal = new bootstrap.Modal(document.getElementById('requirementsModal'), {
@@ -534,5 +570,4 @@
     </script>
 
 </body>
-
 </html>

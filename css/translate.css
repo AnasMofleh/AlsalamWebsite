@@ -1,0 +1,89 @@
+/* css/translate.css */
+
+/* Basic RTL adjustments */
+body.arabic-lang {
+    text-align: right;
+    /* Optionally load an Arabic-friendly font */
+    /* font-family: 'Noto Sans Arabic', sans-serif; */ /* Example Font - Needs Google Font import */
+}
+
+html[dir="rtl"] .ms-lg-5 { /* Example: Adjust margin start/end for RTL */
+    margin-right: 3rem !important; /* Override Bootstrap's margin-start */
+    margin-left: 0 !important;
+}
+html[dir="rtl"] .me-lg-5 {
+    margin-left: 3rem !important; /* Override Bootstrap's margin-end */
+    margin-right: 0 !important;
+}
+html[dir="rtl"] .ms-auto { /* Adjust margin auto for RTL */
+    margin-right: auto !important;
+    margin-left: 0 !important;
+}
+html[dir="rtl"] .me-auto {
+     margin-left: auto !important;
+    margin-right: 0 !important;
+}
+html[dir="rtl"] .ms-4 {
+    margin-right: 1.5rem !important;
+    margin-left: 0 !important;
+}
+html[dir="rtl"] .me-2 {
+    margin-left: 0.5rem !important;
+    margin-right: 0 !important;
+}
+html[dir="rtl"] .me-3 {
+    margin-left: 1rem !important;
+    margin-right: 0 !important;
+}
+html[dir="rtl"] .ps-3 { /* Padding start */
+    padding-right: 1rem !important;
+    padding-left: 0 !important;
+}
+html[dir="rtl"] .pe-5 { /* Padding end */
+     padding-left: 3rem !important;
+     padding-right: 0 !important;
+}
+
+
+/* Style for active language button (adjust as needed) */
+.language-switcher button.active {
+    font-weight: bold;
+    /* Example using primary color provided in header.html script */
+}
+
+/* Ensure switcher stays visible */
+.language-switcher {
+    white-space: nowrap; /* Prevent buttons from wrapping */
+}
+
+/* Adjust form labels and inputs if necessary */
+html[dir="rtl"] .form-label {
+    text-align: right;
+    display: block; /* Ensure it takes full width for alignment */
+}
+html[dir="rtl"] .form-check {
+    padding-right: 1.25rem; /* Adjust checkbox padding */
+    padding-left: 0;
+}
+html[dir="rtl"] .form-check .form-check-input {
+    float: right;
+    margin-left: 0.3em;
+    margin-right: -1.25rem; /* Position checkbox correctly */
+}
+html[dir="rtl"] .form-check-label {
+     margin-right: 0.5em; /* Space between checkbox and label */
+}
+
+
+/* You might need more specific RTL adjustments depending on your layout */
+/* Example: Flip icon positions if needed */
+/*
+html[dir="rtl"] .d-flex .me-2 {
+     margin-left: 0.5rem !important;
+     margin-right: 0 !important;
+}
+html[dir="rtl"] .d-flex .me-3 {
+     margin-left: 1rem !important;
+     margin-right: 0 !important;
+}
+*/

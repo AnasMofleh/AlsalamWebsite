@@ -1,62 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<!-- Default lang/dir set in header.html, updated by translate.js -->
+<html>
 <head>
-    <meta charset="utf-8">
-    <title>Al-Salam Moské</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
-
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Pacifico&display=swap"
-        rel="stylesheet">
-
-    <!-- Icon Font Stylesheet -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Libraries Stylesheet -->
-    <link href="lib/animate/animate.min.css" rel="stylesheet">
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
-
-
-
+     <!-- Meta, CSS links etc. are loaded via header.html -->
+     <title>Al-Salam Moské - Donationer</title> <!-- Static title, or translate server-side -->
 </head>
-
 <body>
     <!-- Header Start -->
     <div id="header-placeholder"></div>
     <!-- Header End -->
 
+    <!-- Donations Section -->
     <div class="container mt-5 pt-5 text-center">
-        <div class="donations-section">
-            <h3 class="mb-4">Donationsalternativ</h3>
+        <div class="donations-section wow fadeIn" data-wow-delay="0.1s">
+            <h3 class="mb-4" data-translate="donations.title">Donationsalternativ</h3>
             <div class="tabs-group">
-                <button class="tab-button active" id="one-time">Engång</button>
-                <button class="tab-button" id="monthly">Månatlig</button>
-                <button class="tab-button" id="yearly">Årlig</button>
+                <button class="tab-button active" id="one-time" data-translate="donations.tabOneTime">Engång</button>
+                <button class="tab-button" id="monthly" data-translate="donations.tabMonthly">Månatlig</button>
+                <button class="tab-button" id="yearly" data-translate="donations.tabYearly">Årlig</button>
             </div>
         </div>
 
         <div class="row justify-content-center">
-
-            <div class="col-lg-4 donation-box" id="card-one">
+            <!-- Card 1: Swish -->
+            <div class="col-lg-4 donation-box wow fadeInUp" data-wow-delay="0.2s" id="card-one">
                 <div class="row">
                     <h4>Gåva via Swish</h4>
                     <p>Stödja moskén genom att swisha engångdonation "Gåva".</p>
                 </div>
                 <div class="circle-border">
-                    <img src="img/swishwakfQR.png" alt="Swish Logo" class="donation-img">
+                    <img src="img/swishwakfQR.png" alt="Swish QR Code" class="donation-img">
                 </div>
                 <button class="donation-btn" onclick="openSwish()">Swisha</button>
             </div>
@@ -87,13 +60,15 @@
                 <div class="circle-border">
                     <img src="img/pay.png" alt="International Donation Logo" class="donation-img">
                 </div>
+                 <!-- Stripe Button: Text/Language is controlled via Stripe dashboard configuration -->
                 <script async src="https://js.stripe.com/v3/buy-button.js"></script>
                 <stripe-buy-button buy-button-id="buy_btn_1S3NspG84lZUxh2hjMuXI9tr"
                     publishable-key="pk_live_51QOjFxG84lZUxh2hwRThSaug3j7zlPSL9Ts5OXxkOMw5KxHnvxusRgNIME8PtWpsFEGI9x2tSEvisU0269pHsNnm00kHzyvueL">
                 </stripe-buy-button>
             </div>
 
-            <div class="col-lg-4 donation-box" id="card-three">
+            <!-- Card 3: Monthly (Stripe Subscription Button) -->
+            <div class="col-lg-4 donation-box wow fadeInUp" data-wow-delay="0.4s" id="card-three">
                 <div class="row">
                     <h4>Månatlig Gåva</h4>
                     <p>Stödja moskén via automatisk återkommande Gåva varje månad (likt Autogiro).</p>
@@ -139,8 +114,51 @@
     <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
     <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+    <script src="js/main.js"></script> <!-- Load main JS first -->
 
+     <!-- Load Header and Footer & Initialize Translation -->
+    <script>
+        $(function () {
+            // Using the same loading logic as index.html for consistency
+            let headerLoaded = false;
+            let footerLoaded = false;
+            let initialLangApplied = false;
+
+            function applyInitialLanguage() {
+                if (headerLoaded && footerLoaded && !initialLangApplied) {
+                     if (window.translatePage) {
+                        const savedLang = localStorage.getItem('selectedLanguage') || 'sv';
+                         if (window.translations && window.translations[savedLang]) {
+                             window.translatePage(savedLang);
+                             initialLangApplied = true;
+                         } else { setTimeout(applyInitialLanguage, 100); }
+                    } else { setTimeout(applyInitialLanguage, 100); }
+                }
+            }
+
+            $("#header-placeholder").load("header.html", function(response, status, xhr) {
+                if (status == "success") {
+                    headerLoaded = true;
+                    if (window.initializeLanguageSwitcher) window.initializeLanguageSwitcher();
+                    applyInitialLanguage();
+                } else { console.error("Error loading header.html:", status); }
+            });
+
+            $("#footer-placeholder").load("footer.html", function(response, status, xhr) {
+                 if (status == "success") {
+                    footerLoaded = true;
+                    applyInitialLanguage();
+                 } else { console.error("Error loading footer.html:", status); }
+            });
+
+             document.addEventListener('languageChanged', function(e) {
+                 console.log("Language changed event received for:", e.detail.lang);
+                 // Re-translate donation cards/popup if needed
+             });
+        });
+    </script>
+
+    <!-- Popup Script -->
     <script>
         function isMobileDevice() {
             return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
@@ -167,51 +185,52 @@
         }
     </script>
 
+    <!-- Tab/Card Visibility Script -->
     <script>
-        const buttons = document.querySelectorAll('.tab-button');
-        const cards = [
-            document.querySelector('#card-one'),
-            document.querySelector('#card-two'),
-            document.querySelector('#card-three'),
-            document.querySelector('#card-four')
-        ];
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.tab-button');
+            const cards = { // Use object for easier mapping
+                'one-time': [document.querySelector('#card-one'), document.querySelector('#card-two')],
+                'monthly': [document.querySelector('#card-three')],
+                'yearly': [document.querySelector('#card-four')]
+            };
+            const allCardElements = document.querySelectorAll('.donation-box'); // Select all boxes
 
-        buttons.forEach(button => {
-            button.addEventListener('click', () => {
-                buttons.forEach(btn => btn.classList.remove('active')); // Remove active class from other buttons
-                button.classList.add('active'); // Highlight clicked button
+            function updateVisibleCards(activeTabId) {
+                 allCardElements.forEach(card => {
+                     if(card) card.classList.remove('visible'); // Hide all first
+                 });
 
-                // Show/hide cards based on active button
-                if (button.id === 'one-time') {
-                    cards[0].classList.add('visible'); // Show first card
-                    cards[1].classList.add('visible'); // Show last card
-                    cards[2].classList.remove('visible'); // Hide middle card
-                    cards[3].classList.remove('visible'); // Hide middle card
-                } else if (button.id === 'monthly') {
-                    cards[0].classList.remove('visible'); // Hide middle card
-                    cards[1].classList.remove('visible'); // Show last card
-                    cards[2].classList.add('visible'); // Hide middle card
-                    cards[3].classList.remove('visible'); // Hide middle card
-                } else if (button.id === 'yearly') {
-                    cards[0].classList.remove('visible'); // Hide middle card
-                    cards[1].classList.remove('visible'); // Show last card
-                    cards[2].classList.remove('visible'); // Hide middle card
-                    cards[3].classList.add('visible'); // Hide middle card
+                if (cards[activeTabId]) {
+                    cards[activeTabId].forEach(card => {
+                         if(card) card.classList.add('visible'); // Show relevant cards
+                    });
                 }
+            }
+
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    buttons.forEach(btn => btn.classList.remove('active')); // Standard Bootstrap active class
+                    button.classList.add('active');
+                    updateVisibleCards(button.id);
+                });
             });
-        });
 
-        // Initial state: Show first and last cards
-        document.querySelector('#one-time').click(); // Simulate click on "One-Time"
-    </script>
-
-    <!-- Load Header and Footer -->
-    <script>
-        $(function () {
-            $("#header-placeholder").load("header.html");
-            $("#footer-placeholder").load("footer.html");
+            // Initial state: Simulate click on the default active button ("one-time")
+            const initialActiveButton = document.querySelector('.tab-button.active');
+             if(initialActiveButton) {
+                 updateVisibleCards(initialActiveButton.id);
+             } else {
+                 // Fallback if no button starts active (shouldn't happen with current HTML)
+                 const firstButton = document.querySelector('.tab-button');
+                 if (firstButton) {
+                     firstButton.classList.add('active');
+                     updateVisibleCards(firstButton.id);
+                 }
+             }
         });
     </script>
+    <!-- Translation scripts are loaded within header.html -->
+
 </body>
-
 </html>
