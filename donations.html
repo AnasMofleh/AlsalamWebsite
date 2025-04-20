@@ -52,18 +52,36 @@
 
             <div class="col-lg-4 donation-box" id="card-one">
                 <div class="row">
-                    <h4>Sadaqa via Swish</h4>
-                    <p>Stödja moskén genom att swisha engångdonation "sadaqa".</p>
+                    <h4>Gåva via Swish</h4>
+                    <p>Stödja moskén genom att swisha engångdonation "Gåva".</p>
                 </div>
                 <div class="circle-border">
                     <img src="img/swishwakfQR.png" alt="Swish Logo" class="donation-img">
                 </div>
-                <button class="donation-btn">Swisha</button>
+                <button class="donation-btn" onclick="openSwish()">Swisha</button>
             </div>
+            <!-- Swish Popup -->
+            <div id="swish-popup" class="popup" style="display: none;">
+                <div class="popup-content">
+                    <!-- Close Button -->
+                    <button class="close-btn" onclick="hideSwishPopup()">X</button>
+
+                    <!-- Popup Content -->
+                    <h4 style="text-align: center;">Swish kräver mobil</h4>
+                    <p>Swish-betalning fungerar endast på mobiltelefoner med Swish-appen installerad.</p>
+                    <p>Alternativt kan du skanna QR-koden nedan:</p>
+                    <img src="img/swishwakfQR.png" alt="Swish QR"
+                        style="width: 100%; max-width: 200px; margin: 10px auto 10px; display: block;" />
+
+                    <!-- Close Button -->
+                    <button class="donation-btn" onclick="hideSwishPopup()">Stäng</button>
+                </div>
+            </div>
+
 
             <div class="col-lg-4 donation-box" id="card-two">
                 <div class="row">
-                    <h4>Sadaqa via andra betalningssätt</h4>
+                    <h4>Gåva via andra betalningssätt</h4>
                     <p>Stödja moskén genom att använda andra betalnings metoder.</p>
                 </div>
                 <div class="circle-border">
@@ -77,8 +95,8 @@
 
             <div class="col-lg-4 donation-box" id="card-three">
                 <div class="row">
-                    <h4>Månatlig Sadaqa</h4>
-                    <p>Stödja moskén via automatisk återkommande sadaqa varje månad.</p>
+                    <h4>Månatlig Gåva</h4>
+                    <p>Stödja moskén via automatisk återkommande Gåva varje månad.</p>
                 </div>
                 <div class="circle-border">
                     <img src="img/sadaka.png" alt="Monthly Donation Icon" class="donation-img">
@@ -91,7 +109,7 @@
 
             <div class="col-lg-4 donation-box" id="card-four">
                 <div class="row">
-                    <h4>Sadaqa via Skattsedel</h4>
+                    <h4>Gåva via Skattsedel</h4>
                     <p>Stödja moskén genom att ge din moskéavgiften via skattsedel varje år.</p>
                 </div>
                 <div class="circle-border">
@@ -135,6 +153,27 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+
+    <script>
+        function isMobileDevice() {
+            return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+        }
+
+        function openSwish() {
+            const swishNumber = "1234567890"; // Replace with your Swish number
+
+            if (isMobileDevice()) {
+                window.location.href = `swish://payment?phone=${swishNumber}`;
+            } else {
+                document.getElementById("swish-popup").style.display = "flex";
+            }
+        }
+
+        function hideSwishPopup() {
+            document.getElementById("swish-popup").style.display = "none";
+        }
+    </script>
+
 
     <script>
         function showPopup() {

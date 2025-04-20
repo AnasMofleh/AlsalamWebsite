@@ -1,41 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Payment Success - School Portal</title>
-  <link rel="stylesheet" href="styles.css"> <!-- External CSS for consistent styling -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Success</title>
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
 </head>
-<body>
-  <!-- Header Section -->
-  <header>
-    <h1>School Portal</h1>
-    <nav>
-      <ul>
-        <li><a href="school.html">Home</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
 
-  <!-- Main Content Section -->
-  <main>
-    <section class="success-message">
-      <h2>Payment Successful!</h2>
-      <p>Thank you for your payment. Below are the details you provided:</p>
-      <div class="info">
-        <p><strong>Barnets personnummer:</strong> <span id="personnummer">Loading...</span></p>
-      </div>
-    </section>
-  </main>
+<body class="success-page">
+    <div id="loading">Laddar...</div>
 
-  <!-- Footer Section -->
-  <footer>
-    <p>&copy; 2025 School Portal. All Rights Reserved.</p>
-    <a href="school.html" class="back-link">Back to School Page</a>
-  </footer>
+    <div id="info" style="display: none;"></div>
 
-  <!-- External JavaScript -->
-  <script src="script-success.js"></script>
+    <script>
+        // Function to show the loading message with dots
+        const showLoading = () => {
+            let dots = 0;
+            const loadingEl = document.getElementById("loading");
+            return setInterval(() => {
+                dots = (dots + 1) % 4;
+                loadingEl.textContent = "Laddar" + ".".repeat(dots);
+            }, 500);
+        };
+
+        window.onload = async function () {
+            const loadingInterval = showLoading(); // Show loading message
+
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const sessionId = urlParams.get('session_id');
+
+                // Send data to Google Apps Script (updatePayments function)
+                const scriptResponse = await fetch("https://script.google.com/macros/s/AKfycby_E_NRU7MBYK4Y0XdWnT_rTilTrCXh5MbgJ-Kf5jqU0j0tmWC4iE9pnsxTKN_7KsGWQQ/exec", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: new URLSearchParams({
+                        action: "updatePayments",
+                        "session_id": sessionId
+                    })
+                });
+
+                const data = await scriptResponse.json(); // Response from Google Apps Script
+
+                // Stop loading animation
+                clearInterval(loadingInterval);
+                document.getElementById("loading").style.display = "none";
+                const infoBox = document.getElementById("info");
+                infoBox.style.display = "block"; // Show the info box
+
+                const { headers, row } = data; // Extract headers and row data from the response
+
+                let tableHTML = `
+                    <h2>Tack för din registrering!</h2>
+                    <p>Vi har registrerat följande information:</p>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        ${headers.map((header, i) => `
+                            <tr>
+                                <td style="border: 1px solid #ccc; padding: 6px;"><strong>${header}</strong></td>
+                                <td style="border: 1px solid #ccc; padding: 6px;">${row[i]}</td>
+                            </tr>
+                        `).join('')}
+                    </table>
+                    <div style="text-align: center; margin-top: 30px;">
+                        <button class="donation-btn" onclick="window.location.href='index.html'" style="
+                            padding: 12px 24px;
+                            font-size: 16px;
+                            background-color: #2d89e5;
+                            color: white;
+                            border: none;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            "> Tillbaka till startsidan 
+                        </button>
+                    </div>`;
+
+                // Populate the table with the data
+                infoBox.innerHTML = tableHTML;
+            } catch (err) {
+                // Stop loading animation and display error
+                clearInterval(loadingInterval);
+                document.getElementById("loading").textContent = "Ett fel inträffade. Försök igen senare.";
+                console.error(err);
+            }
+        };
+    </script>
 </body>
+
 </html>

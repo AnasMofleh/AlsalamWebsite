@@ -47,58 +47,54 @@
             <form id="schoolsform" method="POST"
                 action="https://script.google.com/macros/s/AKfycby_E_NRU7MBYK4Y0XdWnT_rTilTrCXh5MbgJ-Kf5jqU0j0tmWC4iE9pnsxTKN_7KsGWQQ/exec">
                 <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="efternamn" class="form-label">Barnets efternamn</label>
-                        <input type="text" class="form-control" name="Barnets efternamn" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="barnetsNamn" class="form-label">Barnets namn</label>
+                    <div class="col-md-4 mb-3">
+                        <label for="barnetsNamn" class="form-label">Barnets Namn</label>
                         <input type="text" class="form-control" name="Barnetsnamn" required>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="Personnummer" class="form-label">Barnets personnummer</label>
+                    <div class="col-md-4 mb-3">
+                        <label for="efternamn" class="form-label">Barnets Efternamn</label>
+                        <input type="text" class="form-control" name="Barnets efternamn" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="Personnummer" class="form-label">Barnets Personnummer</label>
                         <input type="text" class="form-control" name="Barnets personnummer" required
                             pattern="\d{10}|\d{12}" title="Personnummer must be 10 or 12 digits">
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="registreringsDatum" class="form-label">Registreringsdatum</label>
-                        <input type="date" class="form-control" name="RegistreringsDatum" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="pappansNamn" class="form-label">Pappans namn</label>
+                        <label for="pappansNamn" class="form-label">Pappans Fullständigt Namn</label>
                         <input type="text" class="form-control" name="Pappans namn" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="mammansNamn" class="form-label">Mammans namn</label>
+                        <label for="mammansNamn" class="form-label">Mammans Fullständigt Namn</label>
                         <input type="text" class="form-control" name="Mammans namn" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="pappansPersonnummer" class="form-label">Pappans personnummer</label>
+                        <label for="pappansPersonnummer" class="form-label">Pappans Personnummer</label>
                         <input type="text" class="form-control" name="Pappans personnummer" required
                             pattern="\d{10}|\d{12}" title="Personnummer must be 10 or 12 digits">
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="mammansPersonnummer" class="form-label">Mammans personnummer</label>
+                        <label for="mammansPersonnummer" class="form-label">Mammans Personnummer</label>
                         <input type="text" class="form-control" name="Mammans Personnummer" required
                             pattern="\d{10}|\d{12}" title="Personnummer must be 10 or 12 digits">
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="pappansMobilnummer" class="form-label">Pappans mobilnummer</label>
+                        <label for="pappansMobilnummer" class="form-label">Pappans Mobilnummer</label>
                         <input type="text" class="form-control" name="Pappans mobilnummer" required pattern="07\d{8}"
                             title="Mobilnummer must start with '07' and contain 10 digits">
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="mammansMobilnummer" class="form-label">Mammans mobilnummer</label>
+                        <label for="mammansMobilnummer" class="form-label">Mammans Mobilnummer</label>
                         <input type="text" class="form-control" name="Mammans mobilnummer" required pattern="07\d{8}"
                             title="Mobilnummer must start with '07' and contain 10 digits">
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="pappansEpost" class="form-label">Pappans e-post</label>
+                        <label for="pappansEpost" class="form-label">Pappans E-post</label>
                         <input type="email" class="form-control" name="Pappans e-post" required
                             title="Ange en giltig e-postadress">
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="mammansEpost" class="form-label">Mammans e-post</label>
+                        <label for="mammansEpost" class="form-label">Mammans E-post</label>
                         <input type="email" class="form-control" name="Mammans e-post" required
                             title="Ange en giltig e-postadress">
                     </div>
@@ -132,7 +128,13 @@
                     </div>
 
                 </div>
-                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Registrera</button>
+
+                <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Registrera</button>
+                <p style="font-size: 0.9rem; color: #000000; margin-top: 10px;">
+                    <strong> * Din ansöka och din data hanteras i enlighet med GDPR. Dina personuppgifter kommer att
+                        raderas efter 4 år.
+                    </strong>
+                </p>
             </form>
         </div>
     </div>
@@ -172,13 +174,12 @@
                     body: data,
                 })
                     .then(() => {
-                        window.location.href = 'https://donate.stripe.com/test_cN27vE9VAeyoc9ieUW?'; // Redirect to your link
+                        window.location.href = `https://donate.stripe.com/test_cN27vE9VAeyoc9ieUW?prefilled_email=${data.get('Pappans e-post')}`; // Redirect to your link
                     })
                     .catch(error => {
                         console.error("Error:", error);
                         alert("Submission failed. Please try again.");
                     });
-
             });
         });
     </script>

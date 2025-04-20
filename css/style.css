@@ -1,3 +1,12 @@
+:root {
+    --primary: #6c757d;
+    --bg-light: #f8f9fa;
+    --bg-white: #ffffff;
+    --text-dark: #212529;
+    --buttons: #ffc107;
+    --radius: 12px;
+  }
+
 /*** Spinner Start ***/
 
 #spinner {
@@ -216,12 +225,10 @@ h6,
 .hero-leftside,
 .hero-rightside {
     display: flex;
-    height: 33.4em;
-    /* Ensure it stretches fully */
-    transform: scale(1.2);
-    /* Slightly shrink the content */
-    transform-origin: top left;
-    /* Set scaling origin */
+    height: 33.4em;    /* Ensure it stretches fully */
+    transform: scale(1.2);    /* Slightly shrink the content */
+    transform-origin: top left;    /* Set scaling origin */
+    pointer-events: none; /* Optional: makes it non-interactive */
 }
 
 .hero-leftside img {
@@ -230,7 +237,7 @@ h6,
     /* Make image responsive */
     border-radius: 40px;
     /* Example of rounded corners */
-    outline: thick solid #ffffff;
+    outline: thick solid var(--bg-white);
     outline-width: 1.0em;
     outline-offset: -0.8em;
 }
@@ -241,7 +248,7 @@ h6,
     /* Make iframe responsive */
     border-radius: 40px;
     /* Example of rounded corners */
-    outline: thick solid #ffffff;
+    outline: thick solid var(--bg-white);
     outline-width: 1.0em;
     outline-offset: -0.8em;
 }
@@ -510,7 +517,7 @@ h6,
 }
 
 .tab-button.active {
-    background-color: #ffc107;
+    background-color: var(--buttons);
 }
 
 
@@ -521,7 +528,7 @@ h6,
     padding: 20px;
     margin-top: 20px;
     margin-right: 25px;
-    background-color: #ffffff;
+    background-color: var(--bg-white);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: center;
     align-items: center;
@@ -538,7 +545,7 @@ h6,
 
 /* Circle Border - Equal Size for All */
 .circle-border {
-    border: 3px solid #ffc107;
+    border: 3px solid var(--buttons);
     border-radius: 30%;
     display: flex;
     justify-content: center;
@@ -663,6 +670,131 @@ h6,
 }
 
 /*** Marrige End ***/
+
+/*** School-success Start ***/
+.success-page {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+  }
+  
+  .success-page h1,
+  .success-page p {
+    text-align: center;
+  }
+  
+  .success-page #info {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+  }
+  
+  .success-page #loading {
+    text-align: center;
+    margin-top: 100px;
+    font-size: 1.2rem;
+    color: #555;
+  }
+/*** School-success End ***/
+
+/*** Students Start ***/
+.students {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg-light);
+    margin: 0;
+    padding: 0;
+  }
+  
+  .students .container {
+    max-width: 600px;
+    margin: 5vh auto;
+    padding: 2rem;
+    background-color: var(--bg-white);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .students h2 {
+    text-align: center;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+  }
+  
+  .students input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+    box-sizing: border-box;
+  }
+  
+  .students button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary);
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-top: 10px;
+  }
+  
+  .students button:hover {
+    background-color: var(--buttons);
+  }
+  
+  .students .result {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: var(--bg-white);
+    border-left: 4px solid var(--primary);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .students .result p {
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+  }
+  
+  .students .error {
+    color: red;
+    font-weight: 500;
+    text-align: center;
+  }
+  
+  .students .home-btn {
+    background-color: #6c757d;
+  }
+  
+  .students .home-btn:hover {
+    background-color: var(--buttons);
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+/*** Students End ***/
 
 
 /*** Footer Start ***/
