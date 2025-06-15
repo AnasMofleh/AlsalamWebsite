@@ -8,24 +8,28 @@
 <body>
     <!-- Spinner Start -->
     <div id="spinner"
-        class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
+        class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-grow text-primary" role="status"></div>
     </div>
     <!-- Spinner End -->
 
     <!-- Add container div to control width -->
-    <div class="container-fluid" style="max-width: 1200px;">
+    <div class="container-fluid" style="max-width: 1200px">
         <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-white py-3 rounded shadow-sm">
             <div class="container-fluid d-flex justify-content-between align-items-center">
                 <!-- Logo -->
                 <a href="index.html" class="navbar-brand ms-lg-5">
                     <img src="img/Al-Salam-Center-Logo.png" alt="Mosque Logo" class="img-fluid"
-                        style="max-height: 60px;">
+                        style="max-height: 60px" />
                 </a>
 
-                <!-- Hamburger button -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                    <span class="fa fa-bars text-primary"></span>
+                <button id="donate-button-mobile" onclick="window.location.href='donations.html'">
+                    Donera <i class="fas fa-heart"></i>
+                </button>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <!-- Collapsible content -->
@@ -42,7 +46,8 @@
 
                         <!-- Social media buttons -->
                         <div class="d-flex align-items-center ms-4">
-                            <a class="btn btn-primary btn-sm me-2" href="https://chat.whatsapp.com/IRiZCLCCM7lF4NHi2wBvmj">
+                            <a class="btn btn-primary btn-sm me-2"
+                                href="https://chat.whatsapp.com/IRiZCLCCM7lF4NHi2wBvmj">
                                 <i class="fab fa-whatsapp"></i>
                             </a>
                             <a class="btn btn-primary btn-sm me-2" href="https://www.facebook.com/alsalam.center.se">
@@ -59,7 +64,7 @@
                         <!-- Swish button -->
                         <span class="navbar-text">
                             <div class="d-none d-xl-flex align-items-center ms-4">
-                                <img src="img/swish.png" alt="Swish Icon" class="me-2" style="width: 20px;">
+                                <img src="img/swish.png" alt="Swish Icon" class="me-2" style="width: 20px" />
                                 <span>Swish: 1235942958</span>
                             </div>
                         </span>
@@ -70,6 +75,7 @@
     </div>
 
     <!-- Add margin to prevent content from hiding behind navbar -->
-    <div style="margin-top: 100px;"></div>
+    <div style="margin-top: 100px"></div>
 </body>
+
 </html>
