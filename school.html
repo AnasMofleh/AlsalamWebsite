@@ -334,33 +334,52 @@
             }
         })
 
-        formSubmitBtn.addEventListener("click", function (event) {
-            event.preventDefault()
-            if (stepMenuOne.className == 'formbold-step-menu1 active') {
-                event.preventDefault()
+        formSubmitBtn.addEventListener("click", async function (event) {
+            event.preventDefault();
 
-                stepMenuOne.classList.remove('active')
-                stepMenuTwo.classList.add('active')
-
-                stepOne.classList.remove('active')
-                stepTwo.classList.add('active')
-
-                formBackBtn.classList.add('active')
-
-            } else if (stepMenuTwo.className == 'formbold-step-menu2 active') {
-                event.preventDefault()
-
-                stepMenuTwo.classList.remove('active')
-                stepMenuThree.classList.add('active')
-
-                stepTwo.classList.remove('active')
-                stepThree.classList.add('active')
-
-                formSubmitBtn.textContent = 'Submit'
-            } else if (stepMenuThree.className == 'formbold-step-menu3 active') {
-                document.querySelector('form').submit()
+            // STEP 1 → 2
+            if (stepMenuOne.classList.contains('active')) {
+                stepMenuOne.classList.remove('active');
+                stepMenuTwo.classList.add('active');
+                stepOne.classList.remove('active');
+                stepTwo.classList.add('active');
+                formBackBtn.classList.add('active');
+                return;
             }
-        })
+
+            // STEP 2 → 3
+            if (stepMenuTwo.classList.contains('active')) {
+                stepMenuTwo.classList.remove('active');
+                stepMenuThree.classList.add('active');
+                stepTwo.classList.remove('active');
+                stepThree.classList.add('active');
+                formSubmitBtn.textContent = 'Submit';
+                return;
+            }
+
+            // FINAL STEP → submit to Apps Script **then** redirect to Stripe
+            if (stepMenuThree.classList.contains('active')) {
+                const form = document.getElementById('schoolsform');
+                const data = new FormData(form);
+
+                // 1) POST the data via fetch()
+                try {
+                    const res = await fetch(form.action, {
+                        method: 'POST',
+                        body: data
+                    });
+                    const json = await res.json();
+                    console.log('Form submission response:', json);
+                } catch (err) {
+                    console.error('Error submitting form data:', err);
+                    // you might alert the user here and abort redirect
+                }
+
+                // 2) then redirect to Stripe with prefilled_email
+                const email = encodeURIComponent(data.get('Pappans Email') || '');
+                window.location.href = `https://donate.stripe.com/test_cN27vE9VAeyoc9ieUW?prefilled_email=${email}`;
+            }
+        });
     </script>
     <script>
         function toggleSecondParent(button) {
