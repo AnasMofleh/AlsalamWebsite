@@ -5,157 +5,291 @@
     <meta charset="utf-8">
     <title>Al-Salam Moské</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
 
-    <!-- Google Web Fonts -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Pacifico&display=swap"
         rel="stylesheet">
 
-    <!-- Icon Font Stylesheet -->
+    <!-- Font Awesome & Bootstrap Icons -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Libraries Stylesheet -->
+    <!-- CSS -->
     <link href="lib/animate/animate.min.css" rel="stylesheet">
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-
-    <!-- Customized Bootstrap Stylesheet -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
-
-
-
 </head>
 
 <body>
-    <!-- Header Start -->
     <div id="header-placeholder"></div>
-    <!-- Header End -->
-
-    <!-- Add margin to prevent content from hiding behind navbar -->
     <div style="margin-top: 100px;"></div>
 
     <div class="container mt-5 pt-5 d-flex justify-content-center">
         <div class="col-md-8">
-            <h2>Registreringsformulär</h2>
-            <form id="schoolsform" method="POST"
-                action="https://script.google.com/macros/s/AKfycby_E_NRU7MBYK4Y0XdWnT_rTilTrCXh5MbgJ-Kf5jqU0j0tmWC4iE9pnsxTKN_7KsGWQQ/exec">
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label for="barnetsNamn" class="form-label">Barnets Namn</label>
-                        <input type="text" class="form-control" name="Barnetsnamn" required>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="efternamn" class="form-label">Barnets Efternamn</label>
-                        <input type="text" class="form-control" name="Barnets efternamn" required>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="Personnummer" class="form-label">Barnets Personnummer</label>
-                        <input type="text" class="form-control" name="Barnets personnummer" required
-                            pattern="\d{10}|\d{12}" title="Personnummer must be 10 or 12 digits">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="pappansNamn" class="form-label">Pappans Fullständigt Namn</label>
-                        <input type="text" class="form-control" name="Pappans namn" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="mammansNamn" class="form-label">Mammans Fullständigt Namn</label>
-                        <input type="text" class="form-control" name="Mammans namn" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="pappansPersonnummer" class="form-label">Pappans Personnummer</label>
-                        <input type="text" class="form-control" name="Pappans personnummer" required
-                            pattern="\d{10}|\d{12}" title="Personnummer must be 10 or 12 digits">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="mammansPersonnummer" class="form-label">Mammans Personnummer</label>
-                        <input type="text" class="form-control" name="Mammans Personnummer" required
-                            pattern="\d{10}|\d{12}" title="Personnummer must be 10 or 12 digits">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="pappansMobilnummer" class="form-label">Pappans Mobilnummer</label>
-                        <input type="text" class="form-control" name="Pappans mobilnummer" required pattern="07\d{8}"
-                            title="Mobilnummer must start with '07' and contain 10 digits">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="mammansMobilnummer" class="form-label">Mammans Mobilnummer</label>
-                        <input type="text" class="form-control" name="Mammans mobilnummer" required pattern="07\d{8}"
-                            title="Mobilnummer must start with '07' and contain 10 digits">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="pappansEpost" class="form-label">Pappans E-post</label>
-                        <input type="email" class="form-control" name="Pappans e-post" required
-                            title="Ange en giltig e-postadress">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="mammansEpost" class="form-label">Mammans E-post</label>
-                        <input type="email" class="form-control" name="Mammans e-post" required
-                            title="Ange en giltig e-postadress">
-                    </div>
-                    <div class="row">
-                        <!-- Parent to Contact -->
-                        <div class="col-md-6">
-                            <label class="form-label">Vilken förälder ska vara kontaktpersonen:</label>
-                            <div class="form-check">
-                                <input type="radio" class="form-check-input" name="kontaktForälder" id="kontaktPappa"
-                                    required>
-                                <label for="kontaktPappa" class="form-check-label">Pappa</label>
+            <h2 class="text-center">Registreringsformulär</h2>
+            <div class="formbold-main-wrapper">
+                <!-- Author: FormBold Team -->
+                <!-- Learn More: https://formbold.com -->
+                <div class="formbold-form-wrapper">
+                    <form id="schoolsform" method="POST"
+                        action="https://script.google.com/macros/s/AKfycbwWHS1yB_oEpYHk16T3OOkHetyeBcGh0RHSXk518U5_lbHee9Ne4W0djxm6HwI6t1V7Hw/exec">
+                        <div class="formbold-steps">
+                            <ul>
+                                <li class="formbold-step-menu1 active">
+                                    <span>1</span>
+                                    Föräldrar information
+                                </li>
+                                <li class="formbold-step-menu2">
+                                    <span>2</span>
+                                    Barnen information
+                                </li>
+                                <li class="formbold-step-menu3">
+                                    <span>3</span>
+                                    Bekräfta
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="formbold-form-step-1 active">
+                            <p> Förälder 1: </p>
+                            <div class="formbold-input-flex">
+                                <div>
+                                    <label for="parent1name" class="formbold-form-label"> Förnamn </label>
+                                    <input type="text" name="Pappans Förnamn" placeholder="Taha" id="parent1name"
+                                        class="formbold-form-input" />
+                                </div>
+                                <div>
+                                    <label for="parent1lastname" class="formbold-form-label"> Efternamn </label>
+                                    <input type="text" name="Pappans Efternamn" placeholder="Ali" id="parent1lastname"
+                                        class="formbold-form-input" />
+                                </div>
+                                <div>
+                                    <label for="parent1number" class="formbold-form-label"> Mobilenummer </label>
+                                    <input type="text" name="Pappans Mobilenummer" placeholder="0731234567"
+                                        id="parent1number" class="formbold-form-input" />
+                                </div>
                             </div>
-                            <div class="form-check">
-                                <input type="radio" class="form-check-input" name="kontaktForälder" id="kontaktMamma">
-                                <label for="kontaktMamma" class="form-check-label">Mamma</label>
+
+                            <div class="formbold-input-flex">
+                                <div>
+                                    <label for="parent1ssn" class="formbold-form-label"> Personnummer </label>
+                                    <input type="text" name="Pappans Personnummer" id="parent1ssn"
+                                        placeholder="XXXXXX-XXXX" class="formbold-form-input">
+                                </div>
+                                <div>
+                                    <label for="parents1email" class="formbold-form-label"> Email Address </label>
+                                    <input type="email" name="Pappans Email" placeholder="example@mail.com"
+                                        id="parents1email" class="formbold-form-input" />
+                                </div>
+                            </div>
+
+
+
+                            <button type="button" onclick="toggleSecondParent(this)" class="formbold-add-button">
+                                ➕ Lägg till Förälder 2
+                            </button>
+
+                            <!-- The second parent section (initially hidden) -->
+                            <div id="secondParentContainer" style="display: none; margin-top: 1rem;">
+                                <p>Förälder 2:</p>
+                                <div class="formbold-input-flex">
+                                    <div>
+                                        <label for="parent2name" class="formbold-form-label">Förnamn</label>
+                                        <input type="text" name="Mammans Förnamn" placeholder="Amina" id="parent2name"
+                                            class="formbold-form-input" />
+                                    </div>
+                                    <div>
+                                        <label for="parent2lastname" class="formbold-form-label">Efternamn</label>
+                                        <input type="text" name="Mammans Efternamn" placeholder="Ali"
+                                            id="parent2lastname" class="formbold-form-input" />
+                                    </div>
+                                    <div>
+                                        <label for="parent2number" class="formbold-form-label">Mobilenummer</label>
+                                        <input type="text" name="Mammans Mobilnummer" placeholder="0701234567"
+                                            id="parent2number" class="formbold-form-input" />
+                                    </div>
+                                </div>
+
+                                <div class="formbold-input-flex">
+                                    <div>
+                                        <label for="parent2ssn" class="formbold-form-label">Personnummer</label>
+                                        <input type="text" name="Mammans Personnummer" id="parent2ssn"
+                                            placeholder="XXXXXX-XXXX" class="formbold-form-input">
+                                    </div>
+                                    <div>
+                                        <label for="parent2email" class="formbold-form-label">Email Address</label>
+                                        <input type="email" name="Mammans Email" placeholder="example2@mail.com"
+                                            id="parent2email" class="formbold-form-input" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="formbold-input-flex" style="margin-top: 1rem;">
+                                <div>
+                                    <label for="address" class="formbold-form-label"> Address </label>
+                                    <input type="text" name="Address" id="Address" placeholder="Södergatan 65"
+                                        class="formbold-form-input" />
+                                </div>
+                                <div>
+                                    <label for="Postnummer" class="formbold-form-label"> Postnummer </label>
+                                    <input type="text" name="Postnummer" id="Postnummer" placeholder="25219"
+                                        class="formbold-form-input" />
+                                </div>
+                                <div>
+                                    <label for="Postort" class="formbold-form-label"> Postort </label>
+                                    <input type="text" name="Postort" id="Postort" placeholder="Helsingborg"
+                                        class="formbold-form-input" />
+                                </div>
+                            </div>
+
+                            <p class="mt-2 text-muted">
+                                <strong>* Din ansökan och din data hanteras i enlighet med GDPR. Dina personuppgifter
+                                    kommer att raderas efter 4 år.</strong>
+                            </p>
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        <div class="formbold-form-step-2">
+                            <!-- Container for all children -->
+
+                            <div id="childrenContainer">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <p style="margin: 0;">Barn 1</p>
+                                </div>
+                                <div class="formbold-input-flex">
+                                    <div>
+                                        <label for="Barnet Namn 1" class="formbold-form-label">Förnamn</label>
+                                        <input type="text" name="Barnets Namn[]" id="Barnet Namn 1" placeholder="Ali"
+                                            class="formbold-form-input" />
+                                    </div>
+                                    <div style="position: relative; width: 55%;">
+                                        <label for="Barnets Personnummer 1"
+                                            class="formbold-form-label">Personnummer</label>
+                                        <div style="display: flex; align-items: center;">
+                                            <input type="text" id="Barnets Personnummer 1" name="Barnets Personnummer[]"
+                                                placeholder="YYYYMMDD-XXXX" class="formbold-form-input" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Add Child Button -->
+                            <button type="button" onclick="addChild()" class="formbold-add-button"
+                                style="margin-bottom: 1rem;">
+                                ➕ Lägg till Barn
+                            </button>
+
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        <div class="formbold-form-step-3">
+                            <div class="formbold-form-confirm">
+                                <div class="container ">
+                                    <div class="col-md-6">
+                                        <label>Kontaktförälder:</label>
+                                        <div class="form-check">
+                                            <input type="radio" class="form-check-input" name="kontaktForälder"
+                                                id="kontaktPappa" value="Pappa" required>
+                                            <label for="kontaktPappa" class="form-check-label">Pappa</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" class="form-check-input" name="kontaktForälder"
+                                                id="kontaktMamma" value="Mamma">
+                                            <label for="kontaktMamma" class="form-check-label">Mamma</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label>Skoldag:</label>
+                                        <div class="form-check">
+                                            <input type="radio" class="form-check-input" name="skoldag"
+                                                id="skoldagLördag" value="Lördag" required>
+                                            <label for="skoldagLördag" class="form-check-label">Lördag</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" class="form-check-input" name="skoldag"
+                                                id="skoldagSöndag" value="Söndag">
+                                            <label for="skoldagSöndag" class="form-check-label">Söndag</label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- School Day -->
-                        <div class="col-md-6">
-                            <label class="form-label">Välj dag för skola (Lördag eller Söndag):</label>
-                            <div class="form-check">
-                                <input type="radio" class="form-check-input" name="skoldag" id="skoldagLördag" required>
-                                <label for="skoldagLördag" class="form-check-label">Lördag</label>
-                            </div>
-                            <div class="form-check">
-                                <input type="radio" class="form-check-input" name="skoldag" id="skoldagSöndag">
-                                <label for="skoldagSöndag" class="form-check-label">Söndag</label>
-                            </div>
-                        </div>
-                    </div>
+                        <div class="formbold-form-btn-wrapper">
+                            <button class="formbold-back-btn">
+                                Back
+                            </button>
 
+                            <button class="formbold-btn">
+                                Next Step
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <g clip-path="url(#clip0_1675_1807)">
+                                        <path
+                                            d="M10.7814 7.33312L7.20541 3.75712L8.14808 2.81445L13.3334 7.99979L8.14808 13.1851L7.20541 12.2425L10.7814 8.66645H2.66675V7.33312H10.7814Z"
+                                            fill="white" />
+                                    </g>
+                                    <defs>
+                                        <clipPath id="clip0_1675_1807">
+                                            <rect width="16" height="16" fill="white" />
+                                        </clipPath>
+                                    </defs>
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
                 </div>
+            </div>
 
-                <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Registrera</button>
-                <p style="font-size: 0.9rem; color: #000000; margin-top: 10px;">
-                    <strong> * Din ansöka och din data hanteras i enlighet med GDPR. Dina personuppgifter kommer att
-                        raderas efter 4 år.
-                    </strong>
-                </p>
-            </form>
+
         </div>
     </div>
 
-
-    <!-- Footer Start -->
     <div id="footer-placeholder"></div>
-    <!-- Footer End -->
 
-    <!-- JavaScript Libraries -->
+    <!-- Scripts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/wow/wow.min.js"></script>
     <script src="lib/easing/easing.min.js"></script>
     <script src="lib/waypoints/waypoints.min.js"></script>
     <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-
-    <!-- Template Javascript -->
     <script src="js/main.js"></script>
+    <script src="lib\wow\wow.min.js"></script>
 
-    <!-- Load Header and Footer -->
+
     <script>
         $(function () {
             $("#header-placeholder").load("header.html");
@@ -163,25 +297,137 @@
         });
     </script>
     <script>
-        window.addEventListener("load", function () {
-            const form = document.getElementById('schoolsform');
-            form.addEventListener("submit", function (e) {
-                e.preventDefault();
-                const data = new FormData(form);
-                const action = e.target.action;
-                fetch(action, {
-                    method: 'POST',
-                    body: data,
-                })
-                    .then(() => {
-                        window.location.href = `https://donate.stripe.com/test_cN27vE9VAeyoc9ieUW?prefilled_email=${data.get('Pappans e-post')}`; // Redirect to your link
-                    })
-                    .catch(error => {
-                        console.error("Error:", error);
-                        alert("Submission failed. Please try again.");
-                    });
+        const stepMenuOne = document.querySelector('.formbold-step-menu1')
+        const stepMenuTwo = document.querySelector('.formbold-step-menu2')
+        const stepMenuThree = document.querySelector('.formbold-step-menu3')
+
+        const stepOne = document.querySelector('.formbold-form-step-1')
+        const stepTwo = document.querySelector('.formbold-form-step-2')
+        const stepThree = document.querySelector('.formbold-form-step-3')
+
+        const formSubmitBtn = document.querySelector('.formbold-btn')
+        const formBackBtn = document.querySelector('.formbold-back-btn')
+
+        formBackBtn.addEventListener("click", function (event) {
+            if (stepMenuTwo.className == 'formbold-step-menu2 active') {
+                event.preventDefault()
+
+                stepMenuOne.classList.add('active')
+                stepMenuTwo.classList.remove('active')
+
+                stepOne.classList.add('active')
+                stepTwo.classList.remove('active')
+
+                formBackBtn.classList.remove('active')
+
+
+            } else if (stepMenuThree.className == 'formbold-step-menu3 active') {
+                event.preventDefault()
+
+                stepMenuTwo.classList.add('active')
+                stepMenuThree.classList.remove('active')
+
+                stepTwo.classList.add('active')
+                stepThree.classList.remove('active')
+
+                formSubmitBtn.textContent = 'Next Step'
+            }
+        })
+
+        formSubmitBtn.addEventListener("click", function (event) {
+            event.preventDefault()
+            if (stepMenuOne.className == 'formbold-step-menu1 active') {
+                event.preventDefault()
+
+                stepMenuOne.classList.remove('active')
+                stepMenuTwo.classList.add('active')
+
+                stepOne.classList.remove('active')
+                stepTwo.classList.add('active')
+
+                formBackBtn.classList.add('active')
+
+            } else if (stepMenuTwo.className == 'formbold-step-menu2 active') {
+                event.preventDefault()
+
+                stepMenuTwo.classList.remove('active')
+                stepMenuThree.classList.add('active')
+
+                stepTwo.classList.remove('active')
+                stepThree.classList.add('active')
+
+                formSubmitBtn.textContent = 'Submit'
+            } else if (stepMenuThree.className == 'formbold-step-menu3 active') {
+                document.querySelector('form').submit()
+            }
+        })
+    </script>
+    <script>
+        function toggleSecondParent(button) {
+            const container = document.getElementById("secondParentContainer");
+            const isVisible = container.style.display === "block";
+
+            container.style.display = isVisible ? "none" : "block";
+
+            // Toggle button text and color
+            if (isVisible) {
+                button.textContent = "+ Lägg till Förälder 2";
+                button.classList.remove("formbold-remove-button");
+            } else {
+                button.textContent = "− Ta bort Förälder";
+                button.classList.add("formbold-remove-button");
+            }
+        }
+    </script>
+    <script>
+        let childCount = 1;
+
+        function addChild() {
+            childCount++;
+
+            const container = document.getElementById('childrenContainer');
+
+            const childDiv = document.createElement('div');
+            childDiv.className = 'child-section';
+            childDiv.style.marginBottom = '1.5rem';
+
+            childDiv.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <p style="margin: 0;">Barn ${childCount}</p>
+            </div>
+            <div class="formbold-input-flex">
+                <div>
+                    <label for="Barnet Namn ${childCount}" class="formbold-form-label">Förnamn</label>
+                    <input type="text" name="Barnets Namn[]" id="Barnet Namn ${childCount}" class="formbold-form-input" />
+                </div>
+                <div style="position: relative; width: 55%;">
+                    <label for="Barnets Personnummer ${childCount}" class="formbold-form-label">Personnummer</label>
+                    <div style="display: flex; align-items: center;">
+                        <input type="text" id="Barnets Personnummer ${childCount}" name="Barnets Personnummer[]" placeholder="YYYYMMDD-XXXX" class="formbold-form-input" />
+                        <button type="button" class="remove-child-btn" style="
+                            margin-left: 8px;
+                            background: none;
+                            border: none;
+                            color: red;
+                            font-size: 1.4rem;
+                            cursor: pointer;
+                        ">❌</button>
+                    </div>
+                </div>
+            </div>
+            
+        `;
+
+            // Attach event listener *after* adding to DOM
+            const removeBtn = childDiv.querySelector('.remove-child-btn');
+            removeBtn.addEventListener('click', function () {
+                console.log("Remove clicked");
+                childDiv.remove();
+                childCount--;
             });
-        });
+
+            container.appendChild(childDiv);
+        }
     </script>
 </body>
 
