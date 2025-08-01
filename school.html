@@ -276,6 +276,12 @@
 
         </div>
     </div>
+    <div id="loadingSpinner"
+        style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Laddar...</span>
+        </div>
+    </div>
 
     <div id="footer-placeholder"></div>
 
@@ -339,6 +345,15 @@
 
             // STEP 1 → 2
             if (stepMenuOne.classList.contains('active')) {
+                // Get values to validate
+                const form = document.getElementById('schoolsform');
+                const data = new FormData(form);
+                const parentEmail = data.get('Pappans Email');
+                const parentPhone = data.get('Pappans Mobilenummer');
+                if (!parentEmail || !parentPhone) {
+                    alert("Du måste fylla i förälders email och mobilnummer innan du kan fortsätta!");
+                    return;
+                }
                 stepMenuOne.classList.remove('active');
                 stepMenuTwo.classList.add('active');
                 stepOne.classList.remove('active');
@@ -349,6 +364,16 @@
 
             // STEP 2 → 3
             if (stepMenuTwo.classList.contains('active')) {
+                // Get values to validate
+                const form = document.getElementById('schoolsform');
+                const data = new FormData(form);
+                const childPNs = data.getAll('Barnets Personnummer[]');
+                // Basic Validation
+                const isMissingChildPN = childPNs.some(pn => !pn.trim());
+                if (isMissingChildPN) {
+                    alert("Du måste fylla i barnets personnummer innan du kan fortsätta!");
+                    return;
+                }
                 stepMenuTwo.classList.remove('active');
                 stepMenuThree.classList.add('active');
                 stepTwo.classList.remove('active');
@@ -361,6 +386,9 @@
             if (stepMenuThree.classList.contains('active')) {
                 const form = document.getElementById('schoolsform');
                 const data = new FormData(form);
+
+                // Show spinner
+                document.getElementById('loadingSpinner').style.display = 'block';
 
                 // 1) POST the data via fetch()
                 try {
