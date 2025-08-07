@@ -397,7 +397,6 @@
                         body: data
                     });
                     const json = await res.json();
-                    console.log('Form submission response:', json);
                 } catch (err) {
                     console.error('Error submitting form data:', err);
                     // you might alert the user here and abort redirect
@@ -405,7 +404,8 @@
 
                 // 2) then redirect to Stripe with prefilled_email
                 const email = encodeURIComponent(data.get('Pappans Email') || '');
-                window.location.href = `https://donate.stripe.com/test_cN27vE9VAeyoc9ieUW?prefilled_email=${email}`;
+                const pnr = encodeURIComponent(data.get('Pappans Personnummer') || '');
+                window.location.href = `https://donate.stripe.com/test_cN27vE9VAeyoc9ieUW?prefilled_email=${email}&client_reference_id=${pnr}`;
             }
         });
     </script>

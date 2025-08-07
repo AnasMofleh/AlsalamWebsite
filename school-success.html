@@ -33,7 +33,7 @@
                 const sessionId = urlParams.get('session_id');
 
                 // Send data to Google Apps Script (updatePayments function)
-                const scriptResponse = await fetch("https://script.google.com/macros/s/AKfycby_E_NRU7MBYK4Y0XdWnT_rTilTrCXh5MbgJ-Kf5jqU0j0tmWC4iE9pnsxTKN_7KsGWQQ/exec", {
+                const scriptResponse = await fetch("https://script.google.com/macros/s/AKfycbwWHS1yB_oEpYHk16T3OOkHetyeBcGh0RHSXk518U5_lbHee9Ne4W0djxm6HwI6t1V7Hw/exec", {
                     method: "POST",
                     headers: { "Content-Type": "application/x-www-form-urlencoded" },
                     body: new URLSearchParams({
@@ -50,31 +50,79 @@
                 const infoBox = document.getElementById("info");
                 infoBox.style.display = "block"; // Show the info box
 
-                const { headers, row } = data; // Extract headers and row data from the response
+                const { headers, rows } = data; // Extract headers and row data from the response
 
                 let tableHTML = `
-                    <h2>Tack för din registrering!</h2>
-                    <p>Vi har registrerat följande information:</p>
-                    <table style="width: 100%; border-collapse: collapse;">
-                        ${headers.map((header, i) => `
-                            <tr>
-                                <td style="border: 1px solid #ccc; padding: 6px;"><strong>${header}</strong></td>
-                                <td style="border: 1px solid #ccc; padding: 6px;">${row[i]}</td>
-                            </tr>
+                <h2>Tack för din registrering!</h2>
+                <p>Vi har registrerat följande information:</p>
+            `;
+
+                // Define which headers are for the parent and which for the child
+                const parentFields = [
+                    "Pappans Förnamn", "Pappans Efternamn", "Pappans Personnummer", "Pappans Mobilenummer", "Pappans Email",
+                    "Mammans Förnamn", "Mammans Efternamn", "Mammans Personnummer", "Mammans Mobilnummer", "Mammans Email",
+                    "kontaktForälder", "Address", "Postnummer", "Postort", "RegistreringsDatum"
+                ];
+
+                const childFields = [
+                    "Barnets Namn", "Barnets Personnummer", "skoldag", "Månatligbetalning"
+                ];
+
+                // Get column indexes
+                const parentIndexes = parentFields.map(f => headers.indexOf(f)).filter(i => i !== -1);
+                const childIndexes = childFields.map(f => headers.indexOf(f)).filter(i => i !== -1);
+
+                // Extract parent info from first row
+                const parentRow = rows[0];
+
+                // Render parent info once
+                tableHTML += `
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+                    <caption style="text-align: left; font-weight: bold; margin-bottom: 8px;">Föräldrainformation</caption>
+                    ${parentIndexes.map(i => `
+                        <tr>
+                            <td style="border: 1px solid #ccc; padding: 6px;"><strong>${headers[i]}</strong></td>
+                            <td style="border: 1px solid #ccc; padding: 6px;">${parentRow[i]}</td>
+                        </tr>
+                    `).join('')}
+                </table>
+            `;
+
+                // Render children table
+                tableHTML += `
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+                    <caption style="text-align: left; font-weight: bold; margin-bottom: 8px;">Registrerade barn</caption>
+                    <tr>
+                        ${childIndexes.map(i => `
+                            <th style="border: 1px solid #ccc; padding: 6px; background-color: #f0f0f0;">${headers[i]}</th>
                         `).join('')}
-                    </table>
-                    <div style="text-align: center; margin-top: 30px;">
-                        <button class="donation-btn" onclick="window.location.href='index.html'" style="
-                            padding: 12px 24px;
-                            font-size: 16px;
-                            background-color: #2d89e5;
-                            color: white;
-                            border: none;
-                            border-radius: 8px;
-                            cursor: pointer;
-                            "> Tillbaka till startsidan 
-                        </button>
-                    </div>`;
+                    </tr>
+                    ${rows.map(row => `
+                        <tr>
+                            ${childIndexes.map(i => `
+                                <td style="border: 1px solid #ccc; padding: 6px;">${row[i]}</td>
+                            `).join('')}
+                        </tr>
+                    `).join('')}
+                </table>
+            `;
+
+                // Add back button
+                tableHTML += `
+                <div style="text-align: center;">
+                    <button class="donation-btn" onclick="window.location.href='index.html'" style="
+                        padding: 12px 24px;
+                        font-size: 16px;
+                        background-color: #2d89e5;
+                        color: white;
+                        border: none;
+                        border-radius: 8px;
+                        cursor: pointer;
+                    "> Tillbaka till startsidan</button>
+                </div>
+            `;
+
+
 
                 // Populate the table with the data
                 infoBox.innerHTML = tableHTML;
