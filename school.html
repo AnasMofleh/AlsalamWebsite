@@ -348,8 +348,13 @@
                 const data = new FormData(form);
                 const parentEmail = data.get('Pappans Email');
                 const parentPhone = data.get('Pappans Mobilenummer');
-                if (!parentEmail || !parentPhone) {
-                    alert("Du måste fylla i förälders email och mobilnummer innan du kan fortsätta!");
+                const parentSSN = data.get('Pappans Personnummer');
+                const parentName = data.get('Pappans Förnamn');
+                const address = data.get('Address');
+                const ort = data.get('Postort');
+                const postNummer = data.get('Postnummer');
+                if (!parentName || !parentEmail || !parentPhone || !parentSSN || !address || !ort || !postNummer) {
+                    alert("För att gå vidare måste du fylla i alla uppgifter!");
                     return;
                 }
                 stepMenuOne.classList.remove('active');
