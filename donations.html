@@ -109,35 +109,20 @@
                 </stripe-buy-button>
             </div>
 
-            <div class="col-lg-4 donation-box" id="card-four">
+            <div class="col-lg-6 donation-box" id="card-four">
                 <div class="row">
                     <h4>Gåva via Skattsedel</h4>
                     <p>Stödja moskén genom att ge din moskéavgiften via skattsedel varje år.</p>
                 </div>
-                <div class="circle-border">
-                    <img src="img/skattsedel.png" alt="Tax Donation Icon" class="donation-img">
+
+                <!-- Replace circle-border image and button with iframe -->
+                <div class="iframe-container">
+                    <iframe src="https://medlem.fifs.se/SCH" width="100%" height="500"
+                        style="border: 2px solid #ccc; border-radius: 10px;" title="Ansökan via FIFS">
+                    </iframe>
                 </div>
-                <button class="donation-btn" onclick="showPopup()">Fyll i blanketten</button>
             </div>
 
-            <div id="popup" class="popup">
-                <div class="popup-content">
-                    <!-- Close Button -->
-                    <button class="close-btn" onclick="hidePopup()">X</button>
-                    <!-- Popup Information -->
-                    <h4 style="text-align: center;">Information om Ansökan</h4>
-                    <p>Innan du fyller i ansökan i nästa steg behöver du veta följande:</p>
-                    <ul>
-                        <li>Lämna referensnummer fältet tom.</li>
-                        <li>Checka <strong>INTE</strong> av boxen som säger att du vill ha 100% av din medlemsavigft går
-                            till FIFS.</li>
-                        </li>
-                        <li>Fyll i föreningsnamn som: <span style="color: blue;">Al Salam Center i Helsingborg</span>
-                    </ul>
-                    <!-- Redirect Button -->
-                    <button class="donation-btn" onclick="redirectToLink()">Fortsätt till Ansökan</button>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -173,21 +158,6 @@
 
         function hideSwishPopup() {
             document.getElementById("swish-popup").style.display = "none";
-        }
-    </script>
-
-
-    <script>
-        function showPopup() {
-            document.getElementById('popup').style.display = 'flex';
-        }
-
-        function hidePopup() {
-            document.getElementById('popup').style.display = 'none';
-        }
-
-        function redirectToLink() {
-            window.location.href = 'https://app.assently.com/t/633yg2'; // Your link here
         }
     </script>
 
