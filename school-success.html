@@ -31,6 +31,7 @@
             try {
                 const urlParams = new URLSearchParams(window.location.search);
                 const sessionId = urlParams.get('session_id');
+                    const isLocal = window.location.hostname === "localhost";
 
                 // Send data to Google Apps Script (updatePayments function)
                 const scriptResponse = await fetch("https://script.google.com/macros/s/AKfycbwWHS1yB_oEpYHk16T3OOkHetyeBcGh0RHSXk518U5_lbHee9Ne4W0djxm6HwI6t1V7Hw/exec", {
@@ -38,7 +39,8 @@
                     headers: { "Content-Type": "application/x-www-form-urlencoded" },
                     body: new URLSearchParams({
                         action: "updatePayments",
-                        "session_id": sessionId
+                        "session_id": sessionId,
+                        "env": isLocal ? "test" : "prod"
                     })
                 });
 

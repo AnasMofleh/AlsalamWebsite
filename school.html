@@ -59,17 +59,18 @@
                                 <div>
                                     <label for="parent1name" class="formbold-form-label"> Förnamn </label>
                                     <input type="text" name="Pappans Förnamn" placeholder="Taha" id="parent1name"
-                                        class="formbold-form-input" />
+                                        class="formbold-form-input" required />
                                 </div>
                                 <div>
                                     <label for="parent1lastname" class="formbold-form-label"> Efternamn </label>
                                     <input type="text" name="Pappans Efternamn" placeholder="Ali" id="parent1lastname"
-                                        class="formbold-form-input" />
+                                        class="formbold-form-input" required />
                                 </div>
                                 <div>
                                     <label for="parent1number" class="formbold-form-label"> Mobilenummer </label>
-                                    <input type="text" name="Pappans Mobilenummer" placeholder="0731234567"
-                                        id="parent1number" class="formbold-form-input" />
+                                    <input type="text" name="Pappans Mobilenummer" id="parent1number"
+                                        placeholder="0731234567" class="formbold-form-input" required pattern="07\d{8}"
+                                        title="Mobilnummer måste vara 10 siffror som börjar med 07" />
                                 </div>
                             </div>
 
@@ -77,12 +78,16 @@
                                 <div>
                                     <label for="parent1ssn" class="formbold-form-label"> Personnummer </label>
                                     <input type="text" name="Pappans Personnummer" id="parent1ssn"
-                                        placeholder="XXXXXX-XXXX" class="formbold-form-input">
+                                        placeholder="YYYYMMDDXXXX" class="formbold-form-input" required
+                                        pattern="(19|20)\d{10}"
+                                        title="Personnummer måste vara 12 siffror och börja med 19 eller 20" />
+
                                 </div>
                                 <div>
                                     <label for="parents1email" class="formbold-form-label"> Email Address </label>
                                     <input type="email" name="Pappans Email" placeholder="example@mail.com"
-                                        id="parents1email" class="formbold-form-input" />
+                                        id="parents1email" class="formbold-form-input" required
+                                        title="Ange en giltig e-postadress" />
                                 </div>
                             </div>
 
@@ -129,14 +134,15 @@
 
                             <div class="formbold-input-flex" style="margin-top: 1rem;">
                                 <div>
-                                    <label for="address" class="formbold-form-label"> Address </label>
+                                    <label for="Address" class="formbold-form-label"> Address </label>
                                     <input type="text" name="Address" id="Address" placeholder="Södergatan 65"
                                         class="formbold-form-input" />
                                 </div>
                                 <div>
                                     <label for="Postnummer" class="formbold-form-label"> Postnummer </label>
                                     <input type="text" name="Postnummer" id="Postnummer" placeholder="25219"
-                                        class="formbold-form-input" />
+                                        class="formbold-form-input" required pattern="\d{5}"
+                                        title="Postnummer måste vara 5 siffror" />
                                 </div>
                                 <div>
                                     <label for="Postort" class="formbold-form-label"> Postort </label>
@@ -173,14 +179,15 @@
                                     <div>
                                         <label for="Barnet Namn 1" class="formbold-form-label">Förnamn</label>
                                         <input type="text" name="Barnets Namn[]" id="Barnet Namn 1" placeholder="Ali"
-                                            class="formbold-form-input" />
+                                            class="formbold-form-input" required />
                                     </div>
                                     <div style="position: relative; width: 55%;">
                                         <label for="Barnets Personnummer 1"
                                             class="formbold-form-label">Personnummer</label>
                                         <div style="display: flex; align-items: center;">
                                             <input type="text" id="Barnets Personnummer 1" name="Barnets Personnummer[]"
-                                                placeholder="YYYYMMDD-XXXX" class="formbold-form-input" />
+                                                placeholder="YYYYMMDDXXXX" class="formbold-form-input" required
+                                                pattern="(19|20)?\d{10}" title="Personnummer måste vara 12 siffror" />
                                         </div>
                                     </div>
                                 </div>
@@ -301,184 +308,112 @@
         });
     </script>
     <script>
-        const stepMenuOne = document.querySelector('.formbold-step-menu1')
-        const stepMenuTwo = document.querySelector('.formbold-step-menu2')
-        const stepMenuThree = document.querySelector('.formbold-step-menu3')
+        document.addEventListener("DOMContentLoaded", () => {
+            const steps = [...document.querySelectorAll(".formbold-form-step-1, .formbold-form-step-2, .formbold-form-step-3")];
+            const menus = [...document.querySelectorAll(".formbold-step-menu1, .formbold-step-menu2, .formbold-step-menu3")];
+            const form = document.getElementById("schoolsform");
+            const btnNext = document.querySelector(".formbold-btn");
+            const btnBack = document.querySelector(".formbold-back-btn");
+            const spinner = document.getElementById("loadingSpinner");
 
-        const stepOne = document.querySelector('.formbold-form-step-1')
-        const stepTwo = document.querySelector('.formbold-form-step-2')
-        const stepThree = document.querySelector('.formbold-form-step-3')
+            let currentStep = 0;
 
-        const formSubmitBtn = document.querySelector('.formbold-btn')
-        const formBackBtn = document.querySelector('.formbold-back-btn')
-
-        formBackBtn.addEventListener("click", function (event) {
-            if (stepMenuTwo.className == 'formbold-step-menu2 active') {
-                event.preventDefault()
-
-                stepMenuOne.classList.add('active')
-                stepMenuTwo.classList.remove('active')
-
-                stepOne.classList.add('active')
-                stepTwo.classList.remove('active')
-
-                formBackBtn.classList.remove('active')
-
-
-            } else if (stepMenuThree.className == 'formbold-step-menu3 active') {
-                event.preventDefault()
-
-                stepMenuTwo.classList.add('active')
-                stepMenuThree.classList.remove('active')
-
-                stepTwo.classList.add('active')
-                stepThree.classList.remove('active')
-
-                formSubmitBtn.textContent = 'Next Step'
-            }
-        })
-
-        formSubmitBtn.addEventListener("click", async function (event) {
-            event.preventDefault();
-
-            // STEP 1 → 2
-            if (stepMenuOne.classList.contains('active')) {
-                // Get values to validate
-                const form = document.getElementById('schoolsform');
-                const data = new FormData(form);
-                const parentEmail = data.get('Pappans Email');
-                const parentPhone = data.get('Pappans Mobilenummer');
-                const parentSSN = data.get('Pappans Personnummer');
-                const parentName = data.get('Pappans Förnamn');
-                const address = data.get('Address');
-                const ort = data.get('Postort');
-                const postNummer = data.get('Postnummer');
-                if (!parentName || !parentEmail || !parentPhone || !parentSSN || !address || !ort || !postNummer) {
-                    alert("För att gå vidare måste du fylla i alla uppgifter!");
-                    return;
-                }
-                stepMenuOne.classList.remove('active');
-                stepMenuTwo.classList.add('active');
-                stepOne.classList.remove('active');
-                stepTwo.classList.add('active');
-                formBackBtn.classList.add('active');
-                return;
+            function showStep(index) {
+                steps.forEach((s, i) => s.classList.toggle("active", i === index));
+                menus.forEach((m, i) => m.classList.toggle("active", i === index));
+                btnBack.style.display = index > 0 ? "inline-block" : "none";
+                btnNext.textContent = index === steps.length - 1 ? "Submit" : "Next Step";
+                currentStep = index;
             }
 
-            // STEP 2 → 3
-            if (stepMenuTwo.classList.contains('active')) {
-                // Get values to validate
-                const form = document.getElementById('schoolsform');
-                const data = new FormData(form);
-                const childPNs = data.getAll('Barnets Personnummer[]');
-                // Basic Validation
-                const isMissingChildPN = childPNs.some(pn => !pn.trim());
-                if (isMissingChildPN) {
-                    alert("Du måste fylla i barnets personnummer innan du kan fortsätta!");
-                    return;
-                }
-                stepMenuTwo.classList.remove('active');
-                stepMenuThree.classList.add('active');
-                stepTwo.classList.remove('active');
-                stepThree.classList.add('active');
-                formSubmitBtn.textContent = 'Submit';
-                return;
-            }
+            btnNext.addEventListener("click", async (e) => {
+                e.preventDefault();
 
-            // FINAL STEP → submit to Apps Script **then** redirect to Stripe
-            if (stepMenuThree.classList.contains('active')) {
-                const form = document.getElementById('schoolsform');
-                const data = new FormData(form);
-
-                // Show spinner
-                document.getElementById('loadingSpinner').style.display = 'block';
-
-                // 1) POST the data via fetch()
-                try {
-                    const res = await fetch(form.action, {
-                        method: 'POST',
-                        body: data
-                    });
-                    const json = await res.json();
-                } catch (err) {
-                    console.error('Error submitting form data:', err);
-                    // you might alert the user here and abort redirect
+                // Only validate inputs in the current step
+                const stepInputs = steps[currentStep].querySelectorAll("input, select, textarea");
+                for (let input of stepInputs) {
+                    if (!input.checkValidity()) {
+                        input.reportValidity();
+                        return; // Stop if invalid
+                    }
                 }
 
-                // 2) then redirect to Stripe with prefilled_email
-                const email = encodeURIComponent(data.get('Pappans Email') || '');
-                const pnr = encodeURIComponent(data.get('Pappans Personnummer') || '');
-                window.location.href = `https://donate.stripe.com/cNi9ATgA7doc1AT6sIfw400?prefilled_email=${email}&client_reference_id=${pnr}`;
-            }
-        });
-    </script>
-    <script>
-        function toggleSecondParent(button) {
-            const container = document.getElementById("secondParentContainer");
-            const isVisible = container.style.display === "block";
+                if (currentStep < steps.length - 1) {
+                    showStep(currentStep + 1);
+                } else {
+                    // Final submit
+                    spinner.style.display = "block";
+                    const data = new FormData(form);
 
-            container.style.display = isVisible ? "none" : "block";
+                    try {
+                        await fetch(form.action, { method: "POST", body: data });
+                    } catch (err) {
+                        console.error("Error submitting form:", err);
+                    }
 
-            // Toggle button text and color
-            if (isVisible) {
-                button.textContent = "+ Lägg till Förälder 2";
-                button.classList.remove("formbold-remove-button");
-            } else {
-                button.textContent = "− Ta bort Förälder";
-                button.classList.add("formbold-remove-button");
-            }
-        }
-    </script>
-    <script>
-        let childCount = 1;
+                    const email = encodeURIComponent(data.get("Pappans Email") || "");
+                    const pnr = encodeURIComponent(data.get("Pappans Personnummer") || "");
+                    const isLocal = window.location.hostname === "localhost";
 
-        function addChild() {
-            childCount++;
-
-            const container = document.getElementById('childrenContainer');
-
-            const childDiv = document.createElement('div');
-            childDiv.className = 'child-section';
-            childDiv.style.marginBottom = '1.5rem';
-
-            childDiv.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <p style="margin: 0;">Barn ${childCount}</p>
-            </div>
-            <div class="formbold-input-flex">
-                <div>
-                    <label for="Barnet Namn ${childCount}" class="formbold-form-label">Förnamn</label>
-                    <input type="text" name="Barnets Namn[]" id="Barnet Namn ${childCount}" class="formbold-form-input" />
-                </div>
-                <div style="position: relative; width: 55%;">
-                    <label for="Barnets Personnummer ${childCount}" class="formbold-form-label">Personnummer</label>
-                    <div style="display: flex; align-items: center;">
-                        <input type="text" id="Barnets Personnummer ${childCount}" name="Barnets Personnummer[]" placeholder="YYYYMMDD-XXXX" class="formbold-form-input" />
-                        <button type="button" class="remove-child-btn" style="
-                            margin-left: 8px;
-                            background: none;
-                            border: none;
-                            color: red;
-                            font-size: 1.4rem;
-                            cursor: pointer;
-                        ">❌</button>
-                    </div>
-                </div>
-            </div>
-            
-        `;
-
-            // Attach event listener *after* adding to DOM
-            const removeBtn = childDiv.querySelector('.remove-child-btn');
-            removeBtn.addEventListener('click', function () {
-                console.log("Remove clicked");
-                childDiv.remove();
-                childCount--;
+                    window.location.href = isLocal
+                        ? `https://buy.stripe.com/test_cN27vE9VAeyoc9ieUW?prefilled_email=${email}&client_reference_id=${pnr}`
+                        : `https://donate.stripe.com/cNi9ATgA7doc1AT6sIfw400?prefilled_email=${email}&client_reference_id=${pnr}`;
+                }
             });
 
-            container.appendChild(childDiv);
-        }
+            btnBack.addEventListener("click", (e) => {
+                e.preventDefault();
+                if (currentStep > 0) showStep(currentStep - 1);
+            });
+
+            // Toggle second parent
+            window.toggleSecondParent = (btn) => {
+                const container = document.getElementById("secondParentContainer");
+                const visible = container.style.display === "block";
+                container.style.display = visible ? "none" : "block";
+                btn.textContent = visible ? "➕ Lägg till Förälder 2" : "− Ta bort Förälder";
+            };
+
+            // Add child logic
+            let childCount = 1;
+            window.addChild = () => {
+                childCount++;
+                const container = document.getElementById("childrenContainer");
+
+                const childDiv = document.createElement("div");
+                childDiv.className = "child-section mb-3";
+                childDiv.innerHTML = `
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <p>Barn ${childCount}</p>
+                    <button type="button" class="remove-child-btn btn btn-sm btn-danger">❌</button>
+                </div>
+                <div class="formbold-input-flex">
+                    <div>
+                        <label class="formbold-form-label">Förnamn</label>
+                        <input type="text" name="Barnets Namn[]" class="formbold-form-input" required />
+                    </div>
+                    <div style="width:55%;">
+                        <label class="formbold-form-label">Personnummer</label>
+                        <input type="text" name="Barnets Personnummer[]" placeholder="YYYYMMDDXXXX"
+                            class="formbold-form-input" required pattern="(19|20)\\d{10}" 
+                            title="Personnummer måste vara 12 siffror som börjar med 19 eller 20"/>
+                    </div>
+                </div>
+            `;
+
+                childDiv.querySelector(".remove-child-btn").addEventListener("click", () => {
+                    childDiv.remove();
+                    childCount--;
+                });
+
+                container.appendChild(childDiv);
+            };
+
+            // Init
+            showStep(0);
+        });
     </script>
+
 </body>
 
 </html>
