@@ -57,38 +57,33 @@
                             <p> Förälder 1: </p>
                             <div class="formbold-input-flex">
                                 <div>
-                                    <label for="parent1name" class="formbold-form-label"> Förnamn </label>
-                                    <input type="text" name="Pappans Förnamn" placeholder="Taha" id="parent1name"
+                                    <label for="parent1name" class="formbold-form-label"> För- och efternamn </label>
+                                    <input type="text" name="parent1name" placeholder="Taha Ali" id="parent1name"
                                         class="formbold-form-input" required />
                                 </div>
                                 <div>
-                                    <label for="parent1lastname" class="formbold-form-label"> Efternamn </label>
-                                    <input type="text" name="Pappans Efternamn" placeholder="Ali" id="parent1lastname"
-                                        class="formbold-form-input" required />
+                                    <label for="parent1ssn" class="formbold-form-label"> Personnummer </label>
+                                    <input type="text" name="parent1ssn" id="parent1ssn" placeholder="199901019999"
+                                        class="formbold-form-input" required pattern="(19|20)\d{10}"
+                                        title="Personnummer måste vara 12 siffror och börja med 19 eller 20" />
                                 </div>
-                                <div>
-                                    <label for="parent1number" class="formbold-form-label"> Mobilenummer </label>
-                                    <input type="text" name="Pappans Mobilenummer" id="parent1number"
-                                        placeholder="0731234567" class="formbold-form-input" required pattern="07\d{8}"
-                                        title="Mobilnummer måste vara 10 siffror som börjar med 07" />
-                                </div>
+
                             </div>
 
                             <div class="formbold-input-flex">
                                 <div>
-                                    <label for="parent1ssn" class="formbold-form-label"> Personnummer </label>
-                                    <input type="text" name="Pappans Personnummer" id="parent1ssn"
-                                        placeholder="YYYYMMDDXXXX" class="formbold-form-input" required
-                                        pattern="(19|20)\d{10}"
-                                        title="Personnummer måste vara 12 siffror och börja med 19 eller 20" />
-
-                                </div>
-                                <div>
-                                    <label for="parents1email" class="formbold-form-label"> Email Address </label>
-                                    <input type="email" name="Pappans Email" placeholder="example@mail.com"
+                                    <label for="parents1email" class="formbold-form-label"> Mejladress </label>
+                                    <input type="email" name="parents1email" placeholder="tahaali@gmail.com"
                                         id="parents1email" class="formbold-form-input" required
                                         title="Ange en giltig e-postadress" />
                                 </div>
+                                <div>
+                                    <label for="parent1number" class="formbold-form-label"> Mobilenummer </label>
+                                    <input type="text" name="parent1number" id="parent1number" placeholder="0731234567"
+                                        class="formbold-form-input" required pattern="07\d{8}"
+                                        title="Mobilnummer måste vara 10 siffror som börjar med 07" />
+                                </div>
+
                             </div>
 
 
@@ -103,38 +98,35 @@
                                 <div class="formbold-input-flex">
                                     <div>
                                         <label for="parent2name" class="formbold-form-label">Förnamn</label>
-                                        <input type="text" name="Mammans Förnamn" placeholder="Amina" id="parent2name"
+                                        <input type="text" name="parent2name" placeholder="Amina Musa" id="parent2name"
                                             class="formbold-form-input" />
                                     </div>
                                     <div>
-                                        <label for="parent2lastname" class="formbold-form-label">Efternamn</label>
-                                        <input type="text" name="Mammans Efternamn" placeholder="Ali"
-                                            id="parent2lastname" class="formbold-form-input" />
+                                        <label for="parent2ssn" class="formbold-form-label">Personnummer</label>
+                                        <input type="text" name="Mammans Personnummer" id="parent2ssn"
+                                            placeholder="199901019999" class="formbold-form-input">
+                                    </div>
+
+                                </div>
+
+                                <div class="formbold-input-flex">
+                                    <div>
+                                        <label for="parent2email" class="formbold-form-label">Mejladress</label>
+                                        <input type="email" name="Mammans Email" placeholder="aminamusa@gmail.com"
+                                            id="parent2email" class="formbold-form-input" />
                                     </div>
                                     <div>
                                         <label for="parent2number" class="formbold-form-label">Mobilenummer</label>
                                         <input type="text" name="Mammans Mobilnummer" placeholder="0701234567"
                                             id="parent2number" class="formbold-form-input" />
                                     </div>
-                                </div>
 
-                                <div class="formbold-input-flex">
-                                    <div>
-                                        <label for="parent2ssn" class="formbold-form-label">Personnummer</label>
-                                        <input type="text" name="Mammans Personnummer" id="parent2ssn"
-                                            placeholder="XXXXXX-XXXX" class="formbold-form-input">
-                                    </div>
-                                    <div>
-                                        <label for="parent2email" class="formbold-form-label">Email Address</label>
-                                        <input type="email" name="Mammans Email" placeholder="example2@mail.com"
-                                            id="parent2email" class="formbold-form-input" />
-                                    </div>
                                 </div>
                             </div>
 
                             <div class="formbold-input-flex" style="margin-top: 1rem;">
                                 <div>
-                                    <label for="Address" class="formbold-form-label"> Address </label>
+                                    <label for="Address" class="formbold-form-label"> Adress </label>
                                     <input type="text" name="Address" id="Address" placeholder="Södergatan 65"
                                         class="formbold-form-input" />
                                 </div>
@@ -177,10 +169,17 @@
                                 </div>
                                 <div class="formbold-input-flex">
                                     <div>
-                                        <label for="Barnet Namn 1" class="formbold-form-label">Förnamn</label>
-                                        <input type="text" name="Barnets Namn[]" id="Barnet Namn 1" placeholder="Ali"
-                                            class="formbold-form-input" required />
+                                        <label for="Barnet Förnamn 1" class="formbold-form-label">Förnamn</label>
+                                        <input type="text" name="Barnet Förnamn 1[]" id="Barnet Förnamn 1"
+                                            placeholder="Ahmad" class="formbold-form-input" required />
                                     </div>
+                                    <div>
+                                        <label for="Barnet efternamn 1" class="formbold-form-label">Efternamn</label>
+                                        <input type="text" name="Barnet efternamn 1[]" id="Barnet efternamn 1"
+                                            placeholder="Ali" class="formbold-form-input" required />
+                                    </div>
+                                </div>
+                                <div class="formbold-input-flex">
                                     <div style="position: relative; width: 55%;">
                                         <label for="Barnets Personnummer 1"
                                             class="formbold-form-label">Personnummer</label>
@@ -216,23 +215,25 @@
 
                         <div class="formbold-form-step-3">
                             <div class="formbold-form-confirm">
-                                <div class="container ">
-                                    <div class="col-md-6">
-                                        <label>Kontaktförälder:</label>
+                                <div class="container" style="display: flex; justify-content: space-around;">
+                                    <fieldset>
+                                        <legend>Kontaktförälder:</legend>
                                         <div class="form-check">
                                             <label for="kontaktPappa" class="form-check-label">
                                                 <input type="radio" class="form-check-input" name="kontaktForälder"
-                                                    id="kontaktPappa" value="Pappa" required>Pappa</label>
+                                                    id="kontaktPappa" value="Pappa" required>Pappa
+                                            </label>
                                         </div>
                                         <div class="form-check">
-                                            <label for="kontaktMamma" class="form-check-label"><input type="radio"
-                                                    class="form-check-input" name="kontaktForälder" id="kontaktMamma"
-                                                    value="Mamma">Mamma</label>
+                                            <label for="kontaktMamma" class="form-check-label">
+                                                <input type="radio" class="form-check-input" name="kontaktForälder"
+                                                    id="kontaktMamma" value="Mamma">Mamma
+                                            </label>
                                         </div>
-                                    </div>
+                                    </fieldset>
 
-                                    <div class="col-md-6">
-                                        <label>Skoldag:</label>
+                                    <fieldset>
+                                        <legend>Skoldag:</legend>
                                         <div class="form-check">
                                             <label for="skoldagLördag" class="form-check-label"><input type="radio"
                                                     class="form-check-input" name="skoldag" id="skoldagLördag"
@@ -243,7 +244,11 @@
                                                     class="form-check-input" name="skoldag" id="skoldagSöndag"
                                                     value="Söndag">Söndag</label>
                                         </div>
-                                    </div>
+                                    </fieldset>
+
+
+                                    
+                                    
                                 </div>
                             </div>
                         </div>
@@ -362,9 +367,9 @@
                     const pnr = encodeURIComponent(data.get("Pappans Personnummer") || "");
                     const isLocal = window.location.hostname === "localhost";
 
-                     window.location.href = isLocal
-                         ? `https://buy.stripe.com/test_cN27vE9VAeyoc9ieUW?prefilled_email=${email}&client_reference_id=${pnr}`
-                         : `https://donate.stripe.com/cNi9ATgA7doc1AT6sIfw400?prefilled_email=${email}&client_reference_id=${pnr}`;
+                    window.location.href = isLocal
+                        ? `https://buy.stripe.com/test_cN27vE9VAeyoc9ieUW?prefilled_email=${email}&client_reference_id=${pnr}`
+                        : `https://donate.stripe.com/cNi9ATgA7doc1AT6sIfw400?prefilled_email=${email}&client_reference_id=${pnr}`;
                 }
             });
 
