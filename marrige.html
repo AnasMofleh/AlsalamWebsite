@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 
 <head>
     <meta charset="utf-8">
@@ -28,9 +28,6 @@
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
-
-
-
 </head>
 
 <body>
@@ -38,28 +35,87 @@
     <div id="header-placeholder"></div>
     <!-- Header End -->
 
-    <!-- Add margin to prevent content from hiding behind navbar -->
     <div style="margin-top: 100px;"></div>
-
-
-
 
     <!-- Marriage Application Form Start -->
     <div class="container py-5">
         <div class="text-center mb-5">
             <h1 class="display-4">Äktenskapsansökan</h1>
             <p class="lead">Fyll i formuläret nedan för att ansöka om äktenskapsceremoni</p>
-            <script type="text/javascript" src="https://form.jotform.com/jsform/250946841378367"></script>
         </div>
-        
-    </div>
 
+        <!-- Embedded JotForm -->
+        <div class="form-container" style="max-height:80vh; overflow-y:auto; border-radius:10px;">
+            <iframe id="JotFormIFrame-250946841378367" title="VigselIntygAnsöka" onload="window.parent.scrollTo(0,0)"
+                allowtransparency="true" allow="geolocation; microphone; camera; fullscreen; payment"
+                src="https://form.jotform.com/250946841378367" frameborder="0"
+                style="min-width:100%;max-width:100%;height:800px;border:none;" scrolling="yes">
+            </iframe>
+        </div>
+
+        <script src='https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js'></script>
+        <script>
+            window.jotformEmbedHandler("iframe[id='JotFormIFrame-250946841378367']", "https://form.jotform.com/")
+        </script>
+    </div>
     <!-- Marriage Application Form End -->
 
-
-    <!-- Footer Start -->
     <div id="footer-placeholder"></div>
-    <!-- Footer End -->
+
+    <!-- Terms & Requirements Modal -->
+    <div class="modal fade" id="requirementsModal" tabindex="-1" aria-labelledby="requirementsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="requirementsModalLabel">Viktigt innan du fyller i formuläret</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Stäng"></button>
+                </div>
+                <div class="modal-body" style="max-height: 450px; overflow-y: auto;">
+                    <p>
+                        Innan du fyller i ansökan om äktenskap måste båda parter läsa villkoren noggrant och förbereda
+                        alla nödvändiga dokument.
+                        Äkta paret måste fylla i den elektroniska ansökan och boka en tid i förväg för att komma till
+                        moskén, lämna in dokumenten och genomföra den religiösa vigseln.
+                    </p>
+                    <p>
+                        För mer information om de nödvändiga dokumenten och tidsbokningen, se listan nedan.
+                    </p>
+                    <h6 class="mt-3"><strong>Dokument som krävs för att genomföra det religiösa
+                            äktenskapskontraktet:</strong></h6>
+                    <ul>
+                        <li>
+                            Familjebevis från Skatteverket för både brud och brudgum, för att
+                            visa civilstånd. <strong>Observera:</strong> Dokumentet får inte vara äldre än en månad.
+                        </li>
+                        <li>
+                            Original svensk identitetshandling eller motsvarande, till exempel pass eller körkort.
+                        </li>
+                        <li>
+                            Betalning av avgiften på 1200 SEK (inklusive 25% moms).
+                            <br>Avgiften betalas med kort i samband med att den elektroniska ansökan fylls i.
+                        </li>
+                        <li>
+                            Ifyllande av den elektroniska ansökan och bokning av tid i förväg.
+                        </li>
+                    </ul>
+                    <p class="mt-3"><strong>Viktigt!</strong></p>
+                    <p>
+                        Det är nödvändigt att boka en tid i förväg för att lämna in dokumenten och genomföra den
+                        religiösa vigseln.
+                        Moskén kan tyvärr inte ta emot par som kommer utan bokad tid.
+                    </p>
+                    <p>
+                        Observera att vigseln i moskén har <strong>endast religiös giltighet</strong> och ingen juridisk
+                        giltighet hos svenska myndigheter.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Jag förstår</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -79,70 +135,15 @@
             $("#footer-placeholder").load("footer.html");
         });
     </script>
+
+    <!-- Show Requirements Modal on Page Load -->
     <script>
-        // Function to handle file uploads for multiple buttons
-        function setupFileUpload(buttonId, inputId, displayId) {
-            const button = document.getElementById(buttonId);
-            const input = document.getElementById(inputId);
-            const display = document.getElementById(displayId);
-
-            button.addEventListener("click", function () {
-                input.click();
+        $(document).ready(function () {
+            const modal = new bootstrap.Modal(document.getElementById('requirementsModal'), {
+                backdrop: 'static',
+                keyboard: false
             });
-
-            input.addEventListener("change", function () {
-                const fileName = input.files.length ? input.files[0].name : "Inga filer uppladdade";
-                display.textContent = "Uppladdad fil: " + fileName;
-            });
-        }
-
-        // Setup individual file uploads
-        setupFileUpload("uploadButton1", "documentUpload1", "fileNameDisplay1");
-        setupFileUpload("uploadButton2", "documentUpload2", "fileNameDisplay2");
-        setupFileUpload("uploadButton3", "documentUpload3", "fileNameDisplay3");
-        setupFileUpload("uploadButton4", "documentUpload4", "fileNameDisplay4");
-    </script>
-
-    <script>
-        const form = document.getElementById("marriageForm");
-
-        form.addEventListener("submitButton", function (e) {
-            e.preventDefault();
-
-            const formData = new FormData(form);
-
-            formData.append("access_key", "77718218-c0f9-457e-b06c-bb88c6f50a44");
-            formData.append("subject", "Ny äktenskapsansökan");
-            formData.append("from_name", "Al-Salam Moské website");
-
-            const file = document.getElementById("attachment");
-            const filesize = file.files[0].size / 1024;
-
-            if (filesize > 4000) {
-                alert("Please upload file less than 4 MB");
-                return;
-            }
-
-            // Don't add `headers` or `content-type` in this fetch call
-            // Since it contains attachments, the browser auto-adds them. 
-            fetch("https://api.web3forms.com/submit", {
-                method: "POST",
-                body: formData
-            })
-                .then(async (response) => {
-                    let json = await response.json();
-                    if (response.status == 200) {
-                        console.log(json.message);
-                    } else {
-                        console.log(response);
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
-                .then(function () {
-                    form.reset();
-                });
+            modal.show();
         });
     </script>
 </body>
