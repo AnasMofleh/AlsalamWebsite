@@ -57,8 +57,8 @@
                             <p> Pappans information: </p>
                             <div class="formbold-input-flex">
                                 <div>
-                                    <label for="Pappans namn" class="formbold-form-label"> För- och efternamn </label>
-                                    <input type="text" name="Pappans namn" placeholder="Taha Ali" id="Pappans namn"
+                                    <label for="Pappans Namn" class="formbold-form-label"> För- och efternamn </label>
+                                    <input type="text" name="Pappans Namn" placeholder="Taha Ali" id="Pappans Namn"
                                         class="formbold-form-input" required />
                                 </div>
                                 <div>
@@ -98,9 +98,9 @@
                                 <p>Mammans information 2:</p>
                                 <div class="formbold-input-flex">
                                     <div>
-                                        <label for="Mammans namn" class="formbold-form-label">Förnamn</label>
-                                        <input type="text" name="Mammans namn" placeholder="Amina Musa"
-                                            id="Mammans namn" class="formbold-form-input" />
+                                        <label for="Mammans Namn" class="formbold-form-label">Förnamn</label>
+                                        <input type="text" name="Mammans Namn" placeholder="Amina Musa"
+                                            id="Mammans Namn" class="formbold-form-input" />
                                     </div>
                                     <div>
                                         <label for="Mammans Personnummer"
@@ -178,7 +178,7 @@
                                     </div>
                                     <div>
                                         <label for="Barnet Efternamn" class="formbold-form-label">Efternamn</label>
-                                        <input type="text" name="Barnet Efternamn" id="Barnet efternamn"
+                                        <input type="text" name="Barnet Efternamn" id="Barnet Efternamn"
                                             placeholder="Ali" class="formbold-form-input" required />
                                     </div>
                                 </div>
@@ -354,9 +354,9 @@
                     const pnr = encodeURIComponent(data.get("Pappans Personnummer") || "");
                     const isLocal = window.location.hostname === "localhost";
 
-                 // window.location.href = isLocal
-                 //         ? `https://buy.stripe.com/test_cN27vE9VAeyoc9ieUW?prefilled_email=${email}&client_reference_id=${pnr}`
-                 //         : `https://donate.stripe.com/cNi9ATgA7doc1AT6sIfw400?prefilled_email=${email}&client_reference_id=${pnr}`;
+                 window.location.href = isLocal
+                          ? `https://buy.stripe.com/test_cN27vE9VAeyoc9ieUW?prefilled_email=${email}&client_reference_id=${pnr}`
+                          : `https://donate.stripe.com/cNi9ATgA7doc1AT6sIfw400?prefilled_email=${email}&client_reference_id=${pnr}`;
                 }
             });
 
