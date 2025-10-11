@@ -177,8 +177,8 @@
                                             placeholder="Ahmad" class="formbold-form-input" required />
                                     </div>
                                     <div>
-                                        <label for="Barnet efternamn" class="formbold-form-label">Efternamn</label>
-                                        <input type="text" name="Barnet efternamn" id="Barnet efternamn"
+                                        <label for="Barnet Efternamn" class="formbold-form-label">Efternamn</label>
+                                        <input type="text" name="Barnet Efternamn" id="Barnet efternamn"
                                             placeholder="Ali" class="formbold-form-input" required />
                                     </div>
                                 </div>
@@ -187,7 +187,7 @@
                                         <label for="Barnets Personnummer 1"
                                             class="formbold-form-label">Personnummer</label>
                                         <div style="display: flex; align-items: center;">
-                                            <input type="text" id="Barnets Personnummer 1" name="Barnets Personnummer[]"
+                                            <input type="text" name="Barnets Personnummer []" id="Barnets Personnummer 1" 
                                                 placeholder="YYYYMMDDXXXX" class="formbold-form-input" required
                                                 pattern="(19|20)?\d{10}" title="Personnummer måste vara 12 siffror" />
                                         </div>
@@ -354,9 +354,9 @@
                     const pnr = encodeURIComponent(data.get("Pappans Personnummer") || "");
                     const isLocal = window.location.hostname === "localhost";
 
-                    window.location.href = isLocal
-                          ? `https://buy.stripe.com/test_cN27vE9VAeyoc9ieUW?prefilled_email=${email}&client_reference_id=${pnr}`
-                          : `https://donate.stripe.com/cNi9ATgA7doc1AT6sIfw400?prefilled_email=${email}&client_reference_id=${pnr}`;
+                 // window.location.href = isLocal
+                 //         ? `https://buy.stripe.com/test_cN27vE9VAeyoc9ieUW?prefilled_email=${email}&client_reference_id=${pnr}`
+                 //         : `https://donate.stripe.com/cNi9ATgA7doc1AT6sIfw400?prefilled_email=${email}&client_reference_id=${pnr}`;
                 }
             });
 
