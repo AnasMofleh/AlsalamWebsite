@@ -90,7 +90,7 @@
 
 
                             <button type="button" onclick="toggleSecondParent(this)" class="formbold-add-button">
-                                ➕ Lägg till Förälder 2
+                                ➕ Lägg till Mammans information
                             </button>
 
                             <!-- The second parent section (initially hidden) -->
@@ -131,7 +131,7 @@
                                 <div>
                                     <label for="Adress" class="formbold-form-label"> Adress </label>
                                     <input type="text" name="Adress" id="Adress" placeholder="Södergatan 65"
-                                        class="formbold-form-input" required/>
+                                        class="formbold-form-input" required />
                                 </div>
                                 <div>
                                     <label for="Postnummer" class="formbold-form-label"> Postnummer </label>
@@ -142,7 +142,7 @@
                                 <div>
                                     <label for="Postort" class="formbold-form-label"> Postort </label>
                                     <input type="text" name="Postort" id="Postort" placeholder="Helsingborg"
-                                        class="formbold-form-input" required/>
+                                        class="formbold-form-input" required />
                                 </div>
                             </div>
                         </div>
@@ -173,7 +173,7 @@
                                 <div class="formbold-input-flex">
                                     <div>
                                         <label for="Barnet Förnamn 1" class="formbold-form-label">Förnamn</label>
-                                        <input type="text" name="Barnet Förnamn 1[]" id="Barnet Förnamn 1"
+                                        <input type="text" name="Barnet Förnamn []" id="Barnet Förnamn 1"
                                             placeholder="Ahmad" class="formbold-form-input" required />
                                     </div>
                                     <div>
@@ -211,7 +211,7 @@
                         <div class="formbold-form-step-3">
                             <div class="formbold-form-confirm">
                                 <div class="container" style="display: flex; justify-content: space-around;">
-                                    
+
 
                                     <fieldset>
                                         <legend>Skoldag:</legend>
@@ -354,9 +354,9 @@
                     const pnr = encodeURIComponent(data.get("Pappans Personnummer") || "");
                     const isLocal = window.location.hostname === "localhost";
 
-                    //  window.location.href = isLocal
-                    //      ? `https://buy.stripe.com/test_cN27vE9VAeyoc9ieUW?prefilled_email=${email}&client_reference_id=${pnr}`
-                    //      : `https://donate.stripe.com/cNi9ATgA7doc1AT6sIfw400?prefilled_email=${email}&client_reference_id=${pnr}`;
+                    window.location.href = isLocal
+                          ? `https://buy.stripe.com/test_cN27vE9VAeyoc9ieUW?prefilled_email=${email}&client_reference_id=${pnr}`
+                          : `https://donate.stripe.com/cNi9ATgA7doc1AT6sIfw400?prefilled_email=${email}&client_reference_id=${pnr}`;
                 }
             });
 
@@ -384,18 +384,23 @@
                 childDiv.innerHTML = `
                 <div style="display:flex;justify-content:space-between;align-items:center;">
                     <p>Barn ${childCount}</p>
-                    <button type="button" class="remove-child-btn btn btn-sm btn-danger">❌</button>
                 </div>
                 <div class="formbold-input-flex">
                     <div>
                         <label class="formbold-form-label">Förnamn</label>
-                        <input type="text" name="Barnets Namn[]" class="formbold-form-input" required />
+                        <input type="text" name="Barnet Förnamn[]" class="formbold-form-input" required />
                     </div>
-                    <div style="width:55%;">
+                    <div style="width:35%;">
                         <label class="formbold-form-label">Personnummer</label>
                         <input type="text" name="Barnets Personnummer[]" placeholder="YYYYMMDDXXXX"
                             class="formbold-form-input" required pattern="(19|20)\\d{10}" 
                             title="Personnummer måste vara 12 siffror som börjar med 19 eller 20"/>
+                    </div>
+                        <div style="margin-top: 33px; width:10%;">
+                           <button type="button" class="remove-child-btn btn btn-outline-light" 
+                                style="font-size: 22px;border-radius: 50%;">
+                                ❌
+                            </button>
                     </div>
                 </div>
             `;
