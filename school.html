@@ -332,16 +332,16 @@
                     const data = new FormData(form);
 
                     // ✅ Log all fields properly, including arrays
-                  //  const debug = {};
-                   //  for (const [key, value] of data.entries()) {
-                  //       if (debug[key]) {
-                 //            if (!Array.isArray(debug[key])) debug[key] = [debug[key]];
-                  //           debug[key].push(value);
-                   //      } else {
-                  //           debug[key] = value;
-                  //       }
-                  //   }
-                  //   console.log("Submitting data:", JSON.stringify(debug, null, 2));
+                    //  const debug = {};
+                    //  for (const [key, value] of data.entries()) {
+                    //       if (debug[key]) {
+                    //            if (!Array.isArray(debug[key])) debug[key] = [debug[key]];
+                    //           debug[key].push(value);
+                    //      } else {
+                    //           debug[key] = value;
+                    //       }
+                    //   }
+                    //   console.log("Submitting data:", JSON.stringify(debug, null, 2));
 
                     try {
                         const res = await fetch(form.action, {
@@ -354,6 +354,10 @@
                     } catch (err) {
                         console.error("Error submitting form data:", err);
                     }
+                    
+                    const email = encodeURIComponent(data.get("Pappans Email") || "");
+                    const pnr = encodeURIComponent(data.get("Pappans Personnummer") || "");
+                    const isLocal = window.location.hostname === "localhost";
 
                     window.location.href = isLocal
                         ? `https://buy.stripe.com/test_cN27vE9VAeyoc9ieUW?prefilled_email=${email}&client_reference_id=${pnr}`
