@@ -118,8 +118,7 @@
                                             id="Mammans Email" class="formbold-form-input" />
                                     </div>
                                     <div>
-                                        <label for="Mammans Mobilnummer"
-                                            class="formbold-form-label">Mobilnummer</label>
+                                        <label for="Mammans Mobilnummer" class="formbold-form-label">Mobilnummer</label>
                                         <input type="text" name="Mammans Mobilnummer" placeholder="0701234567"
                                             id="Mammans Mobilnummer" class="formbold-form-input" />
                                     </div>
@@ -173,7 +172,7 @@
                                 <div class="formbold-input-flex">
                                     <div>
                                         <label for="Barnet Förnamn 1" class="formbold-form-label">Förnamn</label>
-                                        <input type="text" name="Barnet Förnamn []" id="Barnet Förnamn 1"
+                                        <input type="text" name="Barnet Förnamn" id="Barnet Förnamn 1"
                                             placeholder="Ahmad" class="formbold-form-input" required />
                                     </div>
                                     <div>
@@ -187,7 +186,7 @@
                                         <label for="Barnets Personnummer 1"
                                             class="formbold-form-label">Personnummer</label>
                                         <div style="display: flex; align-items: center;">
-                                            <input type="text" name="Barnets Personnummer []" id="Barnets Personnummer 1" 
+                                            <input type="text" name="Barnets Personnummer" id="Barnets Personnummer 1"
                                                 placeholder="YYYYMMDDXXXX" class="formbold-form-input" required
                                                 pattern="(19|20)?\d{10}" title="Personnummer måste vara 12 siffror" />
                                         </div>
@@ -332,31 +331,33 @@
                     spinner.style.display = "block";
                     const data = new FormData(form);
 
-                    // Convert FormData to URLSearchParams
-                    const params = new URLSearchParams();
-                    for (const [key, value] of data.entries()) {
-                        params.append(key, value);
+                    // ✅ Log all fields properly, including arrays
+                  //  const debug = {};
+                   //  for (const [key, value] of data.entries()) {
+                  //       if (debug[key]) {
+                 //            if (!Array.isArray(debug[key])) debug[key] = [debug[key]];
+                  //           debug[key].push(value);
+                   //      } else {
+                  //           debug[key] = value;
+                  //       }
+                  //   }
+                  //   console.log("Submitting data:", JSON.stringify(debug, null, 2));
+
+                    try {
+                        const res = await fetch(form.action, {
+                            method: "POST",
+                            body: data // ✅ sends as multipart/form-data, works perfectly with Google Apps Script
+                        });
+
+                        const json = await res.json();
+                        console.log("Response from script:", json);
+                    } catch (err) {
+                        console.error("Error submitting form data:", err);
                     }
-                    // Convert to object
-                    const obj = Object.fromEntries(params);
 
-                    // Log as JSON
-                    console.log(JSON.stringify(obj, null, 2));
-
-                    // Fire-and-forget request to Google Apps Script
-                    fetch(form.action, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                        body: params
-                    }).catch(err => console.warn("Form submission failed:", err));
-
-                    const email = encodeURIComponent(data.get("Pappans Email") || "");
-                    const pnr = encodeURIComponent(data.get("Pappans Personnummer") || "");
-                    const isLocal = window.location.hostname === "localhost";
-
-                 window.location.href = isLocal
-                          ? `https://buy.stripe.com/test_cN27vE9VAeyoc9ieUW?prefilled_email=${email}&client_reference_id=${pnr}`
-                          : `https://donate.stripe.com/cNi9ATgA7doc1AT6sIfw400?prefilled_email=${email}&client_reference_id=${pnr}`;
+                    window.location.href = isLocal
+                        ? `https://buy.stripe.com/test_cN27vE9VAeyoc9ieUW?prefilled_email=${email}&client_reference_id=${pnr}`
+                        : `https://donate.stripe.com/cNi9ATgA7doc1AT6sIfw400?prefilled_email=${email}&client_reference_id=${pnr}`;
                 }
             });
 
@@ -388,11 +389,11 @@
                 <div class="formbold-input-flex">
                     <div>
                         <label class="formbold-form-label">Förnamn</label>
-                        <input type="text" name="Barnet Förnamn[]" class="formbold-form-input" required />
+                        <input type="text" name="Barnet Förnamn" class="formbold-form-input" required />
                     </div>
                     <div style="width:35%;">
                         <label class="formbold-form-label">Personnummer</label>
-                        <input type="text" name="Barnets Personnummer[]" placeholder="YYYYMMDDXXXX"
+                        <input type="text" name="Barnets Personnummer" placeholder="YYYYMMDDXXXX"
                             class="formbold-form-input" required pattern="(19|20)\\d{10}" 
                             title="Personnummer måste vara 12 siffror som börjar med 19 eller 20"/>
                     </div>
