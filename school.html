@@ -27,6 +27,107 @@
     <div id="header-placeholder"></div>
     <div style="margin-top: 100px;"></div>
 
+    <div class="modal fade" id="requirementsModal" tabindex="-1" aria-labelledby="requirementsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content shadow-lg rounded-4 border-0">
+                <div class="modal-header bg-light border-bottom">
+                    <h5 class="modal-title fw-bold" id="requirementsModalLabel">📘 Viktigt innan du fyller i formuläret
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Stäng"></button>
+                </div>
+
+                <!-- term and condition -->
+                <div class="modal-body" style="max-height: 70vh; overflow-y: auto; background-color: #fff;">
+                    <div class="formbold-terms px-2">
+                        <h4 class="text-primary fw-bold mb-3">Skolans villkor</h4>
+                        <ol class="list-decimal ps-3 pe-2 lh-lg" style="color:#333; font-size: 1rem;">
+
+                            <li class="mb-3">
+                                Kursen börjar <strong>i början av september</strong> och pågår till <strong>mitten av
+                                    juni</strong>.
+                                Därefter erbjuds sommarkurser för de elever som vill fortsätta.
+                            </li>
+
+                            <li class="mb-3">
+                                Undervisningen sker en gång i veckan vårdnadshavarna väljer antingen
+                                lördag <strong> eller </strong> söndag.<br>
+                                • På <strong>lördagar</strong> börjar undervisningen kl.
+                                <span style="color:#0d6efd; font-weight:bold;">10:00</span>.<br>
+                                • På <strong>söndagar</strong> börjar undervisningen kl.
+                                <span style="color:#0d6efd; font-weight:bold;">11:00</span>.
+                            </li>
+
+                            <li class="mb-3">
+                                Undervisningen är cirka två och halvt timmar lång och består av:<br>
+                                • Första timmen: <strong>arabiska språket</strong>.<br>
+                                • En kvarts rast: Under rasten kan eleven äta en lätt måltid.<br>
+                                • Andra timmen: <strong>koranläsning</strong>.<br>
+
+                            </li>
+
+                            <li class="mb-3">
+                                En av föräldrarna måste vara medlem i Alsalam mosken genom trosamfundet
+                                <a href="https://medlem.fifs.se/SCH" target="_blank"
+                                    class="text-decoration-none fw-bold" style="color: #007bff;">FIFS.</a>
+                                <span title="Mer information om medlemskap och betalning visas när ni fyller i ansökan eller genom att klicka på order FIFS"
+                                    style="cursor: help; color: #5d06fd; font-weight: bold;">&#9432;</span>
+                            </li>
+
+                            <li class="mb-3">
+                                Kursavgiften är <strong>160</strong> kr per månad för varje elev och betalas
+                                via <strong>autogiro</strong> till moskéskolans konto. Avgiften betalas för
+                                <strong>12</strong> månader.
+                            </li>
+
+                            <li class="mb-3">
+                                Böcker och skolmaterial delas ut efter att elevens nivå har
+                                fastställts. Kostnaden är <strong>350 kr</strong> och betalas en gång.
+                            </li>
+
+                            <li class="mb-3">
+                                <strong>Kommunikation:</strong> När elevernas nivåer har fastställts skapas
+                                <strong>WhatsApp</strong> grupper för varje klass. Där kan lärarna lägger upp läxor,
+                                uppgifter och
+                                viktig information för att följa upp eleverna tillsammans med föräldrarna.
+                            </li>
+
+                            <li class="mb-3">
+                                Eleverna ska <strong>närvara regelbundet</strong> och inte vara frånvarande utan giltig
+                                anledning.
+                                Vid nödvändig frånvaro ska detta <strong>meddelas i förväg</strong>.
+                                Läxor och uppgifter ska göras och följas upp av vårdnadshavarna hemma.
+                            </li>
+
+                            <li class="mb-3">
+                                Eleverna ska bära kläder som är anpassade för moskén, bön och
+                                väderförhållanden.
+                            </li>
+
+                            <li class="mb-3">
+                                <strong>Ömsesidig respekt</strong> ska råda i alla avseenden – inga förolämpningar,
+                                inget våld och ingen farlig lek.
+                                Renlighet och ordning, både personlig och allmän, ska upprätthållas i moskén och på
+                                vägen dit.
+                            </li>
+
+                            <li class="mb-3">
+                                Eleverna bör inte ta med värdesaker. Om det ändå sker, är det på <strong>egen
+                                    risk</strong>.
+                                Skolan ansvarar inte för borttappade eller förstörda föremål.
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Jag förstår</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="container-fluid px-0">
         <div class="col-12 px-0">
             <h2 class="text-center">Registreringsformulär</h2>
@@ -293,6 +394,15 @@
         });
     </script>
     <script>
+        $(document).ready(function () {
+            const modal = new bootstrap.Modal(document.getElementById('requirementsModal'), {
+                backdrop: 'static',
+                keyboard: false
+            });
+            modal.show();
+        });
+    </script>
+    <script>
         document.addEventListener("DOMContentLoaded", () => {
             const steps = [...document.querySelectorAll(".formbold-form-step-1, .formbold-form-step-2, .formbold-form-step-3")];
             const menus = [...document.querySelectorAll(".formbold-step-menu1, .formbold-step-menu2, .formbold-step-menu3")];
@@ -354,7 +464,7 @@
                     } catch (err) {
                         console.error("Error submitting form data:", err);
                     }
-                    
+
                     const email = encodeURIComponent(data.get("Pappans Email") || "");
                     const pnr = encodeURIComponent(data.get("Pappans Personnummer") || "");
                     const isLocal = window.location.hostname === "localhost";
