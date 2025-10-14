@@ -109,20 +109,52 @@
                 </table>
             `;
 
-                // Add back button
-                tableHTML += `
-                <div style="text-align: center;">
-                    <button class="donation-btn" onclick="window.location.href='/'" style="
+                // Add info message, back + WhatsApp buttons
+            tableHTML += `
+            <div style="text-align: center; margin-top: 30px;">
+                <div style="max-width: 500px; margin: 0 auto; text-align: center;">
+                    <p style="
+                        font-size: 16px;
+                        color: #333;
+                        margin-bottom: 15px;
+                        text-align: left;
+                    ">
+                        Gå med i Alsalam WhatsApp gruppen för att hålla dig uppdaterad med den senaste informationen gällande skolan och viktiga meddelanden.
+                    </p>
+                
+                    <button onclick="window.open('https://chat.whatsapp.com/LwL2lt6kxuWBlSrfYULRrl', '_blank')" style="
                         padding: 12px 24px;
                         font-size: 16px;
-                        background-color: #2d89e5;
+                        background-color: #25D366;
                         color: white;
                         border: none;
                         border-radius: 8px;
                         cursor: pointer;
-                    "> Tillbaka till startsidan</button>
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 10px;
+                    ">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp"
+                            style="width: 22px; height: 22px;">
+                        Gå med i Alsalam Whatsapp
+                    </button>
                 </div>
+
+                <button onclick="window.location.href='/'" style="
+                    padding: 12px 24px;
+                    font-size: 16px;
+                    background-color: #2d89e5;
+                    color: white;
+                    border: none;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    margin-top: 30px;
+                ">
+                    Tillbaka till startsidan
+                </button>
+            </div>
             `;
+
 
 
 
