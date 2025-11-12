@@ -147,10 +147,16 @@
         }
 
         function openSwish() {
-            const swishNumber = "1235000559"; // Replace with your Swish number
+            const swishNumber = "1235000559"; // your Swish number
+            const swishData = encodeURIComponent(
+                JSON.stringify({
+                    version: 1,
+                    payee: { value: swishNumber }
+                })
+            );
 
             if (isMobileDevice()) {
-                window.location.href = `swish://payment?phone=${swishNumber}`;
+                window.location.href = `swish://payment?data=${swishData}`;
             } else {
                 document.getElementById("swish-popup").style.display = "flex";
             }
