@@ -138,7 +138,6 @@
                 color, 
                 icon, 
                 benefits, 
-                isCustomAmount = false,
                 minAmount = 0
             } = config;
             
@@ -149,15 +148,7 @@
                 </div>`
             ).join('');
             
-            const paymentSection = isCustomAmount ? 
-                `<div class="custom-amount-section">
-                    <input type="number" class="amount-input" placeholder="Ange belopp (kr)" min="${minAmount}" id="${id}Amount">
-                    <stripe-buy-button
-                        buy-button-id="${config.buyButtonId}"
-                        publishable-key="pk_live_51QOjFxG84lZUxh2hwRThSaug3j7zlPSL9Ts5OXxkOMw5KxHnvxusRgNIME8PtWpsFEGI9x2tSEvisU0269pHsNnm00kHzyvueL">
-                    </stripe-buy-button>
-                </div>` :
-                `<div class="payment-section">
+            const paymentSection = `<div class="payment-section">
                     <stripe-buy-button
                         buy-button-id="${config.buyButtonId}"
                         publishable-key="pk_live_51QOjFxG84lZUxh2hwRThSaug3j7zlPSL9Ts5OXxkOMw5KxHnvxusRgNIME8PtWpsFEGI9x2tSEvisU0269pHsNnm00kHzyvueL">
@@ -186,16 +177,6 @@
                     </div>
                 </div>
             `;
-        }
-        
-        // Payment handlers
-        function handleCustomPayment(id, title, minAmount, url) {
-            const amount = document.getElementById(id + 'Amount').value;
-            if (amount && amount >= minAmount) {
-                window.open(url + '?amount=' + amount, '_blank');
-            } else {
-                alert(`Vänligen ange ett belopp på minst ${minAmount} kr.`);
-            }
         }
         
         function handleFixedPayment(title, price, url) {
@@ -235,7 +216,6 @@
                 price: 'Över 25,000 kr',
                 color: '#B8860B',
                 icon: 'crown',
-                isCustomAmount: true,
                 minAmount: 25001,
                 buyButtonId: 'buy_btn_1S3NspG84lZUxh2hjMuXI9tr',
                 benefits: getBenefits('gold')
@@ -246,7 +226,7 @@
                 price: '25,000 kr',
                 color: '#C0C0C0',
                 icon: 'star',
-                buyButtonId: 'buy_btn_1S3NspG84lZUxh2hjMuXI9tr',
+                buyButtonId: 'buy_btn_1ScXfNG84lZUxh2hkYOkdcKP',
                 benefits: getBenefits('silver')
             },
             {
@@ -255,7 +235,7 @@
                 price: '10,000 kr',
                 color: '#CD7F32',
                 icon: 'handshake',
-                buyButtonId: 'buy_btn_1S3NspG84lZUxh2hjMuXI9tr',
+                buyButtonId: 'buy_btn_1ScXWzG84lZUxh2hYtgs7TDS',
                 benefits: getBenefits('bronze')
             }
         ];
