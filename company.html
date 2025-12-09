@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="sv">
+
+<head>
+    <meta charset="utf-8">
+    <title>Företagsdonationer - Al-Salam Moské</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Pacifico&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Header Start -->
+    <div id="header-placeholder"></div>
+    <!-- Header End -->
+
+    <!-- Add margin to prevent content from hiding behind navbar -->
+    <div style="margin-top: 100px;"></div>
+
+    <!-- Company Donations Page Content Start -->
+    <div class="container-fluid px-3 px-md-4 px-lg-5 py-4 py-md-5">
+        <div class="container">
+            <div class="text-center mb-4 mb-md-5">
+                <h1 class="display-5 display-md-4 mb-3">Företagsdonationer</h1>
+                <p class="lead fs-6 fs-md-5">Stöd Al-Salam Moské och nå ut till vår community genom våra sponsoringspaket</p>
+            </div>
+
+            <!-- Introduction Section -->
+            <div class="row justify-content-center mb-4 mb-md-5">
+                <div class="col-12 col-lg-10 col-xl-8">
+                    <div class="text-center">
+                        <h3 class="mb-3 fs-4 fs-md-3">Varför bli företagssponsor?</h3>
+                        <p class="text-muted fs-6 lh-base">Som sponsor hos Al-Salam Moské får ditt företag synlighet i vår aktiva community samtidigt som du stödjer vår viktiga verksamhet. Vi erbjuder olika sponsoringsnivåer anpassade efter dina behov och budget.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- Sponsorship Packages -->
+        <div class="container">
+            <div class="row justify-content-center" id="sponsor-container">
+                <!-- Sponsor donation boxes will be generated dynamically by JavaScript -->
+            </div>
+            
+            <!-- Hedersmedlemskap Information -->
+            <div class="row justify-content-center mt-4">
+                <div class="col-12 col-lg-8">
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-star me-2"></i>
+                        <strong>Hedersmedlemskap:</strong> Alla företagssponsorer erhåller hedersmedlemskap i Al-Salam föreningen som erkännande för deras värdefulla stöd.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="bg-light p-4 rounded text-center">
+                    <h4 class="mb-3 fs-4">Har du frågor om våra sponsoringspaket?</h4>
+                    <p class="mb-4">Vi hjälper gärna till att hitta det paket som passar ditt företag bäst.</p>
+                    <div class="row g-3 justify-content-center">
+                        <div class="col-12 col-sm-6 col-md-5 col-lg-4">
+                            <div class="bg-white p-3 rounded shadow-sm">
+                                <div class="d-flex align-items-center justify-content-center mb-2">
+                                    <i class="fas fa-envelope text-primary me-2"></i>
+                                    <span class="fw-semibold">E-post:</span>
+                                </div>
+                                <a href="mailto:alsalam.center@outlook.com" class="text-decoration-none text-break">alsalam.center@outlook.com</a>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-5 col-lg-4">
+                            <div class="bg-white p-3 rounded shadow-sm">
+                                <div class="d-flex align-items-center justify-content-center mb-2">
+                                    <i class="fab fa-whatsapp text-success me-2"></i>
+                                    <span class="fw-semibold">WhatsApp:</span>
+                                </div>
+                                <a href="https://chat.whatsapp.com/IRiZCLCCM7lF4NHi2wBvmj" class="text-decoration-none">Kontakta oss</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Company Donations Page Content End -->
+
+    <!-- Footer Start -->
+    <div id="footer-placeholder"></div>
+    <!-- Footer End -->
+
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+
+    <!-- Stripe Buy Button Script -->
+    <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+
+
+    
+    <!-- Custom JavaScript for Sponsor Generator and Payment -->
+    <script>
+        // Modern Sponsor Card Generator
+        function generateSponsorCard(config) {
+            const { 
+                id, 
+                title, 
+                price, 
+                color, 
+                icon, 
+                benefits, 
+                minAmount = 0
+            } = config;
+            
+            const benefitsList = benefits.map(benefit => 
+                `<div class="benefit-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>${benefit}</span>
+                </div>`
+            ).join('');
+            
+            const paymentSection = `<div class="payment-section">
+                    <stripe-buy-button
+                        buy-button-id="${config.buyButtonId}"
+                        publishable-key="pk_live_51QOjFxG84lZUxh2hwRThSaug3j7zlPSL9Ts5OXxkOMw5KxHnvxusRgNIME8PtWpsFEGI9x2tSEvisU0269pHsNnm00kHzyvueL">
+                    </stripe-buy-button>
+                </div>`;
+            
+            return `
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="sponsor-package" data-level="${id}">
+                        <div class="package-header" style="background: linear-gradient(135deg, ${color}, ${color}cc);">
+                            <div class="package-icon">
+                                <i class="fas fa-${icon}"></i>
+                            </div>
+                            <h3 class="package-title">${title}</h3>
+                            <div class="package-price">${price}</div>
+                        </div>
+                        <div class="package-body">
+                            <div class="benefits-title">Fördelar som ingår:</div>
+                            <div class="benefits-list">
+                                ${benefitsList}
+                            </div>
+                        </div>
+                        <div class="package-footer">
+                            ${paymentSection}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function handleFixedPayment(title, price, url) {
+            window.open(url, '_blank');
+        }
+        
+        // Standard benefits that all sponsors get
+        const standardBenefits = [
+            'Logotyp som sponsor på hemsidan',
+            'Erkännande för ditt stöd',
+            'Årligt sponsoravtal'
+        ];
+        
+        // Additional benefits for different levels
+        const additionalBenefits = {
+            gold: [
+                'Annonser på vår hemsida',
+                'Logotyp i Ramadan-schema',
+                'Personlig kontakt och anpassad sponsoring'
+            ],
+            silver: [
+                'Logotyp i Ramadan-schema'
+            ],
+            bronze: []
+        };
+        
+        // Function to combine benefits
+        function getBenefits(level) {
+            return [...additionalBenefits[level], ...standardBenefits];
+        }
+        
+        // Sponsor configurations
+        const sponsorConfigs = [
+            {
+                id: 'gold',
+                title: 'Guld',
+                price: 'Över 25,000 kr',
+                color: '#B8860B',
+                icon: 'crown',
+                minAmount: 25001,
+                buyButtonId: 'buy_btn_1S3NspG84lZUxh2hjMuXI9tr',
+                benefits: getBenefits('gold')
+            },
+            {
+                id: 'silver',
+                title: 'Silver',
+                price: '25,000 kr',
+                color: '#C0C0C0',
+                icon: 'star',
+                buyButtonId: 'buy_btn_1ScXfNG84lZUxh2hkYOkdcKP',
+                benefits: getBenefits('silver')
+            },
+            {
+                id: 'bronze',
+                title: 'Brons',
+                price: '10,000 kr',
+                color: '#CD7F32',
+                icon: 'handshake',
+                buyButtonId: 'buy_btn_1ScXWzG84lZUxh2hYtgs7TDS',
+                benefits: getBenefits('bronze')
+            }
+        ];
+        
+        // Generate all sponsor cards when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('sponsor-container');
+            if (container) {
+                container.innerHTML = sponsorConfigs.map(config => generateSponsorCard(config)).join('');
+            }
+        });
+    </script>
+
+    <!-- Load Header and Footer -->
+    <script>
+        $(function () {
+            $("#header-placeholder").load("header.html");
+            $("#footer-placeholder").load("footer.html");
+        });
+    </script>
+</body>
+
+</html>
