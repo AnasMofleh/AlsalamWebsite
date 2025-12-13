@@ -1,591 +1,503 @@
-<!doctype html>
-<html lang="sv">
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Donation Dashboard</title>
-  <style>
-    :root {
-      --bg: #0f1724;
-      --card: #0b1220;
-      --muted: #9aa6b2;
-      --accent: #10b981;
-      --accent-2: #06b6d4;
-      --danger: #ef4444;
-      --glass: rgba(255, 255, 255, 0.03);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al Salam Center Fundraising</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Logo Colors */
+            --primary-green: #4CAF50; 
+            --primary-blue: #1565C0;
+            --accent-green: #69F0AE;
+            
+            /* Light Theme Defaults */
+            --bg-color: #f4f6f8;
+            --card-bg: #ffffff;
+            --text-main: #2c3e50;
+            --text-muted: #7f8c8d;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 6px rgba(0,0,0,0.05);
+            --progress-bg: #e9ecef;
+        }
 
-    html,
-    body {
-      height: 100%;
-      margin: 0;
-      font-family: Inter, system-ui, Segoe UI, Roboto, "Helvetica Neue", Arial;
-      color: #e6eef6;
-      background: linear-gradient(180deg, #071426 0%, #071a2a 100%);
-    }
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #ffffff;
+            --text-muted: #b0b3b8;
+            --border-color: #333333;
+            --shadow: 0 4px 6px rgba(0,0,0,0.3);
+            --progress-bg: #333333;
+        }
 
-    .wrap {
-      max-width: 1100px;
-      margin: 32px auto;
-      padding: 24px;
-      display: grid;
-      grid-template-columns: 1fr 360px;
-      gap: 20px;
-    }
+        * { box-sizing: border-box; transition: background-color 0.3s, color 0.3s; }
 
-    .card {
-      background: var(--card);
-      border-radius: 12px;
-      padding: 18px;
-      box-shadow: 0 6px 30px rgba(4, 6, 10, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.03);
-    }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 10px;
+            min-height: 100vh;
+        }
 
-    header.card {
-      grid-column: 1 / -1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
+        /* Grid Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 65% 33%; /* Wider left column */
+            gap: 15px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
 
-    header .title {
-      display: flex;
-      flex-direction: column
-    }
+        /* Hero Section (Split Layout) */
+        .hero-section {
+            grid-column: 1 / -1;
+            background: var(--card-bg);
+            padding: 25px 40px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border-top: 6px solid var(--primary-green);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    h1 {
-      margin: 0;
-      font-size: 20px;
-      letter-spacing: -0.2px
-    }
+        .hero-left {
+            flex: 1;
+            padding-right: 20px;
+        }
 
-    .subtitle {
-      color: var(--muted);
-      font-size: 13px;
-      margin-top: 4px
-    }
+        .hero-right {
+            flex: 0 0 200px; /* Fixed width for logo area */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            border-left: 1px solid var(--border-color);
+            padding-left: 20px;
+        }
 
-    .main-card {
-      display: flex;
-      flex-direction: column;
-      gap: 14px
-    }
+        .logo-container { width: 100%; max-width: 140px; }
+        .logo-container img { width: 100%; height: auto; }
 
-    .total-row {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      justify-content: space-between
-    }
+        .hero-title { font-size: 1.4rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 1px; margin-bottom: 5px; }
+        
+        /* BIGGER NUMBERS */
+        .hero-amount { 
+            font-size: 7rem; /* Massive size */
+            font-weight: 900; 
+            color: var(--primary-blue); 
+            line-height: 1;
+            margin-bottom: 15px;
+        }
+        [data-theme="dark"] .hero-amount { color: var(--accent-green); }
 
-    .big-number {
-      font-size: 44px;
-      font-weight: 700;
-      line-height: 1;
-      color: var(--accent)
-    }
+        /* Progress Bar */
+        .progress-container {
+            background-color: var(--progress-bg);
+            border-radius: 50px;
+            height: 35px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
 
-    .meta {
-      color: var(--muted);
-      font-size: 13px
-    }
+        .progress-bar {
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-green));
+            height: 100%;
+            width: 0%;
+            border-radius: 50px;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-    .progress-wrap {
-      width: 100%;
-      background: var(--glass);
-      border-radius: 10px;
-      padding: 8px
-    }
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
 
-    .progress {
-      height: 20px;
-      background: linear-gradient(90deg, var(--accent), var(--accent-2));
-      border-radius: 8px;
-      width: 0%;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding-right: 10px;
-      color: #052022;
-      font-weight: 700
-    }
+        /* Buttons */
+        .theme-toggle {
+            background: none;
+            border: 2px solid var(--primary-blue);
+            color: var(--primary-blue);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 700;
+            width: 100%;
+        }
 
-    .goal {
-      font-size: 13px;
-      color: var(--muted)
-    }
+        [data-theme="dark"] .theme-toggle { border-color: var(--accent-green); color: var(--accent-green); }
 
-    .stats-grid {
-      display: flex;
-      gap: 10px
-    }
+        /* Hidden Test Button */
+        .test-btn {
+            display: none;
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px;
+            font-size: 0.7rem;
+            opacity: 0.1; /* Almost invisible */
+            cursor: pointer;
+            width: 100%;
+            border-radius: 4px;
+        }
+        .test-btn:hover { opacity: 1; }
 
-    .stat {
-      flex: 1;
-      background: transparent;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.02)
-    }
+        /* Stat Cards */
+        .stats-column { display: flex; flex-direction: column; gap: 15px; }
 
-    .stat .val {
-      font-weight: 700;
-      font-size: 18px
-    }
+        .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
 
-    .feed {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      max-height: 380px;
-      overflow: hidden;
-      position: relative
-    }
+        .card.highlight { border: 3px solid var(--primary-blue); background: rgba(21, 101, 192, 0.03); }
+        [data-theme="dark"] .card.highlight { background: rgba(105, 240, 174, 0.05); border-color: var(--accent-green); }
 
-    .messages {
-      display: flex;
-      flex-direction: column-reverse;
-      gap: 10px;
-      overflow: visible
-    }
+        .card-label { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 5px; font-weight: 600; }
+        
+        /* Bigger Numbers for cards */
+        .card-value { font-size: 2rem; font-weight: 800; color: var(--text-main); line-height: 1.1; }
+        
+        .card-sub { font-size: 1rem; margin-top: 5px; opacity: 0.8; }
+        .card-msg { 
+            background: var(--bg-color); 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin-top: 15px; 
+            font-style: italic; 
+            font-size: 1.1rem;
+            border-left: 4px solid var(--primary-blue);
+        }
 
-    .message {
-      background: rgba(255, 255, 255, 0.02);
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.02);
-      font-size: 14px;
-      color: #e6eef6;
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      transition: opacity .6s, transform .6s;
-    }
+        /* Feed Section */
+        .feed-column {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            height: 700px; /* Taller */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .message .time {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 6px
-    }
+        .feed-header { font-size: 1.3rem; font-weight: 800; margin-bottom: 15px; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
+        
+        .feed-list { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; padding-right: 5px; }
+        .feed-list::-webkit-scrollbar { width: 6px; }
+        .feed-list::-webkit-scrollbar-thumb { background-color: var(--text-muted); border-radius: 10px; }
 
-    .message .amt {
-      font-weight: 700;
-      color: var(--accent);
-      margin-right: 8px
-    }
+        .feed-item {
+            background: var(--bg-color);
+            padding: 15px;
+            border-radius: 8px;
+            animation: slideIn 0.5s ease-out;
+        }
 
-    .message.zero .amt {
-      color: var(--muted)
-    }
+        .feed-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .feed-amount { font-weight: 800; color: var(--primary-green); font-size: 1.1rem; }
+        .feed-time { font-size: 0.8rem; color: var(--text-muted); }
+        .feed-msg { font-size: 1rem; color: var(--text-main); word-break: break-word; }
 
-    /* pop animation for new items */
-    @keyframes popFade {
-      0% {
-        transform: scale(1.35);
-        opacity: 0;
-      }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-      20% {
-        transform: scale(1.05);
-        opacity: 1;
-      }
-
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
-
-    .pop {
-      animation: popFade .6s cubic-bezier(.2, .9, .2, 1);
-      box-shadow: 0 8px 30px rgba(3, 7, 18, 0.6);
-      border-color: rgba(255, 255, 255, 0.06);
-    }
-
-    /* ephemeral fade-away for short notifications */
-    .ephemeral {
-      animation: fadeOut 6s ease forwards;
-    }
-
-    @keyframes fadeOut {
-      0% {
-        opacity: 1;
-      }
-
-      80% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      100% {
-        opacity: 0;
-        transform: translateY(-8px);
-        height: 0;
-        margin: 0;
-        padding: 0;
-      }
-    }
-
-    .right-column {
-      display: flex;
-      flex-direction: column;
-      gap: 14px
-    }
-
-    .small {
-      font-size: 13px;
-      color: var(--muted)
-    }
-
-    .last-updated {
-      font-size: 13px;
-      color: var(--muted);
-      text-align: right
-    }
-
-    .controls {
-      display: flex;
-      gap: 8px;
-      align-items: center
-    }
-
-    .btn {
-      background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.04);
-      padding: 8px 10px;
-      border-radius: 8px;
-      color: var(--muted);
-      font-size: 13px;
-      cursor: pointer
-    }
-
-    .emphasis {
-      color: var(--accent);
-      font-weight: 700
-    }
-
-    footer.card {
-      grid-column: 1 / -1;
-      display: flex;
-      justify-content: space-between;
-      align-items: center
-    }
-
-    .goal-figure {
-      font-size: 13px;
-      color: var(--muted)
-    }
-
-    /* responsive */
-    @media (max-width:980px) {
-      .wrap {
-        grid-template-columns: 1fr;
-        padding: 14px
-      }
-
-      header.card {
-        flex-direction: column;
-        align-items: flex-start
-      }
-
-      .right-column {
-        order: 2
-      }
-    }
-  </style>
+        /* Responsive */
+        @media (max-width: 900px) {
+            .hero-section { flex-direction: column-reverse; text-align: center; }
+            .hero-left { padding-right: 0; }
+            .hero-right { border-left: none; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; margin-bottom: 20px; padding-left: 0; width: 100%; flex-direction: row; justify-content: center; }
+            .hero-amount { font-size: 5rem; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .feed-column { height: 500px; }
+        }
+    </style>
 </head>
-
 <body>
-  <div class="wrap" role="main">
-    <header class="card">
-      <div class="title">
-        <h1>Donationsöversikt</h1>
-        <div class="subtitle">Fokus: Totalbelopp mot mål</div>
-      </div>
-      <div class="controls">
-        <div class="small">Mål:</div>
-        <div class="emphasis" id="goal-display">10&nbsp;000&nbsp;000 kr</div>
-      </div>
-    </header>
 
-    <section class="card main-card" aria-labelledby="total-heading">
-      <div class="total-row">
-        <div>
-          <div class="meta">Total alla tider</div>
-          <div class="big-number" id="total-counter">0 kr</div>
+    <div class="dashboard-grid">
+        
+        <div class="hero-section">
+            <div class="hero-left">
+                <div class="hero-title">Total Raised So Far</div>
+                <div class="hero-amount"><span id="total-alltime">0</span> Kr</div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="progress-percentage">0%</span>
+                    <span>Goal: 10,000,000 Kr</span>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <div class="logo-container">
+                    <img src="img/Al-Salam-Center-Logo.png" alt="Logo" id="logo">
+                </div>
+                <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark</button>
+                <button class="test-btn" onclick="simulateTest()">🤖 Test Data</button>
+            </div>
         </div>
-        <div style="min-width:220px">
-          <div class="meta">Framsteg mot målet</div>
-          <div class="progress-wrap" aria-hidden="true">
-            <div id="progress-bar" class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100">0%</div>
-          </div>
-          <div style="display:flex;justify-content:space-between;margin-top:8px">
-            <div class="goal">Mål: <span class="emphasis">10 000 000 kr</span></div>
-            <div class="meta" id="percent-label">0%</div>
-          </div>
+
+        <div class="stats-column">
+
+            <div class="card">
+                <div class="card-label">📅 Collected Today</div>
+                <div class="card-value"><span id="total-today">0</span> Kr</div>
+                <div class="card-sub"><span id="count-today">0</span> donations today</div>
+            </div>
+
+            <div class="card">
+                <div class="card-label">🌟 Highest All Time</div>
+                <div class="card-value"><span id="highest-ever-amount">0</span> Kr</div>
+                <div id="highest-ever-msg" class="card-msg" style="display:none;"></div>
+            </div>
+            
+            <div class="card highlight">
+                <div class="card-label">🏆 Highest Donation Today</div>
+                <div class="card-value"><span id="highest-today-amount">0</span> Kr</div>
+                <div id="highest-today-msg" class="card-msg" style="display:none;"></div>
+            </div>
+            
         </div>
-      </div>
 
-      <div style="display:flex;gap:18px;align-items:center">
-        <div class="stats-grid" style="flex:1">
-          <div class="stat">
-            <div class="small">Total idag</div>
-            <div class="val" id="total-today">0 kr</div>
-          </div>
-          <div class="stat">
-            <div class="small">Antal meddelanden (alla tider)</div>
-            <div class="val" id="count-alltime">0</div>
-          </div>
-          <div class="stat">
-            <div class="small">Antal idag</div>
-            <div class="val" id="count-today">0</div>
-          </div>
+        <div class="feed-column">
+            <div class="feed-header">💬 Recent Donations</div>
+            <div class="feed-list" id="feed-list"></div>
         </div>
-        <div style="width:220px">
-          <div class="small">Högsta någonsin</div>
-          <div style="font-weight:700;font-size:18px" id="highest-ever">4 kr</div>
-          <div class="small" style="margin-top:8px">Högsta idag</div>
-          <div style="font-weight:700;font-size:18px" id="highest-today">4 kr</div>
-        </div>
-      </div>
-    </section>
 
-    <aside class="card right-column" aria-labelledby="feed-heading">
-      <div>
-        <div class="small">Senaste meddelanden</div>
-        <div class="feed" style="margin-top:10px">
-          <div id="messages" class="messages" aria-live="polite" aria-atomic="true"></div>
-        </div>
-      </div>
+    </div>
 
-      <div class="small last-updated" id="last-updated">Uppdaterad: -</div>
-    </aside>
+    <script>
+        // CONFIG
+        const API_URL = "https://script.google.com/macros/s/AKfycbyvsHmRWM96nR0xMFjUk1y0ox_Pohm0Rtd8MIfZYvvpevjokVmY-eU8ZIHZfN-tdUi8/exec";
+        const GOAL = 10000000;
+        const REFRESH_RATE = 5000; 
 
-    <footer class="card">
-      <div class="small">Käll-URL: <a id="source-url" href="#" target="_blank"
-          style="color:var(--accent);text-decoration:none">Google Apps Script</a></div>
-      <div class="goal-figure">Mål kvar: <span id="goal-remaining" class="emphasis">10 000 000 kr</span></div>
-    </footer>
-  </div>
+        // STATE
+        let previousData = {
+            total_alltime: 0,
+            Highest_today: { amount: 0 }
+        };
 
-  <script>
-    (function () {
-      // Config
-      const FETCH_URL = 'https://script.google.com/macros/s/AKfycbyvsHmRWM96nR0xMFjUk1y0ox_Pohm0Rtd8MIfZYvvpevjokVmY-eU8ZIHZfN-tdUi8/exec';
-      const POLL_INTERVAL_MS = 5000;
-      const GOAL = 10000000; // 10 million
-      const MAX_MESSAGES_SHOWN = 6;
+        // DOM ELEMENTS
+        const els = {
+            totalAll: document.getElementById('total-alltime'),
+            progressBar: document.getElementById('progress-bar'),
+            progressPct: document.getElementById('progress-percentage'),
+            highestTodayAmt: document.getElementById('highest-today-amount'),
+            highestTodayMsg: document.getElementById('highest-today-msg'),
+            totalToday: document.getElementById('total-today'),
+            countToday: document.getElementById('count-today'),
+            highestEverAmt: document.getElementById('highest-ever-amount'),
+            highestEverMsg: document.getElementById('highest-ever-msg'),
+            feedList: document.getElementById('feed-list')
+        };
 
-      // DOM refs
-      const totalCounter = document.getElementById('total-counter');
-      const progressBar = document.getElementById('progress-bar');
-      const percentLabel = document.getElementById('percent-label');
-      const totalTodayEl = document.getElementById('total-today');
-      const countAlltimeEl = document.getElementById('count-alltime');
-      const countTodayEl = document.getElementById('count-today');
-      const highestEverEl = document.getElementById('highest-ever');
-      const highestTodayEl = document.getElementById('highest-today');
-      const messagesWrap = document.getElementById('messages');
-      const lastUpdatedEl = document.getElementById('last-updated');
-      const sourceUrlEl = document.getElementById('source-url');
-      const goalRemainingEl = document.getElementById('goal-remaining');
-
-      sourceUrlEl.href = FETCH_URL;
-
-      // Local state for detecting new messages
-      let seenIds = new Set();
-      let lastTotal = 0;
-      let animFrameId = null;
-
-      // Format helper (Swedish style)
-      function formatCurrency(n) {
-        // integer values shown as "1 234 kr"
-        try {
-          const opts = { minimumFractionDigits: 0, maximumFractionDigits: 0 };
-          return new Intl.NumberFormat('sv-SE', opts).format(Math.round(n)) + ' kr';
-        } catch (e) {
-          return n + ' kr';
+        // Number Animation Utility
+        function animateValue(obj, start, end, duration) {
+            if (start === end) return;
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start).toLocaleString();
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
         }
-      }
-      function formatPercent(p) {
-        return Math.round(p) + '%';
-      }
 
-      // animate numeric counter from lastTotal to newTotal
-      function animateCount(newTotal) {
-        const start = lastTotal || 0;
-        const end = Number(newTotal) || 0;
-        const duration = 800;
-        const startTime = performance.now();
-        if (animFrameId) cancelAnimationFrame(animFrameId);
-        function tick(now) {
-          const t = Math.min(1, (now - startTime) / duration);
-          const eased = t < .5 ? 2 * t * t : -1 + (4 - 2 * t) * t; // ease in-out-ish
-          const cur = Math.round(start + (end - start) * eased);
-          totalCounter.textContent = formatCurrency(cur);
-          if (t < 1) {
-            animFrameId = requestAnimationFrame(tick);
-          } else {
-            lastTotal = end;
-            totalCounter.textContent = formatCurrency(end);
-          }
+        // Fetch Data
+        async function fetchData() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                updateDashboard(data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
         }
-        animFrameId = requestAnimationFrame(tick);
-      }
 
-      // update progress bar
-      function updateProgress(total) {
-        const pct = Math.min(100, (total / GOAL) * 100);
-        progressBar.style.width = pct + '%';
-        progressBar.textContent = Math.round(pct) + '%';
-        progressBar.setAttribute('aria-valuenow', Math.round(pct));
-        percentLabel.textContent = formatPercent(pct);
-        const remaining = Math.max(0, GOAL - total);
-        goalRemainingEl.textContent = formatCurrency(remaining);
-      }
+        function updateDashboard(data) {
+            // 1. Total All Time
+            if (data.total_alltime !== previousData.total_alltime) {
+                animateValue(els.totalAll, previousData.total_alltime, data.total_alltime, 2000);
+                
+                // Trigger FIREWORKS if goal reached
+                if (data.total_alltime >= GOAL && previousData.total_alltime < GOAL) {
+                    triggerGoalCelebration();
+                } else if (data.total_alltime > previousData.total_alltime && previousData.total_alltime > 0) {
+                    // Small burst for any update
+                   confetti({ particleCount: 30, spread: 50, origin: { y: 0.6 } });
+                }
+            }
 
-      // compute simple stable id for a message
-      function messageId(msg) {
-        // combine timestamp + amount + raw_body to reduce collisions
-        return `${msg.timestamp}::${msg.amount}::${(msg.raw_body || '').slice(0, 120)}`;
-      }
+            // 2. Progress Bar
+            const percentage = Math.min((data.total_alltime / GOAL) * 100, 100).toFixed(1);
+            els.progressBar.style.width = percentage + "%";
+            els.progressPct.innerText = percentage + "%";
 
-      // show messages list; new messages get pop+ephemeral class
-      function renderMessages(msgs) {
-        // msgs expected newest-first in JSON? Provided sample seems newest first.
-        // We'll display newest at top.
-        // Keep at most MAX_MESSAGES_SHOWN visible.
-        const toShow = msgs.slice(0, MAX_MESSAGES_SHOWN);
-        // We will rebuild list but animate newly seen items.
-        const fragment = document.createDocumentFragment();
+            // 3. Highest Today
+            if (data.Highest_today.amount !== previousData.Highest_today.amount) {
+                animateValue(els.highestTodayAmt, previousData.Highest_today.amount, data.Highest_today.amount, 1000);
+                
+                // Trigger SIDE CANNONS for new record
+                if (data.Highest_today.amount > previousData.Highest_today.amount && previousData.Highest_today.amount > 0) {
+                    triggerRecordBreaker();
+                }
+            }
+            
+            // Text Content Updates
+            if (data.Highest_today.message) {
+                els.highestTodayMsg.innerText = `"${data.Highest_today.message}"`;
+                els.highestTodayMsg.style.display = "block";
+            } else { els.highestTodayMsg.style.display = "none"; }
 
-        for (const m of toShow) {
-          const id = messageId(m);
-          const isNew = !seenIds.has(id);
+            els.totalToday.innerText = data.total_today.toLocaleString();
+            els.countToday.innerText = data.count_today;
 
-          const div = document.createElement('div');
-          div.className = 'message';
-          if (m.amount === 0) div.classList.add('zero');
-          const time = document.createElement('div');
-          time.className = 'time';
-          time.textContent = m.timestamp || '';
-          const body = document.createElement('div');
-          // amount + message
-          const amtSpan = document.createElement('span');
-          amtSpan.className = 'amt';
-          amtSpan.textContent = (m.amount || 0) ? (formatCurrency(m.amount)) : '—';
-          const msgText = document.createElement('span');
-          msgText.className = 'msgtext';
-          msgText.textContent = (m.message && m.message.trim()) ? m.message.trim() : (m.raw_body || '').trim();
+            els.highestEverAmt.innerText = data.Highest_ever.amount.toLocaleString();
+            if (data.Highest_ever.message) {
+                els.highestEverMsg.innerText = `"${data.Highest_ever.message}"`;
+                els.highestEverMsg.style.display = "block";
+            } else { els.highestEverMsg.style.display = "none"; }
 
-          body.appendChild(amtSpan);
-          body.appendChild(msgText);
+            // 4. Feed
+            // Only re-render if timestamp changed to save DOM operations
+            if (JSON.stringify(data.last_messages) !== JSON.stringify(previousData.last_messages)) {
+                renderFeed(data.last_messages);
+            }
 
-          div.appendChild(time);
-          div.appendChild(body);
-
-          if (isNew) {
-            div.classList.add('pop', 'ephemeral');
-            // mark as seen after adding to DOM so future polls won't flash again
-            seenIds.add(id);
-          }
-
-          // insert at top of fragment to keep newest-first
-          fragment.insertBefore(div, fragment.firstChild);
+            previousData = data;
         }
-        // Clear and append (we keep DOM simple)
-        messagesWrap.innerHTML = '';
-        messagesWrap.appendChild(fragment);
-      }
 
-      // attempt to parse numeric fields even if they are strings with "kr"
-      function toNumber(val) {
-        if (typeof val === 'number') return val;
-        if (!val) return 0;
-        try {
-          // remove non-digit except minus and dot
-          const cleaned = String(val).replace(/[^\d\.\-]/g, '');
-          const n = parseFloat(cleaned);
-          return isNaN(n) ? 0 : n;
-        } catch (e) {
-          return 0;
+        function renderFeed(messages) {
+            els.feedList.innerHTML = "";
+            if (!messages || messages.length === 0) {
+                els.feedList.innerHTML = "<div style='text-align:center; color:#ccc; padding:20px'>No recent messages</div>";
+                return;
+            }
+
+            messages.forEach(msg => {
+                const item = document.createElement('div');
+                item.className = 'feed-item';
+                
+                let timeStr = msg.timestamp;
+                if(msg.timestamp.includes('T')) timeStr = msg.timestamp.split('T')[1].substring(0, 5);
+
+                let displayMsg = msg.message;
+                if (!displayMsg || displayMsg === "Test") displayMsg = msg.message || "-";
+
+                item.innerHTML = `
+                    <div class="feed-top">
+                        <span class="feed-amount">${msg.amount > 0 ? msg.amount.toLocaleString() + ' Kr' : ''}</span>
+                        <span class="feed-time">${timeStr}</span>
+                    </div>
+                    <div class="feed-msg">${displayMsg}</div>
+                `;
+                els.feedList.appendChild(item);
+            });
         }
-      }
 
-      // Main update from JSON
-      async function fetchAndUpdate() {
-        try {
-          const controller = new AbortController();
-          const timeout = setTimeout(() => controller.abort(), 4000);
-          const res = await fetch(FETCH_URL, { cache: 'no-store', signal: controller.signal });
-          clearTimeout(timeout);
-          if (!res.ok) throw new Error('Network response not ok: ' + res.status);
-          const data = await res.json();
+        // --- ANIMATIONS ---
 
-          // Safety: if structure not as expected, don't crash
-          const total_alltime = toNumber(data.total_alltime);
-          const total_today = toNumber(data.total_today);
-          const count_alltime = data.count_alltime || 0;
-          const count_today = data.count_today || 0;
-          const highest_ever = data.Highest_ever && data.Highest_ever.amount ? toNumber(data.Highest_ever.amount) : 0;
-          const highest_today = data.Highest_today && data.Highest_today.amount ? toNumber(data.Highest_today.amount) : 0;
-          const last_messages = Array.isArray(data.last_messages) ? data.last_messages : [];
+        // 1. Goal Celebration: Fireworks (Lasts 3 seconds)
+        function triggerGoalCelebration() {
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
 
-          // update UI
-          animateCount(total_alltime);
-          updateProgress(total_alltime);
-          totalTodayEl.textContent = formatCurrency(total_today);
-          countAlltimeEl.textContent = count_alltime;
-          countTodayEl.textContent = count_today;
-          highestEverEl.textContent = formatCurrency(highest_ever);
-          highestTodayEl.textContent = formatCurrency(highest_today);
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
 
-          // render messages (assume incoming JSON newest-first)
-          renderMessages(last_messages);
-
-          // last updated
-          const lastUpdated = data.last_updated || new Date().toISOString().slice(0, 10);
-          lastUpdatedEl.textContent = 'Uppdaterad: ' + lastUpdated;
-        } catch (err) {
-          // show error in last-updated area briefly
-          lastUpdatedEl.textContent = 'Fel vid hämtning: ' + (err && err.message ? err.message : err);
-          console.warn('Fetch error', err);
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
+            }, 250);
         }
-      }
 
-      // Initial load: mark existing messages as seen to avoid flashing old ones
-      async function initialLoad() {
-        try {
-          const res = await fetch(FETCH_URL, { cache: 'no-store' });
-          if (!res.ok) throw new Error('Network error');
-          const data = await res.json();
-          const msgs = Array.isArray(data.last_messages) ? data.last_messages : [];
-          // mark current messages as seen (so only truly new ones later flash)
-          for (const m of msgs) seenIds.add(messageId(m));
-          // set last total to the value so initial number appears without count animation from zero
-          lastTotal = toNumber(data.total_alltime) || 0;
-          totalCounter.textContent = formatCurrency(lastTotal);
-          updateProgress(lastTotal);
-          // render current messages (no pop)
-          renderMessages(msgs);
-          lastUpdatedEl.textContent = 'Uppdaterad: ' + (data.last_updated || new Date().toISOString().slice(0, 10));
-        } catch (e) {
-          console.warn('Initial load failed', e);
-          // Still start polling
-        } finally {
-          // start polling loop
-          setInterval(fetchAndUpdate, POLL_INTERVAL_MS);
-          // do a fetch soon to pick up changes quickly
-          setTimeout(fetchAndUpdate, 1000);
+        // 2. Record Breaker: Side Cannons
+        function triggerRecordBreaker() {
+            const end = Date.now() + 1000;
+            const colors = ['#bb0000', '#ffffff'];
+
+            (function frame() {
+                confetti({
+                    particleCount: 2, angle: 60, spread: 55, origin: { x: 0 }, colors: colors
+                });
+                confetti({
+                    particleCount: 2, angle: 120, spread: 55, origin: { x: 1 }, colors: colors
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
         }
-      }
 
-      // Kick off
-      initialLoad();
+        // Theme Toggle
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.querySelector('.theme-toggle');
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                btn.innerText = "🌙 Dark";
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                btn.innerText = "☀️ Light";
+            }
+        }
 
-    })();
-  </script>
+        // --- TEST BUTTON LOGIC ---
+        function simulateTest() {
+            // Generate Fake data higher than current
+            let currentTotal = parseInt(els.totalAll.innerText.replace(/,/g,'')) || 1000;
+            let currentHigh = parseInt(els.highestTodayAmt.innerText.replace(/,/g,'')) || 100;
+
+            const fakeData = {
+                "total_alltime": currentTotal + Math.floor(Math.random() * 5000),
+                "count_alltime": 50,
+                "total_today": 5000,
+                "count_today": 12,
+                "Highest_ever": { "amount": 2000, "message": "Big Donor" },
+                "Highest_today": { 
+                    "amount": currentHigh + 150, // Always beats current high to trigger animation
+                    "message": "Fictive Donor!" 
+                },
+                "last_messages": [
+                    { "timestamp": "2025-12-13T16:00", "amount": 500, "message": "Test Donation 1" },
+                    { "timestamp": "2025-12-13T16:05", "amount": 200, "message": "Test Donation 2" }
+                ],
+                "last_updated": "2025-12-13"
+            };
+            
+            console.log("Simulating Data:", fakeData);
+            updateDashboard(fakeData);
+        }
+
+        // Init
+        fetchData();
+        setInterval(fetchData, REFRESH_RATE);
+
+    </script>
 </body>
-
 </html>
