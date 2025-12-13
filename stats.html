@@ -1,26 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Al Salam Center Fundraising</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
+        rel="stylesheet">
+
     <style>
         :root {
             /* Logo Colors */
-            --primary-green: #4CAF50; 
+            --primary-green: #4CAF50;
             --primary-blue: #1565C0;
-            --accent-green: #69F0AE;
-            
+            --accent-green: #4CAF50;
+
             /* Light Theme Defaults */
             --bg-color: #f4f6f8;
             --card-bg: #ffffff;
             --text-main: #2c3e50;
             --text-muted: #7f8c8d;
             --border-color: #e0e0e0;
-            --shadow: 0 4px 6px rgba(0,0,0,0.05);
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             --progress-bg: #e9ecef;
         }
 
@@ -30,25 +32,46 @@
             --text-main: #ffffff;
             --text-muted: #b0b3b8;
             --border-color: #333333;
-            --shadow: 0 4px 6px rgba(0,0,0,0.3);
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
             --progress-bg: #333333;
         }
 
-        * { box-sizing: border-box; transition: background-color 0.3s, color 0.3s; }
+        * {
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
 
         body {
             font-family: 'Tajawal', sans-serif;
             background-color: var(--bg-color);
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
             color: var(--text-main);
             margin: 0;
             padding: 10px;
             min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            z-index: -1;
         }
 
         /* Grid Layout */
         .dashboard-grid {
             display: grid;
-            grid-template-columns: 65% 33%; /* Wider left column */
+            grid-template-columns: 65% 33%;
+            /* Wider left column */
             gap: 15px;
             max-width: 1400px;
             margin: 0 auto;
@@ -57,7 +80,7 @@
         /* Hero Section (Split Layout) */
         .hero-section {
             grid-column: 1 / -1;
-            background: var(--card-bg);
+            background: rgba(255, 255, 255, 0.85);
             padding: 25px 40px;
             border-radius: 16px;
             box-shadow: var(--shadow);
@@ -65,6 +88,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        [data-theme="dark"] .hero-section {
+            background: rgba(30, 30, 30, 0.85);
         }
 
         .hero-left {
@@ -73,7 +101,8 @@
         }
 
         .hero-right {
-            flex: 0 0 200px; /* Fixed width for logo area */
+            flex: 0 0 200px;
+            /* Fixed width for logo area */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -83,20 +112,43 @@
             padding-left: 20px;
         }
 
-        .logo-container { width: 100%; max-width: 140px; }
-        .logo-container img { width: 100%; height: auto; }
+        .hero-right .theme-switch {
+            width: 100%;
+            justify-content: center;
+        }
 
-        .hero-title { font-size: 1.4rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 1px; margin-bottom: 5px; }
-        
+        .logo-container {
+            width: 100%;
+            max-width: 140px;
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: auto;
+        }
+
+        .hero-title {
+            font-size: 1.4rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
         /* BIGGER NUMBERS */
-        .hero-amount { 
-            font-size: 7rem; /* Massive size */
-            font-weight: 900; 
-            color: var(--primary-blue); 
+        .hero-amount {
+            font-size: 7rem;
+            /* Massive size */
+            font-weight: 900;
+            color: var(--primary-blue);
             line-height: 1;
             margin-bottom: 15px;
         }
-        [data-theme="dark"] .hero-amount { color: var(--accent-green); }
+
+        [data-theme="dark"] .hero-amount {
+            color: var(--accent-green);
+        }
 
         /* Progress Bar */
         .progress-container {
@@ -125,19 +177,92 @@
             font-weight: 600;
         }
 
-        /* Buttons */
-        .theme-toggle {
-            background: none;
-            border: 2px solid var(--primary-blue);
-            color: var(--primary-blue);
-            padding: 8px 16px;
+        /* Theme Switch */
+        .theme-switch {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 6px 10px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        [data-theme="dark"] .theme-switch {
+            background: rgba(30, 30, 30, 0.95);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 38px;
+            height: 18px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 18px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 12px;
+            width: 12px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--primary-green);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(20px);
+        }
+
+        #theme-label {
+            font-size: 0.9rem;
+        }
+
+        /* Donation Button */
+        .donation-btn {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
+            border: none;
+            color: white;
+            padding: 10px 16px;
             border-radius: 20px;
             cursor: pointer;
             font-weight: 700;
             width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        [data-theme="dark"] .theme-toggle { border-color: var(--accent-green); color: var(--accent-green); }
+        .donation-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(76, 175, 80, 0.3);
+        }
 
         /* Hidden Test Button */
         .test-btn {
@@ -147,59 +272,120 @@
             border: none;
             padding: 5px;
             font-size: 0.7rem;
-            opacity: 0.1; /* Almost invisible */
+            opacity: 0.1;
+            /* Almost invisible */
             cursor: pointer;
             width: 100%;
             border-radius: 4px;
         }
-        .test-btn:hover { opacity: 1; }
+
+        .test-btn:hover {
+            opacity: 1;
+        }
 
         /* Stat Cards */
-        .stats-column { display: flex; flex-direction: column; gap: 15px; }
+        .stats-column {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
 
         .card {
-            background: var(--card-bg);
+            background: rgba(255, 255, 255, 0.85);
             padding: 25px;
             border-radius: 12px;
             box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
         }
 
-        .card.highlight { border: 3px solid var(--primary-blue); background: rgba(21, 101, 192, 0.03); }
-        [data-theme="dark"] .card.highlight { background: rgba(105, 240, 174, 0.05); border-color: var(--accent-green); }
+        [data-theme="dark"] .card {
+            background: rgba(30, 30, 30, 0.85);
+        }
 
-        .card-label { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 5px; font-weight: 600; }
-        
+        .card.highlight {
+            border: 3px solid var(--primary-blue);
+            background: rgba(21, 101, 192, 0.03);
+        }
+
+        [data-theme="dark"] .card.highlight {
+            background: rgba(105, 240, 174, 0.05);
+            border-color: var(--accent-green);
+        }
+
+        .card-label {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
         /* Bigger Numbers for cards */
-        .card-value { font-size: 2rem; font-weight: 800; color: var(--text-main); line-height: 1.1; }
-        
-        .card-sub { font-size: 1rem; margin-top: 5px; opacity: 0.8; }
-        .card-msg { 
-            background: var(--bg-color); 
-            padding: 15px; 
-            border-radius: 8px; 
-            margin-top: 15px; 
-            font-style: italic; 
+        .card-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.1;
+        }
+
+        .card-sub {
+            font-size: 1rem;
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+
+        .card-msg {
+            background: var(--bg-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-style: italic;
             font-size: 1.1rem;
             border-left: 4px solid var(--primary-blue);
         }
 
         /* Feed Section */
         .feed-column {
-            background: var(--card-bg);
+            background: rgba(255, 255, 255, 0.85);
             border-radius: 12px;
             box-shadow: var(--shadow);
             padding: 20px;
-            height: 700px; /* Taller */
+            height: 700px;
+            /* Taller */
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            backdrop-filter: blur(10px);
         }
 
-        .feed-header { font-size: 1.3rem; font-weight: 800; margin-bottom: 15px; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
-        
-        .feed-list { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; padding-right: 5px; }
-        .feed-list::-webkit-scrollbar { width: 6px; }
-        .feed-list::-webkit-scrollbar-thumb { background-color: var(--text-muted); border-radius: 10px; }
+        [data-theme="dark"] .feed-column {
+            background: rgba(30, 30, 30, 0.85);
+        }
+
+        .feed-header {
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .feed-list {
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-right: 5px;
+        }
+
+        .feed-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .feed-list::-webkit-scrollbar-thumb {
+            background-color: var(--text-muted);
+            border-radius: 10px;
+        }
 
         .feed-item {
             background: var(--bg-color);
@@ -208,50 +394,124 @@
             animation: slideIn 0.5s ease-out;
         }
 
-        .feed-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-        .feed-amount { font-weight: 800; color: var(--primary-green); font-size: 1.1rem; }
-        .feed-time { font-size: 0.8rem; color: var(--text-muted); }
-        .feed-msg { font-size: 1rem; color: var(--text-main); word-break: break-word; }
+        .feed-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .feed-amount {
+            font-weight: 800;
+            color: var(--primary-green);
+            font-size: 1.1rem;
+        }
+
+        .feed-time {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .feed-msg {
+            font-size: 1rem;
+            color: var(--text-main);
+            word-break: break-word;
+        }
 
         @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Responsive */
         @media (max-width: 900px) {
-            .hero-section { flex-direction: column-reverse; text-align: center; }
-            .hero-left { padding-right: 0; }
-            .hero-right { border-left: none; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; margin-bottom: 20px; padding-left: 0; width: 100%; flex-direction: row; justify-content: center; }
-            .hero-amount { font-size: 5rem; }
-            .dashboard-grid { grid-template-columns: 1fr; }
-            .feed-column { height: 500px; }
+            .hero-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-left {
+                padding-right: 0;
+                width: 100%;
+                order: 2;
+            }
+
+            .hero-right {
+                border-left: none;
+                border-bottom: 1px solid var(--border-color);
+                padding-bottom: 20px;
+                margin-bottom: 20px;
+                padding-left: 0;
+                padding-top: 0;
+                width: 100%;
+                flex-direction: column;
+                justify-content: center;
+                order: 1;
+            }
+
+            .hero-right .donation-btn {
+                display: block;
+                margin-top: 15px;
+            }
+
+            .hero-left .donation-btn {
+                display: none;
+            }
+
+            .hero-amount {
+                font-size: 5rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feed-column {
+                height: 500px;
+            }
         }
     </style>
 </head>
+
 <body>
 
+    <div class="theme-switch">
+        <label class="switch">
+            <input type="checkbox" onchange="toggleTheme()">
+            <span class="slider"></span>
+        </label>
+        <span id="theme-label">☀️</span>
+    </div>
+
     <div class="dashboard-grid">
-        
+
         <div class="hero-section">
             <div class="hero-left">
-                <div class="hero-title">Total Raised So Far</div>
+                <div class="hero-title">Total insamlat idag</div>
                 <div class="hero-amount"><span id="total-alltime">0</span> Kr</div>
-                
+
                 <div class="progress-container">
                     <div class="progress-bar" id="progress-bar"></div>
                 </div>
                 <div class="progress-text">
                     <span id="progress-percentage">0%</span>
-                    <span>Goal: 10,000,000 Kr</span>
+                    <span>Mål: 10,000,000 Kr</span>
                 </div>
+                <button class="donation-btn" onclick="goToDonation()" style="display:none;">💝 Donera</button>
             </div>
 
             <div class="hero-right">
                 <div class="logo-container">
                     <img src="img/Al-Salam-Center-Logo.png" alt="Logo" id="logo">
                 </div>
-                <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark</button>
+                <button class="donation-btn" onclick="goToDonation()">💝 Donera</button>
                 <button class="test-btn" onclick="simulateTest()">🤖 Test Data</button>
             </div>
         </div>
@@ -259,27 +519,27 @@
         <div class="stats-column">
 
             <div class="card">
-                <div class="card-label">📅 Collected Today</div>
+                <div class="card-label"> Insamlat idag: </div>
                 <div class="card-value"><span id="total-today">0</span> Kr</div>
-                <div class="card-sub"><span id="count-today">0</span> donations today</div>
+                <div class="card-sub"><span id="count-today">0</span> donationer idag</div>
             </div>
 
             <div class="card">
-                <div class="card-label">🌟 Highest All Time</div>
+                <div class="card-label"> Högsta donation någonsin 🏆: </div>
                 <div class="card-value"><span id="highest-ever-amount">0</span> Kr</div>
                 <div id="highest-ever-msg" class="card-msg" style="display:none;"></div>
             </div>
-            
+
             <div class="card highlight">
-                <div class="card-label">🏆 Highest Donation Today</div>
+                <div class="card-label"> Högsta donation idag 🌟:</div>
                 <div class="card-value"><span id="highest-today-amount">0</span> Kr</div>
                 <div id="highest-today-msg" class="card-msg" style="display:none;"></div>
             </div>
-            
+
         </div>
 
         <div class="feed-column">
-            <div class="feed-header">💬 Recent Donations</div>
+            <div class="feed-header"> Senaste Donationer 💬:</div>
             <div class="feed-list" id="feed-list"></div>
         </div>
 
@@ -289,7 +549,7 @@
         // CONFIG
         const API_URL = "https://script.google.com/macros/s/AKfycbyvsHmRWM96nR0xMFjUk1y0ox_Pohm0Rtd8MIfZYvvpevjokVmY-eU8ZIHZfN-tdUi8/exec";
         const GOAL = 10000000;
-        const REFRESH_RATE = 5000; 
+        const REFRESH_RATE = 5000;
 
         // STATE
         let previousData = {
@@ -341,13 +601,13 @@
             // 1. Total All Time
             if (data.total_alltime !== previousData.total_alltime) {
                 animateValue(els.totalAll, previousData.total_alltime, data.total_alltime, 2000);
-                
+
                 // Trigger FIREWORKS if goal reached
                 if (data.total_alltime >= GOAL && previousData.total_alltime < GOAL) {
                     triggerGoalCelebration();
                 } else if (data.total_alltime > previousData.total_alltime && previousData.total_alltime > 0) {
                     // Small burst for any update
-                   confetti({ particleCount: 30, spread: 50, origin: { y: 0.6 } });
+                    confetti({ particleCount: 30, spread: 50, origin: { y: 0.6 } });
                 }
             }
 
@@ -359,13 +619,13 @@
             // 3. Highest Today
             if (data.Highest_today.amount !== previousData.Highest_today.amount) {
                 animateValue(els.highestTodayAmt, previousData.Highest_today.amount, data.Highest_today.amount, 1000);
-                
+
                 // Trigger SIDE CANNONS for new record
                 if (data.Highest_today.amount > previousData.Highest_today.amount && previousData.Highest_today.amount > 0) {
                     triggerRecordBreaker();
                 }
             }
-            
+
             // Text Content Updates
             if (data.Highest_today.message) {
                 els.highestTodayMsg.innerText = `"${data.Highest_today.message}"`;
@@ -400,9 +660,9 @@
             messages.forEach(msg => {
                 const item = document.createElement('div');
                 item.className = 'feed-item';
-                
+
                 let timeStr = msg.timestamp;
-                if(msg.timestamp.includes('T')) timeStr = msg.timestamp.split('T')[1].substring(0, 5);
+                if (msg.timestamp.includes('T')) timeStr = msg.timestamp.split('T')[1].substring(0, 5);
 
                 let displayMsg = msg.message;
                 if (!displayMsg || displayMsg === "Test") displayMsg = msg.message || "-";
@@ -426,7 +686,7 @@
             var animationEnd = Date.now() + duration;
             var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
 
-            var interval = setInterval(function() {
+            var interval = setInterval(function () {
                 var timeLeft = animationEnd - Date.now();
                 if (timeLeft <= 0) return clearInterval(interval);
 
@@ -457,21 +717,26 @@
         // Theme Toggle
         function toggleTheme() {
             const body = document.body;
-            const btn = document.querySelector('.theme-toggle');
+            const label = document.getElementById('theme-label');
             if (body.getAttribute('data-theme') === 'dark') {
                 body.removeAttribute('data-theme');
-                btn.innerText = "🌙 Dark";
+                label.innerText = "☀️";
             } else {
                 body.setAttribute('data-theme', 'dark');
-                btn.innerText = "☀️ Light";
+                label.innerText = "🌙";
             }
+        }
+
+        // Donation Button
+        function goToDonation() {
+            window.location.href = 'donations.html';
         }
 
         // --- TEST BUTTON LOGIC ---
         function simulateTest() {
             // Generate Fake data higher than current
-            let currentTotal = parseInt(els.totalAll.innerText.replace(/,/g,'')) || 1000;
-            let currentHigh = parseInt(els.highestTodayAmt.innerText.replace(/,/g,'')) || 100;
+            let currentTotal = parseInt(els.totalAll.innerText.replace(/,/g, '')) || 1000;
+            let currentHigh = parseInt(els.highestTodayAmt.innerText.replace(/,/g, '')) || 100;
 
             const fakeData = {
                 "total_alltime": currentTotal + Math.floor(Math.random() * 5000),
@@ -479,9 +744,9 @@
                 "total_today": 5000,
                 "count_today": 12,
                 "Highest_ever": { "amount": 2000, "message": "Big Donor" },
-                "Highest_today": { 
+                "Highest_today": {
                     "amount": currentHigh + 150, // Always beats current high to trigger animation
-                    "message": "Fictive Donor!" 
+                    "message": "Fictive Donor!"
                 },
                 "last_messages": [
                     { "timestamp": "2025-12-13T16:00", "amount": 500, "message": "Test Donation 1" },
@@ -489,7 +754,7 @@
                 ],
                 "last_updated": "2025-12-13"
             };
-            
+
             console.log("Simulating Data:", fakeData);
             updateDashboard(fakeData);
         }
@@ -500,4 +765,5 @@
 
     </script>
 </body>
+
 </html>
