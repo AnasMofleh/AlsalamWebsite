@@ -8,6 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
         rel="stylesheet">
+    <!-- Decorative font for Swish label -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -264,6 +266,72 @@
             box-shadow: 0 6px 12px rgba(76, 175, 80, 0.3);
         }
 
+        /* Swish */
+        .swish-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        /* swish-qr removed */
+
+        .swish-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        /* Formal Swish label */
+        .swish-label {
+            font-family: 'Tajawal', Arial, sans-serif;
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text-main);
+            display: inline-block;
+            padding-left: 10px;
+            border-left: 3px solid var(--primary-green);
+            line-height: 1;
+            letter-spacing: 0.4px;
+        }
+
+        /* Swish number (pill) */
+        .swish-number-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        .swish-number-label {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+        }
+
+        .swish-number {
+            background: linear-gradient(135deg, rgba(76,175,80,0.12), rgba(21,101,192,0.06));
+            color: var(--primary-green);
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 18px rgba(20,83,48,0.06);
+            border: 1px solid rgba(76,175,80,0.12);
+            font-size: 1rem;
+            transition: transform 0.14s ease, box-shadow 0.14s ease;
+        }
+
+        .swish-number:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 10px 26px rgba(20,83,48,0.08);
+        }
+
+        /* copy button removed */
+
         /* Hidden Test Button */
         .test-btn {
             display: none;
@@ -305,6 +373,9 @@
         .card.highlight {
             border: 3px solid var(--primary-blue);
             background: rgba(21, 101, 192, 0.03);
+            position: relative;
+            box-shadow: 0 12px 30px rgba(21,101,192,0.06);
+            padding: 18px;
         }
 
         [data-theme="dark"] .card.highlight {
@@ -317,6 +388,23 @@
             color: var(--text-muted);
             margin-bottom: 5px;
             font-weight: 600;
+        }
+
+        /* Prominent label for important stats */
+        .card-label.prominent {
+            font-size: 1.18rem;
+            color: var(--text-main);
+            font-weight: 800;
+            padding-left: 10px;
+            border-left: 4px solid var(--primary-green);
+            border-radius: 3px;
+            letter-spacing: 0.2px;
+        }
+
+        /* Emphasize the number for the highest ever */
+        #highest-ever-amount {
+            color: var(--primary-green);
+            text-shadow: 0 2px 8px rgba(76,175,80,0.08);
         }
 
         /* Bigger Numbers for cards */
@@ -341,6 +429,42 @@
             font-style: italic;
             font-size: 1.1rem;
             border-left: 4px solid var(--primary-blue);
+        }
+
+        /* special highest card things */
+        .special-card .special-badge {
+            position: absolute;
+            top: -12px;
+            right: 14px;
+            background: linear-gradient(90deg,var(--primary-green),var(--primary-blue));
+            color: white;
+            padding: 6px 10px;
+            border-radius: 18px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            box-shadow: 0 6px 18px rgba(21,101,192,0.12);
+        }
+
+        .special-card .trophy-ico {
+            margin-right: 8px;
+            font-size: 1.05rem;
+            vertical-align: middle;
+        }
+
+        /* Ensure highest number is black/neutral as requested */
+        #highest-ever-amount {
+            color: var(--text-main) !important;
+            font-size: 2.15rem;
+            font-weight: 900;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .special-card:hover {
+            transform: translateY(-6px);
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+            box-shadow: 0 18px 48px rgba(21,101,192,0.10);
         }
 
         /* Feed Section */
@@ -413,9 +537,13 @@
         }
 
         .feed-msg {
-            font-size: 1rem;
+            font-size: 1.06rem;
             color: var(--text-main);
             word-break: break-word;
+            font-weight: 700;
+            line-height: 1.4;
+            letter-spacing: 0.1px;
+            margin-top: 6px;
         }
 
         @keyframes slideIn {
@@ -513,6 +641,18 @@
                 </div>
                 <button class="donation-btn" onclick="goToDonation()">💝 Donera</button>
                 <button class="test-btn" onclick="simulateTest()">🤖 Test Data</button>
+                <!-- Swish quick access -->
+                <div class="swish-container" aria-label="Swish donation">
+                    <div class="swish-info">
+                        <div class="swish-label">Swish</div>
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <div class="swish-number-wrap">
+                                <div class="swish-number-label">Nummer</div>
+                                <div class="swish-number" id="swish-number">123 500 0559</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -524,9 +664,13 @@
                 <div class="card-sub"><span id="count-today">0</span> donationer idag</div>
             </div>
 
-            <div class="card">
-                <div class="card-label"> Högsta donation någonsin 🏆: </div>
-                <div class="card-value"><span id="highest-ever-amount">0</span> Kr</div>
+            <div class="card highlight special-card">
+                <div class="special-badge" aria-hidden>REKORD</div>
+                <div class="card-label prominent"> Högsta donation någonsin 🏆: </div>
+                <div class="card-value">
+                    <span class="trophy-ico" aria-hidden>🏅</span>
+                    <span id="highest-ever-amount">0</span> Kr
+                </div>
                 <div id="highest-ever-msg" class="card-msg" style="display:none;"></div>
             </div>
 
@@ -731,6 +875,8 @@
         function goToDonation() {
             window.location.href = 'donations.html';
         }
+
+        // copySwish removed (Kopiera button removed)
 
         // --- TEST BUTTON LOGIC ---
         function simulateTest() {
