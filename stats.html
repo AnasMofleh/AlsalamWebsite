@@ -124,6 +124,15 @@
             max-width: 140px;
         }
 
+        .logo-link {
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .logo-link img {
+            cursor: pointer;
+        }
+
         .logo-container img {
             width: 100%;
             height: auto;
@@ -286,7 +295,7 @@
         /* Formal Swish label */
         .swish-label {
             font-family: 'Tajawal', Arial, sans-serif;
-            font-size: 1rem;
+            font-size: 1.6rem;
             font-weight: 800;
             color: var(--text-main);
             display: inline-block;
@@ -321,7 +330,7 @@
             letter-spacing: 1px;
             box-shadow: 0 6px 18px rgba(20,83,48,0.06);
             border: 1px solid rgba(76,175,80,0.12);
-            font-size: 1rem;
+            font-size: 1.4rem;
             transition: transform 0.14s ease, box-shadow 0.14s ease;
         }
 
@@ -537,7 +546,7 @@
         }
 
         .feed-msg {
-            font-size: 1.06rem;
+            font-size: 1.2rem;
             color: var(--text-main);
             word-break: break-word;
             font-weight: 700;
@@ -637,7 +646,9 @@
 
             <div class="hero-right">
                 <div class="logo-container">
-                    <img src="img/Al-Salam-Center-Logo.png" alt="Logo" id="logo">
+                    <a href="index.html" aria-label="Go to home page" class="logo-link">
+                        <img src="img/Al-Salam-Center-Logo.png" alt="Logo" id="logo">
+                    </a>
                 </div>
                 <button class="donation-btn" onclick="goToDonation()">💝 Donera</button>
                 <button class="test-btn" onclick="simulateTest()">🤖 Test Data</button>
