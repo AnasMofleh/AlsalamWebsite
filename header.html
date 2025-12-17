@@ -34,42 +34,66 @@
 
                 <!-- Collapsible content -->
                 <div class="collapse navbar-collapse bg-white justify-content-center" id="navbarCollapse">
-                    <!-- Navigation links -->
-                    <div class="navbar-nav align-items-center">
-                        <a href="index.html" class="nav-item nav-link active">Home</a>
-                        <!-- <a href="#OmOss" class="nav-item nav-link ">Om Oss</a> -->
+                    <!-- Desktop navigation: show two items + dropdown -->
+                    <div class="navbar-nav align-items-center d-none d-lg-flex">
+                        <a href="index.html" class="nav-item nav-link">Home</a>
                         <a href="index.html#Services" class="nav-item nav-link">Tjänster</a>
                         <a href="donations.html" class="nav-item nav-link">Donationer</a>
-                        <a href="school.html" class="nav-item nav-link">Skolan</a>
-                        <a href="marrige.html" class="nav-item nav-link">Äktenskap</a>
-                        <a href="company.html" class="nav-item nav-link">Företag</a>
-                        <a href="#footer" class="nav-item nav-link me-lg-5">Kontakt</a>
 
-                        <!-- Social media buttons -->
-                        <div class="d-flex align-items-center ms-4">
-                            <a class="btn btn-primary btn-sm me-2"
-                                href="https://chat.whatsapp.com/IRiZCLCCM7lF4NHi2wBvmj">
-                                <i class="fab fa-whatsapp"></i>
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="moreMenu" role="button" aria-haspopup="true" aria-expanded="false">
+                                Mer
                             </a>
-                            <a class="btn btn-primary btn-sm me-2" href="https://www.facebook.com/alsalam.center.se">
-                                <i class="fab fa-facebook-f"></i>
-                            </a>
-                            <a class="btn btn-primary btn-sm me-2" href="https://www.instagram.com/alsalam_center_hbg">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                            <a class="btn btn-primary btn-sm me-2" href="https://www.tiktok.com/@alsalam_center_hbg">
-                                <i class="fab fa-tiktok"></i>
-                            </a>
+                            <div class="dropdown-menu" aria-labelledby="moreMenu">
+                                <a class="dropdown-item" href="company.html">Företag</a>
+                                <a class="dropdown-item" href="#footer">Kontakt</a>
+                                <a class="dropdown-item" href="stats.html">
+                                    <i class="fas fa-chart-line"></i>
+                                    Statistik
+                                </a>
+                            </div>
                         </div>
 
-                        <!-- Swish button -->
-                        <span class="navbar-text">
-                            <div class="d-none d-xl-flex align-items-center ms-4">
-                                <img src="img/swish.png" alt="Swish Icon" class="me-2" style="width: 20px" />
-                                <span>Swish: 1235942958</span>
-                            </div>
-                        </span>
+                        <!-- Keep CTA style for Statistik when accessed directly in dropdown -->
                     </div>
+
+                    <!-- Mobile navigation: keep full list -->
+                    <div class="navbar-nav align-items-center d-lg-none">
+                        <a href="index.html" class="nav-item nav-link active">Home</a>
+                        <a href="index.html#Services" class="nav-item nav-link">Tjänster</a>
+                        <a href="donations.html" class="nav-item nav-link">Donationer</a>
+                        <a href="company.html" class="nav-item nav-link">Företag</a>
+                        <a href="stats.html" class="nav-item nav-link stats-cta-link">
+                            <i class="fas fa-chart-line"></i>
+                            Statistik
+                        </a>
+                        <a href="#footer" class="nav-item nav-link me-lg-5">Kontakt</a>
+                    </div>
+
+                    <!-- Social media buttons -->
+                    <div class="d-flex align-items-center ms-4">
+                        <a class="btn btn-primary btn-sm me-2"
+                            href="https://chat.whatsapp.com/IRiZCLCCM7lF4NHi2wBvmj">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a class="btn btn-primary btn-sm me-2" href="https://www.facebook.com/alsalam.center.se">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a class="btn btn-primary btn-sm me-2" href="https://www.instagram.com/alsalam_center_hbg">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a class="btn btn-primary btn-sm me-2" href="https://www.tiktok.com/@alsalam_center_hbg">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    </div>
+
+                    <!-- Swish button -->
+                    <span class="navbar-text">
+                        <div class="d-none d-xl-flex align-items-center ms-4">
+                            <img src="img/swish.png" alt="Swish Icon" class="me-2" style="width: 20px" />
+                            <span>Swish: 1235942958</span>
+                        </div>
+                    </span>
                 </div>
             </div>
         </nav>
