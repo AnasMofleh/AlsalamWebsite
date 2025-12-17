@@ -254,7 +254,7 @@ h6,
 }
 
 #stats-preview {
-  background: linear-gradient(180deg, rgba(13, 110, 253, 0.05) 0%, rgba(25, 135, 84, 0.05) 100%);
+  background: --bg-white;
 }
 
 .stats-preview-card {
