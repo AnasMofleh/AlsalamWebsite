@@ -8,7 +8,6 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
         rel="stylesheet">
-    <!-- Decorative font for Swish label -->
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 
     <style>
@@ -69,11 +68,10 @@
             z-index: -1;
         }
 
-        /* Grid Layout */
+        /* Grid Layout - Updated to ~25% for right column */
         .dashboard-grid {
             display: grid;
-            grid-template-columns: 65% 33%;
-            /* Wider left column */
+            grid-template-columns: 73% 25%;
             gap: 15px;
             max-width: 1400px;
             margin: 0 auto;
@@ -103,8 +101,7 @@
         }
 
         .hero-right {
-            flex: 0 0 200px;
-            /* Fixed width for logo area */
+            flex: 0 0 25%; /* Set to 25% width */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -150,7 +147,6 @@
         /* BIGGER NUMBERS */
         .hero-amount {
             font-size: 7rem;
-            /* Massive size */
             font-weight: 900;
             color: var(--primary-blue);
             line-height: 1;
@@ -275,24 +271,23 @@
             box-shadow: 0 6px 12px rgba(76, 175, 80, 0.3);
         }
 
-        /* Swish */
+        /* Swish Layout Adjustments */
         .swish-container {
             display: flex;
             align-items: center;
             gap: 12px;
             margin-top: 8px;
+            width: 100%; /* Take full width for alignment */
         }
-
-        /* swish-qr removed */
 
         .swish-info {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
             gap: 4px;
+            width: 100%;
         }
 
-        /* Formal Swish label */
         .swish-label {
             font-family: 'Tajawal', Arial, sans-serif;
             font-size: 1.6rem;
@@ -305,16 +300,18 @@
             letter-spacing: 0.4px;
         }
 
-        /* Swish number (pill) */
         .swish-number-wrap {
             display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 4px;
+            flex-direction: row; /* Row by default */
+            align-items: center;
+            justify-content: space-between; /* Left/Right alignment */
+            width: 100%;
+            flex-wrap: wrap; /* Wraps on mobile */
+            gap: 8px;
         }
 
         .swish-number-label {
-            font-size: 0.72rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
             text-transform: uppercase;
             font-weight: 700;
@@ -324,22 +321,21 @@
         .swish-number {
             background: linear-gradient(135deg, rgba(76, 175, 80, 0.12), rgba(21, 101, 192, 0.06));
             color: var(--primary-green);
-            padding: 8px 14px;
+            padding: 6px 14px;
             border-radius: 999px;
             font-weight: 800;
             letter-spacing: 1px;
             box-shadow: 0 6px 18px rgba(20, 83, 48, 0.06);
             border: 1px solid rgba(76, 175, 80, 0.12);
-            font-size: 1.4rem;
+            font-size: 1.25rem;
             transition: transform 0.14s ease, box-shadow 0.14s ease;
+            cursor: pointer;
         }
 
         .swish-number:hover {
             transform: translateY(-2px) scale(1.02);
             box-shadow: 0 10px 26px rgba(20, 83, 48, 0.08);
         }
-
-        /* copy button removed */
 
         /* Hidden Test Button */
         .test-btn {
@@ -350,7 +346,6 @@
             padding: 5px;
             font-size: 0.7rem;
             opacity: 0.1;
-            /* Almost invisible */
             cursor: pointer;
             width: 100%;
             border-radius: 4px;
@@ -399,7 +394,6 @@
             font-weight: 600;
         }
 
-        /* Prominent label for important stats */
         .card-label.prominent {
             font-size: 1.18rem;
             color: var(--text-main);
@@ -410,13 +404,14 @@
             letter-spacing: 0.2px;
         }
 
-        /* Emphasize the number for the highest ever */
         #highest-ever-amount {
-            color: var(--primary-green);
-            text-shadow: 0 2px 8px rgba(76, 175, 80, 0.08);
+            color: var(--text-main) !important;
+            font-size: 2.15rem;
+            font-weight: 900;
+            display: inline-block;
+            vertical-align: middle;
         }
 
-        /* Bigger Numbers for cards */
         .card-value {
             font-size: 2rem;
             font-weight: 800;
@@ -440,7 +435,6 @@
             border-left: 4px solid var(--primary-blue);
         }
 
-        /* special highest card things */
         .special-card .special-badge {
             position: absolute;
             top: -12px;
@@ -461,15 +455,6 @@
             vertical-align: middle;
         }
 
-        /* Ensure highest number is black/neutral as requested */
-        #highest-ever-amount {
-            color: var(--text-main) !important;
-            font-size: 2.15rem;
-            font-weight: 900;
-            display: inline-block;
-            vertical-align: middle;
-        }
-
         .special-card:hover {
             transform: translateY(-6px);
             transition: transform 0.18s ease, box-shadow 0.18s ease;
@@ -483,7 +468,6 @@
             box-shadow: var(--shadow);
             padding: 20px;
             height: 700px;
-            /* Taller */
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -556,15 +540,8 @@
         }
 
         @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Responsive */
@@ -572,6 +549,7 @@
             .hero-section {
                 flex-direction: column;
                 text-align: center;
+                padding: 25px 20px;
             }
 
             .hero-left {
@@ -591,27 +569,16 @@
                 flex-direction: column;
                 justify-content: center;
                 order: 1;
+                flex: 1;
             }
 
-            .hero-right .donation-btn {
-                display: block;
-                margin-top: 15px;
-            }
-
-            .hero-left .donation-btn {
-                display: none;
-            }
-
-            .hero-amount {
-                font-size: 5rem;
-            }
-
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .feed-column {
-                height: 500px;
+            .hero-amount { font-size: 5rem; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .feed-column { height: 500px; }
+            
+            /* Center the Swish row on mobile */
+            .swish-number-wrap {
+                justify-content: center;
             }
         }
     </style>
@@ -631,7 +598,7 @@
 
         <div class="hero-section">
             <div class="hero-left">
-                <div class="hero-title">Totalt insamlat hittills:</div>
+                <div class="hero-title">Tillsammans har vi samlat in:</div>
                 <div class="hero-amount"><span id="total-alltime">0</span> Kr</div>
 
                 <div class="progress-container">
@@ -641,7 +608,6 @@
                     <span id="progress-percentage">0%</span>
                     <span>Mål: 10,000,000 Kr</span>
                 </div>
-                <button class="donation-btn" onclick="goToDonation()" style="display:none;">💝 Donera</button>
             </div>
 
             <div class="hero-right">
@@ -652,15 +618,12 @@
                 </div>
                 <button class="donation-btn" onclick="goToDonation()">💝 Donera</button>
                 <button class="test-btn" onclick="simulateTest()">🤖 Test Data</button>
-                <!-- Swish quick access -->
+                
                 <div class="swish-container" aria-label="Swish donation">
                     <div class="swish-info">
-                        <div class="swish-label">Swish</div>
-                        <div style="display:flex;align-items:center;gap:8px;">
-                            <div class="swish-number-wrap">
-                                <div class="swish-number-label">Nummer</div>
-                                <div class="swish-number" id="swish-number">123 500 0559</div>
-                            </div>
+                        <div class="swish-number-wrap">
+                            <div class="swish-label">Swish: </div>
+                            <button class="swish-number" onclick="openSwish()">123 500 0559</button>
                         </div>
                     </div>
                 </div>
@@ -668,7 +631,6 @@
         </div>
 
         <div class="stats-column">
-
             <div class="card">
                 <div class="card-label"> Insamlat idag: </div>
                 <div class="card-value"><span id="total-today">0</span> Kr</div>
@@ -690,7 +652,6 @@
                 <div class="card-value"><span id="highest-today-amount">0</span> Kr</div>
                 <div id="highest-today-msg" class="card-msg" style="display:none;"></div>
             </div>
-
         </div>
 
         <div class="feed-column">
@@ -701,18 +662,15 @@
     </div>
 
     <script>
-        // CONFIG
         const API_URL = "https://script.google.com/macros/s/AKfycbyvsHmRWM96nR0xMFjUk1y0ox_Pohm0Rtd8MIfZYvvpevjokVmY-eU8ZIHZfN-tdUi8/exec";
         const GOAL = 10000000;
         const REFRESH_RATE = 5000;
 
-        // STATE
         let previousData = {
             total_alltime: 0,
             Highest_today: { amount: 0 }
         };
 
-        // DOM ELEMENTS
         const els = {
             totalAll: document.getElementById('total-alltime'),
             progressBar: document.getElementById('progress-bar'),
@@ -726,7 +684,6 @@
             feedList: document.getElementById('feed-list')
         };
 
-        // Number Animation Utility
         function animateValue(obj, start, end, duration) {
             if (start === end) return;
             let startTimestamp = null;
@@ -734,14 +691,11 @@
                 if (!startTimestamp) startTimestamp = timestamp;
                 const progress = Math.min((timestamp - startTimestamp) / duration, 1);
                 obj.innerHTML = Math.floor(progress * (end - start) + start).toLocaleString();
-                if (progress < 1) {
-                    window.requestAnimationFrame(step);
-                }
+                if (progress < 1) window.requestAnimationFrame(step);
             };
             window.requestAnimationFrame(step);
         }
 
-        // Fetch Data
         async function fetchData() {
             try {
                 const response = await fetch(API_URL);
@@ -753,35 +707,26 @@
         }
 
         function updateDashboard(data) {
-            // 1. Total All Time
             if (data.total_alltime !== previousData.total_alltime) {
                 animateValue(els.totalAll, previousData.total_alltime, data.total_alltime, 2000);
-
-                // Trigger FIREWORKS if goal reached
                 if (data.total_alltime >= GOAL && previousData.total_alltime < GOAL) {
                     triggerGoalCelebration();
                 } else if (data.total_alltime > previousData.total_alltime && previousData.total_alltime > 0) {
-                    // Small burst for any update
                     confetti({ particleCount: 30, spread: 50, origin: { y: 0.6 } });
                 }
             }
 
-            // 2. Progress Bar
             const percentage = Math.min((data.total_alltime / GOAL) * 100, 100).toFixed(1);
             els.progressBar.style.width = percentage + "%";
             els.progressPct.innerText = percentage + "%";
 
-            // 3. Highest Today
             if (data.Highest_today.amount !== previousData.Highest_today.amount) {
                 animateValue(els.highestTodayAmt, previousData.Highest_today.amount, data.Highest_today.amount, 1000);
-
-                // Trigger SIDE CANNONS for new record
                 if (data.Highest_today.amount > previousData.Highest_today.amount && previousData.Highest_today.amount > 0) {
                     triggerRecordBreaker();
                 }
             }
 
-            // Text Content Updates
             if (data.Highest_today.message) {
                 els.highestTodayMsg.innerText = `"${data.Highest_today.message}"`;
                 els.highestTodayMsg.style.display = "block";
@@ -796,12 +741,9 @@
                 els.highestEverMsg.style.display = "block";
             } else { els.highestEverMsg.style.display = "none"; }
 
-            // 4. Feed
-            // Only re-render if timestamp changed to save DOM operations
             if (JSON.stringify(data.last_messages) !== JSON.stringify(previousData.last_messages)) {
                 renderFeed(data.last_messages);
             }
-
             previousData = data;
         }
 
@@ -811,17 +753,12 @@
                 els.feedList.innerHTML = "<div style='text-align:center; color:#ccc; padding:20px'>No recent messages</div>";
                 return;
             }
-
             messages.forEach(msg => {
                 const item = document.createElement('div');
                 item.className = 'feed-item';
-
                 let timeStr = msg.timestamp;
                 if (msg.timestamp.includes('T')) timeStr = msg.timestamp.split('T')[1].substring(0, 5);
-
-                let displayMsg = msg.message;
-                if (!displayMsg || displayMsg === "Test") displayMsg = msg.message || "-";
-
+                let displayMsg = msg.message || "-";
                 item.innerHTML = `
                     <div class="feed-top">
                         <span class="feed-amount">${msg.amount > 0 ? msg.amount.toLocaleString() + ' Kr' : ''}</span>
@@ -833,43 +770,28 @@
             });
         }
 
-        // --- ANIMATIONS ---
-
-        // 1. Goal Celebration: Fireworks (Lasts 3 seconds)
         function triggerGoalCelebration() {
             var duration = 3 * 1000;
             var animationEnd = Date.now() + duration;
             var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
             var interval = setInterval(function () {
                 var timeLeft = animationEnd - Date.now();
                 if (timeLeft <= 0) return clearInterval(interval);
-
                 var particleCount = 50 * (timeLeft / duration);
                 confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
             }, 250);
         }
 
-        // 2. Record Breaker: Side Cannons
         function triggerRecordBreaker() {
             const end = Date.now() + 1000;
             const colors = ['#bb0000', '#ffffff'];
-
             (function frame() {
-                confetti({
-                    particleCount: 2, angle: 60, spread: 55, origin: { x: 0 }, colors: colors
-                });
-                confetti({
-                    particleCount: 2, angle: 120, spread: 55, origin: { x: 1 }, colors: colors
-                });
-
-                if (Date.now() < end) {
-                    requestAnimationFrame(frame);
-                }
+                confetti({ particleCount: 2, angle: 60, spread: 55, origin: { x: 0 }, colors: colors });
+                confetti({ particleCount: 2, angle: 120, spread: 55, origin: { x: 1 }, colors: colors });
+                if (Date.now() < end) requestAnimationFrame(frame);
             }());
         }
 
-        // Theme Toggle
         function toggleTheme() {
             const body = document.body;
             const label = document.getElementById('theme-label');
@@ -882,45 +804,39 @@
             }
         }
 
-        // Donation Button
-        function goToDonation() {
-            window.location.href = 'donations.html';
+        function goToDonation() { window.location.href = 'donations.html'; }
+
+        function openSwish() {
+            const swishData = {
+                version: 1,
+                payee: { value: "1235000559" },
+                amount: { value: 200 },
+                message: { value: "Från tiktok" }
+            };
+            const url = "swish://paymentrequest?data=" + encodeURIComponent(JSON.stringify(swishData));
+            window.location.href = url;
         }
 
-        // copySwish removed (Kopiera button removed)
-
-        // --- TEST BUTTON LOGIC ---
         function simulateTest() {
-            // Generate Fake data higher than current
             let currentTotal = parseInt(els.totalAll.innerText.replace(/,/g, '')) || 1000;
             let currentHigh = parseInt(els.highestTodayAmt.innerText.replace(/,/g, '')) || 100;
-
             const fakeData = {
-                "total_alltime": currentTotal + Math.floor(Math.random() * 5000),
+                "total_alltime": currentTotal + 500,
                 "count_alltime": 50,
                 "total_today": 5000,
                 "count_today": 12,
                 "Highest_ever": { "amount": 2000, "message": "Big Donor" },
-                "Highest_today": {
-                    "amount": currentHigh + 150, // Always beats current high to trigger animation
-                    "message": "Fictive Donor!"
-                },
+                "Highest_today": { "amount": currentHigh + 150, "message": "Fictive Donor!" },
                 "last_messages": [
-                    { "timestamp": "2025-12-13T16:00", "amount": 500, "message": "Test Donation 1" },
-                    { "timestamp": "2025-12-13T16:05", "amount": 200, "message": "Test Donation 2" }
+                    { "timestamp": "2025-12-13T16:00", "amount": 500, "message": "Test Donation 1" }
                 ],
                 "last_updated": "2025-12-13"
             };
-
-            console.log("Simulating Data:", fakeData);
             updateDashboard(fakeData);
         }
 
-        // Init
         fetchData();
         setInterval(fetchData, REFRESH_RATE);
-
     </script>
 </body>
-
 </html>
