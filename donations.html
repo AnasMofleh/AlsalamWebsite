@@ -151,7 +151,9 @@
             const swishData = encodeURIComponent(
                 JSON.stringify({
                     version: 1,
-                    payee: { value: swishNumber }
+                    payee: { value: swishNumber },
+                    amount: { value: 200 },         // Optional: pre-fill an amount
+                    message: { value: "Från hemsidan" }
                 })
             );
 
