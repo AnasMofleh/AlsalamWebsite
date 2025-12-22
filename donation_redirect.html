@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Thank You – Al Salam Center Mosque</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .status {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Thank You for Your Donation 🤍</h1>
+
+    <p>
+        We sincerely thank you for your generous donation to<br>
+        <strong>Al Salam Center Mosque – Helsingborg</strong>.
+    </p>
+
+    <div class="status" id="status">
+        Processing your donation...
+    </div>
+
+    <p>
+        May Allah reward you and accept your charity.
+    </p>
+
+    <a href="/">Return to homepage</a>
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get("session_id");
+
+    const statusEl = document.getElementById("status");
+
+    // Replace this with your actual Web App URL
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwz_fAOfZ_vuI7RlEzMt0i-jJtL8q-hOcAjRZrXND6otuV49mdIshBQ32oQjAIlRukL/exec"; 
+
+    if (!sessionId) {
+        statusEl.innerText = "Missing payment reference.";
+    } else {
+        fetch(WEB_APP_URL, {
+            method: "POST",
+            redirect: "follow", // Important: GAS redirects responses
+            headers: {
+                "Content-Type": "text/plain;charset=utf-8", // 'text/plain' avoids CORS preflight checks
+            },
+            // FIX: You must convert the object to a string
+            body: JSON.stringify({
+                session_id: sessionId
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "ok") {
+                statusEl.innerText = "Your donation has been successfully recorded. Thank you!";
+            } else {
+                console.error("Server Error:", data);
+                statusEl.innerText = "Donation received. Thank you for your support.";
+            }
+        })
+        .catch((error) => {
+            console.error("Fetch Error:", error); // Log the error to console for debugging
+            statusEl.innerText = "Donation received. Thank you for your support.";
+        });
+    }
+</script>
+
+
+   
+
+</body>
+
+</html>
