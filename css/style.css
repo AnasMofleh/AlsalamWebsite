@@ -213,44 +213,42 @@ h6,
 
 /* General container settings */
 .container-fluid.hero {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  /* Center content vertically */
+  width: 90%;
   justify-content: center;
-  /* Center content horizontally */
+  align-items: center;
 }
 
 /* Left side styles */
 .hero-leftside,
 .hero-rightside {
+  /* padding-left: 10%; */
   display: flex;
   height: 33.4em; /* Ensure it stretches fully */
   transform: scale(1.2); /* Slightly shrink the content */
   transform-origin: top left; /* Set scaling origin */
   pointer-events: none; /* Optional: makes it non-interactive */
+
+
 }
 
 .hero-leftside img {
-  display: flex;
-  max-width: 100%;
-  /* Make image responsive */
+  max-width: 90%;
   border-radius: 40px;
-  /* Example of rounded corners */
-  outline: thick solid var(--bg-white);
-  outline-width: 1em;
+  outline: 1em solid var(--bg-white);
   outline-offset: -0.8em;
+  transform: scale(1.05);
 }
 
 .hero-rightside iframe {
-  display: flex;
-  width: 400px;
-  /* Make iframe responsive */
+  
+  width: 89%;
+  max-width: 400px;
   border-radius: 40px;
-  /* Example of rounded corners */
-  outline: thick solid var(--bg-white);
-  outline-width: 1em;
+  outline: 1em solid var(--bg-white);
   outline-offset: -0.8em;
+  transform: scale(1.05);
+  border: none;
+  margin-left: 10%;
 }
 
 #stats-preview {
@@ -380,23 +378,42 @@ h6,
 
 /* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
-  .row.no-gutters {
-    display: flex;
-    flex-direction: column-reverse;
-    /* Stack elements vertically */
+  html, body {
+    overflow-x: hidden; /* last-resort: hide any leftover overflow */
+  }
+
+  /* Remove scale and large outlines that force overflow */
+  .hero-leftside,
+  .hero-rightside {
+    transform: none !important;
+    transform-origin: initial !important;
+    height: auto !important;
+    pointer-events: auto;
   }
 
   .hero-leftside img,
   .hero-rightside iframe {
-    width: 90%;
-    /* Ensure full width on small screens */
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    outline: none !important;
+    outline-offset: 0 !important;
+    box-sizing: border-box;
+    height: 500px;
+  }
+  .hero-rightside iframe {
+    margin-top: 120px;
+  }
+    .mobileSize {
+    height: 300px !important;
+    width: 100% !important;
   }
 
-  .hero-rightside iframe {
-    aspect-ratio: calc(16 / 9);
-    /* Maintain aspect ratio */
-  }
 }
+
+
+
+
 
 /*** Hero Header ***/
 
