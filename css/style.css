@@ -233,7 +233,7 @@ h6,
 
 .hero-leftside img {
   max-width: 90%;
-  border-radius: 40px;
+  border-radius: 20px;
   outline: 1em solid var(--bg-white);
   outline-offset: -0.8em;
   transform: scale(1.05);
@@ -243,7 +243,7 @@ h6,
   
   width: 89%;
   max-width: 400px;
-  border-radius: 40px;
+  border-radius: 20px;
   outline: 1em solid var(--bg-white);
   outline-offset: -0.8em;
   transform: scale(1.05);
@@ -402,7 +402,8 @@ h6,
     height: 500px;
   }
   .hero-rightside iframe {
-    margin-top: 120px;
+
+    margin-bottom: 120px;
   }
     .mobileSize {
     height: 300px !important;
@@ -764,7 +765,7 @@ h6,
 @media (max-width: 768px) {
   .row {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     /* Stack cards vertically */
     align-items: center;
   }
