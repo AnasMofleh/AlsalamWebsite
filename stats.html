@@ -101,7 +101,8 @@
         }
 
         .hero-right {
-            flex: 0 0 25%; /* Set to 25% width */
+            flex: 0 0 25%;
+            /* Set to 25% width */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -277,7 +278,8 @@
             align-items: center;
             gap: 12px;
             margin-top: 8px;
-            width: 100%; /* Take full width for alignment */
+            width: 100%;
+            /* Take full width for alignment */
         }
 
         .swish-info {
@@ -302,11 +304,14 @@
 
         .swish-number-wrap {
             display: flex;
-            flex-direction: row; /* Row by default */
+            flex-direction: row;
+            /* Row by default */
             align-items: center;
-            justify-content: space-between; /* Left/Right alignment */
+            justify-content: space-between;
+            /* Left/Right alignment */
             width: 100%;
-            flex-wrap: wrap; /* Wraps on mobile */
+            flex-wrap: wrap;
+            /* Wraps on mobile */
             gap: 8px;
         }
 
@@ -540,8 +545,15 @@
         }
 
         @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Responsive */
@@ -572,10 +584,18 @@
                 flex: 1;
             }
 
-            .hero-amount { font-size: 5rem; }
-            .dashboard-grid { grid-template-columns: 1fr; }
-            .feed-column { height: 500px; }
-            
+            .hero-amount {
+                font-size: 5rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feed-column {
+                height: 500px;
+            }
+
             /* Center the Swish row on mobile */
             .swish-number-wrap {
                 justify-content: center;
@@ -618,7 +638,7 @@
                 </div>
                 <button class="donation-btn" onclick="goToDonation()">💝 Donera</button>
                 <button class="test-btn" onclick="simulateTest()">🤖 Test Data</button>
-                
+
                 <div class="swish-container" aria-label="Swish donation">
                     <div class="swish-info">
                         <div class="swish-number-wrap">
@@ -806,6 +826,10 @@
 
         function goToDonation() { window.location.href = 'donations.html'; }
 
+        function isMobileDevice() {
+            return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+        }
+
         function openSwish() {
             const swishNumber = "1235000559"; // your Swish number
             const swishData = encodeURIComponent(
@@ -819,6 +843,7 @@
 
             if (isMobileDevice()) {
                 window.location.href = `swish://payment?data=${swishData}`;
+            }
         }
 
         function simulateTest() {
@@ -843,4 +868,5 @@
         setInterval(fetchData, REFRESH_RATE);
     </script>
 </body>
+
 </html>
