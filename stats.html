@@ -807,14 +807,18 @@
         function goToDonation() { window.location.href = 'donations.html'; }
 
         function openSwish() {
-            const swishData = {
-                version: 1,
-                payee: { value: "1235000559" },
-                amount: { value: 200 },
-                message: { value: "Från tiktok" }
-            };
-            const url = "swish://paymentrequest?data=" + encodeURIComponent(JSON.stringify(swishData));
-            window.location.href = url;
+            const swishNumber = "1235000559"; // your Swish number
+            const swishData = encodeURIComponent(
+                JSON.stringify({
+                    version: 1,
+                    payee: { value: swishNumber },
+                    //amount: { value: 200 },         // Optional: pre-fill an amount
+                    message: { value: "Från tiktok" }
+                })
+            );
+
+            if (isMobileDevice()) {
+                window.location.href = `swish://payment?data=${swishData}`;
         }
 
         function simulateTest() {
