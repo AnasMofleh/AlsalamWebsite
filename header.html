@@ -3,6 +3,10 @@
 
 <head>
     <!-- ...existing code... -->
+    <link rel="alternate" hreflang="sv" href="/sv">
+    <link rel="alternate" hreflang="en" href="/en">
+    <link rel="alternate" hreflang="ar" href="/ar">
+
 </head>
 
 <body>
@@ -23,10 +27,17 @@
                         style="max-height: 60px" />
                 </a>
 
-                <button id="donate-button-mobile" onclick="window.location.href='donations.html'">
+                <button class="donation-btn btn" style="background-color: #ffc107;"
+                    onclick="loadLanguage('sv')">SV</button>
+                <button class="donation-btn btn" style="background-color: #ffc107;"
+                    onclick="loadLanguage('en')">EN</button>
+                <button class="donation-btn btn" style="background-color: #ffc107;"
+                    onclick="loadLanguage('ar')">AR</button>
+
+                <button id="donate-button-mobile" onclick="window.location.href='donations.html'" data-i18n="donation">
                     Donera <i class="fas fa-heart"></i>
                 </button>
-
+                <!-- Toggler/collapsibe Button -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
                     aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -36,39 +47,50 @@
                 <div class="collapse navbar-collapse bg-white justify-content-center" id="navbarCollapse">
                     <!-- Desktop navigation: show two items + dropdown -->
                     <div class="navbar-nav align-items-center d-none d-lg-flex">
-                        <a href="index.html" class="nav-item nav-link">Home</a>
-                        <a href="index.html#Services" class="nav-item nav-link">Tjänster</a>
-                        <a href="donations.html" class="nav-item nav-link">Donationer</a>
+                        <a href="index.html" class="nav-item nav-link" data-i18n="nav.home">HOME</a>
+                        <a href="index.html#Services" class="nav-item nav-link" data-i18n="nav.tjänster">TJÄNSTER</a>
+                        <a href="donations.html" class="nav-item nav-link" data-i18n="nav.donationer">DONATIONER</a>
 
                         <div class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="moreMenu" role="button"
-                                aria-haspopup="true" aria-expanded="false">
-                                Mer
+                                aria-haspopup="true" aria-expanded="false" data-i18n="nav.more">MER
+
                             </a>
                             <div class="dropdown-menu" aria-labelledby="moreMenu">
-                                <a class="dropdown-item" href="company.html">Företag</a>
-                                <a class="dropdown-item" href="#footer">Kontakt</a>
+                                <a class="dropdown-item" href="company.html" data-i18n="nav.company">FÖRETAG</a>
+                                <a class="dropdown-item" href="#footer" data-i18n="nav.contact">KONTAKTA OSS</a>
                                 <a class="dropdown-item" href="stats.html">
                                     <i class="fas fa-chart-line"></i>
-                                    Statistik
+                                    <span data-i18n="nav.stats"></span>STATISTIK
                                 </a>
                             </div>
                         </div>
+
+
+                        <!-- <div class="dropdown-menu" aria-labelledby="statsMenu">
+                            <button class="donation-btn btn" style="background-color: #ffc107;"
+                                onclick="loadLanguage('sv')">SV</button>
+                            <button class="donation-btn btn" style="background-color: #ffc107;"
+                                onclick="loadLanguage('en')">EN</button>
+                            <button class="donation-btn btn" style="background-color: #ffc107;"
+                                onclick="loadLanguage('ar')">AR</button>
+
+                        </div> -->
 
                         <!-- Keep CTA style for Statistik when accessed directly in dropdown -->
                     </div>
 
                     <!-- Mobile navigation: keep full list -->
                     <div class="navbar-nav align-items-center d-lg-none">
-                        <a href="index.html" class="nav-item nav-link active">Home</a>
-                        <a href="index.html#Services" class="nav-item nav-link">Tjänster</a>
-                        <a href="donations.html" class="nav-item nav-link">Donationer</a>
-                        <a href="company.html" class="nav-item nav-link">Företag</a>
+                        <a href="index.html" class="nav-item nav-link active" data-i18n="nav.home">Home</a>
+                        <a href="index.html#Services" class="nav-item nav-link" data-i18n="nav.tjänster">Tjänster</a>
+                        <a href="donations.html" class="nav-item nav-link" data-i18n="nav.donationer">Donationer</a>
+                        <a href="company.html" class="nav-item nav-link" data-i18n="nav.company">Företag</a>
                         <a href="stats.html" class="nav-item nav-link stats-cta-link">
                             <i class="fas fa-chart-line"></i>
-                            Statistik
+                            <span data-i18n="nav.stats"></span>STATISTIK
                         </a>
-                        <a href="#footer" class="nav-item nav-link me-lg-5">Kontakt</a>
+                        <a href="#footer" class="nav-item nav-link me-lg-5" data-i18n="nav.contact">Kontakt</a>
                     </div>
 
                     <!-- Social media buttons -->
@@ -87,7 +109,7 @@
                             <i class="fab fa-tiktok"></i>
                         </a> -->
                         <button onclick="window.location.href='donations.html';" class="donation-btn btn"
-                            style="background-color: #ffc107;">
+                            data-i18n="donation" style="background-color: #ffc107;">
                             Donera
                         </button>
                     </div>
