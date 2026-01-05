@@ -1,0 +1,90 @@
+{
+  "title": "Al-Salam Mosque",
+  "welcome": "Welcome",
+  "donation": "DONATE",
+  "rights": "All rights reserved.",
+  "nav": {
+    "home": "HOME",
+    "tjänster": "SERVICES",
+    "donationer": "DONATIONS",
+    "company": "COMPANY",
+    "contact": "CONTACT US",
+    "stats": "STATISTICS",
+    "more": "MORE"
+  },
+  "static": {
+    "collection-for": "Live collection for",
+    "live": "Live",
+    "total-collected": "Total Collected so far: ",
+    "years-goal": "This Year's Goal: 10,000,000 SEK",
+    "your-generosity-makes-difference": "Your generosity makes a difference every day.",
+    "statistics": "Statistics"
+  },
+  "about": {
+    "title": "About Us",
+    "description": "Al Salam in Helsingborg is an Islamic association and mosque. A center for Muslims to turn to in all aspects of their lives, from prayer and jummah to marriage, knowledge, guidance in matters",
+    "version-title": "Our Vision",
+    "version-description": "Muslims should feel at home in the country, be able to practice and fully exercise their religion as Swedish Muslims."
+
+  },
+  "activities": {
+    "title": "Our Values",
+    "knowledge": "Knowledge",
+    "knowledge-description": "Seeking knowledge is a central part of every Muslim's life journey – a path to understanding, faith, and development.",
+    "community": "Community",
+    "community-description": "We pray together, break our fast together, and share life in a warm and inclusive community that Islam encourages.",
+    "prayer": "Prayers",
+    "prayer-description": "The mosque is open for all five daily prayers – a place for spiritual presence and inner peace."
+  },
+  "services": {
+    "title": "Services",
+    "marriage": "Marriage Certificate (ZAWAJ)",
+    "marriage-description": "The mosque offers the opportunity to enter into marriage according to Muslim tradition. The ceremony is performed in the mosque by our marriage officiant and imam. After the ceremony, a marriage certificate is issued which has only religious validity.",
+    "koran-arabic-school": "Quran and Arabic School",
+    "koran-arabic-school-description": "Teaching in Arabic and Quran The mosque offers teaching in the Arabic language and the Quran for children from 6 years old and up. The teaching is open both to Arabic-speaking children and to children who do not have",
+    "prayer-times": "Prayer Times",
+    "prayer-times-description": "We display and maintain daily prayer times on our website as well as in the mosque. Times are updated regularly according to the current calendar for the sun's position.",
+    "jumaa": "Jummah Sermon",
+    "jumaa-description": "The sermon is held in the mosque every Jummah (Friday) and begins at the time of Dhuhr prayer.",
+    "fatwa": "Fatwa",
+    "fatwa-description": "If you need guidance on an Islamic legal matter (fiqh), you are welcome to contact us via email.",
+    "family-counseling": "Family Counseling",
+    "family-counseling-description": "If you need help or guidance in a family matter or conflict, you can contact us via email."
+  },
+  "footer": {
+    "whatsapp": "WhatsApp",
+    "e-post": "email address",
+    "adress": "Address"
+  },
+  "company": {
+    "title": "Corporate Sponsorship",
+    "subtitle": "Support our activities through corporate sponsorship",
+    "why-sponsor": "Why sponsor us?",
+    "why-sponsor-description": "By sponsoring Al-Salam Mosque, your company contributes to strengthening our community and supporting our important services. Your sponsorship helps us continue to offer valuable resources and programs for Muslims in the Helsingborg area.",
+    "honorary-membership": "Honorary Membership:",
+    "honorary-membership-description": " All corporate sponsors receive honorary membership in the Al-Salam association in recognition of their valuable support.",
+    "question": "Do you have questions about our sponsorship packages?",
+    "contact_description": "We are happy to help find the package that best suits your company.",
+    "email": "Email:",
+    "whatsapp": "WhatsApp:"
+  },
+  "donations": {
+    "title": "Donation Options",
+    "one-time": "One-Time",
+    "month": "Monthly",
+    "year": "Yearly",
+    "swish": "Donation via Swish",
+    "swish-description": "Support the mosque by swishing a one-time donation 'Gåva'.",
+    "swish-popup-title": "Swish Requires Mobile",
+    "swish-popup-description": "Swish payment only works on mobile phones with the Swish app installed.",
+    "swish-popup-alternative": "Alternatively, you can scan the QR code below:",
+    "close": "Close",
+    "klarna-payment-methods": "Donation via Other Payment Methods",
+    "klarna-payment-methods-description": "Support the mosque by using other payment methods.",
+    "monthly": "Monthly Donation",
+    "monthly-description": "Support the mosque via automatic recurring donation every month (similar to Autogiro).",
+    "tax-donation": "Donation via Tax Return",
+    "tax-donation-description": "Support the mosque by giving your mosque fee via tax return every year."
+  }
+
+}

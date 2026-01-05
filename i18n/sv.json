@@ -1,0 +1,87 @@
+{
+  "title": "Al-Salam Moské",
+  "welcome": "Välkommen",
+  "donation": "DONERA",
+  "rights": "Alla rättigheter förbehållna.",
+  "nav": {
+    "home": "HOME",
+    "tjänster": "TJÄNSTER",
+    "donationer": "DONATIONER",
+    "company": "FÖRETAG",
+    "contact": "KONTAKTA OSS",
+    "stats": "STATISTIK",
+    "more": "MER"
+  },
+  "static": {
+    "collection-for": "Insamling i realtid för",
+    "live": "Live",
+    "total-collected": "Totalt insamlat hittills: ",
+    "years-goal": "Årets mål: 10 000 000 SEK",
+    "your-generosity-makes-difference": "Din generositet gör skillnad varje dag.",
+    "statistics": "Statistik"
+  },
+  "about": {
+    "title": "Om Oss",
+    "description": "Al Salam i Helsingborg är en islamisk förening och moské. Ett center för muslimer att vända sig i alla aspekter av sitt liv, från bön och jummah till giftemål, kunskap, vägledning i sakfrågor",
+    "version-title": "Vår Vision",
+    "version-description": "muslimerna ska känna sig hemma i landet, kunna praktisera och utöva relgionen fullt ut som Svenska Muslimer."
+  },
+  "activities": {
+    "title": "Vår Värdegrund",
+    "knowledge": "Kunskap",
+    "knowledge-description": "Att söka kunskap är en central del av varje muslims livsresa – en väg till förståelse, tro och utveckling.",
+    "community": "Gemenskap",
+    "community-description": "Vi ber tillsammans, bryter fastan tillsammans och delar livet i en varm och inkluderande gemenskap som Islam uppmuntrar.",
+    "prayer": "Böner",
+    "prayer-description": "Moskén är öppen för samtliga fem dagliga böner – en plats för andlig närvaro och inre frid."
+  },
+  "services": {
+    "title": "Tjänster",
+    "marriage": "Vigselintyg (ZAWAJ)",
+    "marriage-description": "Moskén erbjuder möjligheten att ingå äktenskap enligt muslimsk tradition. Vigseln utförs i moskén av vår vigselförrättare och imam. Efter vigseln utfärdas ett vigselintyg som har endast religiös giltighet",
+    "koran-arabic-school": "Koran- och Arabiskaskolan",
+    "prayer-times": "Böntider",
+    "prayer-times-description": "Vi visar och underhåller dagliga bönetider på vår webbplats samt i moskén. Tiderna uppdateras regelbundet enligt aktuell kalender för solens position.",
+    "jumaa": "Jummahpredikan",
+    "jumaa-description": "Predikan hålls i moskén varje Jummah (fredag) och börjar vid tiden för Dhuhr-bönen.",
+    "fatwa": "Fatwa",
+    "fatwa-description": "Om du behöver råd i en islamisk rättsfråga (fiqh), är du välkommen att kontakta oss via mejl.",
+    "family-counseling": "Familjerådgivning",
+    "family-counseling-description": "Om du behöver hjälp eller vägledning i ett ärende eller en konflikt inom familjen, kan du kontakta oss via mejl."
+  },
+  "footer": {
+    "whatsapp": "WhatsApp",
+    "e-post": "e-postadress",
+    "adress": "Adress"
+  },
+  "company": {
+    "title": "Företagssponsring",
+    "subtitle": "Stöd vår verksamhet genom företagsponsring",
+    "why-sponsor": "Varför sponsra oss?",
+    "why-sponsor-description": "Genom att sponsra Al-Salam Moské bidrar ditt företag till att stärka vår gemenskap och stödja våra viktiga tjänster. Din sponsring hjälper oss att fortsätta erbjuda värdefulla resurser och program för muslimer i Helsingborgsområdet.",
+    "honorary-membership": "Hedersmedlemskap:",
+    "honorary-membership-description": " Alla företagssponsorer erhåller hedersmedlemskap i Al-Salam föreningen som erkännande för deras värdefulla stöd.",
+    "question": "Har du frågor om våra sponsoringspaket?",
+    "contact_description": "Vi hjälper gärna till att hitta det paket som passar ditt företag bäst.",
+    "email": "E-post:",
+    "whatsapp": "WhatsApp:"
+  },
+  "donations": {
+    "title": "Donationer",
+    "one-time": "Engång",
+    "month": "Månatlig",
+    "year": "Årlig",
+    "swish": "Gåva via Swish",
+    "swish-description": "Stödja moskén genom att swisha engångdonation \"Gåva\".",
+    "swish-popup-title": "Swish kräver mobil",
+    "swish-popup-description": "Swish-betalning fungerar endast på mobiltelefoner med Swish-appen installerad.",
+    "swish-popup-alternative": "Alternativt kan du skanna QR-koden nedan:",
+    "close": "Stäng",
+    "klarna-payment-methods": "Gåva via andra betalningssätt",
+    "klarna-payment-methods-description": "Stödja moskén genom att använda andra betalnings metoder.",
+    "monthly": "Månatlig Gåva",
+    "monthly-description": "Stödja moskén via automatisk återkommande Gåva varje månad (likt Autogiro).",
+    "tax-donation": 	"Gåva via Skattsedel",
+   	"tax-donation-description":"Stödja moskén genom att ge din moskéavgiften via skattsedel varje år."
+  }
+}
