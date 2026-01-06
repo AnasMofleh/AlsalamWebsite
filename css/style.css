@@ -248,9 +248,10 @@ h6,
   outline-offset: -0.8em;
 }
 
-.hero-rightside{
+.hero-rightside {
   max-width: 500px;
 }
+
 .hero-rightside iframe {
   width: 90%;
   height: 600px;
@@ -264,6 +265,7 @@ h6,
 html[dir="rtl"] .hero-row {
   flex-direction: row-reverse;
 }
+
 /*** Hero Header End ***/
 
 #stats-preview {
@@ -405,34 +407,12 @@ html[dir="rtl"] .hero-row {
   }
 
   /* Remove scale and large outlines that force overflow */
-  .hero-leftside,
-  .hero-rightside {
-    transform: none !important;
-    transform-origin: initial !important;
-    height: auto !important;
-    pointer-events: auto;
-  }
 
   .hero-leftside img,
   .hero-rightside iframe {
     width: 100% !important;
-    max-width: 100% !important;
-    margin-left: 0 !important;
-    outline: none !important;
-    outline-offset: 0 !important;
-    box-sizing: border-box;
-    height: 500px;
   }
 
-  .hero-rightside iframe {
-
-    margin-bottom: 120px;
-  }
-
-  .mobileSize {
-    height: 300px !important;
-    width: 100% !important;
-  }
 
 }
 
