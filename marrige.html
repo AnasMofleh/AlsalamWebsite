@@ -129,8 +129,18 @@
     <!-- Load Header and Footer -->
     <script>
         $(function () {
-            $("#header-placeholder").load("header.html");
-            $("#footer-placeholder").load("footer.html");
+            $("#header-placeholder").load("header.html", function() {
+                // Reapply translations after header loads
+                if (window.reapplyTranslations) {
+                    setTimeout(() => window.reapplyTranslations(), 50);
+                }
+            });
+            $("#footer-placeholder").load("footer.html", function() {
+                // Reapply translations after footer loads
+                if (window.reapplyTranslations) {
+                    setTimeout(() => window.reapplyTranslations(), 50);
+                }
+            });
         });
     </script>
 
@@ -144,6 +154,8 @@
             modal.show();
         });
     </script>
+    <!-- i18n module (exposed as global `loadLanguage`) -->
+    <script type="module" src="i18n/js/i18n.js" defer></script>
 </body>
 
 </html>

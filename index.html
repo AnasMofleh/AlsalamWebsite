@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Al-Salam Moské</title>
+    <title data-i18n="title"></title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -38,46 +38,19 @@
     <!-- Header End -->
 
     <!-- Add margin to prevent content from hiding behind navbar -->
-    <div style="margin-top: 100px;"></div>
-<div class="container hero py-5 my-5">
-    <div class="row align-items-center">
-
-        <div class="col-12 col-md-7">
-            <div class="hero-leftside">
+    <!-- <div style="margin-top: 100px;"></div> -->
+    <div class="container-fluid hero  py-5 mb-5">
+        <div class="row hero-row">
+            <div class="col-12 col-md-7 hero-leftside">
                 <img src="img/Al-Salam-Insida.jpg" alt="Al-Salam Insida">
             </div>
-        </div>
-
-        <div class="col-12 col-md-5">
-            <div class="hero-rightside">
-                <iframe
-                    src="https://time.my-masjid.com/timinginfoscreen/ee787ee0-549f-43f3-9fe4-9c8bc3c295f7"
+            <div class="col-12 col-md-5 hero-rightside">
+                <iframe src="https://time.my-masjid.com/timinginfoscreen/ee787ee0-549f-43f3-9fe4-9c8bc3c295f7"
                     scrolling="no">
                 </iframe>
             </div>
         </div>
-
     </div>
-</div>
-
-    <!-- <div class="container hero py-5 my-5">
-        <div class="row align-items-center">
-            <div class="row">
-                <div class="col-md-7">
-                    <div class="hero-leftside">
-                        <img src="img/Al-Salam-Insida.jpg" alt="Al-Salam Insida">
-                    </div>
-                </div>
-                <div class="col-md-5">
-                    <div class="hero-rightside">
-                        <iframe src="https://time.my-masjid.com/timinginfoscreen/ee787ee0-549f-43f3-9fe4-9c8bc3c295f7"
-                            scrolling="no">
-                        </iframe>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
 
     <section id="stats-preview" class="pt-5">
         <div class="container py-5">
@@ -92,19 +65,20 @@
                             </div>
                             <div>
                                 <p class="text-uppercase text-muted mb-1">
-                                    Insamling i realtid för&nbsp;
+                                    <span data-i18n="static.collection-for">Insamling i realtid för</span>
+                                    &nbsp;
                                     <span class="current-year"></span>:
-
                                 </p>
 
                             </div>
-                            <span class="badge bg-success ms-auto">Live</span>
+                            <span class="badge bg-success ms-auto" data-i18n="static.live">Live</span>
                         </div>
                         <div class="row text-center mb-4">
 
                             <div class="col">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <span class="text-muted">Totalt insamlat hittills:</span>
+                                    <span class="text-muted" data-i18n="static.total-collected">Totalt insamlat
+                                        hittills: </span>
                                     <h3 class="mb-1" id="stats-preview-total">0 kr</h3>
                                 </div>
                             </div>
@@ -114,16 +88,18 @@
                             <div class="stats-preview-fill" id="stats-preview-progress"></div>
                         </div>
                         <div class="d-flex justify-content-between text-muted">
-                            <small><span class="current-year"></span> årets mål: 10 000 000 kr</small>
+                            <small><span class="current-year"></span> <span data-i18n="static.years-goal">Årets mål:
+                                    10
+                                    000 000 SEK</span></small>
                             <small id="stats-preview-percentage">0%</small>
 
                         </div>
                         <div class="d-flex justify-content-between align-items-center mt-4">
-                            <p class="mb-0 text-secondary" id="stats-preview-message">
-                                "Din generositet gör skillnad varje dag."
-                            </p>
+                            <p class="mb-0 text-secondary" id="stats-preview-message"
+                                data-i18n="static.your-generosity-makes-difference">
+                                Din generositet gör skillnad varje dag.</p>
                             <a href="stats.html" class="btn btn-primary btn-lg stats-preview-btn">
-                                Statistik
+                                <span data-i18n="static.statistics">Statistik</span>
                                 <i class="fas fa-arrow-right ms-2"></i>
                             </a>
                         </div>
@@ -142,8 +118,8 @@
                     <div class="col-xl-6">
                         <div class="row g-4">
                             <div class="col-6">
-                                <img src="img/about-1.jpg" class="img-fluid mobileSize h-100 wow zoomIn" data-wow-delay="0.1s"
-                                    alt="">
+                                <img src="img/about-1.jpg" class="img-fluid mobileSize h-100 wow zoomIn"
+                                    data-wow-delay="0.1s" alt="">
                             </div>
                             <div class="col-6">
                                 <img src="img/about-2.jpg" class="img-fluid pb-3 wow zoomIn" data-wow-delay="0.1s"
@@ -154,15 +130,17 @@
                         </div>
                     </div>
                     <div class="col-xl-6 wow fadeIn" data-wow-delay="0.5s">
-                        <h1 class="display-5 pb-4 m-0">Om Oss</h1>
-                        <p class="text-secondary" style="line-height: 2;">
-                            Al Salam i Helsingborg är en islamisk förening och moksé. Ett center för muslimer att vända
-                            sig i alla aspekter av sitt liv, från bön och jummah till giftemål, kunskap, vägledning i
+                        <h3 class=" pb-4 m-0" data-i18n="about.title">Om Oss</h3>
+                        <p class="text-secondary" style="line-height: 2;" data-i18n="about.description">
+                            Al Salam i Helsingborg är en islamisk förening och moské. Ett center för muslimer att
+                            vända
+                            sig i alla aspekter av sitt liv, från bön och jummah till giftemål, kunskap, vägledning
+                            i
                             sakfrågor
                             i fiqh, till koranskola och arbaiska för barnen.</p>
-                        <h2 class="display-6 pb-4 m-0">Vår Vision</h2>
+                        <h3 class="pb-4 m-0" data-i18n="about.version-title">Vår Vision</h3>
 
-                        <p class="text-secondary" style="line-height: 2;">
+                        <p class="text-secondary" style="line-height: 2;" data-i18n="about.version-description">
                             muslimerna ska känna sig hemma i landet, kunna praktisera och utöva relgionen
                             fullt ut som Svenska Muslimer.</p>
                     </div>
@@ -177,17 +155,19 @@
     <div class="container-fluid activities py-5">
         <div class="container py-5">
             <div class="mx-auto text-center mb-5 wow fadeIn" data-wow-delay="0.1s" style="max-width: 700px;">
-                <h1 class="display-3">
+                <h1 class="display-3" data-i18n="activities.title">
                     Vår Värdegrund
                 </h1>
             </div>
             <div class="row g-4">
                 <div class="col-lg-6 col-xl-4">
                     <div class="activities-item p-4 wow fadeIn" data-wow-delay="0.1s">
-                        <i class="fa fa-mosque fa-4x text-dark"></i>
+                        <i class="fa fa-mosque fa-4x text-dark" style="margin: 10px;"></i>
                         <div class="ms-4">
-                            <h4>Kunskap</h4>
-                            <p class="mb-4">Att söka kunskap är en central del av varje muslims livsresa – en väg till
+                            <h4 data-i18n="activities.knowledge">Kunskap</h4>
+                            <p class="mb-4" data-i18n="activities.knowledge-description">Att söka kunskap är en
+                                central
+                                del av varje muslims livsresa – en väg till
                                 förståelse, tro och utveckling.
                             </p>
                         </div>
@@ -195,10 +175,11 @@
                 </div>
                 <div class="col-lg-6 col-xl-4">
                     <div class="activities-item p-4 wow fadeIn" data-wow-delay="0.3s">
-                        <i class="fa fa-users fa-4x text-dark"></i>
+                        <i class="fa fa-users fa-4x text-dark" style="margin: 10px;"></i>
                         <div class="ms-4">
-                            <h4>Gemenskap</h4>
-                            <p class="mb-4">Vi ber tillsammans, bryter fastan tillsammans och delar livet i en varm och
+                            <h4 data-i18n="activities.community">Gemenskap</h4>
+                            <p class="mb-4" data-i18n="activities.community-description">Vi ber tillsammans, bryter
+                                fastan tillsammans och delar livet i en varm och
                                 inkluderande gemenskap som Islam uppmuntrar.
                             </p>
                         </div>
@@ -206,10 +187,12 @@
                 </div>
                 <div class="col-lg-6 col-xl-4">
                     <div class="activities-item p-4 wow fadeIn" data-wow-delay="0.5s">
-                        <i class="fa fa-quran fa-4x text-dark"></i>
+                        <i class="fa fa-quran fa-4x text-dark" style="margin: 10px;"></i>
                         <div class="ms-4">
-                            <h4>Böner</h4>
-                            <p class="mb-4">Moskén är öppen för samtliga fem dagliga böner – en plats för andlig närvaro
+                            <h4 data-i18n="activities.prayer">Böner</h4>
+                            <p class="mb-4" data-i18n="activities.prayer-description">Moskén är öppen för samtliga
+                                fem
+                                dagliga böner – en plats för andlig närvaro
                                 och inre frid.
                             </p>
                         </div>
@@ -219,14 +202,14 @@
             </div>
         </div>
     </div>
+    <!-- Activities End -->
 
 
-
-    <!-- Activities Start -->
+    <!-- Services Start -->
     <div class="container-fluid sermon py-5" id="Services">
         <div class="container py-5">
             <div class="text-center mx-auto mb-5 wow fadeIn" data-wow-delay="0.1s" style="max-width: 700px;">
-                <h1 class="display-3">Tjänster</h1>
+                <h1 class="display-3" data-i18n="services.title">Tjänster</h1>
             </div>
             <div class="row g-4 justify-content-center">
                 <div class="col-lg-6 col-xl-4">
@@ -236,8 +219,9 @@
                                 <img src="img/marrigecontract.jpg" class="img-fluid w-100" alt="">
                             </div>
                             <div class="p-4">
-                                <span class="d-inline-block h4 lh-sm mb-3">Vigselintyg (ZAWAJ)</span>
-                                <p class="mb-0">
+                                <span class="d-inline-block h4 lh-sm mb-3" data-i18n="services.marriage">Vigselintyg
+                                    (ZAWAJ)</span>
+                                <p class="mb-0" data-i18n="services.marriage-description">
                                     Moskén erbjuder möjligheten att ingå äktenskap enligt muslimsk tradition.
                                     Vigseln utförs i moskén av vår vigselförrättare och imam.
                                     Efter vigseln utfärdas ett vigselintyg som har endast religiös giltighet
@@ -254,11 +238,13 @@
                                 <img src="img/school.jpg" class="img-fluid w-100" alt="">
                             </div>
                             <div class="p-4">
-                                <span class="d-inline-block h4 lh-sm mb-3">
+                                <span class="d-inline-block h4 lh-sm mb-3" data-i18n="services.koran-arabic-school">
                                     Koran- och Arabiskaskolan
                                 </span>
-                                <p class="mb-0">Undervisning i arabiska och Koran
-                                    Moskén erbjuder undervisning i det arabiska språket och Koranen för barn från 6 års
+                                <p class="mb-0" data-i18n="services.koran-arabic-school-description">Undervisning i
+                                    arabiska och Koran
+                                    Moskén erbjuder undervisning i det arabiska språket och Koranen för barn från 6
+                                    års
                                     ålder och uppåt.
                                     Undervisningen är öppen både för arabisktalande barn och för barn som inte har
                                     arabiska som modersmål.
@@ -277,8 +263,11 @@
                                 <img src="img/böntider.jpg" class="img-fluid w-100" alt="">
                             </div>
                             <div class="p-4">
-                                <span class="d-inline-block h4 lh-sm mb-3">Böntider</span>
-                                <p class="mb-0">Vi visar och underhåller dagliga bönetider på vår webbplats samt i
+                                <span class="d-inline-block h4 lh-sm mb-3"
+                                    data-i18n="services.prayer-times">Böntider</span>
+                                <p class="mb-0" data-i18n="services.prayer-times-description">Vi visar och
+                                    underhåller
+                                    dagliga bönetider på vår webbplats samt i
                                     moskén.
                                     Tiderna uppdateras regelbundet enligt aktuell kalender för solens position.</p>
                             </div>
@@ -293,8 +282,10 @@
                         </div>
                         <div class="p-4">
 
-                            <a class="d-inline-block h4 lh-sm mb-3">Jummahpredikan</a>
-                            <p class="mb-0">Predikan hålls i moskén varje Jummah (fredag) och börjar vid tiden för
+                            <a class="d-inline-block h4 lh-sm mb-3" data-i18n="services.jumaa">Jummahpredikan</a>
+                            <p class="mb-0" data-i18n="services.jumaa-description">Predikan hålls i moskén varje
+                                Jummah
+                                (fredag) och börjar vid tiden för
                                 Dhuhr-bönen.
                             </p>
                         </div>
@@ -307,9 +298,10 @@
                                 <img src="img/fatwa.jpg" class="img-fluid w-100" alt="">
                             </div>
                             <div class="p-4">
-                                <span class="d-inline-block h4 lh-sm mb-3">Fatwa</span>
-                                <p class="mb-0">
-                                    Om du behöver råd i en islamisk rättsfråga (fiqh), är du välkommen att kontakta oss
+                                <span class="d-inline-block h4 lh-sm mb-3" data-i18n="services.fatwa">Fatwa</span>
+                                <p class="mb-0" data-i18n="services.fatwa-description">
+                                    Om du behöver råd i en islamisk rättsfråga (fiqh), är du välkommen att kontakta
+                                    oss
                                     via mejl.
                                 </p>
                             </div>
@@ -324,8 +316,11 @@
                                 <img src="img/familjconsulting.JPG" class="img-fluid w-100" alt="">
                             </div>
                             <div class="p-4">
-                                <span class="d-inline-block h4 lh-sm mb-3">Familjerådgivning</span>
-                                <p class="mb-0">Om du behöver hjälp eller vägledning i ett ärende eller en konflikt inom
+                                <span class="d-inline-block h4 lh-sm mb-3"
+                                    data-i18n="services.family-counseling">Familjerådgivning</span>
+                                <p class="mb-0" data-i18n="services.family-counseling-description">Om du behöver
+                                    hjälp
+                                    eller vägledning i ett ärende eller en konflikt inom
                                     familjen, kan du kontakta oss via mejl.
                                 </p>
                             </div>
@@ -392,11 +387,24 @@
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
 
+    <!-- i18n module (exposed as global `loadLanguage`) -->
+    <script type="module" src="i18n/js/i18n.js" defer></script>
+
     <!-- Load Header and Footer -->
     <script>
         $(function () {
-            $("#header-placeholder").load("header.html");
-            $("#footer-placeholder").load("footer.html");
+            $("#header-placeholder").load("header.html", function () {
+                // Reapply translations after header loads
+                if (window.reapplyTranslations) {
+                    setTimeout(() => window.reapplyTranslations(), 50);
+                }
+            });
+            $("#footer-placeholder").load("footer.html", function () {
+                // Reapply translations after footer loads
+                if (window.reapplyTranslations) {
+                    setTimeout(() => window.reapplyTranslations(), 50);
+                }
+            });
         });
     </script>
 </body>

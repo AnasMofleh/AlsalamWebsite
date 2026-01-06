@@ -8,27 +8,30 @@
 
             <div class="col-md-6 col-lg-6 col-xl-3">
                 <div class="footer-item mt-5">
-                    <div class="d-flex flex-column">                        
-                        <h6 class="text-secondary mt-4 mb-0">WhatsApp</h6>
+                    <div class="d-flex flex-column">
+                        <h6 class="text-secondary mt-4 mb-0" data-i18n="footer.whatsapp">WhatsApp</h6>
                         <div class="d-flex align-items-center py-4">
                             <span class="flex-shrink-0 btn-square bg-success me-3 p-4">
                                 <i class="fab fa-whatsapp text-dark"></i>
                             </span>
-                            <a href="https://chat.whatsapp.com/IRiZCLCCM7lF4NHi2wBvmj" class="text-body"
-                                target="_blank">Wakf Alsalam i Helsingborg</a>
+                            <a href="https://chat.whatsapp.com/IRiZCLCCM7lF4NHi2wBvmj" class="text-body" target="_blank"
+                                style="margin: 10px;">Wakf Alsalam i Helsingborg</a>
                         </div>
 
-                        <h6 class="text-secondary mb-0">e-postadress</h6>
+                        <h6 class="text-secondary mb-0" data-i18n="footer.e-post">e-postadress</h6>
                         <div class="d-flex align-items-center border-bottom py-4">
                             <span class="flex-shrink-0 btn-square bg-primary me-3 p-4"><i
                                     class="fa fa-envelope text-dark"></i></span>
-                            <a href="mailto:alsalam.center@outlook.com" class="text-body">alsalam.center@outlook.com</a>
+                            <a href="mailto:alsalam.center@outlook.com" class="text-body"
+                                style="margin: 10px;">alsalam.center@outlook.com</a>
                         </div>
-                        <h6 class="text-secondary mb-0">Adress</h6>
+                        <h6 class="text-secondary mb-0" data-i18n="footer.adress">Adress</h6>
                         <div class="d-flex align-items-center border-bottom py-4">
                             <span class="flex-shrink-0 btn-square bg-primary me-3 p-4"><i
                                     class="fa fa-map-marker-alt text-dark"></i></span>
-                            <a href="https://maps.app.goo.gl/fByt9MfZN88wLhm89" class="text-body">Södergatan 65, 252 25 Helsingborg</a>
+                            <a href="https://maps.app.goo.gl/fByt9MfZN88wLhm89" class="text-body"
+                                style="margin: 10px;">Södergatan 65, 252 25
+                                Helsingborg</a>
                         </div>
 
                     </div>
@@ -38,12 +41,12 @@
 
             <div class="col-md-6 col-lg-6 col-xl-3">
                 <div class="footer-item mt-5">
-                    <h6 class="text-secondary mt-4 mb-0">Donation</h6>
+                    <h6 class="text-secondary mt-4 mb-0" data-i18n="donation">Donation</h6>
                     <div class="d-flex flex-column">
                         <img src="img/swishwakfQR.png" alt="Swish QR" style="width: 18.0rem;"
                             class="mb-3 d-block mx-auto">
                         <button onclick="window.location.href='donations.html';" class="donation-btn btn"
-                            style="background-color: #ffc107;">
+                            style="background-color: #ffc107;" data-i18n="donation">
                             Donera
                         </button>
                     </div>
@@ -63,8 +66,9 @@
             <div class="border-top border-secondary pb-4"></div>
             <div class="row">
                 <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                    &copy; <a class="border-bottom" href="#">alsalamcenter</a>, All Right Reserved.
-                </div>
+                    &copy; <a class="border-bottom" href="#">alsalamcenter</a>, <span data-i18n="rights">All Right
+                        Reserved.
+                </div></span>
 
             </div>
         </div>
@@ -83,4 +87,6 @@
     <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
     <!-- Template Javascript -->
+    <!-- i18n module (exposed as global `loadLanguage`) -->
+    <script type="module" src="i18n/js/i18n.js" defer></script>
     <script src="js/main.js"></script>
