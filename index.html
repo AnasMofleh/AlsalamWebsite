@@ -39,7 +39,7 @@
 
     <!-- Add margin to prevent content from hiding behind navbar -->
     <!-- <div style="margin-top: 100px;"></div> -->
-    <div class="container-fluid hero py-5 mb-5">
+    <div class="container-fluid hero ">
         <div class="row hero-row">
 
             <div class="col-12 col-md-7 hero-leftside">
@@ -410,8 +410,18 @@
     <!-- Load Header and Footer -->
     <script>
         $(function () {
-            $("#header-placeholder").load("header.html");
-            $("#footer-placeholder").load("footer.html");
+            $("#header-placeholder").load("header.html", function() {
+                // Reapply translations after header loads
+                if (window.reapplyTranslations) {
+                    setTimeout(() => window.reapplyTranslations(), 50);
+                }
+            });
+            $("#footer-placeholder").load("footer.html", function() {
+                // Reapply translations after footer loads
+                if (window.reapplyTranslations) {
+                    setTimeout(() => window.reapplyTranslations(), 50);
+                }
+            });
         });
     </script>
 </body>

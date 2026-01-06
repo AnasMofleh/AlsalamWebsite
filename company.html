@@ -261,8 +261,18 @@
     <!-- Load Header and Footer -->
     <script>
         $(function () {
-            $("#header-placeholder").load("header.html");
-            $("#footer-placeholder").load("footer.html");
+            $("#header-placeholder").load("header.html", function() {
+                // Reapply translations after header loads
+                if (window.reapplyTranslations) {
+                    setTimeout(() => window.reapplyTranslations(), 50);
+                }
+            });
+            $("#footer-placeholder").load("footer.html", function() {
+                // Reapply translations after footer loads
+                if (window.reapplyTranslations) {
+                    setTimeout(() => window.reapplyTranslations(), 50);
+                }
+            });
         });
     </script>
 </body>

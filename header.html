@@ -26,14 +26,14 @@
                     <img src="img/Al-Salam-Center-Logo.png" alt="Mosque Logo" class="img-fluid"
                         style="max-height: 60px" />
                 </a>
+                <!-- Language selector and mobile donate button -->
 
-                <button class="donation-btn btn" style="background-color: #ffc107;"
-                    onclick="loadLanguage('sv')">SV</button>
-                <button class="donation-btn btn" style="background-color: #ffc107;"
-                    onclick="loadLanguage('en')">EN</button>
-                <button class="donation-btn btn" style="background-color: #ffc107;"
-                    onclick="loadLanguage('ar')">AR</button>
-
+                <select class=" btn btn-sm" style="background-color:#ffc107; margin-left: 20px;"
+                    onchange="loadLanguage(this.value)">
+                    <option value="sv"> 🌐 SV</option>
+                    <option value="en"> 🌐 EN</option>
+                    <option value="ar"> 🌐 AR</option>
+                </select>
                 <button id="donate-button-mobile" onclick="window.location.href='donations.html'" data-i18n="donation">
                     Donera <i class="fas fa-heart"></i>
                 </button>
@@ -66,16 +66,6 @@
                             </div>
                         </div>
 
-
-                        <!-- <div class="dropdown-menu" aria-labelledby="statsMenu">
-                            <button class="donation-btn btn" style="background-color: #ffc107;"
-                                onclick="loadLanguage('sv')">SV</button>
-                            <button class="donation-btn btn" style="background-color: #ffc107;"
-                                onclick="loadLanguage('en')">EN</button>
-                            <button class="donation-btn btn" style="background-color: #ffc107;"
-                                onclick="loadLanguage('ar')">AR</button>
-
-                        </div> -->
 
                         <!-- Keep CTA style for Statistik when accessed directly in dropdown -->
                     </div>
@@ -126,8 +116,13 @@
         </nav>
     </div>
 
+
     <!-- Add margin to prevent content from hiding behind navbar -->
     <div style="margin-top: 75px"></div>
+
+    <!-- i18n module (exposed as global `loadLanguage`) -->
+    <script type="module" src="i18n/js/i18n.js" defer></script>
+
 </body>
 
 </html>

@@ -68,8 +68,7 @@
 
                     <!-- Popup Content -->
                     <h4 style="text-align: center;" data-i18n="donations.swish-popup-title">Swish kräver mobil</h4>
-                    <p data-i18n="donations.swish-popup-description">Swish-betalning fungerar endast på mobiltelefoner
-                        med Swish-appen installerad.</p>
+                    <p data-i18n="donations.swish-popup-description">Swish-betalning fungerar endast på mobiltelefoner med Swish-appen installerad.</p>
                     <p data-i18n="donations.swish-popup-alternative">Alternativt kan du skanna QR-koden nedan:</p>
                     <img src="img/swishwakfQR.png" alt="Swish QR"
                         style="width: 100%; max-width: 200px; margin: 10px auto 10px; display: block;" />
@@ -83,8 +82,7 @@
             <div class="col-lg-4 donation-box" id="card-two">
                 <div class="row">
                     <h4 data-i18n="donations.klarna-payment-methods">Gåva via andra betalningssätt</h4>
-                    <p data-i18n="donations.klarna-payment-methods-description">Stödja moskén genom att använda andra
-                        betalnings metoder.</p>
+                    <p data-i18n="donations.klarna-payment-methods-description">Stödja moskén genom att använda andra betalnings metoder.</p>
                 </div>
                 <div class="circle-border">
                     <img src="img/pay.png" alt="International Donation Logo" class="donation-img">
@@ -98,8 +96,7 @@
             <div class="col-lg-4 donation-box" id="card-three">
                 <div class="row">
                     <h4 data-i18n="donations.monthly">Månatlig Gåva</h4>
-                    <p data-i18n="donations.monthly-description">Stödja moskén via automatisk återkommande Gåva varje
-                        månad (likt Autogiro).</p>
+                    <p data-i18n="donations.monthly-description">Stödja moskén via automatisk återkommande Gåva varje månad (likt Autogiro).</p>
                 </div>
                 <div class="circle-border">
                     <img src="img/sadaka.png" alt="Monthly Donation Icon" class="donation-img">
@@ -115,8 +112,7 @@
             <div class="col-lg-6 donation-box" id="card-four">
                 <div class="row">
                     <h4 data-i18n="donations.tax-donation">Gåva via Skattsedel</h4>
-                    <p data-i18n="donations.tax-donation-description">Stödja moskén genom att ge din moskéavgiften via
-                        skattsedel varje år.</p>
+                    <p data-i18n="donations.tax-donation-description">Stödja moskén genom att ge din moskéavgiften via skattsedel varje år.</p>
                 </div>
 
                 <!-- Replace circle-border image and button with iframe -->
@@ -210,14 +206,24 @@
         // Initial state: Show first and last cards
         document.querySelector('#one-time').click(); // Simulate click on "One-Time"
     </script>
-    <!-- i18n module (exposed as global `loadLanguage`) -->
+        <!-- i18n module (exposed as global `loadLanguage`) -->
     <script type="module" src="i18n/js/i18n.js" defer></script>
 
     <!-- Load Header and Footer -->
     <script>
         $(function () {
-            $("#header-placeholder").load("header.html");
-            $("#footer-placeholder").load("footer.html");
+            $("#header-placeholder").load("header.html", function() {
+                // Reapply translations after header loads
+                if (window.reapplyTranslations) {
+                    setTimeout(() => window.reapplyTranslations(), 50);
+                }
+            });
+            $("#footer-placeholder").load("footer.html", function() {
+                // Reapply translations after footer loads
+                if (window.reapplyTranslations) {
+                    setTimeout(() => window.reapplyTranslations(), 50);
+                }
+            });
         });
     </script>
 </body>
