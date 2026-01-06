@@ -28,12 +28,14 @@
                 </a>
                 <!-- Language selector and mobile donate button -->
 
-                <select class=" btn btn-sm" style="background-color:#ffc107; margin-left: 20px;"
-                    onchange="loadLanguage(this.value)">
-                    <option value="sv"> 🌐 SV</option>
-                    <option value="en"> 🌐 EN</option>
-                    <option value="ar"> 🌐 AR</option>
-                </select>
+                <div class="lang-desktop">
+                    <select class="btn btn-sm" style="background-color:#ffc107; margin-left: 20px;"
+                        onchange="loadLanguage(this.value)">
+                        <option value="sv">🌐 SV</option>
+                        <option value="en">🌐 EN</option>
+                        <option value="ar">🌐 AR</option>
+                    </select>
+                </div>
                 <button id="donate-button-mobile" onclick="window.location.href='donations.html'" data-i18n="donation">
                     Donera <i class="fas fa-heart"></i>
                 </button>
@@ -66,12 +68,25 @@
                             </div>
                         </div>
 
-
+                        <button onclick="window.location.href='donations.html';" class="donation-btn btn"
+                            data-i18n="donation" style="background-color: #ffc107;">
+                            Donera
+                        </button>
                         <!-- Keep CTA style for Statistik when accessed directly in dropdown -->
                     </div>
 
                     <!-- Mobile navigation: keep full list -->
                     <div class="navbar-nav align-items-center d-lg-none">
+
+
+                        <div class="lang-logmobile">
+                            <select class="btn btn-sm" style="background-color:#ffc107; margin-left: 20px;"
+                                onchange="loadLanguage(this.value)">
+                                <option value="sv">🌐 SV</option>
+                                <option value="en">🌐 EN</option>
+                                <option value="ar">🌐 AR</option>
+                            </select>
+                        </div>
                         <a href="index.html" class="nav-item nav-link active" data-i18n="nav.home">Home</a>
                         <a href="index.html#Services" class="nav-item nav-link" data-i18n="nav.tjänster">Tjänster</a>
                         <a href="donations.html" class="nav-item nav-link" data-i18n="nav.donationer">Donationer</a>
@@ -80,7 +95,11 @@
                             <i class="fas fa-chart-line"></i>
                             <span data-i18n="nav.stats"></span>STATISTIK
                         </a>
+
                         <a href="#footer" class="nav-item nav-link me-lg-5" data-i18n="nav.contact">Kontakt</a>
+
+
+
                     </div>
 
                     <!-- Social media buttons -->
@@ -98,10 +117,7 @@
                         <a class="btn btn-primary btn-sm me-2" href="https://www.tiktok.com/@alsalam_center_hbg">
                             <i class="fab fa-tiktok"></i>
                         </a> -->
-                        <button onclick="window.location.href='donations.html';" class="donation-btn btn"
-                            data-i18n="donation" style="background-color: #ffc107;">
-                            Donera
-                        </button>
+
                     </div>
 
                     <!-- Swish button -->

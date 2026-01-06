@@ -410,9 +410,8 @@ html[dir="rtl"] .hero-row {
 
   .hero-leftside img,
   .hero-rightside iframe {
-    width: 100% !important;
+    width: 100% ;
   }
-
 
 }
 
@@ -1500,5 +1499,45 @@ body {
     padding: 25px 20px;
   }
 }
+
+
+
+/* Default visibility */
+.lang-mobile {
+  display: none;
+}
+
+.lang-desktop {
+  display: block;
+}
+
+/* Mobile breakpoint */
+@media (max-width: 768px) {
+  .lang-desktop {
+    display: none;
+  }
+
+  .lang-mobile {
+    display: block;
+    padding: 12px 0;
+    border-top: 1px solid #ddd;
+  }
+
+  .lang-item {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .lang-item:hover {
+    background-color: #f2f2f2;
+  }
+}
+
 
 /*** Company Sponsorship End ***/
