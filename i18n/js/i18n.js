@@ -36,6 +36,7 @@ function updateLanguageSelector(lang) {
   }
 }
 
+
 // load i18n files and apply translations
 export async function loadLanguage(lang = DEFAULT_LANG) {
   try {
