@@ -6,7 +6,6 @@
     <link rel="alternate" hreflang="sv" href="/sv">
     <link rel="alternate" hreflang="en" href="/en">
     <link rel="alternate" hreflang="ar" href="/ar">
-
 </head>
 
 <body>
@@ -77,11 +76,9 @@
 
                     <!-- Mobile navigation: keep full list -->
                     <div class="navbar-nav align-items-center d-lg-none">
-
-
                         <div class="lang-logmobile">
                             <select class="btn btn-sm" style="background-color:#ffc107; margin-left: 20px;"
-                                onchange="loadLanguage(this.value)">
+                                onchange="changeLangAndCloseNavbar(this.value)">
                                 <option value="sv">🌐 SV</option>
                                 <option value="en">🌐 EN</option>
                                 <option value="ar">🌐 AR</option>
@@ -142,3 +139,17 @@
 </body>
 
 </html>
+
+<script>
+    function changeLangAndCloseNavbar(lang) {
+
+        loadLanguage(lang);
+        const navbarCollapse = document.querySelector('.navbar-collapse');
+        if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+            const collapse =
+                bootstrap.Collapse.getInstance(navbarCollapse) ||
+                new bootstrap.Collapse(navbarCollapse);
+            collapse.hide();
+        }
+    }
+</script>
