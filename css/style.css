@@ -1541,3 +1541,48 @@ body {
 
 
 /*** Company Sponsorship End ***/
+
+/*** Sponsors Carousel Start ***/
+.sponsors-section {
+  background-color: #fff !important;
+}
+
+.sponsors-carousel {
+  padding: 20px 0;
+}
+
+.sponsor-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #fff;
+  transition: all 0.3s ease;
+  height: 150px;
+}
+
+.sponsor-item:hover {
+  transform: translateY(-5px);
+}
+
+.sponsor-item img {
+  max-height: 100px;
+  max-width: 100%;
+  object-fit: contain;
+  transition: all 0.3s ease;
+}
+
+.sponsor-item:hover img {
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .sponsor-item {
+    height: 120px;
+  }
+  
+  .sponsor-item img {
+    max-height: 80px;
+  }
+}
+/*** Sponsors Carousel End ***/

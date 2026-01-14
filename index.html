@@ -151,6 +151,10 @@
         </div>
     </section>
 
+    <!-- Sponsors Start -->
+    <div id="sponsors-placeholder"></div>
+    <!-- Sponsors End -->
+
     <!-- Activities Start -->
     <div class="container-fluid activities py-5">
         <div class="container py-5">
@@ -390,7 +394,7 @@
     <!-- i18n module (exposed as global `loadLanguage`) -->
     <script type="module" src="i18n/js/i18n.js" defer></script>
 
-    <!-- Load Header and Footer -->
+    <!-- Load Header, Footer and Sponsors -->
     <script>
         $(function () {
             $("#header-placeholder").load("header.html", function () {
@@ -401,6 +405,12 @@
             });
             $("#footer-placeholder").load("footer.html", function () {
                 // Reapply translations after footer loads
+                if (window.reapplyTranslations) {
+                    setTimeout(() => window.reapplyTranslations(), 50);
+                }
+            });
+            $("#sponsors-placeholder").load("sponsors.html", function () {
+                // Reapply translations after sponsors loads
                 if (window.reapplyTranslations) {
                     setTimeout(() => window.reapplyTranslations(), 50);
                 }

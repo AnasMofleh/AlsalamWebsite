@@ -70,6 +70,13 @@ export async function loadLanguage(lang = DEFAULT_LANG) {
 
     // Save to localStorage
     localStorage.setItem("lang", lang);
+    
+    // Reinitialize sponsor carousel if it exists
+    if (typeof window.reinitializeSponsors === 'function') {
+      setTimeout(() => {
+        window.reinitializeSponsors();
+      }, 100);
+    }
   } catch (err) {
     console.error("i18n error:", err);
   }

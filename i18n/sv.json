@@ -4,7 +4,7 @@
   "donation": "DONERA",
   "rights": "Alla rättigheter förbehållna.",
   "nav": {
-    "home": "HOME",
+    "home": "HEM",
     "tjänster": "TJÄNSTER",
     "donationer": "DONATIONER",
     "company": "FÖRETAG",
@@ -25,6 +25,10 @@
     "description": "Al Salam i Helsingborg är en islamisk förening och moské. Ett center för muslimer att vända sig i alla aspekter av sitt liv, från bön och jummah till giftemål, kunskap, vägledning i sakfrågor",
     "version-title": "Vår Vision",
     "version-description": "muslimerna ska känna sig hemma i landet, kunna praktisera och utöva relgionen fullt ut som Svenska Muslimer."
+  },
+  "sponsors": {
+    "title": "Våra Sponsorer",
+    "description": "Tack till våra generösa sponsorer som stödjer Alsalam Moské"
   },
   "activities": {
     "title": "Vår Värdegrund",
