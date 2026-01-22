@@ -151,10 +151,6 @@
         </div>
     </section>
 
-    <!-- Sponsors Start -->
-    <div id="sponsors-placeholder"></div>
-    <!-- Sponsors End -->
-
     <!-- Activities Start -->
     <div class="container-fluid activities py-5">
         <div class="container py-5">
@@ -337,6 +333,11 @@
             </div>
         </div>
     </div>
+
+    <!-- Sponsors Start -->
+    <div id="sponsors-placeholder"></div>
+    <!-- Sponsors End -->
+
     <!-- Activities End -->
 
     <!-- Team Start 
@@ -412,7 +413,7 @@
             $("#sponsors-placeholder").load("sponsors.html", function () {
                 // Reapply translations after sponsors loads
                 if (window.reapplyTranslations) {
-                    setTimeout(() => window.reapplyTranslations(), 50);
+                    setTimeout(() => window.reapplyTranslations(), 100);
                 }
             });
         });
