@@ -333,6 +333,11 @@
             </div>
         </div>
     </div>
+
+    <!-- Sponsors Start -->
+    <div id="sponsors-placeholder"></div>
+    <!-- Sponsors End -->
+
     <!-- Activities End -->
 
     <!-- Team Start 
@@ -390,7 +395,7 @@
     <!-- i18n module (exposed as global `loadLanguage`) -->
     <script type="module" src="i18n/js/i18n.js" defer></script>
 
-    <!-- Load Header and Footer -->
+    <!-- Load Header, Footer and Sponsors -->
     <script>
         $(function () {
             $("#header-placeholder").load("header.html", function () {
@@ -403,6 +408,12 @@
                 // Reapply translations after footer loads
                 if (window.reapplyTranslations) {
                     setTimeout(() => window.reapplyTranslations(), 50);
+                }
+            });
+            $("#sponsors-placeholder").load("sponsors.html", function () {
+                // Reapply translations after sponsors loads
+                if (window.reapplyTranslations) {
+                    setTimeout(() => window.reapplyTranslations(), 100);
                 }
             });
         });

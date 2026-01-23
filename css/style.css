@@ -1,7 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
-
-
 html[dir="rtl"] {
   text-align: right;
 }
@@ -24,12 +22,16 @@ html[dir="ltr"] {
 #spinner {
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.8s ease-out, visibility 0s linear 0.5s;
+  transition:
+    opacity 0.8s ease-out,
+    visibility 0s linear 0.5s;
   z-index: 99999;
 }
 
 #spinner.show {
-  transition: opacity 0.8s ease-out, visibility 0s linear 0s;
+  transition:
+    opacity 0.8s ease-out,
+    visibility 0s linear 0s;
   visibility: visible;
   opacity: 1;
 }
@@ -213,9 +215,9 @@ h6,
     margin-top: 0;
   }
 
-  .navbar .nav-item.dropdown:hover>.dropdown-menu,
-  .navbar .nav-item.dropdown:focus-within>.dropdown-menu,
-  .navbar .nav-item.dropdown.open>.dropdown-menu {
+  .navbar .nav-item.dropdown:hover > .dropdown-menu,
+  .navbar .nav-item.dropdown:focus-within > .dropdown-menu,
+  .navbar .nav-item.dropdown.open > .dropdown-menu {
     display: block;
   }
 }
@@ -239,7 +241,6 @@ h6,
   align-items: center;
 }
 
-
 .hero-leftside img {
   width: 100%;
   height: 600px;
@@ -259,11 +260,16 @@ h6,
   outline: 1em solid var(--bg-white);
   outline-offset: -0.8em;
   border: none;
-
 }
 
 html[dir="rtl"] .hero-row {
   flex-direction: row-reverse;
+}
+
+@media (max-width: 576px) {
+  #current-lang {
+    display: none;
+  }
 }
 
 /*** Hero Header End ***/
@@ -306,7 +312,9 @@ html[dir="rtl"] .hero-row {
   border-radius: 999px;
   padding: 12px 26px;
   box-shadow: 0 12px 24px rgba(13, 110, 253, 0.18);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .stats-preview-btn:hover {
@@ -364,7 +372,12 @@ html[dir="rtl"] .hero-row {
   font-weight: 600;
   cursor: pointer;
   text-align: center;
-  margin: 10px auto;
+  margin: 0 auto;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 22px;
+  width: fit-content;
   animation: bounce 2s infinite;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s ease;
@@ -379,7 +392,6 @@ html[dir="rtl"] .hero-row {
 }
 
 @keyframes bounce {
-
   0%,
   100% {
     transform: translateY(0);
@@ -399,7 +411,6 @@ html[dir="rtl"] .hero-row {
 
 /* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
-
   html,
   body {
     overflow-x: hidden;
@@ -410,14 +421,9 @@ html[dir="rtl"] .hero-row {
 
   .hero-leftside img,
   .hero-rightside iframe {
-    width: 100% ;
+    width: 100%;
   }
-
 }
-
-
-
-
 
 /*** Hero Header ***/
 
@@ -824,7 +830,6 @@ html[dir="rtl"] .hero-row {
 /*** Marrige End ***/
 /* school 2*/
 
-
 * {
   margin: 0;
   padding: 0;
@@ -901,7 +906,7 @@ body {
   margin-bottom: 22px;
 }
 
-.formbold-input-flex>div {
+.formbold-input-flex > div {
   width: 50%;
 }
 
@@ -949,7 +954,7 @@ body {
   width: 75%;
 }
 
-.formbold-form-confirm>div {
+.formbold-form-confirm > div {
   display: flex;
   gap: 15px;
 }
@@ -1500,8 +1505,6 @@ body {
   }
 }
 
-
-
 /* Default visibility */
 .lang-mobile {
   display: none;
@@ -1539,5 +1542,152 @@ body {
   }
 }
 
-
 /*** Company Sponsorship End ***/
+
+/*** Sponsors Carousel Start ***/
+.sponsors-section {
+  background-color: #fff !important;
+}
+
+.sponsors-carousel {
+  padding: 20px 0;
+}
+
+/*** Updated Sponsors Carousel ***/
+
+/* 1. Force the Carousel to move in a perfectly straight, non-stop line */
+
+:root {
+  --gap: 40px;
+  --item-min-h: 120px;
+  --item-max-h: 280px;
+  --logo-min-h: 150px;
+  --logo-max-h: 250px;
+  --logo-min-w: 100px;
+  --logo-max-w: 300px;
+  --speed-ltr: 18s;
+  /* faster -> lower number */
+  --speed-rtl: 22s;
+  --track-easing: linear;
+}
+
+/* Basic layout */
+body {
+  margin: 0;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    Arial;
+  background: #fff;
+  color: #111;
+}
+
+.sponsors-section {
+  padding: 40px 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.title {
+  text-align: center;
+  font-size: clamp(1.6rem, 4.2vw, 2.6rem);
+  margin: 0 0 28px;
+}
+
+/* Wrapper for each track */
+.sponsor-wrap {
+  overflow: hidden;
+  width: 100%;
+  margin-bottom: 28px;
+  box-sizing: border-box;
+  /* hide until ready to avoid jumps */
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.sponsor-wrap.is-ready {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Track holds duplicated items (items + items) */
+.sponsor-track {
+  display: flex;
+  align-items: center;
+  gap: var(--gap);
+  width: max-content;
+  /* content-sized; duplicated inside JS */
+  will-change: transform;
+}
+
+/* animation only runs when wrapper has is-ready */
+.sponsor-wrap.is-ready .sponsor-track.ltr {
+  animation: scroll var(--speed-ltr) var(--track-easing) infinite;
+  animation-delay: -3.5s;
+  /* offset to avoid perfect sync with the other track */
+}
+
+.sponsor-wrap.is-ready .sponsor-track.rtl {
+  animation: scroll var(--speed-rtl) var(--track-easing) infinite;
+  animation-direction: reverse;
+  animation-delay: -8s;
+  /* different offset */
+}
+
+/* Items */
+.sponsor-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: clamp(var(--item-min-h), 20vw, var(--item-max-h));
+  padding: 18px;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  /* don't shrink */
+}
+
+.sponsor-item img {
+  max-height: clamp(var(--logo-min-h), 20vw, var(--logo-max-h));
+  max-width: clamp(var(--logo-min-w), 30vw, var(--logo-max-w)); 
+  width: auto !important;
+  display: block;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Make sure the duplicated content lines up seamlessly:
+       The keyframe moves the track left by 50% (one full set), so the inner HTML must be [items][items] */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Accessibility: respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .sponsor-wrap.is-ready .sponsor-track {
+    animation: none;
+  }
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  :root {
+    --gap: 20px;
+  }
+}
+
+/*** Sponsors Carousel End ***/
