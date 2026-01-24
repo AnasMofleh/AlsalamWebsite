@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistik - Al Salam Center</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Logo Colors */
+            --primary-green: #4CAF50;
+            --primary-blue: #1565C0;
+            --accent-green: #4CAF50;
+            --stripe-purple: #635BFF;
+            --swish-pink: #FF5C8A;
+
+            /* Light Theme Defaults */
+            --bg-color: #f4f6f8;
+            --card-bg: #ffffff;
+            --text-main: #2c3e50;
+            --text-muted: #7f8c8d;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --progress-bg: #e9ecef;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #ffffff;
+            --text-muted: #b0b3b8;
+            --border-color: #333333;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            --progress-bg: #333333;
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-color);
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            color: var(--text-main);
+            margin: 0;
+            padding: 10px;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            z-index: -1;
+        }
+
+        /* Grid Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 73% 25%;
+            gap: 15px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            grid-column: 1 / -1;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 25px 40px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border-top: 6px solid var(--primary-green);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        [data-theme="dark"] .hero-section {
+            background: rgba(30, 30, 30, 0.85);
+        }
+
+        .hero-left {
+            flex: 1;
+            padding-right: 20px;
+        }
+
+        .hero-right {
+            flex: 0 0 25%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            border-left: 1px solid var(--border-color);
+            padding-left: 20px;
+        }
+
+        .logo-container {
+            width: 100%;
+            max-width: 140px;
+        }
+
+        .logo-link {
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .logo-link img {
+            cursor: pointer;
+            width: 100%;
+            height: auto;
+        }
+
+        .hero-title {
+            font-size: 1.4rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .source-badge {
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .stripe-badge {
+            background: var(--stripe-purple);
+        }
+
+        .swish-badge {
+            background: var(--swish-pink);
+        }
+
+        .hero-amount {
+            font-size: 7rem;
+            font-weight: 900;
+            color: var(--primary-green);
+            line-height: 1;
+            margin-bottom: 15px;
+        }
+
+        [data-theme="dark"] .hero-amount {
+            color: var(--accent-green);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background-color: var(--progress-bg);
+            border-radius: 50px;
+            height: 35px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, var(--primary-green), var(--primary-blue));
+            height: 100%;
+            width: 0%;
+            border-radius: 50px;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Theme Switch */
+        .theme-switch {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 6px 10px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        [data-theme="dark"] .theme-switch {
+            background: rgba(30, 30, 30, 0.95);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 38px;
+            height: 18px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 18px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 12px;
+            width: 12px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--primary-green);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(20px);
+        }
+
+        #theme-label {
+            font-size: 0.9rem;
+        }
+
+        /* Donation Button */
+        .donation-btn {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
+            border: none;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 700;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .donation-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        /* Stat Cards */
+        .stats-column {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        [data-theme="dark"] .card {
+            background: rgba(30, 30, 30, 0.85);
+        }
+
+        .card.highlight {
+            border: 3px solid var(--primary-green);
+            background: rgba(76, 175, 80, 0.03);
+            position: relative;
+            box-shadow: 0 12px 30px rgba(76, 175, 80, 0.06);
+            padding: 18px;
+        }
+
+        .card-label {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .card-label.prominent {
+            font-size: 1.18rem;
+            color: var(--text-main);
+            font-weight: 800;
+            padding-left: 10px;
+            border-left: 4px solid var(--primary-green);
+            border-radius: 3px;
+            letter-spacing: 0.2px;
+        }
+
+        .card-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.1;
+        }
+
+        .card-sub {
+            font-size: 1rem;
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+
+        /* Breakdown Section */
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breakdown-row:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .breakdown-value {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        /* Feed Section */
+        .feed-column {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            height: 700px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+        }
+
+        [data-theme="dark"] .feed-column {
+            background: rgba(30, 30, 30, 0.85);
+        }
+
+        .feed-header {
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .feed-list {
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-right: 5px;
+        }
+
+        .feed-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .feed-list::-webkit-scrollbar-thumb {
+            background-color: var(--text-muted);
+            border-radius: 10px;
+        }
+
+        .feed-item {
+            background: var(--bg-color);
+            padding: 15px;
+            border-radius: 8px;
+            animation: slideIn 0.5s ease-out;
+            border-left: 4px solid transparent;
+        }
+
+        .feed-item.stripe {
+            border-left-color: var(--stripe-purple);
+        }
+
+        .feed-item.swish {
+            border-left-color: var(--swish-pink);
+        }
+
+        .feed-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .feed-amount {
+            font-weight: 800;
+            color: var(--primary-green);
+            font-size: 1.1rem;
+        }
+
+        .feed-time {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .feed-message {
+            font-size: 1rem;
+            color: var(--text-main);
+            word-break: break-word;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .feed-source {
+            font-size: 0.85rem;
+            margin-top: 4px;
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .feed-source.stripe {
+            background: rgba(99, 91, 255, 0.1);
+            color: var(--stripe-purple);
+        }
+
+        .feed-source.swish {
+            background: rgba(255, 92, 138, 0.1);
+            color: var(--swish-pink);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Error State */
+        .error-message {
+            background: rgba(231, 76, 60, 0.1);
+            border: 2px solid rgba(231, 76, 60, 0.3);
+            color: #e74c3c;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .hero-section {
+                flex-direction: column;
+                text-align: center;
+                padding: 25px 20px;
+            }
+
+            .hero-left {
+                padding-right: 0;
+                width: 100%;
+                order: 2;
+            }
+
+            .hero-right {
+                border-left: none;
+                border-bottom: 1px solid var(--border-color);
+                padding-bottom: 20px;
+                margin-bottom: 20px;
+                padding-left: 0;
+                width: 100%;
+                order: 1;
+            }
+
+            .hero-amount {
+                font-size: 5rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feed-column {
+                height: 500px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="theme-switch">
+        <label class="switch">
+            <input type="checkbox" onchange="toggleTheme()">
+            <span class="slider"></span>
+        </label>
+        <span id="theme-label">☀️</span>
+    </div>
+
+    <div class="dashboard-grid">
+
+        <div class="hero-section">
+            <div class="hero-left">
+                <div class="hero-subtitle">
+                    <span>Totala Donationer</span>
+                    <span class="source-badge stripe-badge">STRIPE</span>
+                    <span class="source-badge swish-badge">SWISH</span>
+                </div>
+                <div class="hero-title">Total insamlat:</div>
+                <div class="hero-amount"><span id="total-combined">0</span> Kr</div>
+
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="progress-percentage">0%</span>
+                    <span>Mål: 10,000,000 Kr</span>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <div class="logo-container">
+                    <a href="index.html" aria-label="Go to home page" class="logo-link">
+                        <img src="img/Al-Salam-Center-Logo.png" alt="Logo">
+                    </a>
+                </div>
+                <button class="donation-btn" onclick="goToDonation()">💝 Donera</button>
+            </div>
+        </div>
+
+        <div class="stats-column">
+            <div class="card">
+                <div class="card-label">Uppdelning per källa:</div>
+                <div class="breakdown-row">
+                    <div class="breakdown-label">
+                        <span class="source-badge swish-badge">Swish</span>
+                    </div>
+                    <div class="breakdown-value"><span id="total-swish">0</span> Kr</div>
+                </div>
+                <div class="breakdown-row">
+                    <div class="breakdown-label">
+                        <span class="source-badge stripe-badge">Stripe</span>
+                    </div>
+                    <div class="breakdown-value"><span id="total-stripe">0</span> Kr</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-label">Donationer idag:</div>
+                <div class="card-value"><span id="total-today">0</span> Kr</div>
+                <div class="card-sub"><span id="count-today">0</span> transaktioner idag</div>
+            </div>
+
+            <div class="card highlight">
+                <div class="card-label prominent">Högsta donation någonsin:</div>
+                <div class="card-value"><span id="highest-amount">0</span> Kr</div>
+                <div class="card-sub" id="highest-source">-</div>
+            </div>
+
+            <div class="card">
+                <div class="card-label">Genomsnittlig donation:</div>
+                <div class="card-value"><span id="average-amount">0</span> Kr</div>
+            </div>
+        </div>
+
+        <div class="feed-column">
+            <div class="feed-header">Senaste Donationer 💬:</div>
+            <div class="feed-list" id="feed-list">
+                <div class="loading">Laddar donationer...</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // API endpoints
+        const SWISH_API_URL = "https://script.google.com/macros/s/AKfycbyvsHmRWM96nR0xMFjUk1y0ox_Pohm0Rtd8MIfZYvvpevjokVmY-eU8ZIHZfN-tdUi8/exec";
+        const STRIPE_API_URL = "https://script.google.com/macros/s/AKfycby4xd1YkqdDe-xvshIuMpj53wCLM9kUClwb84Qtx5amrPd6xrUjKjJxiYSdEppweq4/exec"; // Update with actual Stripe API
+        const GOAL = 10000000;
+        const REFRESH_RATE = 5000; // 10 seconds
+
+        let previousData = {
+            total_combined: 0,
+            highest_amount: 0
+        };
+
+        const els = {
+            totalCombined: document.getElementById('total-combined'),
+            totalSwish: document.getElementById('total-swish'),
+            totalStripe: document.getElementById('total-stripe'),
+            progressBar: document.getElementById('progress-bar'),
+            progressPct: document.getElementById('progress-percentage'),
+            totalToday: document.getElementById('total-today'),
+            countToday: document.getElementById('count-today'),
+            highestAmount: document.getElementById('highest-amount'),
+            highestSource: document.getElementById('highest-source'),
+            averageAmount: document.getElementById('average-amount'),
+            feedList: document.getElementById('feed-list')
+        };
+
+        function animateValue(obj, start, end, duration) {
+            if (start === end) return;
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start).toLocaleString();
+                if (progress < 1) window.requestAnimationFrame(step);
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        async function fetchCombinedData() {
+            try {
+                // Fetch both Swish and Stripe data in parallel
+                const [swishResponse, stripeResponse] = await Promise.allSettled([
+                    fetch(SWISH_API_URL),
+                    fetch(STRIPE_API_URL)
+                ]);
+
+                let swishData = null;
+                let stripeData = null;
+
+                // Process Swish data
+                if (swishResponse.status === 'fulfilled' && swishResponse.value.ok) {
+                    swishData = await swishResponse.value.json();
+                }
+
+                // Process Stripe data
+                if (stripeResponse.status === 'fulfilled' && stripeResponse.value.ok) {
+                    stripeData = await stripeResponse.value.json();
+                }
+
+                // Combine the data
+                const combinedData = combineData(swishData, stripeData);
+                updateDashboard(combinedData);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                showError("Kunde inte hämta data. Försöker igen...");
+            }
+        }
+
+        function combineData(swishData, stripeData) {
+            const combined = {
+                total_swish: 0,
+                total_stripe: 0,
+                total_combined: 0,
+                total_today: 0,
+                count_today: 0,
+                highest_amount: 0,
+                highest_source: '-',
+                average_amount: 0,
+                combined_payments: []
+            };
+
+            // Process Swish data
+            if (swishData) {
+                combined.total_swish = swishData.total_alltime || 0;
+                combined.total_combined += combined.total_swish;
+
+                // Add Swish payments to combined list
+                if (swishData.last_messages) {
+                    swishData.last_messages.forEach(msg => {
+                        combined.combined_payments.push({
+                            amount: msg.amount || 0,
+                            message: msg.message || '-',
+                            timestamp: msg.timestamp,
+                            source: 'swish'
+                        });
+                    });
+                }
+
+                // Check highest from Swish
+                if (swishData.Highest_ever && swishData.Highest_ever.amount > combined.highest_amount) {
+                    combined.highest_amount = swishData.Highest_ever.amount;
+                    combined.highest_source = 'Swish';
+                }
+
+                // Today's totals from Swish
+                combined.total_today += swishData.total_today || 0;
+                combined.count_today += swishData.count_today || 0;
+            }
+
+            // Process Stripe data
+            if (stripeData) {
+                // Handle Stripe data as array (based on your response format)
+                if (Array.isArray(stripeData)) {
+                    let stripe_total = 0;
+                    let stripe_today = 0;
+                    let stripe_count_today = 0;
+                    let stripe_highest = 0;
+
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+
+                    stripeData.forEach(payment => {
+                        const amount = parseFloat(payment.Amount) || 0;
+                        stripe_total += amount;
+
+                        // Check if today
+                        const paymentDate = new Date(payment.Datetime);
+                        paymentDate.setHours(0, 0, 0, 0);
+                        if (paymentDate.getTime() === today.getTime()) {
+                            stripe_today += amount;
+                            stripe_count_today++;
+                        }
+
+                        // Track highest
+                        if (amount > stripe_highest) {
+                            stripe_highest = amount;
+                        }
+
+                        // Add to combined payments
+                        combined.combined_payments.push({
+                            amount: amount,
+                            message: payment.customer_name || payment.customer_email || 'Anonym',
+                            timestamp: payment.Datetime,
+                            source: 'stripe',
+                            payment_type: payment.payment_type
+                        });
+                    });
+
+                    combined.total_stripe = stripe_total;
+                    combined.total_combined += stripe_total;
+                    combined.total_today += stripe_today;
+                    combined.count_today += stripe_count_today;
+
+                    if (stripe_highest > combined.highest_amount) {
+                        combined.highest_amount = stripe_highest;
+                        combined.highest_source = 'Stripe';
+                    }
+                } else if (stripeData.total_stripe) {
+                    // Handle object format
+                    combined.total_stripe = stripeData.total_stripe || 0;
+                    combined.total_combined += combined.total_stripe;
+                    combined.total_today += stripeData.total_today || 0;
+                    combined.count_today += stripeData.count_today || 0;
+
+                    if (stripeData.highest_amount > combined.highest_amount) {
+                        combined.highest_amount = stripeData.highest_amount;
+                        combined.highest_source = 'Stripe: ' + (stripeData.highest_customer || 'Anonym');
+                    }
+
+                    if (stripeData.recent_payments) {
+                        stripeData.recent_payments.forEach(payment => {
+                            combined.combined_payments.push({
+                                amount: payment.amount,
+                                message: payment.customer_name || payment.customer_email || 'Anonym',
+                                timestamp: payment.timestamp,
+                                source: 'stripe',
+                                payment_type: payment.payment_type
+                            });
+                        });
+                    }
+                }
+            }
+
+            // Calculate average
+            if (combined.combined_payments.length > 0) {
+                combined.average_amount = Math.round(combined.total_combined / combined.combined_payments.length);
+            }
+
+            // Sort combined payments by timestamp (newest first)
+            combined.combined_payments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            return combined;
+        }
+
+        function updateDashboard(data) {
+            // Animate total combined amount
+            if (data.total_combined !== previousData.total_combined) {
+                animateValue(els.totalCombined, previousData.total_combined, data.total_combined, 2000);
+                if (data.total_combined > previousData.total_combined && previousData.total_combined > 0) {
+                    confetti({ particleCount: 30, spread: 50, origin: { y: 0.6 } });
+                }
+            }
+
+            // Update breakdown
+            els.totalSwish.innerText = data.total_swish.toLocaleString();
+            els.totalStripe.innerText = data.total_stripe.toLocaleString();
+
+            // Update progress bar
+            const percentage = Math.min((data.total_combined / GOAL) * 100, 100).toFixed(1);
+            els.progressBar.style.width = percentage + "%";
+            els.progressPct.innerText = percentage + "%";
+
+            // Update today's stats
+            els.totalToday.innerText = data.total_today.toLocaleString();
+            els.countToday.innerText = data.count_today;
+
+            // Update highest donation
+            if (data.highest_amount !== previousData.highest_amount) {
+                animateValue(els.highestAmount, previousData.highest_amount, data.highest_amount, 1000);
+            }
+            els.highestSource.innerText = data.highest_source;
+
+            // Update average
+            els.averageAmount.innerText = data.average_amount.toLocaleString();
+
+            // Render combined feed
+            if (JSON.stringify(data.combined_payments) !== JSON.stringify(previousData.combined_payments)) {
+                renderFeed(data.combined_payments);
+            }
+
+            previousData = data;
+        }
+
+        function renderFeed(payments) {
+            els.feedList.innerHTML = "";
+            if (!payments || payments.length === 0) {
+                els.feedList.innerHTML = "<div style='text-align:center; color:var(--text-muted); padding:20px'>Inga donationer än</div>";
+                return;
+            }
+
+            // Show only the 20 most recent
+            const recentPayments = payments.slice(0, 20);
+
+            recentPayments.forEach(payment => {
+                const item = document.createElement('div');
+                item.className = `feed-item ${payment.source}`;
+
+                let timeStr = payment.timestamp || '';
+                if (timeStr.includes('T')) {
+                    timeStr = timeStr.split('T')[1].substring(0, 5);
+                }
+
+                const sourceLabel = payment.source === 'stripe' ? 'Stripe' : 'Swish';
+                const paymentTypeMap = {
+                    'one_time': 'Engångsdonation',
+                    'monthly': 'Månatlig',
+                    'yearly': 'Årlig'
+                };
+                const paymentInfo = payment.payment_type ? ` (${paymentTypeMap[payment.payment_type] || 'Donation'})` : '';
+
+                item.innerHTML = `
+                    <div class="feed-top">
+                        <span class="feed-amount">${payment.amount?.toLocaleString() || '0'} Kr</span>
+                        <span class="feed-time">${timeStr}</span>
+                    </div>
+                    <div class="feed-message">${payment.message || '-'}</div>
+                    <span class="feed-source ${payment.source}">${sourceLabel}${paymentInfo}</span>
+                `;
+                els.feedList.appendChild(item);
+            });
+        }
+
+        function showError(message) {
+            els.feedList.innerHTML = `<div class="error-message">${message}</div>`;
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const label = document.getElementById('theme-label');
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                label.innerText = "☀️";
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                label.innerText = "🌙";
+            }
+        }
+
+        function goToDonation() {
+            window.location.href = 'donations.html';
+        }
+
+        // Initial fetch
+        fetchCombinedData();
+
+        // Set up periodic refresh
+        setInterval(fetchCombinedData, REFRESH_RATE);
+    </script>
+</body>
+
+</html>
