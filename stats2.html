@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Statistik - Al Salam Center</title>
+    <title>Donationer - Al Salam Center</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
         rel="stylesheet">
@@ -17,16 +17,17 @@
             --primary-blue: #1565C0;
             --accent-green: #4CAF50;
             --stripe-purple: #635BFF;
-            --swish-pink: #FF5C8A;
+            --mobile-payment: #00D9FF;
+            --card-payment: #FF6B9D;
 
             /* Light Theme Defaults */
-            --bg-color: #f4f6f8;
+            --bg-color: #f0f2f5;
             --card-bg: #ffffff;
-            --text-main: #2c3e50;
-            --text-muted: #7f8c8d;
-            --border-color: #e0e0e0;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            --progress-bg: #e9ecef;
+            --text-main: #1a1a1a;
+            --text-muted: #606770;
+            --border-color: #dadde1;
+            --shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            --progress-bg: #e4e6eb;
         }
 
         [data-theme="dark"] {
@@ -70,13 +71,22 @@
             z-index: -1;
         }
 
-        /* Grid Layout */
+        /* Grid Layout - TikTok Stream Optimized */
         .dashboard-grid {
             display: grid;
-            grid-template-columns: 73% 25%;
-            gap: 15px;
-            max-width: 1400px;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            max-width: 1600px;
             margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Two Column Layout for Feeds */
+        .feeds-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            grid-column: 1 / -1;
         }
 
         /* Hero Section */
@@ -150,18 +160,20 @@
 
         .source-badge {
             color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.85rem;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.9rem;
             font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .stripe-badge {
-            background: var(--stripe-purple);
+        .mobile-badge {
+            background: linear-gradient(135deg, var(--mobile-payment), #00B8D4);
         }
 
-        .swish-badge {
-            background: var(--swish-pink);
+        .card-badge {
+            background: linear-gradient(135deg, var(--card-payment), #FF1744);
         }
 
         .hero-amount {
@@ -290,23 +302,31 @@
             box-shadow: 0 6px 12px rgba(76, 175, 80, 0.3);
         }
 
-        /* Stat Cards */
-        .stats-column {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+        .mobile-number {
+            background: linear-gradient(135deg, var(--mobile-payment), #00B8D4);
+            color: white;
+            padding: 14px 18px;
+            border-radius: 20px;
+            font-weight: 900;
+            font-size: 1.6rem;
+            letter-spacing: 1.5px;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(0, 217, 255, 0.3);
+            margin-top: 8px;
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.85);
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(10px);
+        .mobile-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            font-weight: 600;
+            text-align: center;
+        }
         }
 
         [data-theme="dark"] .card {
-            background: rgba(30, 30, 30, 0.85);
+            background: rgba(30, 30, 30, 0.95);
         }
 
         .card.highlight {
@@ -374,29 +394,45 @@
             color: var(--text-main);
         }
 
-        /* Feed Section */
+        /* Feed Section - TikTok Optimized */
         .feed-column {
-            background: rgba(255, 255, 255, 0.85);
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
             box-shadow: var(--shadow);
             padding: 20px;
-            height: 700px;
+            height: 600px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             backdrop-filter: blur(10px);
+            border: 2px solid var(--border-color);
+        }
+
+        .feed-column.mobile-feed {
+            border-top: 4px solid var(--mobile-payment);
+        }
+
+        .feed-column.card-feed {
+            border-top: 4px solid var(--card-payment);
         }
 
         [data-theme="dark"] .feed-column {
-            background: rgba(30, 30, 30, 0.85);
+            background: rgba(30, 30, 30, 0.95);
         }
 
         .feed-header {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: 800;
             margin-bottom: 15px;
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feed-header .icon {
+            font-size: 1.6rem;
         }
 
         .feed-list {
@@ -419,18 +455,21 @@
 
         .feed-item {
             background: var(--bg-color);
-            padding: 15px;
-            border-radius: 8px;
+            padding: 16px;
+            border-radius: 12px;
             animation: slideIn 0.5s ease-out;
             border-left: 4px solid transparent;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
-        .feed-item.stripe {
-            border-left-color: var(--stripe-purple);
+        .feed-item.mobile {
+            border-left-color: var(--mobile-payment);
+            background: linear-gradient(90deg, rgba(0, 217, 255, 0.05) 0%, var(--bg-color) 10%);
         }
 
-        .feed-item.swish {
-            border-left-color: var(--swish-pink);
+        .feed-item.card {
+            border-left-color: var(--card-payment);
+            background: linear-gradient(90deg, rgba(255, 107, 157, 0.05) 0%, var(--bg-color) 10%);
         }
 
         .feed-top {
@@ -441,41 +480,43 @@
         }
 
         .feed-amount {
-            font-weight: 800;
+            font-weight: 900;
             color: var(--primary-green);
-            font-size: 1.1rem;
+            font-size: 1.3rem;
         }
 
         .feed-time {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
+            font-weight: 600;
         }
 
         .feed-message {
-            font-size: 1rem;
+            font-size: 1.05rem;
             color: var(--text-main);
             word-break: break-word;
             font-weight: 600;
-            margin-top: 4px;
+            margin-top: 8px;
+            line-height: 1.4;
         }
 
         .feed-source {
             font-size: 0.85rem;
-            margin-top: 4px;
+            margin-top: 8px;
             display: inline-block;
-            padding: 2px 8px;
-            border-radius: 8px;
-            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 700;
         }
 
-        .feed-source.stripe {
-            background: rgba(99, 91, 255, 0.1);
-            color: var(--stripe-purple);
+        .feed-source.mobile {
+            background: rgba(0, 217, 255, 0.15);
+            color: var(--mobile-payment);
         }
 
-        .feed-source.swish {
-            background: rgba(255, 92, 138, 0.1);
-            color: var(--swish-pink);
+        .feed-source.card {
+            background: rgba(255, 107, 157, 0.15);
+            color: var(--card-payment);
         }
 
         @keyframes slideIn {
@@ -536,12 +577,16 @@
                 font-size: 5rem;
             }
 
-            .dashboard-grid {
+            .feeds-container {
                 grid-template-columns: 1fr;
             }
 
             .feed-column {
-                height: 500px;
+                height: 450px;
+            }
+
+            .stats-column {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -563,8 +608,8 @@
             <div class="hero-left">
                 <div class="hero-subtitle">
                     <span>Totala Donationer</span>
-                    <span class="source-badge stripe-badge">STRIPE</span>
-                    <span class="source-badge swish-badge">SWISH</span>
+                    <span class="source-badge mobile-badge">📱 Mobilbetalning</span>
+                    <span class="source-badge card-badge">💳 Kortbetalning</span>
                 </div>
                 <div class="hero-title">Total insamlat:</div>
                 <div class="hero-amount"><span id="total-combined">0</span> Kr</div>
@@ -585,6 +630,10 @@
                     </a>
                 </div>
                 <button class="donation-btn" onclick="goToDonation()">💝 Donera</button>
+                <div style="width: 100%; margin-top: 15px;">
+                    <div class="mobile-label">📱 Mobilbetalning</div>
+                    <div class="mobile-number">123 500 0559</div>
+                </div>
             </div>
         </div>
 
@@ -593,15 +642,15 @@
                 <div class="card-label">Uppdelning per källa:</div>
                 <div class="breakdown-row">
                     <div class="breakdown-label">
-                        <span class="source-badge swish-badge">Swish</span>
+                        <span class="source-badge mobile-badge">📱 Mobilbetalning</span>
                     </div>
-                    <div class="breakdown-value"><span id="total-swish">0</span> Kr</div>
+                    <div class="breakdown-value"><span id="total-mobile">0</span> Kr</div>
                 </div>
                 <div class="breakdown-row">
                     <div class="breakdown-label">
-                        <span class="source-badge stripe-badge">Stripe</span>
+                        <span class="source-badge card-badge">💳 Kortbetalning</span>
                     </div>
-                    <div class="breakdown-value"><span id="total-stripe">0</span> Kr</div>
+                    <div class="breakdown-value"><span id="total-card">0</span> Kr</div>
                 </div>
             </div>
 
@@ -623,10 +672,25 @@
             </div>
         </div>
 
-        <div class="feed-column">
-            <div class="feed-header">Senaste Donationer 💬:</div>
-            <div class="feed-list" id="feed-list">
-                <div class="loading">Laddar donationer...</div>
+        <div class="feeds-container">
+            <div class="feed-column mobile-feed">
+                <div class="feed-header">
+                    <span class="icon">📱</span>
+                    <span>Mobilbetalningar</span>
+                </div>
+                <div class="feed-list" id="mobile-feed-list">
+                    <div class="loading">Laddar donationer...</div>
+                </div>
+            </div>
+
+            <div class="feed-column card-feed">
+                <div class="feed-header">
+                    <span class="icon">💳</span>
+                    <span>Kortbetalningar</span>
+                </div>
+                <div class="feed-list" id="card-feed-list">
+                    <div class="loading">Laddar donationer...</div>
+                </div>
             </div>
         </div>
 
@@ -634,20 +698,22 @@
 
     <script>
         // API endpoints
-        const SWISH_API_URL = "https://script.google.com/macros/s/AKfycbyvsHmRWM96nR0xMFjUk1y0ox_Pohm0Rtd8MIfZYvvpevjokVmY-eU8ZIHZfN-tdUi8/exec";
-        const STRIPE_API_URL = "https://script.google.com/macros/s/AKfycby4xd1YkqdDe-xvshIuMpj53wCLM9kUClwb84Qtx5amrPd6xrUjKjJxiYSdEppweq4/exec"; // Update with actual Stripe API
+        const MOBILE_API_URL = "https://script.google.com/macros/s/AKfycbyvsHmRWM96nR0xMFjUk1y0ox_Pohm0Rtd8MIfZYvvpevjokVmY-eU8ZIHZfN-tdUi8/exec";
+        const CARD_API_URL = "https://script.google.com/macros/s/AKfycby4xd1YkqdDe-xvshIuMpj53wCLM9kUClwb84Qtx5amrPd6xrUjKjJxiYSdEppweq4/exec";
         const GOAL = 10000000;
-        const REFRESH_RATE = 5000; // 10 seconds
+        const REFRESH_RATE = 5000;
 
         let previousData = {
             total_combined: 0,
-            highest_amount: 0
+            highest_amount: 0,
+            mobile_payments: [],
+            card_payments: []
         };
 
         const els = {
             totalCombined: document.getElementById('total-combined'),
-            totalSwish: document.getElementById('total-swish'),
-            totalStripe: document.getElementById('total-stripe'),
+            totalMobile: document.getElementById('total-mobile'),
+            totalCard: document.getElementById('total-card'),
             progressBar: document.getElementById('progress-bar'),
             progressPct: document.getElementById('progress-percentage'),
             totalToday: document.getElementById('total-today'),
@@ -655,7 +721,8 @@
             highestAmount: document.getElementById('highest-amount'),
             highestSource: document.getElementById('highest-source'),
             averageAmount: document.getElementById('average-amount'),
-            feedList: document.getElementById('feed-list')
+            mobileFeedList: document.getElementById('mobile-feed-list'),
+            cardFeedList: document.getElementById('card-feed-list')
         };
 
         function animateValue(obj, start, end, duration) {
@@ -672,27 +739,27 @@
 
         async function fetchCombinedData() {
             try {
-                // Fetch both Swish and Stripe data in parallel
-                const [swishResponse, stripeResponse] = await Promise.allSettled([
-                    fetch(SWISH_API_URL),
-                    fetch(STRIPE_API_URL)
+                // Fetch both Mobile and Card payment data in parallel
+                const [mobileResponse, cardResponse] = await Promise.allSettled([
+                    fetch(MOBILE_API_URL),
+                    fetch(CARD_API_URL)
                 ]);
 
-                let swishData = null;
-                let stripeData = null;
+                let mobileData = null;
+                let cardData = null;
 
-                // Process Swish data
-                if (swishResponse.status === 'fulfilled' && swishResponse.value.ok) {
-                    swishData = await swishResponse.value.json();
+                // Process Mobile payment data
+                if (mobileResponse.status === 'fulfilled' && mobileResponse.value.ok) {
+                    mobileData = await mobileResponse.value.json();
                 }
 
-                // Process Stripe data
-                if (stripeResponse.status === 'fulfilled' && stripeResponse.value.ok) {
-                    stripeData = await stripeResponse.value.json();
+                // Process Card payment data
+                if (cardResponse.status === 'fulfilled' && cardResponse.value.ok) {
+                    cardData = await cardResponse.value.json();
                 }
 
                 // Combine the data
-                const combinedData = combineData(swishData, stripeData);
+                const combinedData = combineData(mobileData, cardData);
                 updateDashboard(combinedData);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -700,114 +767,119 @@
             }
         }
 
-        function combineData(swishData, stripeData) {
+        function combineData(mobileData, cardData) {
             const combined = {
-                total_swish: 0,
-                total_stripe: 0,
+                total_mobile: 0,
+                total_card: 0,
                 total_combined: 0,
                 total_today: 0,
                 count_today: 0,
                 highest_amount: 0,
                 highest_source: '-',
                 average_amount: 0,
-                combined_payments: []
+                mobile_payments: [],
+                card_payments: []
             };
 
-            // Process Swish data
-            if (swishData) {
-                combined.total_swish = swishData.total_alltime || 0;
-                combined.total_combined += combined.total_swish;
+            // Process Mobile payment data
+            if (mobileData) {
+                combined.total_mobile = mobileData.total_alltime || 0;
+                combined.total_combined += combined.total_mobile;
 
-                // Add Swish payments to combined list
-                if (swishData.last_messages) {
-                    swishData.last_messages.forEach(msg => {
-                        combined.combined_payments.push({
+                // Add Mobile payments to list
+                if (mobileData.last_messages) {
+                    mobileData.last_messages.forEach(msg => {
+                        combined.mobile_payments.push({
                             amount: msg.amount || 0,
                             message: msg.message || '-',
                             timestamp: msg.timestamp,
-                            source: 'swish'
+                            source: 'mobile'
                         });
                     });
                 }
 
-                // Check highest from Swish
-                if (swishData.Highest_ever && swishData.Highest_ever.amount > combined.highest_amount) {
-                    combined.highest_amount = swishData.Highest_ever.amount;
-                    combined.highest_source = 'Swish';
+                // Check highest from Mobile
+                if (mobileData.Highest_ever && mobileData.Highest_ever.amount > combined.highest_amount) {
+                    combined.highest_amount = mobileData.Highest_ever.amount;
+                    combined.highest_source = 'Mobilbetalning';
                 }
 
-                // Today's totals from Swish
-                combined.total_today += swishData.total_today || 0;
-                combined.count_today += swishData.count_today || 0;
+                // Today's totals from Mobile
+                combined.total_today += mobileData.total_today || 0;
+                combined.count_today += mobileData.count_today || 0;
             }
 
-            // Process Stripe data
-            if (stripeData) {
-                // Handle Stripe data as array (based on your response format)
-                if (Array.isArray(stripeData)) {
-                    let stripe_total = 0;
-                    let stripe_today = 0;
-                    let stripe_count_today = 0;
-                    let stripe_highest = 0;
+            // Process Card payment data
+            if (cardData) {
+                // Handle Card data as array
+                if (Array.isArray(cardData)) {
+                    let card_total = 0;
+                    let card_today = 0;
+                    let card_count_today = 0;
+                    let card_highest = 0;
 
                     const today = new Date();
                     today.setHours(0, 0, 0, 0);
 
-                    stripeData.forEach(payment => {
+                    cardData.forEach(payment => {
                         const amount = parseFloat(payment.Amount) || 0;
-                        stripe_total += amount;
+                        card_total += amount;
 
                         // Check if today
                         const paymentDate = new Date(payment.Datetime);
                         paymentDate.setHours(0, 0, 0, 0);
                         if (paymentDate.getTime() === today.getTime()) {
-                            stripe_today += amount;
-                            stripe_count_today++;
+                            card_today += amount;
+                            card_count_today++;
                         }
 
                         // Track highest
-                        if (amount > stripe_highest) {
-                            stripe_highest = amount;
+                        if (amount > card_highest) {
+                            card_highest = amount;
                         }
 
-                        // Add to combined payments
-                        combined.combined_payments.push({
+                        // Use message field if available, otherwise customer info
+                        const displayMessage = payment.message || payment.customer_name || payment.customer_email || 'Tack för ditt stöd!';
+
+                        // Add to card payments
+                        combined.card_payments.push({
                             amount: amount,
-                            message: payment.customer_name || payment.customer_email || 'Anonym',
+                            message: displayMessage,
                             timestamp: payment.Datetime,
-                            source: 'stripe',
+                            source: 'card',
                             payment_type: payment.payment_type
                         });
                     });
 
-                    combined.total_stripe = stripe_total;
-                    combined.total_combined += stripe_total;
-                    combined.total_today += stripe_today;
-                    combined.count_today += stripe_count_today;
+                    combined.total_card = card_total;
+                    combined.total_combined += card_total;
+                    combined.total_today += card_today;
+                    combined.count_today += card_count_today;
 
-                    if (stripe_highest > combined.highest_amount) {
-                        combined.highest_amount = stripe_highest;
-                        combined.highest_source = 'Stripe';
+                    if (card_highest > combined.highest_amount) {
+                        combined.highest_amount = card_highest;
+                        combined.highest_source = 'Kortbetalning';
                     }
-                } else if (stripeData.total_stripe) {
+                } else if (cardData.total_stripe || cardData.total_card) {
                     // Handle object format
-                    combined.total_stripe = stripeData.total_stripe || 0;
-                    combined.total_combined += combined.total_stripe;
-                    combined.total_today += stripeData.total_today || 0;
-                    combined.count_today += stripeData.count_today || 0;
+                    combined.total_card = cardData.total_stripe || cardData.total_card || 0;
+                    combined.total_combined += combined.total_card;
+                    combined.total_today += cardData.total_today || 0;
+                    combined.count_today += cardData.count_today || 0;
 
-                    if (stripeData.highest_amount > combined.highest_amount) {
-                        combined.highest_amount = stripeData.highest_amount;
-                        combined.highest_source = 'Stripe: ' + (stripeData.highest_customer || 'Anonym');
+                    if ((cardData.highest_amount || 0) > combined.highest_amount) {
+                        combined.highest_amount = cardData.highest_amount;
+                        combined.highest_source = 'Kortbetalning';
                     }
 
-                    if (stripeData.recent_payments) {
-                        stripeData.recent_payments.forEach(payment => {
-                            combined.combined_payments.push({
+                    if (cardData.recent_payments) {
+                        cardData.recent_payments.forEach(payment => {
+                            const displayMessage = payment.message || payment.customer_name || payment.customer_email || 'Tack för ditt stöd!';
+                            combined.card_payments.push({
                                 amount: payment.amount,
-                                message: payment.customer_name || payment.customer_email || 'Anonym',
+                                message: displayMessage,
                                 timestamp: payment.timestamp,
-                                source: 'stripe',
+                                source: 'card',
                                 payment_type: payment.payment_type
                             });
                         });
@@ -816,12 +888,14 @@
             }
 
             // Calculate average
-            if (combined.combined_payments.length > 0) {
-                combined.average_amount = Math.round(combined.total_combined / combined.combined_payments.length);
+            const totalPayments = combined.mobile_payments.length + combined.card_payments.length;
+            if (totalPayments > 0) {
+                combined.average_amount = Math.round(combined.total_combined / totalPayments);
             }
 
-            // Sort combined payments by timestamp (newest first)
-            combined.combined_payments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            // Sort payments by timestamp (newest first)
+            combined.mobile_payments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            combined.card_payments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
             return combined;
         }
@@ -836,8 +910,8 @@
             }
 
             // Update breakdown
-            els.totalSwish.innerText = data.total_swish.toLocaleString();
-            els.totalStripe.innerText = data.total_stripe.toLocaleString();
+            els.totalMobile.innerText = data.total_mobile.toLocaleString();
+            els.totalCard.innerText = data.total_card.toLocaleString();
 
             // Update progress bar
             const percentage = Math.min((data.total_combined / GOAL) * 100, 100).toFixed(1);
@@ -857,55 +931,87 @@
             // Update average
             els.averageAmount.innerText = data.average_amount.toLocaleString();
 
-            // Render combined feed
-            if (JSON.stringify(data.combined_payments) !== JSON.stringify(previousData.combined_payments)) {
-                renderFeed(data.combined_payments);
+            // Render separate feeds
+            if (JSON.stringify(data.mobile_payments) !== JSON.stringify(previousData.mobile_payments)) {
+                renderMobileFeed(data.mobile_payments);
+            }
+            if (JSON.stringify(data.card_payments) !== JSON.stringify(previousData.card_payments)) {
+                renderCardFeed(data.card_payments);
             }
 
             previousData = data;
         }
 
-        function renderFeed(payments) {
-            els.feedList.innerHTML = "";
+        function renderMobileFeed(payments) {
+            els.mobileFeedList.innerHTML = "";
             if (!payments || payments.length === 0) {
-                els.feedList.innerHTML = "<div style='text-align:center; color:var(--text-muted); padding:20px'>Inga donationer än</div>";
+                els.mobileFeedList.innerHTML = "<div style='text-align:center; color:var(--text-muted); padding:20px'>Inga mobilbetalningar än</div>";
                 return;
             }
 
-            // Show only the 20 most recent
-            const recentPayments = payments.slice(0, 20);
+            // Show only the 15 most recent
+            const recentPayments = payments.slice(0, 15);
 
             recentPayments.forEach(payment => {
                 const item = document.createElement('div');
-                item.className = `feed-item ${payment.source}`;
+                item.className = 'feed-item mobile';
 
                 let timeStr = payment.timestamp || '';
                 if (timeStr.includes('T')) {
                     timeStr = timeStr.split('T')[1].substring(0, 5);
                 }
 
-                const sourceLabel = payment.source === 'stripe' ? 'Stripe' : 'Swish';
-                const paymentTypeMap = {
-                    'one_time': 'Engångsdonation',
-                    'monthly': 'Månatlig',
-                    'yearly': 'Årlig'
-                };
-                const paymentInfo = payment.payment_type ? ` (${paymentTypeMap[payment.payment_type] || 'Donation'})` : '';
-
                 item.innerHTML = `
                     <div class="feed-top">
                         <span class="feed-amount">${payment.amount?.toLocaleString() || '0'} Kr</span>
                         <span class="feed-time">${timeStr}</span>
                     </div>
-                    <div class="feed-message">${payment.message || '-'}</div>
-                    <span class="feed-source ${payment.source}">${sourceLabel}${paymentInfo}</span>
+                    <div class="feed-message">${payment.message || 'Tack för ditt stöd!'}</div>
                 `;
-                els.feedList.appendChild(item);
+                els.mobileFeedList.appendChild(item);
+            });
+        }
+
+        function renderCardFeed(payments) {
+            els.cardFeedList.innerHTML = "";
+            if (!payments || payments.length === 0) {
+                els.cardFeedList.innerHTML = "<div style='text-align:center; color:var(--text-muted); padding:20px'>Inga kortbetalningar än</div>";
+                return;
+            }
+
+            // Show only the 15 most recent
+            const recentPayments = payments.slice(0, 15);
+
+            recentPayments.forEach(payment => {
+                const item = document.createElement('div');
+                item.className = 'feed-item card';
+
+                let timeStr = payment.timestamp || '';
+                if (timeStr.includes('T')) {
+                    timeStr = timeStr.split('T')[1].substring(0, 5);
+                }
+
+                const paymentTypeMap = {
+                    'one_time': '💚',
+                    'monthly': '🔄',
+                    'yearly': '⭐'
+                };
+                const typeIcon = payment.payment_type ? paymentTypeMap[payment.payment_type] || '' : '';
+
+                item.innerHTML = `
+                    <div class="feed-top">
+                        <span class="feed-amount">${typeIcon} ${payment.amount?.toLocaleString() || '0'} Kr</span>
+                        <span class="feed-time">${timeStr}</span>
+                    </div>
+                    <div class="feed-message">${payment.message || 'Tack för ditt stöd!'}</div>
+                `;
+                els.cardFeedList.appendChild(item);
             });
         }
 
         function showError(message) {
-            els.feedList.innerHTML = `<div class="error-message">${message}</div>`;
+            els.mobileFeedList.innerHTML = `<div class="error-message">${message}</div>`;
+            els.cardFeedList.innerHTML = `<div class="error-message">${message}</div>`;
         }
 
         function toggleTheme() {
