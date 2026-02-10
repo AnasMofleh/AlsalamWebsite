@@ -19,9 +19,9 @@
             --primary-green: #4CAF50;
             --primary-blue: #1565C0;
             --accent-green: #4CAF50;
-            --stripe-purple: #635BFF;
-            --mobile-payment: #00D9FF;
-            --card-payment: #FF6B9D;
+            --stripe-purple: #1565C0;
+            --mobile-payment: #1565C0;
+            --card-payment: #4CAF50;
 
             /* Light Theme Defaults */
             --bg-color: #f0f2f5;
@@ -178,11 +178,11 @@
         }
 
         .mobile-badge {
-            background: linear-gradient(135deg, var(--mobile-payment), #00B8D4);
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue));
         }
 
         .card-badge {
-            background: linear-gradient(135deg, var(--card-payment), #FF1744);
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green));
         }
 
         .hero-amount {
@@ -314,7 +314,7 @@
         }
 
         .mobile-number {
-            background: linear-gradient(135deg, var(--mobile-payment), #00B8D4);
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue));
             color: white;
             padding: 14px 18px;
             border-radius: 20px;
@@ -323,7 +323,7 @@
             letter-spacing: 1.5px;
             text-align: center;
             width: 100%;
-            box-shadow: 0 4px 12px rgba(0, 217, 255, 0.3);
+            box-shadow: 0 4px 12px rgba(21, 101, 192, 0.3);
             margin-top: 8px;
         }
 
@@ -493,12 +493,24 @@
 
         .feed-item.mobile {
             border-left-color: var(--mobile-payment);
-            background: linear-gradient(90deg, rgba(0, 217, 255, 0.05) 0%, var(--bg-color) 10%);
+            background: linear-gradient(90deg, rgba(21, 101, 192, 0.05) 0%, var(--bg-color) 10%);
+        }
+
+        /* Mobile feed text + numbers in blue */
+        .mobile-feed .feed-amount,
+        .mobile-feed .feed-message {
+            color: var(--primary-blue);
+        }
+
+        /* Card feed text + numbers in green */
+        .card-feed .feed-amount,
+        .card-feed .feed-message {
+            color: var(--primary-green);
         }
 
         .feed-item.card {
             border-left-color: var(--card-payment);
-            background: linear-gradient(90deg, rgba(255, 107, 157, 0.05) 0%, var(--bg-color) 10%);
+            background: linear-gradient(90deg, rgba(76, 175, 80, 0.05) 0%, var(--bg-color) 10%);
         }
 
         .feed-top {
@@ -539,12 +551,12 @@
         }
 
         .feed-source.mobile {
-            background: rgba(0, 217, 255, 0.15);
+            background: rgba(21, 101, 192, 0.15);
             color: var(--mobile-payment);
         }
 
         .feed-source.card {
-            background: rgba(255, 107, 157, 0.15);
+            background: rgba(76, 175, 80, 0.15);
             color: var(--card-payment);
         }
 
