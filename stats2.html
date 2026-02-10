@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donationer - Al Salam Center</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===========================
+           Base Theme + Global Styles
+           =========================== */
+        :root {
+            /* Logo Colors */
+            --primary-green: #4CAF50;
+            --primary-blue: #1565C0;
+            --accent-green: #4CAF50;
+            --stripe-purple: #1565C0;
+            --mobile-payment: #1565C0;
+            --card-payment: #4CAF50;
+
+            /* Light Theme Defaults */
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-main: #1a1a1a;
+            --text-muted: #606770;
+            --border-color: #dadde1;
+            --shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            --progress-bg: #e4e6eb;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #ffffff;
+            --text-muted: #b0b3b8;
+            --border-color: #333333;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            --progress-bg: #333333;
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-color);
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            color: var(--text-main);
+            margin: 0;
+            padding: 10px;
+            min-height: 100vh;
+            position: relative;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            z-index: -1;
+        }
+
+          /* ===========================
+              Desktop / Browser Layout
+              =========================== */
+
+          /* Grid Layout - TikTok Stream Optimized */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            max-width: 2000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Two Column Layout for Feeds (Browser) */
+        .feeds-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            grid-column: 1 / -1;
+        }
+
+        /* Hero Section (Browser) */
+        .hero-section {
+            grid-column: 1 / -1;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 25px 40px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border-top: 6px solid var(--primary-green);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        [data-theme="dark"] .hero-section {
+            background: rgba(30, 30, 30, 0.85);
+        }
+
+        .hero-left {
+            flex: 1;
+            padding-right: 20px;
+        }
+
+        .hero-right {
+            flex: 0 0 25%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            border-left: 1px solid var(--border-color);
+            padding-left: 20px;
+        }
+
+        .logo-container {
+            width: 100%;
+            max-width: 140px;
+        }
+
+        .logo-link {
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .logo-link img {
+            cursor: pointer;
+            width: 100%;
+            height: auto;
+        }
+
+        .hero-title {
+            font-size: 1.6rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .source-badge {
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .mobile-badge {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue));
+        }
+
+        .card-badge {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green));
+        }
+
+        .hero-amount {
+            font-size: clamp(6rem, 8vw, 8.5rem);
+            font-weight: 900;
+            color: var(--primary-green);
+            line-height: 1;
+            margin-bottom: 15px;
+        }
+
+        [data-theme="dark"] .hero-amount {
+            color: var(--accent-green);
+        }
+
+        /* Progress Bar (Shared) */
+        .progress-container {
+            background-color: var(--progress-bg);
+            border-radius: 50px;
+            height: 35px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, var(--primary-green), var(--primary-blue));
+            height: 100%;
+            width: 0%;
+            border-radius: 50px;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Theme Switch (Shared) */
+        .theme-switch {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 6px 10px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        [data-theme="dark"] .theme-switch {
+            background: rgba(30, 30, 30, 0.95);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 38px;
+            height: 18px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 18px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 12px;
+            width: 12px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--primary-green);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(20px);
+        }
+
+        #theme-label {
+            font-size: 0.9rem;
+        }
+
+        /* Donation Button (Shared) */
+        .donation-btn {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
+            border: none;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            font-size: 1.3rem;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .donation-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .mobile-number {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue));
+            color: white;
+            padding: 14px 18px;
+            border-radius: 20px;
+            font-weight: 900;
+            font-size: 2.6rem;
+            letter-spacing: 1.5px;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(21, 101, 192, 0.3);
+            margin-top: 8px;
+        }
+
+        .mobile-label {
+            font-size: 1.8rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        /* Stats Cards (Browser) */
+        .stats-column {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+            align-items: stretch;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            min-width: 0;
+        }
+
+        [data-theme="dark"] .card {
+            background: rgba(30, 30, 30, 0.95);
+        }
+
+        .card.highlight {
+            border: 3px solid var(--primary-green);
+            background: rgba(76, 175, 80, 0.03);
+            position: relative;
+            box-shadow: 0 12px 30px rgba(76, 175, 80, 0.06);
+            padding: 18px;
+        }
+
+        .card-label {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .card-label.prominent {
+            font-size: 1.3rem;
+            color: var(--text-main);
+            font-weight: 800;
+            padding-left: 10px;
+            border-left: 4px solid var(--primary-green);
+            border-radius: 3px;
+            letter-spacing: 0.2px;
+        }
+
+        .card-value {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.1;
+        }
+
+        .card-sub {
+            font-size: 1.1rem;
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+
+        /* Breakdown Section (Shared) */
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breakdown-row:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .breakdown-value {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        /* Feed Section - TikTok Optimized (Browser) */
+        .feed-column {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            height: 600px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--border-color);
+        }
+
+        .feed-column.mobile-feed {
+            border-top: 4px solid var(--mobile-payment);
+        }
+
+        .feed-column.card-feed {
+            border-top: 4px solid var(--card-payment);
+        }
+
+        [data-theme="dark"] .feed-column {
+            background: rgba(30, 30, 30, 0.95);
+        }
+
+        .feed-header {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feed-header .icon {
+            font-size: 1.9rem;
+        }
+
+        .feed-list {
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-right: 5px;
+        }
+
+        .feed-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .feed-list::-webkit-scrollbar-thumb {
+            background-color: var(--text-muted);
+            border-radius: 10px;
+        }
+
+        .feed-item {
+            background: var(--bg-color);
+            padding: 16px;
+            border-radius: 12px;
+            animation: slideIn 0.5s ease-out;
+            border-left: 4px solid transparent;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .feed-item.mobile {
+            border-left-color: var(--mobile-payment);
+            background: linear-gradient(90deg, rgba(21, 101, 192, 0.05) 0%, var(--bg-color) 10%);
+        }
+
+        /* Mobile feed text + numbers in blue */
+        .mobile-feed .feed-amount,
+        .mobile-feed .feed-message {
+            color: var(--primary-blue);
+        }
+
+        /* Card feed text + numbers in green */
+        .card-feed .feed-amount,
+        .card-feed .feed-message {
+            color: var(--primary-green);
+        }
+
+        .feed-item.card {
+            border-left-color: var(--card-payment);
+            background: linear-gradient(90deg, rgba(76, 175, 80, 0.05) 0%, var(--bg-color) 10%);
+        }
+
+        .feed-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .feed-amount {
+            font-weight: 900;
+            color: var(--primary-green);
+            font-size: 1.5rem;
+        }
+
+        .feed-time {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .feed-message {
+            font-size: 1.2rem;
+            color: var(--text-main);
+            word-break: break-word;
+            font-weight: 600;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        .feed-source {
+            font-size: 0.95rem;
+            margin-top: 8px;
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 700;
+        }
+
+        .feed-source.mobile {
+            background: rgba(21, 101, 192, 0.15);
+            color: var(--mobile-payment);
+        }
+
+        .feed-source.card {
+            background: rgba(76, 175, 80, 0.15);
+            color: var(--card-payment);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Error State (Shared) */
+        .error-message {
+            background: rgba(231, 76, 60, 0.1);
+            border: 2px solid rgba(231, 76, 60, 0.3);
+            color: #e74c3c;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* Loading State (Shared) */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+
+          /* ===========================
+              Responsive: Tablet
+              =========================== */
+        @media (max-width: 1200px) {
+            .hero-right {
+                flex: 0 0 30%;
+            }
+
+            .hero-amount {
+                font-size: clamp(3.5rem, 7vw, 6rem);
+            }
+        }
+
+        /* ===========================
+           Large Screens
+           =========================== */
+        @media (min-width: 1600px) {
+            .dashboard-grid {
+                padding: 0 30px;
+            }
+
+            .hero-section {
+                padding: 30px 50px;
+            }
+
+            .progress-container {
+                height: 40px;
+            }
+
+            .card {
+                padding: 24px;
+            }
+
+            .feed-column {
+                height: 700px;
+                padding: 24px;
+            }
+        }
+
+          /* ===========================
+              Responsive: Mobile
+              =========================== */
+          @media (max-width: 900px) {
+            .hero-section {
+                flex-direction: column;
+                text-align: center;
+                padding: 25px 20px;
+            }
+
+            .hero-left {
+                padding-right: 0;
+                width: 100%;
+                order: 2;
+            }
+
+            .hero-right {
+                border-left: none;
+                border-bottom: 1px solid var(--border-color);
+                padding-bottom: 20px;
+                margin-bottom: 20px;
+                padding-left: 0;
+                width: 100%;
+                order: 1;
+            }
+
+            .hero-amount {
+                font-size: clamp(3rem, 12vw, 5rem);
+            }
+
+            .feeds-container {
+                grid-template-columns: 1fr;
+            }
+
+            .feed-column {
+                height: 450px;
+            }
+
+            .stats-column {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-text {
+                flex-wrap: wrap;
+                gap: 6px 12px;
+                justify-content: center;
+                text-align: center;
+            }
+
+            .feed-top {
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+        }
+
+        /* Mobile (Small screens) */
+        @media (max-width: 600px) {
+            body {
+                padding: 6px;
+            }
+
+            .dashboard-grid {
+                gap: 16px;
+                padding: 0 10px;
+            }
+
+            .hero-section {
+                padding: 18px 14px;
+            }
+
+            .hero-title {
+                font-size: 1.1rem;
+            }
+
+            .hero-subtitle {
+                font-size: 0.9rem;
+            }
+
+            .source-badge {
+                font-size: 0.75rem;
+                padding: 5px 10px;
+            }
+
+            .progress-container {
+                height: 26px;
+            }
+
+            .progress-text {
+                font-size: 0.95rem;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .donation-btn {
+                padding: 10px 14px;
+            }
+
+            .mobile-number {
+                font-size: 1.25rem;
+                letter-spacing: 1px;
+            }
+
+            .card-value {
+                font-size: 1.6rem;
+            }
+
+            .breakdown-row {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .feed-column {
+                height: 480px;
+                padding: 14px;
+            }
+
+            .feed-header {
+                font-size: 1.1rem;
+            }
+
+            .feed-header .icon {
+                font-size: 1.3rem;
+            }
+
+            .feed-list {
+                gap: 10px;
+            }
+
+            .feed-item {
+                padding: 12px;
+            }
+
+            .feed-amount {
+                font-size: 1.1rem;
+            }
+
+            .feed-message {
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Mobile (Extra small screens) */
+        @media (max-width: 420px) {
+            .hero-right {
+                gap: 10px;
+            }
+
+            .logo-container {
+                max-width: 110px;
+            }
+
+            .hero-amount {
+                font-size: clamp(2.4rem, 12vw, 4rem);
+            }
+
+            .feed-column {
+                height: 440px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Browser + Mobile: Theme toggle -->
+    <div class="theme-switch">
+        <label class="switch">
+            <input type="checkbox" onchange="toggleTheme()">
+            <span class="slider"></span>
+        </label>
+        <span id="theme-label">☀️</span>
+    </div>
+
+    <!-- Browser + Mobile: Main dashboard container -->
+    <div class="dashboard-grid">
+
+        <!-- Browser + Mobile: Hero summary (total + progress + donation CTA) -->
+        <div class="hero-section">
+            <div class="hero-left">
+                <div class="hero-subtitle">
+                    <span>Totala Donationer</span>
+                    <span class="source-badge mobile-badge">📱 Mobilbetalning</span>
+                    <span class="source-badge card-badge">💳 Kortbetalning</span>
+                </div>
+                <div class="hero-title">Total insamlat:</div>
+                <div class="hero-amount"><span id="total-combined">0</span> Kr</div>
+
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="progress-percentage">0%</span>
+                    <span>Mål: 10,000,000 Kr</span>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <div class="logo-container">
+                    <a href="index.html" aria-label="Go to home page" class="logo-link">
+                        <img src="img/Al-Salam-Center-Logo.png" alt="Logo">
+                    </a>
+                </div>
+                <button class="donation-btn" onclick="goToDonation()">💝 Kortbetalningar</button>
+                <div style="width: 100%; margin-top: 15px;">
+                    <div class="mobile-label">📱 Mobilbetalning</div>
+                    <div class="mobile-number">123 500 0559</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Browser + Mobile: Stats cards grid -->
+        <div class="stats-column">
+            <div class="card">
+                <div class="card-label">Uppdelning per källa:</div>
+                <div class="breakdown-row">
+                    <div class="breakdown-label">
+                        <span class="source-badge mobile-badge">📱 Mobilbetalning</span>
+                    </div>
+                    <div class="breakdown-value"><span id="total-mobile">0</span> Kr</div>
+                </div>
+                <div class="breakdown-row">
+                    <div class="breakdown-label">
+                        <span class="source-badge card-badge">💳 Kortbetalning</span>
+                    </div>
+                    <div class="breakdown-value"><span id="total-card">0</span> Kr</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-label">Donationer idag:</div>
+                <div class="card-value"><span id="total-today">0</span> Kr</div>
+                <div class="card-sub"><span id="count-today">0</span> transaktioner idag</div>
+            </div>
+
+            <div class="card highlight">
+                <div class="card-label prominent">Högsta donation någonsin:</div>
+                <div class="card-value"><span id="highest-amount">0</span> Kr</div>
+                <div class="card-sub" id="highest-source">-</div>
+            </div>
+
+            <div class="card">
+                <div class="card-label">Genomsnittlig donation:</div>
+                <div class="card-value"><span id="average-amount">0</span> Kr</div>
+            </div>
+        </div>
+
+        <!-- Browser: Two-column feeds | Mobile: Stacked feeds -->
+        <div class="feeds-container">
+            <div class="feed-column mobile-feed">
+                <div class="feed-header">
+                    <span class="icon">📱</span>
+                    <span>Mobilbetalningar</span>
+                </div>
+                <div class="feed-list" id="mobile-feed-list">
+                    <div class="loading">Laddar donationer...</div>
+                </div>
+            </div>
+
+            <div class="feed-column card-feed">
+                <div class="feed-header">
+                    <span class="icon">💳</span>
+                    <span>Kortbetalningar</span>
+                </div>
+                <div class="feed-list" id="card-feed-list">
+                    <div class="loading">Laddar donationer...</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // API endpoints
+        const MOBILE_API_URL = "https://script.google.com/macros/s/AKfycbyvsHmRWM96nR0xMFjUk1y0ox_Pohm0Rtd8MIfZYvvpevjokVmY-eU8ZIHZfN-tdUi8/exec";
+        const CARD_API_URL = "https://script.google.com/macros/s/AKfycby4xd1YkqdDe-xvshIuMpj53wCLM9kUClwb84Qtx5amrPd6xrUjKjJxiYSdEppweq4/exec";
+        const GOAL = 10000000;
+        const REFRESH_RATE = 5000;
+
+        let previousData = {
+            total_combined: 0,
+            highest_amount: 0,
+            mobile_payments: [],
+            card_payments: []
+        };
+
+        const els = {
+            totalCombined: document.getElementById('total-combined'),
+            totalMobile: document.getElementById('total-mobile'),
+            totalCard: document.getElementById('total-card'),
+            progressBar: document.getElementById('progress-bar'),
+            progressPct: document.getElementById('progress-percentage'),
+            totalToday: document.getElementById('total-today'),
+            countToday: document.getElementById('count-today'),
+            highestAmount: document.getElementById('highest-amount'),
+            highestSource: document.getElementById('highest-source'),
+            averageAmount: document.getElementById('average-amount'),
+            mobileFeedList: document.getElementById('mobile-feed-list'),
+            cardFeedList: document.getElementById('card-feed-list')
+        };
+
+        function animateValue(obj, start, end, duration) {
+            if (start === end) return;
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start).toLocaleString();
+                if (progress < 1) window.requestAnimationFrame(step);
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        async function fetchCombinedData() {
+            try {
+                // Fetch both Mobile and Card payment data in parallel
+                const [mobileResponse, cardResponse] = await Promise.allSettled([
+                    fetch(MOBILE_API_URL),
+                    fetch(CARD_API_URL)
+                ]);
+
+                let mobileData = null;
+                let cardData = null;
+
+                // Process Mobile payment data
+                if (mobileResponse.status === 'fulfilled' && mobileResponse.value.ok) {
+                    mobileData = await mobileResponse.value.json();
+                    console.log('=== RAW MOBILE PAYMENT DATA ===');
+                    console.log(JSON.stringify(mobileData, null, 2));
+                }
+
+                // Process Card payment data
+                if (cardResponse.status === 'fulfilled' && cardResponse.value.ok) {
+                    cardData = await cardResponse.value.json();
+                    console.log('=== RAW CARD PAYMENT DATA ===');
+                    console.log(JSON.stringify(cardData, null, 2));
+                }
+
+                // Combine the data
+                const combinedData = combineData(mobileData, cardData);
+                updateDashboard(combinedData);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                showError("Kunde inte hämta data. Försöker igen...");
+            }
+        }
+
+        function combineData(mobileData, cardData) {
+            const combined = {
+                total_mobile: 0,
+                total_card: 0,
+                total_combined: 0,
+                total_today: 0,
+                count_today: 0,
+                highest_amount: 0,
+                highest_source: '-',
+                average_amount: 0,
+                mobile_payments: [],
+                card_payments: []
+            };
+
+            // Process Mobile payment data
+            if (mobileData) {
+                combined.total_mobile = mobileData.total_alltime || 0;
+                combined.total_combined += combined.total_mobile;
+
+                // Add Mobile payments to list
+                if (mobileData.last_messages) {
+                    mobileData.last_messages.forEach(msg => {
+                        combined.mobile_payments.push({
+                            amount: msg.amount || 0,
+                            message: msg.message || '-',
+                            timestamp: msg.timestamp,
+                            source: 'mobile'
+                        });
+                    });
+                }
+
+                // Check highest from Mobile
+                if (mobileData.Highest_ever && mobileData.Highest_ever.amount > combined.highest_amount) {
+                    combined.highest_amount = mobileData.Highest_ever.amount;
+                    combined.highest_source = 'Mobilbetalning';
+                }
+
+                // Today's totals from Mobile
+                combined.total_today += mobileData.total_today || 0;
+                combined.count_today += mobileData.count_today || 0;
+            }
+
+            // Process Card payment data
+            if (cardData) {
+                // Handle Card data as array
+                if (Array.isArray(cardData)) {
+                    let card_total = 0;
+                    let card_today = 0;
+                    let card_count_today = 0;
+                    let card_highest = 0;
+
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+
+                    cardData.forEach(payment => {
+                        const amount = parseFloat(payment.Amount) || 0;
+                        card_total += amount;
+
+                        // Check if today
+                        const paymentDate = new Date(payment.Datetime);
+                        paymentDate.setHours(0, 0, 0, 0);
+                        if (paymentDate.getTime() === today.getTime()) {
+                            card_today += amount;
+                            card_count_today++;
+                        }
+
+                        // Track highest
+                        if (amount > card_highest) {
+                            card_highest = amount;
+                        }
+
+                        // Use Message field (capital M) if available and not empty, otherwise customer info
+                        let displayMessage = 'Tack för ditt stöd!';
+                        if (payment.Message && payment.Message.trim() !== '') {
+                            displayMessage = payment.Message;
+                        } else if (payment.customer_name) {
+                            displayMessage = payment.customer_name;
+                        } else if (payment.customer_email) {
+                            displayMessage = payment.customer_email;
+                        }
+
+                        // Add to card payments
+                        combined.card_payments.push({
+                            amount: amount,
+                            message: displayMessage,
+                            timestamp: payment.Datetime,
+                            source: 'card',
+                            payment_type: payment.payment_type
+                        });
+                    });
+
+                    combined.total_card = card_total;
+                    combined.total_combined += card_total;
+                    combined.total_today += card_today;
+                    combined.count_today += card_count_today;
+
+                    if (card_highest > combined.highest_amount) {
+                        combined.highest_amount = card_highest;
+                        combined.highest_source = 'Kortbetalning';
+                    }
+                } else if (cardData.total_stripe || cardData.total_card) {
+                    // Handle object format
+                    combined.total_card = cardData.total_stripe || cardData.total_card || 0;
+                    combined.total_combined += combined.total_card;
+                    combined.total_today += cardData.total_today || 0;
+                    combined.count_today += cardData.count_today || 0;
+
+                    if ((cardData.highest_amount || 0) > combined.highest_amount) {
+                        combined.highest_amount = cardData.highest_amount;
+                        combined.highest_source = 'Kortbetalning';
+                    }
+
+                    if (cardData.recent_payments) {
+                        cardData.recent_payments.forEach(payment => {
+                            let displayMessage = 'Tack för ditt stöd!';
+                            if (payment.Message && payment.Message.trim() !== '') {
+                                displayMessage = payment.Message;
+                            } else if (payment.Messages && payment.Messages.trim() !== '') {
+                                displayMessage = payment.Messages;
+                            } else if (payment.message && payment.message.trim() !== '') {
+                                displayMessage = payment.message;
+                            } else if (payment.customer_name) {
+                                displayMessage = payment.customer_name;
+                            } else if (payment.customer_email) {
+                                displayMessage = payment.customer_email;
+                            }
+                            
+                            combined.card_payments.push({
+                                amount: payment.amount,
+                                message: displayMessage,
+                                timestamp: payment.timestamp,
+                                source: 'card',
+                                payment_type: payment.payment_type
+                            });
+                        });
+                    }
+                }
+            }
+
+            // Calculate average
+            const totalPayments = combined.mobile_payments.length + combined.card_payments.length;
+            if (totalPayments > 0) {
+                combined.average_amount = Math.round(combined.total_combined / totalPayments);
+            }
+
+            // Sort payments by timestamp (newest first)
+            combined.mobile_payments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            combined.card_payments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            return combined;
+        }
+
+        function updateDashboard(data) {
+            // Animate total combined amount
+            if (data.total_combined !== previousData.total_combined) {
+                animateValue(els.totalCombined, previousData.total_combined, data.total_combined, 2000);
+                if (data.total_combined > previousData.total_combined && previousData.total_combined > 0) {
+                    confetti({ particleCount: 30, spread: 50, origin: { y: 0.6 } });
+                }
+            }
+
+            // Update breakdown
+            els.totalMobile.innerText = data.total_mobile.toLocaleString();
+            els.totalCard.innerText = data.total_card.toLocaleString();
+
+            // Update progress bar
+            const percentage = Math.min((data.total_combined / GOAL) * 100, 100).toFixed(1);
+            els.progressBar.style.width = percentage + "%";
+            els.progressPct.innerText = percentage + "%";
+
+            // Update today's stats
+            els.totalToday.innerText = data.total_today.toLocaleString();
+            els.countToday.innerText = data.count_today;
+
+            // Update highest donation
+            if (data.highest_amount !== previousData.highest_amount) {
+                animateValue(els.highestAmount, previousData.highest_amount, data.highest_amount, 1000);
+            }
+            els.highestSource.innerText = data.highest_source;
+
+            // Update average
+            els.averageAmount.innerText = data.average_amount.toLocaleString();
+
+            // Render separate feeds
+            if (JSON.stringify(data.mobile_payments) !== JSON.stringify(previousData.mobile_payments)) {
+                renderMobileFeed(data.mobile_payments);
+            }
+            if (JSON.stringify(data.card_payments) !== JSON.stringify(previousData.card_payments)) {
+                renderCardFeed(data.card_payments);
+            }
+
+            previousData = data;
+        }
+
+        function renderMobileFeed(payments) {
+            els.mobileFeedList.innerHTML = "";
+            if (!payments || payments.length === 0) {
+                els.mobileFeedList.innerHTML = "<div style='text-align:center; color:var(--text-muted); padding:20px'>Inga mobilbetalningar än</div>";
+                return;
+            }
+
+            // Show only the 15 most recent
+            const recentPayments = payments.slice(0, 15);
+
+            recentPayments.forEach(payment => {
+                const item = document.createElement('div');
+                item.className = 'feed-item mobile';
+
+                let timeStr = payment.timestamp || '';
+                if (timeStr.includes('T')) {
+                    timeStr = timeStr.split('T')[1].substring(0, 5);
+                }
+
+                item.innerHTML = `
+                    <div class="feed-top">
+                        <span class="feed-amount">${payment.amount?.toLocaleString() || '0'} Kr</span>
+                        <span class="feed-time">${timeStr}</span>
+                    </div>
+                    <div class="feed-message">${payment.message || 'Tack för ditt stöd!'}</div>
+                `;
+                els.mobileFeedList.appendChild(item);
+            });
+        }
+
+        function renderCardFeed(payments) {
+            els.cardFeedList.innerHTML = "";
+            if (!payments || payments.length === 0) {
+                els.cardFeedList.innerHTML = "<div style='text-align:center; color:var(--text-muted); padding:20px'>Inga kortbetalningar än</div>";
+                return;
+            }
+
+            // Show only the 15 most recent
+            const recentPayments = payments.slice(0, 15);
+
+            recentPayments.forEach(payment => {
+                const item = document.createElement('div');
+                item.className = 'feed-item card';
+
+                let timeStr = payment.timestamp || '';
+                if (timeStr.includes('T')) {
+                    timeStr = timeStr.split('T')[1].substring(0, 5);
+                }
+
+                const paymentTypeMap = {
+                    'one_time': '💚',
+                    'monthly': '🔄',
+                    'yearly': '⭐'
+                };
+                const typeIcon = payment.payment_type ? paymentTypeMap[payment.payment_type] || '' : '';
+
+                item.innerHTML = `
+                    <div class="feed-top">
+                        <span class="feed-amount">${typeIcon} ${payment.amount?.toLocaleString() || '0'} Kr</span>
+                        <span class="feed-time">${timeStr}</span>
+                    </div>
+                    <div class="feed-message">${payment.message || 'Tack för ditt stöd!'}</div>
+                `;
+                els.cardFeedList.appendChild(item);
+            });
+        }
+
+        function showError(message) {
+            els.mobileFeedList.innerHTML = `<div class="error-message">${message}</div>`;
+            els.cardFeedList.innerHTML = `<div class="error-message">${message}</div>`;
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const label = document.getElementById('theme-label');
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                label.innerText = "☀️";
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                label.innerText = "🌙";
+            }
+        }
+
+        function goToDonation() {
+            window.location.href = 'donations.html';
+        }
+
+        // Initial fetch
+        fetchCombinedData();
+
+        // Set up periodic refresh
+        setInterval(fetchCombinedData, REFRESH_RATE);
+    </script>
+</body>
+
+</html>
