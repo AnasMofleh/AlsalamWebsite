@@ -423,8 +423,8 @@ html[dir="rtl"] .hero-row {
 
 #donate-button-mobile {
   display: none;
-  background-color: #196F15;
-  color: #fff;
+  background-color: #F1C152;
+  color: #000;
   border: none;
   border-radius: 25px;
   padding: 12px 24px;
@@ -439,7 +439,7 @@ html[dir="rtl"] .hero-row {
   top: 22px;
   width: fit-content;
   animation: bounce 2s infinite;
-  box-shadow: 0 4px 10px rgba(25, 111, 21, 0.3);
+  box-shadow: 0 4px 10px rgba(241, 193, 82, 0.3);
   transition: background-color 0.3s ease;
 }
 
@@ -448,8 +448,8 @@ html[dir="rtl"] .hero-row {
 }
 
 #donate-button-mobile:hover {
-  background-color: #0d5610;
-  box-shadow: 0 6px 14px rgba(25, 111, 21, 0.4);
+  background-color: #f4cd75;
+  box-shadow: 0 6px 14px rgba(241, 193, 82, 0.4);
 }
 
 @keyframes bounce {
@@ -468,6 +468,10 @@ html[dir="rtl"] .hero-row {
 @media (max-width: 991px) {
   #donate-button-mobile {
     display: block;
+  }
+
+  .navbar-brand {
+    background-color: transparent;
   }
 }
 
