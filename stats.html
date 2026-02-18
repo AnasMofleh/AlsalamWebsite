@@ -636,17 +636,21 @@
                         <img src="img/Al-Salam-Center-Logo.png" alt="Logo" id="logo">
                     </a>
                 </div>
-                <button class="donation-btn" onclick="goToDonation()">💝 Donera</button>
                 <button class="test-btn" onclick="simulateTest()">🤖 Test Data</button>
 
-                <div class="swish-container" aria-label="Swish donation">
-                    <div class="swish-info">
-                        <div class="swish-number-wrap">
-                            <div class="swish-label">Swish: </div>
-                            <button class="swish-number" onclick="openSwish()">123 500 0559</button>
-                        </div>
-                    </div>
-                </div>
+                <span style="
+                      display: inline-block;
+                      font-size: 32px;
+                      font-weight: 600;
+                      color: #000;
+                      background-color: #ffffff;
+                      padding: 12px 20px;
+                      border-radius: 8px;
+                      ">
+                      123 500 0559
+                </span>
+
+
             </div>
         </div>
 
@@ -654,12 +658,12 @@
             <div class="card">
                 <div class="card-label"> Insamlat idag: </div>
                 <div class="card-value"><span id="total-today">0</span> Kr</div>
-                <div class="card-sub"><span id="count-today">0</span> donationer idag</div>
+                <div class="card-sub"><span id="count-today">0</span> för idag</div>
             </div>
 
             <div class="card highlight special-card">
                 <div class="special-badge" aria-hidden>REKORD</div>
-                <div class="card-label prominent"> Högsta donation någonsin 🏆: </div>
+                <div class="card-label prominent"> Högsta någonsin 🏆: </div>
                 <div class="card-value">
                     <span class="trophy-ico" aria-hidden>🏅</span>
                     <span id="highest-ever-amount">0</span> Kr
@@ -668,14 +672,14 @@
             </div>
 
             <div class="card highlight">
-                <div class="card-label"> Högsta donation idag 🌟:</div>
+                <div class="card-label"> Högsta idag 🌟:</div>
                 <div class="card-value"><span id="highest-today-amount">0</span> Kr</div>
                 <div id="highest-today-msg" class="card-msg" style="display:none;"></div>
             </div>
         </div>
 
         <div class="feed-column">
-            <div class="feed-header"> Senaste Donationer 💬:</div>
+            <div class="feed-header"> Senaste 💬:</div>
             <div class="feed-list" id="feed-list"></div>
         </div>
 
