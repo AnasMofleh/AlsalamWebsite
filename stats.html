@@ -638,25 +638,17 @@
                 </div>
                 <button class="test-btn" onclick="simulateTest()">🤖 Test Data</button>
 
-                <div class="swish-number"
-                     style="
-                     display: inline-flex;
-                     align-items: center;
-                     justify-content: center;
-                     gap: 14px;
-                     background-color: #ffffff;
-                     padding: 12px 20px;
-                     border-radius: 8px;
-                     text-align: center;
-                        ">
-                <span style="font-size:32px; font-weight:600; color:#000;">
-                        123 500 0559
+                <span style="
+                      display: inline-block;
+                      font-size: 32px;
+                      font-weight: 600;
+                      color: #000;
+                      background-color: #ffffff;
+                      padding: 12px 20px;
+                      border-radius: 8px;
+                      ">
+                      123 500 0559
                 </span>
-
-                    <img src="img/swish.png"
-                         alt="Swish"
-                         style="height:40px;">
-                </div>
 
 
             </div>
@@ -666,12 +658,12 @@
             <div class="card">
                 <div class="card-label"> Insamlat idag: </div>
                 <div class="card-value"><span id="total-today">0</span> Kr</div>
-                <div class="card-sub"><span id="count-today">0</span> donationer idag</div>
+                <div class="card-sub"><span id="count-today">0</span> för idag</div>
             </div>
 
             <div class="card highlight special-card">
                 <div class="special-badge" aria-hidden>REKORD</div>
-                <div class="card-label prominent"> Högsta donation någonsin 🏆: </div>
+                <div class="card-label prominent"> Högsta någonsin 🏆: </div>
                 <div class="card-value">
                     <span class="trophy-ico" aria-hidden>🏅</span>
                     <span id="highest-ever-amount">0</span> Kr
@@ -680,14 +672,15 @@
             </div>
 
             <div class="card highlight">
-                <div class="card-label"> Högsta donation idag 🌟:</div>
+                <div class="card-label"> Högsta idag 🌟:</div>
                 <div class="card-value"><span id="highest-today-amount">0</span> Kr</div>
                 <div id="highest-today-msg" class="card-msg" style="display:none;"></div>
             </div>
         </div>
 
+
         <div class="feed-column">
-            <div class="feed-header"> Senaste Donationer 💬:</div>
+            <div class="feed-header"> Senaste 💬:</div>
             <div class="feed-list" id="feed-list"></div>
         </div>
 
