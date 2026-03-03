@@ -9,21 +9,28 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
 
     <style>
         /* ===========================
            Base Theme + Global Styles
            =========================== */
         :root {
-            /* Logo Colors */
             --primary-green: #4CAF50;
             --primary-blue: #1565C0;
             --accent-green: #4CAF50;
             --stripe-purple: #1565C0;
             --mobile-payment: #1565C0;
             --card-payment: #4CAF50;
+            --gold: #B8860B;
+            --gold-light: #F1C152;
+            --silver: #C0C0C0;
+            --bronze: #CD7F32;
+            --dark-green: #1a3c2a;
+            --darker-green: #0f2a1d;
+            --cream: #f5f0e8;
+            --cream-light: #faf7f2;
 
-            /* Light Theme Defaults */
             --bg-color: #f0f2f5;
             --card-bg: #ffffff;
             --text-main: #1a1a1a;
@@ -41,190 +48,918 @@
             --border-color: #333333;
             --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
             --progress-bg: #333333;
+            --cream: #1a1a1a;
+            --cream-light: #222222;
+            --dark-green: #0f1f15;
+            --darker-green: #0a1610;
         }
 
         * {
             box-sizing: border-box;
-            transition: background-color 0.3s, color 0.3s;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             font-family: 'Tajawal', sans-serif;
             background-color: var(--bg-color);
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center;
             color: var(--text-main);
             margin: 0;
-            padding: 10px;
+            padding: 0;
             min-height: 100vh;
-            position: relative;
-            font-size: 18px;
             line-height: 1.5;
+            font-size: 18px;
         }
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center;
-            z-index: -1;
-        }
-
-          /* ===========================
-              Desktop / Browser Layout
-              =========================== */
-
-          /* Grid Layout - TikTok Stream Optimized */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-            max-width: 2000px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Two Column Layout for Feeds (Browser) */
-        .feeds-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            grid-column: 1 / -1;
-        }
-
-        /* Hero Section (Browser) */
-        .hero-section {
-            grid-column: 1 / -1;
-            background: rgba(255, 255, 255, 0.85);
-            padding: 25px 40px;
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            border-top: 6px solid var(--primary-green);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            backdrop-filter: blur(10px);
-        }
-
-        [data-theme="dark"] .hero-section {
-            background: rgba(30, 30, 30, 0.85);
-        }
-
-        .hero-left {
-            flex: 1;
-            padding-right: 20px;
-        }
-
-        .hero-right {
-            flex: 0 0 25%;
+        /* ===========================
+           Hero Banner Section
+           =========================== */
+        .hero-banner {
+            background: linear-gradient(135deg, var(--dark-green) 0%, var(--darker-green) 100%);
+            position: relative;
+            padding: 60px 20px 80px;
+            text-align: center;
+            overflow: hidden;
+            min-height: 600px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 15px;
-            border-left: 1px solid var(--border-color);
-            padding-left: 20px;
         }
 
-        .logo-container {
-            width: 100%;
-            max-width: 140px;
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('img/Al-Salam-Insida.jpg') center/cover no-repeat;
+            opacity: 0.15;
+            z-index: 0;
         }
 
-        .logo-link {
-            display: inline-block;
-            text-decoration: none;
+        .hero-banner > * {
+            position: relative;
+            z-index: 1;
         }
 
-        .logo-link img {
-            cursor: pointer;
-            width: 100%;
-            height: auto;
-        }
-
-        .hero-title {
-            font-size: 1.6rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
+        .hero-mosque-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gold-light);
+            font-size: 0.85rem;
             font-weight: 700;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+        }
+
+        .hero-mosque-label i {
+            font-size: 1rem;
+        }
+
+        .hero-main-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1.1;
+            margin-bottom: 10px;
+            max-width: 700px;
+        }
+
+        .hero-main-title .highlight {
+            color: var(--gold-light);
+            font-family: 'Pacifico', cursive;
+            display: block;
+            font-size: clamp(2rem, 5vw, 3.8rem);
+            margin-top: 5px;
         }
 
         .hero-subtitle {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 1.15rem;
+            max-width: 500px;
+            margin: 15px auto 35px;
+            line-height: 1.6;
+        }
+
+        /* Raised / Goal Display */
+        .raised-goal-row {
             display: flex;
-            align-items: center;
-            gap: 8px;
+            align-items: baseline;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 15px;
             flex-wrap: wrap;
         }
 
-        .source-badge {
-            color: white;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 1rem;
-            font-weight: 700;
+        .raised-section, .goal-section {
+            text-align: center;
+        }
+
+        .raised-label, .goal-label {
+            font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.5);
+            font-weight: 700;
+            margin-bottom: 4px;
         }
 
-        .mobile-badge {
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue));
-        }
-
-        .card-badge {
-            background: linear-gradient(135deg, var(--primary-green), var(--primary-green));
-        }
-
-        .hero-amount {
-            font-size: clamp(6rem, 8vw, 8.5rem);
+        .raised-value {
+            font-size: clamp(2.5rem, 5vw, 4rem);
             font-weight: 900;
-            color: var(--primary-green);
-            line-height: 1;
-            margin-bottom: 15px;
+            color: #ffffff;
         }
 
-        [data-theme="dark"] .hero-amount {
-            color: var(--accent-green);
+        .goal-value {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            color: var(--gold-light);
         }
 
-        /* Progress Bar (Shared) */
-        .progress-container {
-            background-color: var(--progress-bg);
-            border-radius: 50px;
-            height: 35px;
+        .raised-goal-divider {
+            font-size: 2.5rem;
+            color: rgba(255,255,255,0.3);
+            font-weight: 300;
+        }
+
+        /* Hero Progress Bar */
+        .hero-progress-container {
             width: 100%;
+            max-width: 550px;
+            margin: 0 auto 10px;
+        }
+
+        .hero-progress-bar-wrap {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50px;
+            height: 38px;
             overflow: hidden;
             position: relative;
         }
 
-        .progress-bar {
-            background: linear-gradient(90deg, var(--primary-green), var(--primary-blue));
+        .hero-progress-fill {
+            background: linear-gradient(90deg, var(--primary-green), var(--gold-light));
             height: 100%;
-            width: 0%;
             border-radius: 50px;
+            width: 0%;
             transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 60px;
         }
 
-        .progress-text {
+        .hero-progress-text {
+            color: #fff;
+            font-weight: 800;
+            font-size: 0.85rem;
+        }
+
+        /* Daily Goal Section */
+        .daily-goal-section {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 550px;
+        }
+
+        .daily-goal-label {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.95rem;
+            font-weight: 700;
             display: flex;
-            justify-content: space-between;
-            margin-top: 5px;
-            font-size: 1.25rem;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .daily-goal-label i {
+            color: var(--gold-light);
+        }
+
+        .daily-goal-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .daily-goal-amount {
+            color: #fff;
+            font-weight: 800;
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+
+        .daily-goal-bar-wrap {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 50px;
+            height: 14px;
+            overflow: hidden;
+        }
+
+        .daily-goal-fill {
+            background: linear-gradient(90deg, var(--primary-green), var(--gold-light));
+            height: 100%;
+            border-radius: 50px;
+            width: 0%;
+            transition: width 1.5s ease;
+        }
+
+        .daily-goal-target {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+
+        .daily-goal-remaining {
+            color: rgba(255,255,255,0.45);
+            font-size: 0.85rem;
+            text-align: center;
+            margin-top: 6px;
+        }
+
+        .donor-count {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.95rem;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .donor-count i {
+            color: var(--gold-light);
+        }
+
+        /* ===========================
+           Donation Amount Buttons
+           =========================== */
+        .donation-choices {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .donation-amount-btn {
+            background: rgba(255,255,255,0.08);
+            border: 2px solid var(--gold-light);
+            color: var(--gold-light);
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            font-family: 'Tajawal', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            min-width: 90px;
+        }
+
+        .donation-amount-btn:hover,
+        .donation-amount-btn.active {
+            background: var(--gold-light);
+            color: var(--dark-green);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(241, 193, 82, 0.4);
+        }
+
+        .donation-amount-btn .popular-tag {
+            position: absolute;
+            top: -10px;
+            right: -5px;
+            background: #e74c3c;
+            color: white;
+            font-size: 0.6rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .custom-amount-btn {
+            display: flex;
+            width: 100%;
+            max-width: 550px;
+            margin: 18px auto 0;
+            padding: 16px;
+            background: var(--gold-light);
+            color: var(--dark-green);
+            border: none;
+            border-radius: 14px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            font-family: 'Tajawal', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .custom-amount-btn:hover {
+            background: #f4cd75;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(241, 193, 82, 0.5);
+        }
+
+        .payment-methods-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+
+        .payment-badge {
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.65);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .payment-badge i {
+            font-size: 0.8rem;
+        }
+
+        /* ===========================
+           Content Sections (below hero)
+           =========================== */
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* ===========================
+           Live Donations Feed
+           =========================== */
+        .section-title {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 25px;
+            color: var(--text-main);
+        }
+
+        .live-donations-section {
+            margin-bottom: 50px;
+        }
+
+        .live-feed-container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .live-feed-list {
+            max-height: 380px;
+            overflow-y: auto;
+            padding: 0;
+        }
+
+        .live-feed-list::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .live-feed-list::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 10px;
+        }
+
+        .live-feed-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.2s;
+            gap: 14px;
+        }
+
+        .live-feed-item:last-child {
+            border-bottom: none;
+        }
+
+        .live-feed-item:hover {
+            background: rgba(0,0,0,0.02);
+        }
+
+        [data-theme="dark"] .live-feed-item:hover {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .feed-source-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .feed-source-icon.mobile {
+            background: rgba(21, 101, 192, 0.12);
+            color: var(--mobile-payment);
+        }
+
+        .feed-source-icon.card {
+            background: rgba(76, 175, 80, 0.12);
+            color: var(--card-payment);
+        }
+
+        .feed-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .feed-item-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .feed-item-name .amount {
+            color: var(--primary-green);
+            font-weight: 900;
+        }
+
+        .feed-item-time {
+            font-size: 0.8rem;
             color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* ===========================
+           Imagine the Reward Section
+           =========================== */
+        .reward-section {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 20px;
+        }
+
+        .reward-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--text-main);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .reward-title i {
+            color: #e74c3c;
+        }
+
+        .reward-subtitle {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 500px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+
+        .reward-subtitle strong {
+            color: var(--text-main);
+        }
+
+        .hadith-card {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .hadith-card .quote-icon {
+            font-size: 2.5rem;
+            color: var(--gold-light);
+            margin-bottom: 15px;
+        }
+
+        .hadith-text {
+            font-style: italic;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--text-main);
+            margin-bottom: 15px;
+        }
+
+        .hadith-source {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* ===========================
+           Top Donors Section
+           =========================== */
+        .top-donors-section {
+            margin-bottom: 50px;
+        }
+
+        .top-donors-list {
+            max-width: 650px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .top-donor-item {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 18px 24px;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            gap: 14px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .top-donor-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .top-donor-item.gold {
+            border: 2px solid var(--gold-light);
+            background: linear-gradient(135deg, rgba(241,193,82,0.05), var(--card-bg));
+        }
+
+        .top-donor-item.silver {
+            border: 2px solid var(--silver);
+        }
+
+        .top-donor-item.bronze {
+            border: 2px solid var(--bronze);
+        }
+
+        .donor-rank {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 0.9rem;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .donor-rank.rank-1 { background: var(--gold); }
+        .donor-rank.rank-2 { background: var(--silver); color: #333; }
+        .donor-rank.rank-3 { background: var(--bronze); }
+
+        .donor-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .donor-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .donor-source-badge {
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .donor-source-badge.mobile {
+            background: rgba(21, 101, 192, 0.12);
+            color: var(--mobile-payment);
+        }
+
+        .donor-source-badge.card {
+            background: rgba(76, 175, 80, 0.12);
+            color: var(--card-payment);
+        }
+
+        .donor-amount {
+            font-weight: 900;
+            font-size: 1.15rem;
+            color: var(--gold);
+            flex-shrink: 0;
+        }
+
+        /* ===========================
+           Sponsor Packages Section
+           =========================== */
+        .sponsor-section {
+            margin-bottom: 50px;
+        }
+
+        .sponsor-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: -15px auto 30px;
+            font-size: 1rem;
+        }
+
+        .sponsor-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .sponsor-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sponsor-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.15);
+        }
+
+        .sponsor-card-header {
+            padding: 30px 20px;
+            text-align: center;
+            color: #fff;
+            position: relative;
+        }
+
+        .sponsor-card-header.gold-header {
+            background: linear-gradient(135deg, var(--gold), #D4A017);
+        }
+
+        .sponsor-card-header.silver-header {
+            background: linear-gradient(135deg, #A8A8A8, var(--silver));
+        }
+
+        .sponsor-card-header.bronze-header {
+            background: linear-gradient(135deg, var(--bronze), #B8722D);
+        }
+
+        .sponsor-card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .sponsor-card-title {
+            font-size: 1.4rem;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .sponsor-card-price {
+            font-size: 1rem;
+            opacity: 0.9;
             font-weight: 600;
         }
 
-        /* Theme Switch (Shared) */
+        .sponsor-card-body {
+            padding: 25px 20px;
+            flex: 1;
+        }
+
+        .sponsor-benefit {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+
+        .sponsor-benefit i {
+            color: var(--primary-green);
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+
+        .sponsor-card-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .sponsor-cta-btn {
+            display: inline-block;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 800;
+            font-family: 'Tajawal', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #fff;
+        }
+
+        .sponsor-cta-btn.gold-btn {
+            background: linear-gradient(135deg, var(--gold), #D4A017);
+        }
+
+        .sponsor-cta-btn.silver-btn {
+            background: linear-gradient(135deg, #A8A8A8, var(--silver));
+            color: #333;
+        }
+
+        .sponsor-cta-btn.bronze-btn {
+            background: linear-gradient(135deg, var(--bronze), #B8722D);
+        }
+
+        .sponsor-cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+        }
+
+        /* ===========================
+           Stats Summary Cards
+           =========================== */
+        .stats-cards-section {
+            margin-bottom: 50px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .stat-card-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .stat-card-value {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--text-main);
+        }
+
+        .stat-card-sub {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .stat-card.highlight-card {
+            border: 2px solid var(--gold-light);
+            background: linear-gradient(135deg, rgba(241,193,82,0.04), var(--card-bg));
+        }
+
+        /* ===========================
+           Breakdown Section
+           =========================== */
+        .breakdown-section {
+            max-width: 650px;
+            margin: 0 auto 50px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .breakdown-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breakdown-row:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .breakdown-value {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--text-main);
+        }
+
+        /* ===========================
+           Swish Section
+           =========================== */
+        .swish-section {
+            text-align: center;
+            max-width: 650px;
+            margin: 0 auto 50px;
+            background: var(--card-bg);
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .swish-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .swish-number-display {
+            display: inline-block;
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--primary-green);
+            background: linear-gradient(135deg, rgba(76,175,80,0.08), rgba(21,101,192,0.04));
+            padding: 12px 30px;
+            border-radius: 16px;
+            border: 2px solid rgba(76,175,80,0.15);
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .swish-number-display:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(76,175,80,0.15);
+        }
+
+        .swish-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+
+        /* ===========================
+           Theme Switch
+           =========================== */
         .theme-switch {
             position: fixed;
             top: 15px;
@@ -260,10 +995,7 @@
         .slider {
             position: absolute;
             cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background-color: #ccc;
             transition: 0.4s;
             border-radius: 18px;
@@ -281,11 +1013,11 @@
             border-radius: 50%;
         }
 
-        input:checked+.slider {
+        input:checked + .slider {
             background-color: var(--primary-green);
         }
 
-        input:checked+.slider:before {
+        input:checked + .slider:before {
             transform: translateX(20px);
         }
 
@@ -293,286 +1025,31 @@
             font-size: 0.9rem;
         }
 
-        /* Donation Button (Shared) */
-        .donation-btn {
-            background: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
-            border: none;
-            color: white;
-            padding: 12px 18px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 800;
-            letter-spacing: 0.6px;
-            font-size: 1.3rem;
-            width: 100%;
-            transition: transform 0.2s, box-shadow 0.2s;
+        /* ===========================
+           Home Link
+           =========================== */
+        .home-link {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 2000;
         }
 
-        .donation-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(76, 175, 80, 0.3);
+        .home-link img {
+            width: 50px;
+            height: auto;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
         }
 
-        .mobile-number {
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue));
-            color: white;
-            padding: 14px 18px;
-            border-radius: 20px;
-            font-weight: 900;
-            font-size: 2.6rem;
-            letter-spacing: 1.5px;
-            text-align: center;
-            width: 100%;
-            box-shadow: 0 4px 12px rgba(21, 101, 192, 0.3);
-            margin-top: 8px;
+        .home-link img:hover {
+            transform: scale(1.1);
         }
 
-        .mobile-label {
-            font-size: 1.8rem;
-            color: var(--text-muted);
-            margin-bottom: 5px;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        /* Stats Cards (Browser) */
-        .stats-column {
-            grid-column: 1 / -1;
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 20px;
-            align-items: stretch;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            padding: 20px;
-            border: 1px solid var(--border-color);
-            backdrop-filter: blur(10px);
-            min-width: 0;
-        }
-
-        [data-theme="dark"] .card {
-            background: rgba(30, 30, 30, 0.95);
-        }
-
-        .card.highlight {
-            border: 3px solid var(--primary-green);
-            background: rgba(76, 175, 80, 0.03);
-            position: relative;
-            box-shadow: 0 12px 30px rgba(76, 175, 80, 0.06);
-            padding: 18px;
-        }
-
-        .card-label {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-
-        .card-label.prominent {
-            font-size: 1.3rem;
-            color: var(--text-main);
-            font-weight: 800;
-            padding-left: 10px;
-            border-left: 4px solid var(--primary-green);
-            border-radius: 3px;
-            letter-spacing: 0.2px;
-        }
-
-        .card-value {
-            font-size: 2.4rem;
-            font-weight: 800;
-            color: var(--text-main);
-            line-height: 1.1;
-        }
-
-        .card-sub {
-            font-size: 1.1rem;
-            margin-top: 5px;
-            opacity: 0.8;
-        }
-
-        /* Breakdown Section (Shared) */
-        .breakdown-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .breakdown-row:last-child {
-            border-bottom: none;
-        }
-
-        .breakdown-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .breakdown-value {
-            font-size: 1.35rem;
-            font-weight: 800;
-            color: var(--text-main);
-        }
-
-        /* Feed Section - TikTok Optimized (Browser) */
-        .feed-column {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            padding: 20px;
-            height: 600px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            backdrop-filter: blur(10px);
-            border: 2px solid var(--border-color);
-        }
-
-        .feed-column.mobile-feed {
-            border-top: 4px solid var(--mobile-payment);
-        }
-
-        .feed-column.card-feed {
-            border-top: 4px solid var(--card-payment);
-        }
-
-        [data-theme="dark"] .feed-column {
-            background: rgba(30, 30, 30, 0.95);
-        }
-
-        .feed-header {
-            font-size: 1.6rem;
-            font-weight: 800;
-            margin-bottom: 15px;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .feed-header .icon {
-            font-size: 1.9rem;
-        }
-
-        .feed-list {
-            flex-grow: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            padding-right: 5px;
-        }
-
-        .feed-list::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .feed-list::-webkit-scrollbar-thumb {
-            background-color: var(--text-muted);
-            border-radius: 10px;
-        }
-
-        .feed-item {
-            background: var(--bg-color);
-            padding: 16px;
-            border-radius: 12px;
-            animation: slideIn 0.5s ease-out;
-            border-left: 4px solid transparent;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .feed-item.mobile {
-            border-left-color: var(--mobile-payment);
-            background: linear-gradient(90deg, rgba(21, 101, 192, 0.05) 0%, var(--bg-color) 10%);
-        }
-
-        /* Mobile feed text + numbers in blue */
-        .mobile-feed .feed-amount,
-        .mobile-feed .feed-message {
-            color: var(--primary-blue);
-        }
-
-        /* Card feed text + numbers in green */
-        .card-feed .feed-amount,
-        .card-feed .feed-message {
-            color: var(--primary-green);
-        }
-
-        .feed-item.card {
-            border-left-color: var(--card-payment);
-            background: linear-gradient(90deg, rgba(76, 175, 80, 0.05) 0%, var(--bg-color) 10%);
-        }
-
-        .feed-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-
-        .feed-amount {
-            font-weight: 900;
-            color: var(--primary-green);
-            font-size: 1.5rem;
-        }
-
-        .feed-time {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        .feed-message {
-            font-size: 1.2rem;
-            color: var(--text-main);
-            word-break: break-word;
-            font-weight: 600;
-            margin-top: 8px;
-            line-height: 1.4;
-        }
-
-        .feed-source {
-            font-size: 0.95rem;
-            margin-top: 8px;
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-weight: 700;
-        }
-
-        .feed-source.mobile {
-            background: rgba(21, 101, 192, 0.15);
-            color: var(--mobile-payment);
-        }
-
-        .feed-source.card {
-            background: rgba(76, 175, 80, 0.15);
-            color: var(--card-payment);
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Error State (Shared) */
+        /* ===========================
+           Error / Loading States
+           =========================== */
         .error-message {
             background: rgba(231, 76, 60, 0.1);
             border: 2px solid rgba(231, 76, 60, 0.3);
@@ -583,209 +1060,192 @@
             margin: 20px 0;
         }
 
-        /* Loading State (Shared) */
-        .loading {
+        .loading-text {
             text-align: center;
             padding: 40px;
             color: var(--text-muted);
         }
 
-          /* ===========================
-              Responsive: Tablet
-              =========================== */
-        @media (max-width: 1200px) {
-            .hero-right {
-                flex: 0 0 30%;
-            }
+        /* ===========================
+           Animations
+           =========================== */
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-            .hero-amount {
-                font-size: clamp(3.5rem, 7vw, 6rem);
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* ===========================
+           Celebration Party Animation
+           =========================== */
+        @keyframes pulseGlow {
+            0% { transform: scale(1); text-shadow: 0 0 0 transparent; }
+            25% { transform: scale(1.08); text-shadow: 0 0 30px rgba(241,193,82,0.6); }
+            50% { transform: scale(1.12); text-shadow: 0 0 50px rgba(241,193,82,0.8); }
+            75% { transform: scale(1.08); text-shadow: 0 0 30px rgba(241,193,82,0.6); }
+            100% { transform: scale(1); text-shadow: 0 0 0 transparent; }
+        }
+
+        @keyframes emojiFloat {
+            0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(720deg) scale(0.3); opacity: 0; }
+        }
+
+        @keyframes bannerSlide {
+            0% { transform: translateY(-100%); opacity: 0; }
+            15% { transform: translateY(0); opacity: 1; }
+            85% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100%); opacity: 0; }
+        }
+
+        .amount-pulse {
+            animation: pulseGlow 1s ease-in-out;
+        }
+
+        .celebration-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .celebration-emoji {
+            position: absolute;
+            bottom: -60px;
+            font-size: 2rem;
+            animation: emojiFloat linear forwards;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .celebration-banner {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100%);
+            background: linear-gradient(135deg, var(--gold), #D4A017);
+            color: var(--dark-green);
+            padding: 14px 40px;
+            border-radius: 0 0 16px 16px;
+            font-size: 1.2rem;
+            font-weight: 900;
+            z-index: 10000;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+            animation: bannerSlide 4s ease-in-out forwards;
+            text-align: center;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 600px) {
+            .celebration-banner {
+                font-size: 0.95rem;
+                padding: 10px 20px;
+            }
+            .celebration-emoji {
+                font-size: 1.4rem;
             }
         }
 
         /* ===========================
-           Large Screens
+           Responsive
            =========================== */
-        @media (min-width: 1600px) {
-            .dashboard-grid {
-                padding: 0 30px;
-            }
-
-            .hero-section {
-                padding: 30px 50px;
-            }
-
-            .progress-container {
-                height: 40px;
-            }
-
-            .card {
-                padding: 24px;
-            }
-
-            .feed-column {
-                height: 700px;
-                padding: 24px;
-            }
-        }
-
-          /* ===========================
-              Responsive: Mobile
-              =========================== */
-          @media (max-width: 900px) {
-            .hero-section {
-                flex-direction: column;
-                text-align: center;
-                padding: 25px 20px;
-            }
-
-            .hero-left {
-                padding-right: 0;
-                width: 100%;
-                order: 2;
-            }
-
-            .hero-right {
-                border-left: none;
-                border-bottom: 1px solid var(--border-color);
-                padding-bottom: 20px;
-                margin-bottom: 20px;
-                padding-left: 0;
-                width: 100%;
-                order: 1;
-            }
-
-            .hero-amount {
-                font-size: clamp(3rem, 12vw, 5rem);
-            }
-
-            .feeds-container {
+        @media (max-width: 900px) {
+            .sponsor-grid {
                 grid-template-columns: 1fr;
+                max-width: 400px;
             }
 
-            .feed-column {
-                height: 450px;
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
             }
 
-            .stats-column {
-                grid-template-columns: 1fr;
+            .hero-banner {
+                padding: 40px 15px 60px;
             }
 
-            .progress-text {
-                flex-wrap: wrap;
-                gap: 6px 12px;
-                justify-content: center;
-                text-align: center;
-            }
-
-            .feed-top {
-                flex-wrap: wrap;
-                gap: 6px;
-            }
-        }
-
-        /* Mobile (Small screens) */
-        @media (max-width: 600px) {
-            body {
-                padding: 6px;
-            }
-
-            .dashboard-grid {
-                gap: 16px;
-                padding: 0 10px;
-            }
-
-            .hero-section {
-                padding: 18px 14px;
-            }
-
-            .hero-title {
-                font-size: 1.1rem;
-            }
-
-            .hero-subtitle {
-                font-size: 0.9rem;
-            }
-
-            .source-badge {
-                font-size: 0.75rem;
-                padding: 5px 10px;
-            }
-
-            .progress-container {
-                height: 26px;
-            }
-
-            .progress-text {
-                font-size: 0.95rem;
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .donation-btn {
-                padding: 10px 14px;
-            }
-
-            .mobile-number {
-                font-size: 1.25rem;
-                letter-spacing: 1px;
-            }
-
-            .card-value {
-                font-size: 1.6rem;
-            }
-
-            .breakdown-row {
-                flex-wrap: wrap;
+            .donation-choices {
                 gap: 8px;
             }
 
-            .feed-column {
-                height: 480px;
-                padding: 14px;
-            }
-
-            .feed-header {
-                font-size: 1.1rem;
-            }
-
-            .feed-header .icon {
-                font-size: 1.3rem;
-            }
-
-            .feed-list {
-                gap: 10px;
-            }
-
-            .feed-item {
-                padding: 12px;
-            }
-
-            .feed-amount {
-                font-size: 1.1rem;
-            }
-
-            .feed-message {
-                font-size: 0.95rem;
+            .donation-amount-btn {
+                padding: 12px 20px;
+                font-size: 1rem;
             }
         }
 
-        /* Mobile (Extra small screens) */
+        @media (max-width: 600px) {
+            .hero-main-title {
+                font-size: clamp(2rem, 8vw, 3rem);
+            }
+
+            .hero-main-title .highlight {
+                font-size: clamp(1.6rem, 7vw, 2.5rem);
+            }
+
+            .raised-value, .goal-value {
+                font-size: clamp(1.8rem, 8vw, 3rem);
+            }
+
+            .raised-goal-divider {
+                font-size: 1.8rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .donation-choices {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .donation-amount-btn {
+                flex: 1;
+                min-width: 70px;
+                padding: 10px 14px;
+                font-size: 0.95rem;
+            }
+
+            .top-donor-item {
+                padding: 14px 16px;
+            }
+
+            .live-feed-item {
+                padding: 12px 16px;
+            }
+
+            .swish-number-display {
+                font-size: 1.6rem;
+                padding: 10px 20px;
+            }
+        }
+
         @media (max-width: 420px) {
-            .hero-right {
-                gap: 10px;
+            .hero-banner {
+                padding: 30px 10px 50px;
             }
 
-            .logo-container {
-                max-width: 110px;
+            .payment-methods-row {
+                gap: 6px;
             }
 
-            .hero-amount {
-                font-size: clamp(2.4rem, 12vw, 4rem);
-            }
-
-            .feed-column {
-                height: 440px;
+            .payment-badge {
+                font-size: 0.6rem;
+                padding: 4px 8px;
             }
         }
     </style>
@@ -793,7 +1253,7 @@
 
 <body>
 
-    <!-- Browser + Mobile: Theme toggle -->
+    <!-- Theme Toggle -->
     <div class="theme-switch">
         <label class="switch">
             <input type="checkbox" onchange="toggleTheme()">
@@ -802,98 +1262,249 @@
         <span id="theme-label">☀️</span>
     </div>
 
-    <!-- Browser + Mobile: Main dashboard container -->
-    <div class="dashboard-grid">
+    <!-- Home Link -->
+    <a href="index.html" class="home-link" aria-label="Go to home page">
+        <img src="img/Al-Salam-Center-Logo.png" alt="Al-Salam Center Logo">
+    </a>
 
-        <!-- Browser + Mobile: Hero summary (total + progress + donation CTA) -->
-        <div class="hero-section">
-            <div class="hero-left">
-                <div class="hero-subtitle">
-                    <span>Totala Donationer</span>
-                    <span class="source-badge mobile-badge">📱 Mobilbetalning</span>
-                    <span class="source-badge card-badge">💳 Kortbetalning</span>
-                </div>
-                <div class="hero-title">Total insamlat:</div>
-                <div class="hero-amount"><span id="total-combined">0</span> Kr</div>
+    <!-- ===========================
+         HERO BANNER
+         =========================== -->
+    <div class="hero-banner">
+        <div class="hero-mosque-label">
+            <i class="fas fa-mosque"></i>
+            AL-SALAM CENTER HELSINGBORG
+        </div>
 
-                <div class="progress-container">
-                    <div class="progress-bar" id="progress-bar"></div>
-                </div>
-                <div class="progress-text">
-                    <span id="progress-percentage">0%</span>
-                    <span>Mål: 10,000,000 Kr</span>
-                </div>
+        <h1 class="hero-main-title">
+            Bygg Allahs Hus.
+            <span class="highlight">Tjäna Evig Belöning.</span>
+        </h1>
+
+        <p class="hero-subtitle">
+            Varje bön som utförs i denna moské kommer att räknas på din våg av goda gärningar.
+        </p>
+
+        <!-- Raised / Goal -->
+        <div class="raised-goal-row">
+            <div class="raised-section">
+                <div class="raised-label">INSAMLAT</div>
+                <div class="raised-value"><span id="total-combined">0</span> Kr</div>
             </div>
+            <div class="raised-goal-divider">/</div>
+            <div class="goal-section">
+                <div class="goal-label">MÅL</div>
+                <div class="goal-value">10M Kr</div>
+            </div>
+        </div>
 
-            <div class="hero-right">
-                <div class="logo-container">
-                    <a href="index.html" aria-label="Go to home page" class="logo-link">
-                        <img src="img/Al-Salam-Center-Logo.png" alt="Logo">
-                    </a>
-                </div>
-                <button class="donation-btn" onclick="goToDonation()">💝 Kortbetalningar</button>
-                <div style="width: 100%; margin-top: 15px;">
-                    <div class="mobile-label">📱 Mobilbetalning</div>
-                    <div class="mobile-number">123 500 0559</div>
+        <!-- Main Progress Bar -->
+        <div class="hero-progress-container">
+            <div class="hero-progress-bar-wrap">
+                <div class="hero-progress-fill" id="progress-bar">
+                    <span class="hero-progress-text" id="progress-percentage">0%</span>
                 </div>
             </div>
         </div>
 
-        <!-- Browser + Mobile: Stats cards grid -->
-        <div class="stats-column">
-            <div class="card">
-                <div class="card-label">Uppdelning per källa:</div>
-                <div class="breakdown-row">
-                    <div class="breakdown-label">
-                        <span class="source-badge mobile-badge">📱 Mobilbetalning</span>
-                    </div>
-                    <div class="breakdown-value"><span id="total-mobile">0</span> Kr</div>
+        <!-- Daily Goal -->
+        <div class="daily-goal-section">
+            <div class="daily-goal-label">
+                <i class="fas fa-bullseye"></i> Dagens Mål
+            </div>
+            <div class="daily-goal-bar-row">
+                <div class="daily-goal-amount" id="total-today">0 Kr</div>
+                <div class="daily-goal-bar-wrap">
+                    <div class="daily-goal-fill" id="daily-progress-bar"></div>
                 </div>
-                <div class="breakdown-row">
-                    <div class="breakdown-label">
-                        <span class="source-badge card-badge">💳 Kortbetalning</span>
-                    </div>
-                    <div class="breakdown-value"><span id="total-card">0</span> Kr</div>
+                <div class="daily-goal-target">av 1 000 000 Kr</div>
+            </div>
+            <div class="daily-goal-remaining" id="daily-remaining"></div>
+        </div>
+
+        <!-- Donor Count -->
+        <div class="donor-count">
+            <i class="fas fa-users"></i>
+            <span><span id="count-today">0</span> donatorer har bidragit idag</span>
+        </div>
+
+        <!-- Donation Amount Choices (Sponsor Tiers from company.html) -->
+        <div class="donation-choices">
+            <button class="donation-amount-btn" onclick="goToSponsor('bronze')">
+                🥉 10 000 Kr
+            </button>
+            <button class="donation-amount-btn" onclick="goToSponsor('silver')">
+                🥈 25 000 Kr
+                <span class="popular-tag">Populär</span>
+            </button>
+            <button class="donation-amount-btn" onclick="goToSponsor('gold')">
+                🥇 25 000+ Kr
+            </button>
+        </div>
+
+        <!-- Custom Amount Button -->
+        <button class="custom-amount-btn" onclick="goToDonation()">
+            <i class="fas fa-heart"></i> Valfritt Belopp
+        </button>
+
+        <!-- Payment Methods -->
+        <div class="payment-methods-row">
+            <div class="payment-badge"><i class="fas fa-credit-card"></i> Visa / Mastercard</div>
+            <div class="payment-badge"><i class="fab fa-apple-pay"></i> Apple Pay</div>
+            <div class="payment-badge"><i class="fab fa-google-pay"></i> Google Pay</div>
+            <div class="payment-badge"><i class="fas fa-mobile-alt"></i> Swish</div>
+            <div class="payment-badge"><i class="fas fa-lock"></i> Säker</div>
+        </div>
+    </div>
+
+    <!-- ===========================
+         CONTENT BELOW HERO
+         =========================== -->
+    <div class="content-wrapper">
+
+        <!-- Live Donations Feed -->
+        <div class="live-donations-section fade-in">
+            <h2 class="section-title">Live Donationer</h2>
+            <div class="live-feed-container">
+                <div class="live-feed-list" id="live-feed-list">
+                    <div class="loading-text">Laddar donationer...</div>
                 </div>
-            </div>
-
-            <div class="card">
-                <div class="card-label">Donationer idag:</div>
-                <div class="card-value"><span id="total-today">0</span> Kr</div>
-                <div class="card-sub"><span id="count-today">0</span> transaktioner idag</div>
-            </div>
-
-            <div class="card highlight">
-                <div class="card-label prominent">Högsta donation någonsin:</div>
-                <div class="card-value"><span id="highest-amount">0</span> Kr</div>
-                <div class="card-sub" id="highest-source">-</div>
-            </div>
-
-            <div class="card">
-                <div class="card-label">Genomsnittlig donation:</div>
-                <div class="card-value"><span id="average-amount">0</span> Kr</div>
             </div>
         </div>
 
-        <!-- Browser: Two-column feeds | Mobile: Stacked feeds -->
-        <div class="feeds-container">
-            <div class="feed-column mobile-feed">
-                <div class="feed-header">
-                    <span class="icon">📱</span>
-                    <span>Mobilbetalningar</span>
+        <!-- Imagine the Reward -->
+        <div class="reward-section fade-in">
+            <h2 class="reward-title">
+                <i class="fas fa-heart"></i> Föreställ dig Belöningen
+            </h2>
+            <p class="reward-subtitle">
+                När någon ber, lär sig Koranen, eller gör du'a i denna moské — <strong>du delar i belöningen.</strong>
+            </p>
+            <div class="hadith-card">
+                <div class="quote-icon">📖</div>
+                <p class="hadith-text">
+                    "När en människa dör upphör alla hennes gärningar utom tre: en pågående välgörenhet
+                    (Sadaqah Jariyah), nyttig kunskap, eller ett rättfärdigt barn som ber för dem."
+                </p>
+                <p class="hadith-source">— Profeten Muhammad ﷺ (Sahih Muslim)</p>
+            </div>
+        </div>
+
+        <!-- Top Donors -->
+        <div class="top-donors-section fade-in">
+            <h2 class="section-title">🏆 Toppdonatorer</h2>
+            <div class="top-donors-list" id="top-donors-list">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Stats Summary Cards -->
+        <div class="stats-cards-section fade-in">
+            <h2 class="section-title">Statistik</h2>
+            <div class="stats-grid">
+                <div class="stat-card highlight-card">
+                    <div class="stat-card-label">Högsta Donation</div>
+                    <div class="stat-card-value"><span id="highest-amount">0</span> Kr</div>
+                    <div class="stat-card-sub" id="highest-source">-</div>
                 </div>
-                <div class="feed-list" id="mobile-feed-list">
-                    <div class="loading">Laddar donationer...</div>
+                <div class="stat-card">
+                    <div class="stat-card-label">Genomsnittlig Donation</div>
+                    <div class="stat-card-value"><span id="average-amount">0</span> Kr</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-label">Donationer Idag</div>
+                    <div class="stat-card-value"><span id="count-today-stat">0</span></div>
+                    <div class="stat-card-sub">transaktioner</div>
                 </div>
             </div>
+        </div>
 
-            <div class="feed-column card-feed">
-                <div class="feed-header">
-                    <span class="icon">💳</span>
-                    <span>Kortbetalningar</span>
+        <!-- Breakdown by Source -->
+        <div class="breakdown-section fade-in">
+            <div class="breakdown-title">
+                <i class="fas fa-chart-pie"></i> Uppdelning per källa
+            </div>
+            <div class="breakdown-row">
+                <div class="breakdown-label">
+                    <span>📱</span> Mobilbetalning (Swish)
                 </div>
-                <div class="feed-list" id="card-feed-list">
-                    <div class="loading">Laddar donationer...</div>
+                <div class="breakdown-value"><span id="total-mobile">0</span> Kr</div>
+            </div>
+            <div class="breakdown-row">
+                <div class="breakdown-label">
+                    <span>💳</span> Kortbetalning (Stripe)
+                </div>
+                <div class="breakdown-value"><span id="total-card">0</span> Kr</div>
+            </div>
+        </div>
+
+        <!-- Swish Number -->
+        <div class="swish-section fade-in">
+            <div class="swish-title">📱 Mobilbetalning via Swish</div>
+            <div class="swish-number-display" onclick="openSwish()">
+                123 500 0559
+            </div>
+            <div class="swish-label">Tryck för att öppna Swish (mobil)</div>
+        </div>
+
+        <!-- Sponsor Packages (from company.html) -->
+        <div class="sponsor-section fade-in">
+            <h2 class="section-title">Företagssponsoring</h2>
+            <p class="sponsor-subtitle">Stöd Al-Salam Moské som företag och nå ut till vår gemenskap</p>
+            <div class="sponsor-grid">
+                <!-- Gold -->
+                <div class="sponsor-card">
+                    <div class="sponsor-card-header gold-header">
+                        <div class="sponsor-card-icon"><i class="fas fa-crown"></i></div>
+                        <div class="sponsor-card-title">Guld</div>
+                        <div class="sponsor-card-price">Över 25,000 kr</div>
+                    </div>
+                    <div class="sponsor-card-body">
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Annonser på vår hemsida</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Logotyp i Ramadan-schema</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Personlig kontakt och anpassad sponsoring</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Logotyp som sponsor på hemsidan</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Erkännande för ditt stöd</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Årligt sponsoravtal</div>
+                    </div>
+                    <div class="sponsor-card-footer">
+                        <button class="sponsor-cta-btn gold-btn" onclick="goToSponsor('gold')">Bli Guldsponsor</button>
+                    </div>
+                </div>
+
+                <!-- Silver -->
+                <div class="sponsor-card">
+                    <div class="sponsor-card-header silver-header">
+                        <div class="sponsor-card-icon"><i class="fas fa-star"></i></div>
+                        <div class="sponsor-card-title">Silver</div>
+                        <div class="sponsor-card-price">25,000 kr</div>
+                    </div>
+                    <div class="sponsor-card-body">
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Logotyp i Ramadan-schema</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Logotyp som sponsor på hemsidan</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Erkännande för ditt stöd</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Årligt sponsoravtal</div>
+                    </div>
+                    <div class="sponsor-card-footer">
+                        <button class="sponsor-cta-btn silver-btn" onclick="goToSponsor('silver')">Bli Silversponsor</button>
+                    </div>
+                </div>
+
+                <!-- Bronze -->
+                <div class="sponsor-card">
+                    <div class="sponsor-card-header bronze-header">
+                        <div class="sponsor-card-icon"><i class="fas fa-handshake"></i></div>
+                        <div class="sponsor-card-title">Brons</div>
+                        <div class="sponsor-card-price">10,000 kr</div>
+                    </div>
+                    <div class="sponsor-card-body">
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Logotyp som sponsor på hemsidan</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Erkännande för ditt stöd</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Årligt sponsoravtal</div>
+                    </div>
+                    <div class="sponsor-card-footer">
+                        <button class="sponsor-cta-btn bronze-btn" onclick="goToSponsor('bronze')">Bli Bronssponsor</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -901,11 +1512,17 @@
     </div>
 
     <script>
-        // API endpoints
+        // ===========================
+        // API endpoints & Constants (UNCHANGED LOGIC)
+        // ===========================
         const MOBILE_API_URL = "https://script.google.com/macros/s/AKfycbyvsHmRWM96nR0xMFjUk1y0ox_Pohm0Rtd8MIfZYvvpevjokVmY-eU8ZIHZfN-tdUi8/exec";
         const CARD_API_URL = "https://script.google.com/macros/s/AKfycby4xd1YkqdDe-xvshIuMpj53wCLM9kUClwb84Qtx5amrPd6xrUjKjJxiYSdEppweq4/exec";
         const GOAL = 10000000;
+        const DAILY_GOAL = 1000000;
         const REFRESH_RATE = 5000;
+
+        let isFirstLoad = true;
+        let isCelebrating = false;
 
         let previousData = {
             total_combined: 0,
@@ -922,13 +1539,19 @@
             progressPct: document.getElementById('progress-percentage'),
             totalToday: document.getElementById('total-today'),
             countToday: document.getElementById('count-today'),
+            countTodayStat: document.getElementById('count-today-stat'),
             highestAmount: document.getElementById('highest-amount'),
             highestSource: document.getElementById('highest-source'),
             averageAmount: document.getElementById('average-amount'),
-            mobileFeedList: document.getElementById('mobile-feed-list'),
-            cardFeedList: document.getElementById('card-feed-list')
+            liveFeedList: document.getElementById('live-feed-list'),
+            topDonorsList: document.getElementById('top-donors-list'),
+            dailyProgressBar: document.getElementById('daily-progress-bar'),
+            dailyRemaining: document.getElementById('daily-remaining')
         };
 
+        // ===========================
+        // Animate Value (UNCHANGED)
+        // ===========================
         function animateValue(obj, start, end, duration) {
             if (start === end) return;
             let startTimestamp = null;
@@ -941,9 +1564,11 @@
             window.requestAnimationFrame(step);
         }
 
+        // ===========================
+        // Fetch Combined Data (UNCHANGED LOGIC)
+        // ===========================
         async function fetchCombinedData() {
             try {
-                // Fetch both Mobile and Card payment data in parallel
                 const [mobileResponse, cardResponse] = await Promise.allSettled([
                     fetch(MOBILE_API_URL),
                     fetch(CARD_API_URL)
@@ -952,21 +1577,18 @@
                 let mobileData = null;
                 let cardData = null;
 
-                // Process Mobile payment data
                 if (mobileResponse.status === 'fulfilled' && mobileResponse.value.ok) {
                     mobileData = await mobileResponse.value.json();
                     console.log('=== RAW MOBILE PAYMENT DATA ===');
                     console.log(JSON.stringify(mobileData, null, 2));
                 }
 
-                // Process Card payment data
                 if (cardResponse.status === 'fulfilled' && cardResponse.value.ok) {
                     cardData = await cardResponse.value.json();
                     console.log('=== RAW CARD PAYMENT DATA ===');
                     console.log(JSON.stringify(cardData, null, 2));
                 }
 
-                // Combine the data
                 const combinedData = combineData(mobileData, cardData);
                 updateDashboard(combinedData);
             } catch (error) {
@@ -975,6 +1597,9 @@
             }
         }
 
+        // ===========================
+        // Combine Data (UNCHANGED LOGIC)
+        // ===========================
         function combineData(mobileData, cardData) {
             const combined = {
                 total_mobile: 0,
@@ -994,7 +1619,6 @@
                 combined.total_mobile = mobileData.total_alltime || 0;
                 combined.total_combined += combined.total_mobile;
 
-                // Add Mobile payments to list
                 if (mobileData.last_messages) {
                     mobileData.last_messages.forEach(msg => {
                         combined.mobile_payments.push({
@@ -1006,20 +1630,17 @@
                     });
                 }
 
-                // Check highest from Mobile
                 if (mobileData.Highest_ever && mobileData.Highest_ever.amount > combined.highest_amount) {
                     combined.highest_amount = mobileData.Highest_ever.amount;
                     combined.highest_source = 'Mobilbetalning';
                 }
 
-                // Today's totals from Mobile
                 combined.total_today += mobileData.total_today || 0;
                 combined.count_today += mobileData.count_today || 0;
             }
 
             // Process Card payment data
             if (cardData) {
-                // Handle Card data as array
                 if (Array.isArray(cardData)) {
                     let card_total = 0;
                     let card_today = 0;
@@ -1033,20 +1654,18 @@
                         const amount = parseFloat(payment.Amount) || 0;
                         card_total += amount;
 
-                        // Check if today
                         const paymentDate = new Date(payment.Datetime);
                         paymentDate.setHours(0, 0, 0, 0);
+
                         if (paymentDate.getTime() === today.getTime()) {
                             card_today += amount;
                             card_count_today++;
                         }
 
-                        // Track highest
                         if (amount > card_highest) {
                             card_highest = amount;
                         }
 
-                        // Use Message field (capital M) if available and not empty, otherwise customer info
                         let displayMessage = 'Tack för ditt stöd!';
                         if (payment.Message && payment.Message.trim() !== '') {
                             displayMessage = payment.Message;
@@ -1056,7 +1675,6 @@
                             displayMessage = payment.customer_email;
                         }
 
-                        // Add to card payments
                         combined.card_payments.push({
                             amount: amount,
                             message: displayMessage,
@@ -1076,7 +1694,6 @@
                         combined.highest_source = 'Kortbetalning';
                     }
                 } else if (cardData.total_stripe || cardData.total_card) {
-                    // Handle object format
                     combined.total_card = cardData.total_stripe || cardData.total_card || 0;
                     combined.total_combined += combined.total_card;
                     combined.total_today += cardData.total_today || 0;
@@ -1101,7 +1718,7 @@
                             } else if (payment.customer_email) {
                                 displayMessage = payment.customer_email;
                             }
-                            
+
                             combined.card_payments.push({
                                 amount: payment.amount,
                                 message: displayMessage,
@@ -1127,12 +1744,79 @@
             return combined;
         }
 
+        // ===========================
+        // Celebration Party Animation
+        // ===========================
+        function celebrate(donationAmount) {
+            if (isCelebrating) return;
+            isCelebrating = true;
+
+            // 1. Confetti bursts (multiple waves)
+            const burstConfetti = () => {
+                confetti({ particleCount: 80, spread: 100, origin: { x: 0.5, y: 0.6 }, colors: ['#F1C152', '#4CAF50', '#ffffff', '#B8860B'] });
+                setTimeout(() => {
+                    confetti({ particleCount: 50, angle: 60, spread: 60, origin: { x: 0, y: 0.7 }, colors: ['#F1C152', '#4CAF50', '#CD7F32'] });
+                }, 300);
+                setTimeout(() => {
+                    confetti({ particleCount: 50, angle: 120, spread: 60, origin: { x: 1, y: 0.7 }, colors: ['#F1C152', '#4CAF50', '#CD7F32'] });
+                }, 600);
+            };
+            burstConfetti();
+
+            // 2. Emoji rain overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'celebration-overlay';
+            document.body.appendChild(overlay);
+
+            const emojis = ['🎉', '🎊', '🕌', '💰', '🤲', '⭐', '✨', '🌙', '💚', '🎆'];
+            const emojiCount = 25;
+            for (let i = 0; i < emojiCount; i++) {
+                setTimeout(() => {
+                    const emoji = document.createElement('span');
+                    emoji.className = 'celebration-emoji';
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    emoji.style.left = Math.random() * 100 + '%';
+                    emoji.style.fontSize = (1.2 + Math.random() * 2) + 'rem';
+                    emoji.style.animationDuration = (2.5 + Math.random() * 3) + 's';
+                    emoji.style.animationDelay = '0s';
+                    overlay.appendChild(emoji);
+                }, Math.random() * 1500);
+            }
+
+            // 3. Banner notification
+            const banner = document.createElement('div');
+            banner.className = 'celebration-banner';
+            const formattedAmount = donationAmount ? donationAmount.toLocaleString() + ' Kr' : '';
+            banner.innerHTML = `🎉 Ny donation${formattedAmount ? ': ' + formattedAmount : ''}! JazakAllahu Khairan! 🤲`;
+            document.body.appendChild(banner);
+
+            // 4. Pulse the total amount
+            els.totalCombined.parentElement.classList.add('amount-pulse');
+            setTimeout(() => els.totalCombined.parentElement.classList.remove('amount-pulse'), 1000);
+
+            // Cleanup after animation ends
+            setTimeout(() => {
+                overlay.remove();
+                banner.remove();
+                isCelebrating = false;
+            }, 5000);
+        }
+
+        // ===========================
+        // Update Dashboard
+        // ===========================
         function updateDashboard(data) {
-            // Animate total combined amount
-            if (data.total_combined !== previousData.total_combined) {
-                animateValue(els.totalCombined, previousData.total_combined, data.total_combined, 2000);
-                if (data.total_combined > previousData.total_combined && previousData.total_combined > 0) {
-                    confetti({ particleCount: 30, spread: 50, origin: { y: 0.6 } });
+            const isNewDonation = !isFirstLoad && data.total_combined > previousData.total_combined;
+
+            // Total combined: on first load just display, on update do quick animate
+            if (isFirstLoad) {
+                els.totalCombined.innerHTML = data.total_combined.toLocaleString();
+                els.highestAmount.innerHTML = data.highest_amount.toLocaleString();
+            } else if (data.total_combined !== previousData.total_combined) {
+                animateValue(els.totalCombined, previousData.total_combined, data.total_combined, 600);
+                if (isNewDonation) {
+                    const diff = data.total_combined - previousData.total_combined;
+                    celebrate(diff);
                 }
             }
 
@@ -1140,107 +1824,150 @@
             els.totalMobile.innerText = data.total_mobile.toLocaleString();
             els.totalCard.innerText = data.total_card.toLocaleString();
 
-            // Update progress bar
+            // Update main progress bar
             const percentage = Math.min((data.total_combined / GOAL) * 100, 100).toFixed(1);
-            els.progressBar.style.width = percentage + "%";
+            els.progressBar.style.width = Math.max(parseFloat(percentage), 3) + "%";
             els.progressPct.innerText = percentage + "%";
 
             // Update today's stats
-            els.totalToday.innerText = data.total_today.toLocaleString();
+            els.totalToday.innerText = data.total_today.toLocaleString() + " Kr";
             els.countToday.innerText = data.count_today;
+            if (els.countTodayStat) els.countTodayStat.innerText = data.count_today;
+
+            // Daily goal progress
+            const dailyPct = Math.min((data.total_today / DAILY_GOAL) * 100, 100);
+            els.dailyProgressBar.style.width = dailyPct.toFixed(1) + "%";
+            const remaining = Math.max(DAILY_GOAL - data.total_today, 0);
+            els.dailyRemaining.innerText = remaining.toLocaleString() + " Kr kvar idag";
 
             // Update highest donation
-            if (data.highest_amount !== previousData.highest_amount) {
-                animateValue(els.highestAmount, previousData.highest_amount, data.highest_amount, 1000);
+            if (!isFirstLoad && data.highest_amount !== previousData.highest_amount) {
+                animateValue(els.highestAmount, previousData.highest_amount, data.highest_amount, 600);
             }
             els.highestSource.innerText = data.highest_source;
 
             // Update average
             els.averageAmount.innerText = data.average_amount.toLocaleString();
 
-            // Render separate feeds
-            if (JSON.stringify(data.mobile_payments) !== JSON.stringify(previousData.mobile_payments)) {
-                renderMobileFeed(data.mobile_payments);
-            }
-            if (JSON.stringify(data.card_payments) !== JSON.stringify(previousData.card_payments)) {
-                renderCardFeed(data.card_payments);
+            // Render live feed (combined, sorted by time)
+            const allPayments = [...data.mobile_payments, ...data.card_payments];
+            allPayments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            if (JSON.stringify(allPayments.slice(0, 20)) !== JSON.stringify(previousData._allPayments)) {
+                renderLiveFeed(allPayments.slice(0, 20));
+                renderTopDonors(allPayments);
             }
 
-            previousData = data;
+            previousData = { ...data, _allPayments: allPayments.slice(0, 20) };
+            isFirstLoad = false;
         }
 
-        function renderMobileFeed(payments) {
-            els.mobileFeedList.innerHTML = "";
+        // ===========================
+        // Render Live Feed (NEW - uses existing payment data)
+        // ===========================
+        function renderLiveFeed(payments) {
+            els.liveFeedList.innerHTML = "";
             if (!payments || payments.length === 0) {
-                els.mobileFeedList.innerHTML = "<div style='text-align:center; color:var(--text-muted); padding:20px'>Inga mobilbetalningar än</div>";
+                els.liveFeedList.innerHTML = "<div class='loading-text'>Inga donationer ännu</div>";
                 return;
             }
 
-            // Show only the 15 most recent
-            const recentPayments = payments.slice(0, 15);
-
-            recentPayments.forEach(payment => {
+            payments.forEach(payment => {
                 const item = document.createElement('div');
-                item.className = 'feed-item mobile';
+                item.className = 'live-feed-item';
+                item.style.animation = 'slideIn 0.5s ease-out';
 
                 let timeStr = payment.timestamp || '';
                 if (timeStr.includes('T')) {
-                    timeStr = timeStr.split('T')[1].substring(0, 5);
+                    const date = new Date(timeStr);
+                    const now = new Date();
+                    const diffMs = now - date;
+                    const diffMins = Math.floor(diffMs / 60000);
+                    const diffHours = Math.floor(diffMs / 3600000);
+
+                    if (diffMins < 1) {
+                        timeStr = 'Just nu';
+                    } else if (diffMins < 60) {
+                        timeStr = diffMins + ' minuter sedan';
+                    } else if (diffHours < 24) {
+                        timeStr = 'ca ' + diffHours + ' timmar sedan';
+                    } else {
+                        timeStr = timeStr.split('T')[1].substring(0, 5);
+                    }
                 }
 
+                const sourceIcon = payment.source === 'mobile' ? '📱' : '💳';
+                const sourceClass = payment.source === 'mobile' ? 'mobile' : 'card';
+                const displayName = payment.message && payment.message !== '-' && payment.message !== 'Tack för ditt stöd!'
+                    ? payment.message
+                    : 'Anonym';
+
                 item.innerHTML = `
-                    <div class="feed-top">
-                        <span class="feed-amount">${payment.amount?.toLocaleString() || '0'} Kr</span>
-                        <span class="feed-time">${timeStr}</span>
+                    <div class="feed-source-icon ${sourceClass}">${sourceIcon}</div>
+                    <div class="feed-item-info">
+                        <div class="feed-item-name">
+                            ${displayName} donerade <span class="amount">${payment.amount?.toLocaleString() || '0'} Kr</span>
+                        </div>
+                        <div class="feed-item-time">${timeStr}</div>
                     </div>
-                    <div class="feed-message">${payment.message || 'Tack för ditt stöd!'}</div>
                 `;
-                els.mobileFeedList.appendChild(item);
+                els.liveFeedList.appendChild(item);
             });
         }
 
-        function renderCardFeed(payments) {
-            els.cardFeedList.innerHTML = "";
-            if (!payments || payments.length === 0) {
-                els.cardFeedList.innerHTML = "<div style='text-align:center; color:var(--text-muted); padding:20px'>Inga kortbetalningar än</div>";
+        // ===========================
+        // Render Top Donors (NEW - uses existing payment data)
+        // ===========================
+        function renderTopDonors(allPayments) {
+            const topList = els.topDonorsList;
+            topList.innerHTML = "";
+
+            const sorted = [...allPayments].sort((a, b) => (b.amount || 0) - (a.amount || 0));
+            const top3 = sorted.slice(0, 3);
+
+            if (top3.length === 0) {
+                topList.innerHTML = "<div class='loading-text'>Inga toppdonatorer ännu</div>";
                 return;
             }
 
-            // Show only the 15 most recent
-            const recentPayments = payments.slice(0, 15);
+            const rankClasses = ['gold', 'silver', 'bronze'];
+            const rankLabels = ['rank-1', 'rank-2', 'rank-3'];
 
-            recentPayments.forEach(payment => {
+            top3.forEach((payment, index) => {
                 const item = document.createElement('div');
-                item.className = 'feed-item card';
+                item.className = `top-donor-item ${rankClasses[index] || ''}`;
 
-                let timeStr = payment.timestamp || '';
-                if (timeStr.includes('T')) {
-                    timeStr = timeStr.split('T')[1].substring(0, 5);
-                }
+                const displayName = payment.message && payment.message !== '-' && payment.message !== 'Tack för ditt stöd!'
+                    ? payment.message
+                    : 'Anonym';
 
-                const paymentTypeMap = {
-                    'one_time': '💚',
-                    'monthly': '🔄',
-                    'yearly': '⭐'
-                };
-                const typeIcon = payment.payment_type ? paymentTypeMap[payment.payment_type] || '' : '';
+                const sourceClass = payment.source === 'mobile' ? 'mobile' : 'card';
+                const sourceLabel = payment.source === 'mobile' ? '📱' : '💳';
 
                 item.innerHTML = `
-                    <div class="feed-top">
-                        <span class="feed-amount">${typeIcon} ${payment.amount?.toLocaleString() || '0'} Kr</span>
-                        <span class="feed-time">${timeStr}</span>
+                    <div class="donor-rank ${rankLabels[index] || ''}">${index + 1}</div>
+                    <div class="donor-info">
+                        <div class="donor-name">
+                            ${sourceLabel} ${displayName}
+                            <span class="donor-source-badge ${sourceClass}">${payment.source === 'mobile' ? 'Swish' : 'Kort'}</span>
+                        </div>
                     </div>
-                    <div class="feed-message">${payment.message || 'Tack för ditt stöd!'}</div>
+                    <div class="donor-amount">${payment.amount?.toLocaleString() || '0'} Kr</div>
                 `;
-                els.cardFeedList.appendChild(item);
+                topList.appendChild(item);
             });
         }
 
+        // ===========================
+        // Error Display
+        // ===========================
         function showError(message) {
-            els.mobileFeedList.innerHTML = `<div class="error-message">${message}</div>`;
-            els.cardFeedList.innerHTML = `<div class="error-message">${message}</div>`;
+            els.liveFeedList.innerHTML = `<div class="error-message">${message}</div>`;
         }
 
+        // ===========================
+        // Theme Toggle (UNCHANGED)
+        // ===========================
         function toggleTheme() {
             const body = document.body;
             const label = document.getElementById('theme-label');
@@ -1253,16 +1980,43 @@
             }
         }
 
+        // ===========================
+        // Navigation Helpers
+        // ===========================
         function goToDonation() {
             window.location.href = 'donations.html';
         }
 
-        // Initial fetch
-        fetchCombinedData();
+        function goToSponsor(level) {
+            window.location.href = 'company.html#' + level;
+        }
 
-        // Set up periodic refresh
+        function isMobileDevice() {
+            return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+        }
+
+        function openSwish() {
+            const swishNumber = "1235000559";
+            const swishData = encodeURIComponent(
+                JSON.stringify({
+                    version: 1,
+                    payee: { value: swishNumber },
+                    message: { value: "Från hemsidan" }
+                })
+            );
+
+            if (isMobileDevice()) {
+                window.location.href = `swish://payment?data=${swishData}`;
+            }
+        }
+
+        // ===========================
+        // Initial Fetch & Refresh
+        // ===========================
+        fetchCombinedData();
         setInterval(fetchCombinedData, REFRESH_RATE);
     </script>
 </body>
 
+</html>
 </html>
