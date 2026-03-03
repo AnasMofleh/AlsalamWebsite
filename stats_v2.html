@@ -202,6 +202,23 @@
             margin-top: 4px;
         }
 
+        .swish-qr-wrap {
+            margin-top: 12px;
+            margin-bottom: 12px;
+            text-align: center;
+            border: 1px dashed var(--stats-pill-border);
+            border-radius: 12px;
+            padding: 14px;
+            background: var(--stats-pill-bg);
+        }
+
+        .swish-qr-wrap img {
+            max-width: 230px;
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
         .text-muted {
             color: var(--stats-muted) !important;
         }
@@ -274,7 +291,18 @@
                 <div class="stats-v2-card bg-white p-4 h-100">
                     <div class="d-flex align-items-center justify-content-between mb-3">
                         <h4 class="mb-0">Senaste 5 donationer</h4>
-                        <i class="fas fa-hand-holding-heart text-primary"></i>
+                        <div class="d-flex align-items-center gap-2">
+                            <button id="swishQrToggle" type="button" class="btn btn-outline-success btn-sm">Visa Swish QR</button>
+                            <i class="fas fa-hand-holding-heart text-primary"></i>
+                        </div>
+                    </div>
+                    <div id="swishQrWrap" class="swish-qr-wrap d-none">
+                        <img src="img/swishwakfQR.png" alt="Swish QR kod">
+                        <p class="mb-0 mt-2 text-muted">Skanna med Swish-appen för att donera</p>
+                        <p class="mb-0 mt-1"><strong>Swish: 123 5000 559</strong></p>
+                        <a class="btn btn-success mt-3" href="https://app.swish.nu/1/p/sw/?sw=1235000559&msg=Ramadan%20Alsalam" target="_blank" rel="noopener noreferrer">
+                            Donera med Swish
+                        </a>
                     </div>
                     <ul id="last5List" class="donation-list"></ul>
                     <p id="lastUpdated" class="text-muted small mt-3 mb-0"></p>
@@ -306,10 +334,14 @@
         const last5ListEl = document.getElementById("last5List");
         const lastUpdatedEl = document.getElementById("lastUpdated");
         const themeToggleEl = document.getElementById("themeToggle");
+        const swishQrToggleEl = document.getElementById("swishQrToggle");
+        const swishQrWrapEl = document.getElementById("swishQrWrap");
         const THEME_STORAGE_KEY = "alsalam-stats-v2-theme";
 
         let previousTotalAmount = null;
         let previousNewestDonationKey = null;
+        let showSwishQr = false;
+        let latestLast5Data = [];
 
         function parseAmount(value) {
             if (typeof value === "number") return value;
@@ -383,7 +415,7 @@
                 const amount = parseAmount(donation.amount);
                 const time = formatTimeHHMM(donation.time || "");
                 const message = donation.message ? String(donation.message).trim() : "";
-                const messageHtml = message ? `<div class="donation-message">“${message}”</div>` : "";
+                const messageHtml = !showSwishQr && message ? `<div class="donation-message">“${message}”</div>` : "";
 
                 li.innerHTML = `
                     <div>
@@ -395,6 +427,12 @@
 
                 last5ListEl.appendChild(li);
             });
+        }
+
+        function applySwishQrMode(last5) {
+            swishQrWrapEl.classList.toggle("d-none", !showSwishQr);
+            swishQrToggleEl.textContent = showSwishQr ? "Dölj Swish QR" : "Visa Swish QR";
+            renderLast5(last5);
         }
 
         function formatTimeHHMM(timeValue) {
@@ -541,8 +579,9 @@
                 const totalAmount = parseAmount(payload.totalAmount || 0);
                 const last5 = Array.isArray(payload.last5) ? payload.last5 : [];
 
+                latestLast5Data = last5;
                 renderTotal(totalAmount);
-                renderLast5(last5);
+                applySwishQrMode(latestLast5Data);
                 maybeTriggerCelebrations(totalAmount, last5);
 
                 const now = new Date();
@@ -568,6 +607,11 @@
         themeToggleEl.addEventListener("click", () => {
             const nextTheme = document.body.classList.contains("theme-dark") ? "light" : "dark";
             setTheme(nextTheme);
+        });
+
+        swishQrToggleEl.addEventListener("click", () => {
+            showSwishQr = !showSwishQr;
+            applySwishQrMode(latestLast5Data);
         });
     </script>
 </body>
