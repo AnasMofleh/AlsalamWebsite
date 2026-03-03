@@ -2,603 +2,261 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wakf Al Salam Center stats</title>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
+    <meta charset="utf-8">
+    <title>Al-Salam Donations Stats v2</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Pacifico&display=swap"
         rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
         :root {
-            /* Logo Colors */
-            --primary-green: #4CAF50;
-            --primary-blue: #1565C0;
-            --accent-green: #4CAF50;
-
-            /* Light Theme Defaults */
-            --bg-color: #f4f6f8;
-            --card-bg: #ffffff;
-            --text-main: #2c3e50;
-            --text-muted: #7f8c8d;
-            --border-color: #e0e0e0;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            --progress-bg: #e9ecef;
+            --stats-bg: #f8f9fa;
+            --stats-card-bg: #ffffff;
+            --stats-text: #212529;
+            --stats-muted: #6c757d;
+            --stats-pill-bg: #f5f7fa;
+            --stats-pill-border: #e2e8f0;
+            --stats-pill-text: #34495e;
         }
 
-        [data-theme="dark"] {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --text-main: #ffffff;
-            --text-muted: #b0b3b8;
-            --border-color: #333333;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            --progress-bg: #333333;
-        }
-
-        * {
-            box-sizing: border-box;
-            transition: background-color 0.3s, color 0.3s;
+        body.theme-dark {
+            --stats-bg: #0f172a;
+            --stats-card-bg: #1e293b;
+            --stats-text: #e2e8f0;
+            --stats-muted: #94a3b8;
+            --stats-pill-bg: #334155;
+            --stats-pill-border: #475569;
+            --stats-pill-text: #e2e8f0;
         }
 
         body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: var(--bg-color);
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center;
-            color: var(--text-main);
-            margin: 0;
-            padding: 10px;
-            min-height: 100vh;
-            position: relative;
+            background: var(--stats-bg);
+            color: var(--stats-text);
+            font-size: 1.12rem;
+            transition: background-color 0.25s ease, color 0.25s ease;
         }
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center;
-            z-index: -1;
+        .stats-v2-wrap {
+            margin-top: 28px;
+            margin-bottom: 60px;
         }
 
-        /* Grid Layout - Updated to ~25% for right column */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 73% 25%;
-            gap: 15px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        /* Hero Section (Split Layout) */
-        .hero-section {
-            grid-column: 1 / -1;
-            background: rgba(255, 255, 255, 0.85);
-            padding: 25px 40px;
+        .stats-v2-card {
+            background: var(--stats-card-bg) !important;
+            color: var(--stats-text);
             border-radius: 16px;
-            box-shadow: var(--shadow);
-            border-top: 6px solid var(--primary-green);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
         }
 
-        [data-theme="dark"] .hero-section {
-            background: rgba(30, 30, 30, 0.85);
+        body.theme-dark .stats-v2-card {
+            border-color: rgba(148, 163, 184, 0.22);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
         }
 
-        .hero-left {
-            flex: 1;
-            padding-right: 20px;
-        }
-
-        .hero-right {
-            flex: 0 0 25%;
-            /* Set to 25% width */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            border-left: 1px solid var(--border-color);
-            padding-left: 20px;
-        }
-
-        .hero-right .theme-switch {
-            width: 100%;
-            justify-content: center;
-        }
-
-        .logo-container {
-            width: 100%;
-            max-width: 140px;
-        }
-
-        .logo-link {
-            display: inline-block;
-            text-decoration: none;
-        }
-
-        .logo-link img {
-            cursor: pointer;
-        }
-
-        .logo-container img {
-            width: 100%;
-            height: auto;
-        }
-
-        .hero-title {
-            font-size: 1.4rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-        }
-
-        /* BIGGER NUMBERS */
-        .hero-amount {
-            font-size: 7rem;
-            font-weight: 900;
-            color: var(--primary-blue);
-            line-height: 1;
-            margin-bottom: 15px;
-        }
-
-        [data-theme="dark"] .hero-amount {
-            color: var(--accent-green);
-        }
-
-        /* Progress Bar */
-        .progress-container {
-            background-color: var(--progress-bg);
-            border-radius: 50px;
-            height: 35px;
-            width: 100%;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .progress-bar {
-            background: linear-gradient(90deg, var(--primary-blue), var(--primary-green));
-            height: 100%;
-            width: 0%;
-            border-radius: 50px;
-            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .progress-text {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 5px;
-            font-size: 1.1rem;
-            color: var(--text-muted);
+        .stats-v2-theme-btn {
+            border: 1px solid #d1d5db;
+            background: #fff;
+            color: #111827;
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 1rem;
             font-weight: 600;
         }
 
-        /* Theme Switch */
-        .theme-switch {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            z-index: 2000;
+        .stats-v2-home-btn {
+            border-radius: 999px;
+            padding: 8px 16px;
+            font-weight: 700;
+        }
+
+        body.theme-dark .stats-v2-theme-btn {
+            border-color: #64748b;
+            background: #1f2937;
+            color: #e2e8f0;
+        }
+
+        .stats-v2-total {
+            font-size: clamp(4rem, 12vw, 8rem);
+            font-weight: 800;
+            background: linear-gradient(90deg, #15546F 0%, #196F15 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+            text-align: center;
+            letter-spacing: -2px;
+            direction: ltr;
+            unicode-bidi: bidi-override;
+        }
+
+        body.theme-dark .stats-v2-total {
+            background: linear-gradient(90deg, #3a9fd4 0%, #2ecc71 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stats-v2-card h2 {
+            font-size: clamp(2rem, 4.2vw, 3rem);
+        }
+
+        body.theme-dark .stats-v2-card h2 {
+            color: #ffffff;
+        }
+
+        .stats-v2-card h4 {
+            font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+        }
+
+        body.theme-dark .stats-v2-card h4 {
+            color: #ffffff;
+        }
+
+        .stats-v2-card p,
+        .stats-v2-card small,
+        .stats-v2-card .meta,
+        .stats-v2-card .donation-amount,
+        .stats-v2-card .milestone-pill,
+        .stats-v2-card .badge,
+        .stats-v2-card .stats-v2-theme-btn,
+        .stats-v2-card .btn {
+            font-size: 1.08rem !important;
+        }
+
+        .stats-v2-progress {
+            height: 22px;
+            border-radius: 999px;
+            background: #e9ecef;
+            overflow: hidden;
+        }
+
+        .stats-v2-progress .bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #0d6efd 0%, #198754 100%);
+            transition: width 900ms ease;
+        }
+
+        .milestones {
             display: flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 6px 10px;
-            border-radius: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(10px);
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
         }
 
-        [data-theme="dark"] .theme-switch {
-            background: rgba(30, 30, 30, 0.95);
+        .milestone-pill {
+            border-radius: 999px;
+            font-size: 0.85rem;
+            padding: 6px 12px;
+            background: var(--stats-pill-bg);
+            border: 1px solid var(--stats-pill-border);
+            color: var(--stats-pill-text);
         }
 
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 38px;
-            height: 18px;
+        .milestone-pill.closest {
+            background: #198754;
+            border-color: #198754;
+            color: #fff;
         }
 
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
+        .donation-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
         }
 
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: 0.4s;
-            border-radius: 18px;
+        .donation-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #eef2f7;
         }
 
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 12px;
-            width: 12px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: 0.4s;
-            border-radius: 50%;
+        .donation-item:last-child {
+            border-bottom: none;
         }
 
-        input:checked+.slider {
-            background-color: var(--primary-green);
-        }
-
-        input:checked+.slider:before {
-            transform: translateX(20px);
-        }
-
-        #theme-label {
+        .donation-item .meta {
+            color: var(--stats-muted);
             font-size: 0.9rem;
         }
 
-        /* Donation Button */
-        .donation-btn {
-            background: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
-            border: none;
-            color: white;
-            padding: 10px 16px;
-            border-radius: 20px;
-            cursor: pointer;
+        .donation-amount {
             font-weight: 700;
-            width: 100%;
-            transition: transform 0.2s, box-shadow 0.2s;
+            color: #198754;
+            white-space: nowrap;
         }
 
-        .donation-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(76, 175, 80, 0.3);
-        }
-
-        /* Swish Layout Adjustments */
-        .swish-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-top: 8px;
-            width: 100%;
-            /* Take full width for alignment */
-        }
-
-        .swish-info {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 4px;
-            width: 100%;
-        }
-
-        .swish-label {
-            font-family: 'Tajawal', Arial, sans-serif;
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: var(--text-main);
-            display: inline-block;
-            padding-left: 10px;
-            border-left: 3px solid var(--primary-green);
-            line-height: 1;
-            letter-spacing: 0.4px;
-        }
-
-        .swish-number-wrap {
-            display: flex;
-            flex-direction: row;
-            /* Row by default */
-            align-items: center;
-            justify-content: space-between;
-            /* Left/Right alignment */
-            width: 100%;
-            flex-wrap: wrap;
-            /* Wraps on mobile */
-            gap: 8px;
-        }
-
-        .swish-number-label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 0.6px;
-        }
-
-        .swish-number {
-            background: linear-gradient(135deg, rgba(76, 175, 80, 0.12), rgba(21, 101, 192, 0.06));
-            color: var(--primary-green);
-            padding: 6px 14px;
-            border-radius: 999px;
-            font-weight: 800;
-            letter-spacing: 1px;
-            box-shadow: 0 6px 18px rgba(20, 83, 48, 0.06);
-            border: 1px solid rgba(76, 175, 80, 0.12);
-            font-size: 1.25rem;
-            transition: transform 0.14s ease, box-shadow 0.14s ease;
-            cursor: pointer;
-        }
-
-        .swish-number:hover {
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 10px 26px rgba(20, 83, 48, 0.08);
-        }
-
-        /* Hidden Test Button */
-        .test-btn {
-            display: none;
-            background: red;
-            color: white;
-            border: none;
-            padding: 5px;
-            font-size: 0.7rem;
-            opacity: 0.1;
-            cursor: pointer;
-            width: 100%;
-            border-radius: 4px;
-        }
-
-        .test-btn:hover {
-            opacity: 1;
-        }
-
-        /* Stat Cards */
-        .stats-column {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.85);
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(10px);
-        }
-
-        [data-theme="dark"] .card {
-            background: rgba(30, 30, 30, 0.85);
-        }
-
-        .card.highlight {
-            border: 3px solid var(--primary-blue);
-            background: rgba(21, 101, 192, 0.03);
-            position: relative;
-            box-shadow: 0 12px 30px rgba(21, 101, 192, 0.06);
-            padding: 18px;
-        }
-
-        [data-theme="dark"] .card.highlight {
-            background: rgba(105, 240, 174, 0.05);
-            border-color: var(--accent-green);
-        }
-
-        .card-label {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-
-        .card-label.prominent {
-            font-size: 1.18rem;
-            color: var(--text-main);
-            font-weight: 800;
-            padding-left: 10px;
-            border-left: 4px solid var(--primary-green);
-            border-radius: 3px;
-            letter-spacing: 0.2px;
-        }
-
-        #highest-ever-amount {
-            color: var(--text-main) !important;
-            font-size: 2.15rem;
-            font-weight: 900;
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        .card-value {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--text-main);
-            line-height: 1.1;
-        }
-
-        .card-sub {
-            font-size: 1rem;
-            margin-top: 5px;
-            opacity: 0.8;
-        }
-
-        .card-msg {
-            background: var(--bg-color);
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            font-style: italic;
-            font-size: 1.1rem;
-            border-left: 4px solid var(--primary-blue);
-        }
-
-        .special-card .special-badge {
-            position: absolute;
-            top: -12px;
-            right: 14px;
-            background: linear-gradient(90deg, var(--primary-green), var(--primary-blue));
-            color: white;
-            padding: 6px 10px;
-            border-radius: 18px;
-            font-size: 0.75rem;
-            font-weight: 800;
-            letter-spacing: 0.6px;
-            box-shadow: 0 6px 18px rgba(21, 101, 192, 0.12);
-        }
-
-        .special-card .trophy-ico {
-            margin-right: 8px;
+        .donation-message {
             font-size: 1.05rem;
-            vertical-align: middle;
+            line-height: 1.45;
+            font-weight: 600;
+            color: var(--stats-text);
+            margin-top: 4px;
         }
 
-        .special-card:hover {
-            transform: translateY(-6px);
-            transition: transform 0.18s ease, box-shadow 0.18s ease;
-            box-shadow: 0 18px 48px rgba(21, 101, 192, 0.10);
-        }
-
-        /* Feed Section */
-        .feed-column {
-            background: rgba(255, 255, 255, 0.85);
+        .swish-qr-wrap {
+            margin-top: 12px;
+            margin-bottom: 12px;
+            text-align: center;
+            border: 1px dashed var(--stats-pill-border);
             border-radius: 12px;
-            box-shadow: var(--shadow);
-            padding: 20px;
-            height: 700px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            backdrop-filter: blur(10px);
+            padding: 14px;
+            background: var(--stats-pill-bg);
         }
 
-        [data-theme="dark"] .feed-column {
-            background: rgba(30, 30, 30, 0.85);
-        }
-
-        .feed-header {
-            font-size: 1.3rem;
-            font-weight: 800;
-            margin-bottom: 15px;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
-        }
-
-        .feed-list {
-            flex-grow: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            padding-right: 5px;
-        }
-
-        .feed-list::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .feed-list::-webkit-scrollbar-thumb {
-            background-color: var(--text-muted);
+        .swish-qr-wrap img {
+            max-width: 230px;
+            width: 100%;
+            height: auto;
             border-radius: 10px;
         }
 
-        .feed-item {
-            background: var(--bg-color);
-            padding: 15px;
-            border-radius: 8px;
-            animation: slideIn 0.5s ease-out;
+        .text-muted {
+            color: var(--stats-muted) !important;
         }
 
-        .feed-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px;
+        .rocket {
+            position: fixed;
+            width: 6px;
+            height: 22px;
+            border-radius: 999px;
+            background: linear-gradient(180deg, #f8f9fa 0%, #0d6efd 100%);
+            box-shadow: 0 0 12px rgba(13, 110, 253, 0.8);
+            z-index: 9999;
+            pointer-events: none;
+            animation: rocket-up 850ms ease-out forwards;
         }
 
-        .feed-amount {
-            font-weight: 800;
-            color: var(--primary-green);
-            font-size: 1.1rem;
-        }
-
-        .feed-time {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .feed-msg {
-            font-size: 1.2rem;
-            color: var(--text-main);
-            word-break: break-word;
-            font-weight: 700;
-            line-height: 1.4;
-            letter-spacing: 0.1px;
-            margin-top: 6px;
-        }
-
-        @keyframes slideIn {
+        @keyframes rocket-up {
             from {
-                opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(0) scale(1);
+                opacity: 1;
             }
 
             to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Responsive */
-        @media (max-width: 900px) {
-            .hero-section {
-                flex-direction: column;
-                text-align: center;
-                padding: 25px 20px;
-            }
-
-            .hero-left {
-                padding-right: 0;
-                width: 100%;
-                order: 2;
-            }
-
-            .hero-right {
-                border-left: none;
-                border-bottom: 1px solid var(--border-color);
-                padding-bottom: 20px;
-                margin-bottom: 20px;
-                padding-left: 0;
-                padding-top: 0;
-                width: 100%;
-                flex-direction: column;
-                justify-content: center;
-                order: 1;
-                flex: 1;
-            }
-
-            .hero-amount {
-                font-size: 5rem;
-            }
-
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .feed-column {
-                height: 500px;
-            }
-
-            /* Center the Swish row on mobile */
-            .swish-number-wrap {
-                justify-content: center;
+                transform: translateY(-65vh) scale(0.85);
+                opacity: 0;
             }
         }
     </style>
@@ -606,279 +264,371 @@
 
 <body>
 
-    <div class="theme-switch">
-        <label class="switch">
-            <input type="checkbox" onchange="toggleTheme()">
-            <span class="slider"></span>
-        </label>
-        <span id="theme-label">☀️</span>
+    <div class="container stats-v2-wrap">
+        <div class="row g-4">
+            <div class="col-12">
+                <div class="stats-v2-card bg-white p-4 p-md-5 h-100">
+                    <div class="d-flex align-items-start justify-content-between flex-wrap gap-3">
+                        <div>
+                            <h2 class="mb-2">Tillsammans har vi:</h2>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <a href="index.html" class="btn btn-outline-primary stats-v2-home-btn">
+                                <i class="fas fa-home me-1"></i>Home
+                            </a>
+                            <button id="themeToggle" type="button" class="stats-v2-theme-btn">Dark mode</button>
+                            <span class="badge bg-success px-3 py-2">LIVE</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <div id="totalAmount" class="stats-v2-total">0</div>
+                        <p id="progressLabel" class="text-muted mb-0">0% av målet</p>
+                    </div>
+
+                    <div class="stats-v2-progress mt-3" role="progressbar" aria-label="Insamlingsstatus"
+                        aria-valuemin="0" aria-valuemax="100">
+                        <div id="progressBar" class="bar"></div>
+                    </div>
+
+                    <div class="d-flex justify-content-between text-muted mt-2">
+                        <small>0 kr</small>
+                        <small>10 000 000 kr</small>
+                    </div>
+
+                    <div id="milestones" class="milestones"></div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="stats-v2-card bg-white p-4 h-100">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h4 class="mb-0">Senaste 5 donationer</h4>
+                        <div class="d-flex align-items-center gap-2">
+                            <button id="swishQrToggle" type="button" class="btn btn-outline-success btn-sm">Visa Swish
+                                QR</button>
+                            <i class="fas fa-hand-holding-heart text-primary"></i>
+                        </div>
+                    </div>
+                    <div id="swishQrWrap" class="swish-qr-wrap d-none">
+                        <img src="img/swishwakfQR.png" alt="Swish QR kod">
+                        <p class="mb-0 mt-2 text-muted">Skanna med Swish-appen för att donera</p>
+                        <p class="mb-0 mt-1"><strong>Swish: 123 5000 559</strong></p>
+                        <a class="btn btn-success mt-3"
+                            href="https://app.swish.nu/1/p/sw/?sw=1235000559&msg=Ramadan%20Alsalam" target="_blank"
+                            rel="noopener noreferrer">
+                            Donera med Swish
+                        </a>
+                    </div>
+                    <ul id="last5List" class="donation-list"></ul>
+                    <p id="lastUpdated" class="text-muted small mt-3 mb-0"></p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="dashboard-grid">
+    <div id="footer-placeholder"></div>
 
-        <div class="hero-section">
-            <div class="hero-left">
-                <div class="hero-title">Tillsammans har vi samlat in:</div>
-                <div class="hero-amount"><span id="total-alltime">0</span> Kr</div>
-
-                <div class="progress-container">
-                    <div class="progress-bar" id="progress-bar"></div>
-                </div>
-                <div class="progress-text">
-                    <span id="progress-percentage">0%</span>
-                    <span>Mål: 10,000,000 Kr</span>
-                </div>
-            </div>
-
-            <div class="hero-right">
-                <div class="logo-container">
-                    <a href="index.html" aria-label="Go to home page" class="logo-link">
-                        <img src="img/Al-Salam-Center-Logo.png" alt="Logo" id="logo">
-                    </a>
-                </div>
-                <button class="test-btn" onclick="simulateTest()">🤖 Test Data</button>
-
-                <div class="swish-number"
-                     style="
-                     display: inline-flex;
-                     align-items: center;
-                     justify-content: center;
-                     gap: 14px;
-                     background-color: #ffffff;
-                     padding: 12px 20px;
-                     border-radius: 8px;
-                     text-align: center;
-                        ">
-                <span style="font-size:32px; font-weight:600; color:#000;">
-                        123 500 0559
-                </span>
-
-                    <img src="img/swish.png"
-                         alt="Swish"
-                         style="height:40px;">
-                </div>
-
-
-            </div>
-        </div>
-
-        <div class="stats-column">
-            <div class="card">
-                <div class="card-label"> Insamlat idag: </div>
-                <div class="card-value"><span id="total-today">0</span> Kr</div>
-                <div class="card-sub"><span id="count-today">0</span> för idag</div>
-            </div>
-
-            <div class="card highlight special-card">
-                <div class="special-badge" aria-hidden>REKORD</div>
-                <div class="card-label prominent"> Högsta någonsin 🏆: </div>
-                <div class="card-value">
-                    <span class="trophy-ico" aria-hidden>🏅</span>
-                    <span id="highest-ever-amount">0</span> Kr
-                </div>
-                <div id="highest-ever-msg" class="card-msg" style="display:none;"></div>
-            </div>
-
-            <div class="card highlight">
-                <div class="card-label"> Högsta idag 🌟:</div>
-                <div class="card-value"><span id="highest-today-amount">0</span> Kr</div>
-                <div id="highest-today-msg" class="card-msg" style="display:none;"></div>
-            </div>
-        </div>
-
-
-        <div class="feed-column">
-            <div class="feed-header"> Senaste 💬:</div>
-            <div class="feed-list" id="feed-list"></div>
-        </div>
-
-    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+    <script type="module" src="i18n/js/i18n.js" defer></script>
 
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbyvsHmRWM96nR0xMFjUk1y0ox_Pohm0Rtd8MIfZYvvpevjokVmY-eU8ZIHZfN-tdUi8/exec";
-        const GOAL = 10000000;
-        const REFRESH_RATE = 5000;
+        const API_URL = "https://script.google.com/macros/s/AKfycbxLXBaGS2rdrrvtFAxMGCAeK2elGSfbvRmjtxBhjbORf9gdHBHduzOXIzP2FCI501cMWA/exec";
+        const GOAL_AMOUNT = 10000000;
+        const POLL_INTERVAL_MS = 5000;
 
-        let previousData = {
-            total_alltime: 0,
-            Highest_today: { amount: 0 }
-        };
+        const totalAmountEl = document.getElementById("totalAmount");
+        const progressLabelEl = document.getElementById("progressLabel");
+        const progressBarEl = document.getElementById("progressBar");
+        const milestonesEl = document.getElementById("milestones");
+        const last5ListEl = document.getElementById("last5List");
+        const lastUpdatedEl = document.getElementById("lastUpdated");
+        const themeToggleEl = document.getElementById("themeToggle");
+        const swishQrToggleEl = document.getElementById("swishQrToggle");
+        const swishQrWrapEl = document.getElementById("swishQrWrap");
+        const THEME_STORAGE_KEY = "alsalam-stats-v2-theme";
 
-        const els = {
-            totalAll: document.getElementById('total-alltime'),
-            progressBar: document.getElementById('progress-bar'),
-            progressPct: document.getElementById('progress-percentage'),
-            highestTodayAmt: document.getElementById('highest-today-amount'),
-            highestTodayMsg: document.getElementById('highest-today-msg'),
-            totalToday: document.getElementById('total-today'),
-            countToday: document.getElementById('count-today'),
-            highestEverAmt: document.getElementById('highest-ever-amount'),
-            highestEverMsg: document.getElementById('highest-ever-msg'),
-            feedList: document.getElementById('feed-list')
-        };
+        let previousTotalAmount = null;
+        let previousNewestDonationKey = null;
+        let showSwishQr = false;
+        let latestLast5Data = [];
 
-        function animateValue(obj, start, end, duration) {
-            if (start === end) return;
-            let startTimestamp = null;
-            const step = (timestamp) => {
-                if (!startTimestamp) startTimestamp = timestamp;
-                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                obj.innerHTML = Math.floor(progress * (end - start) + start).toLocaleString();
-                if (progress < 1) window.requestAnimationFrame(step);
-            };
-            window.requestAnimationFrame(step);
+        function parseAmount(value) {
+            if (typeof value === "number") return value;
+            if (typeof value !== "string") return 0;
+            const normalized = value.replace(/\s/g, "").replace(/,/g, ".").replace(/[^\d.-]/g, "");
+            const parsed = Number(normalized);
+            return Number.isFinite(parsed) ? parsed : 0;
         }
 
-        async function fetchData() {
-            try {
-                const response = await fetch(API_URL);
-                const data = await response.json();
-                updateDashboard(data);
-            } catch (error) {
-                console.error("Error fetching data:", error);
+        function formatSek(value) {
+            return `${value.toLocaleString("sv-SE", {
+                minimumFractionDigits: value % 1 === 0 ? 0 : 2,
+                maximumFractionDigits: 2
+            })} kr`;
+        }
+
+        function donationKey(donation) {
+            const date = donation.date || "";
+            const time = donation.time || "";
+            const account = donation.account || "";
+            const amount = parseAmount(donation.amount || 0);
+            const message = donation.message || "";
+            return `${date}|${time}|${account}|${amount}|${message}`;
+        }
+
+        function getPayload(json) {
+            if (json && json.data && (json.data.totalAmount !== undefined || Array.isArray(json.data.last5))) {
+                return json.data;
+            }
+            return json || {};
+        }
+
+        function renderMilestones(totalAmount) {
+            const nextMilestone = Math.min(Math.floor(totalAmount / 1000000) + 1, 10);
+            milestonesEl.innerHTML = "";
+
+            for (let i = 1; i <= 10; i += 1) {
+                const pill = document.createElement("span");
+                pill.className = `milestone-pill ${i === nextMilestone ? "closest" : ""}`;
+                const milestoneTarget = i * 1000000;
+                const leftAmount = Math.max(milestoneTarget - totalAmount, 0);
+                pill.textContent = i === nextMilestone ? `${i} M • kvar ${formatSek(leftAmount)}` : `${i} M`;
+                milestonesEl.appendChild(pill);
             }
         }
 
-        function updateDashboard(data) {
-            if (data.total_alltime !== previousData.total_alltime) {
-                animateValue(els.totalAll, previousData.total_alltime, data.total_alltime, 2000);
-                if (data.total_alltime >= GOAL && previousData.total_alltime < GOAL) {
-                    triggerGoalCelebration();
-                } else if (data.total_alltime > previousData.total_alltime && previousData.total_alltime > 0) {
-                    confetti({ particleCount: 30, spread: 50, origin: { y: 0.6 } });
-                }
-            }
-
-            const percentage = Math.min((data.total_alltime / GOAL) * 100, 100).toFixed(1);
-            els.progressBar.style.width = percentage + "%";
-            els.progressPct.innerText = percentage + "%";
-
-            if (data.Highest_today.amount !== previousData.Highest_today.amount) {
-                animateValue(els.highestTodayAmt, previousData.Highest_today.amount, data.Highest_today.amount, 1000);
-                if (data.Highest_today.amount > previousData.Highest_today.amount && previousData.Highest_today.amount > 0) {
-                    triggerRecordBreaker();
-                }
-            }
-
-            if (data.Highest_today.message) {
-                els.highestTodayMsg.innerText = `"${data.Highest_today.message}"`;
-                els.highestTodayMsg.style.display = "block";
-            } else { els.highestTodayMsg.style.display = "none"; }
-
-            els.totalToday.innerText = data.total_today.toLocaleString();
-            els.countToday.innerText = data.count_today;
-
-            els.highestEverAmt.innerText = data.Highest_ever.amount.toLocaleString();
-            if (data.Highest_ever.message) {
-                els.highestEverMsg.innerText = `"${data.Highest_ever.message}"`;
-                els.highestEverMsg.style.display = "block";
-            } else { els.highestEverMsg.style.display = "none"; }
-
-            if (JSON.stringify(data.last_messages) !== JSON.stringify(previousData.last_messages)) {
-                renderFeed(data.last_messages);
-            }
-            previousData = data;
+        function renderTotal(totalAmount) {
+            const clampedPercent = Math.min((totalAmount / GOAL_AMOUNT) * 100, 100);
+            totalAmountEl.textContent = formatSek(totalAmount);
+            progressLabelEl.textContent = `${clampedPercent.toFixed(2)}% av målet`;
+            progressBarEl.style.width = `${clampedPercent}%`;
+            progressBarEl.parentElement.setAttribute("aria-valuenow", clampedPercent.toFixed(2));
+            renderMilestones(totalAmount);
         }
 
-        function renderFeed(messages) {
-            els.feedList.innerHTML = "";
-            if (!messages || messages.length === 0) {
-                els.feedList.innerHTML = "<div style='text-align:center; color:#ccc; padding:20px'>No recent messages</div>";
+        function renderLast5(last5) {
+            last5ListEl.innerHTML = "";
+
+            if (!Array.isArray(last5) || last5.length === 0) {
+                const empty = document.createElement("li");
+                empty.className = "text-muted";
+                empty.textContent = "Inga donationer ännu.";
+                last5ListEl.appendChild(empty);
                 return;
             }
-            messages.forEach(msg => {
-                const item = document.createElement('div');
-                item.className = 'feed-item';
-                let timeStr = msg.timestamp;
-                if (msg.timestamp.includes('T')) timeStr = msg.timestamp.split('T')[1].substring(0, 5);
-                let displayMsg = msg.message || "-";
-                item.innerHTML = `
-                    <div class="feed-top">
-                        <span class="feed-amount">${msg.amount > 0 ? msg.amount.toLocaleString() + ' Kr' : ''}</span>
-                        <span class="feed-time">${timeStr}</span>
+
+            last5.slice(0, 5).forEach((donation) => {
+                const li = document.createElement("li");
+                li.className = "donation-item";
+
+                const amount = parseAmount(donation.amount);
+                const time = formatTimeHHMM(donation.time || "");
+                const message = donation.message ? String(donation.message).trim() : "";
+                const messageHtml = !showSwishQr && message ? `<div class="donation-message">“${message}”</div>` : "";
+
+                li.innerHTML = `
+                    <div>
+                        <div class="meta"><strong>Tid:</strong> ${time}</div>
+                        ${messageHtml}
                     </div>
-                    <div class="feed-msg">${displayMsg}</div>
+                    <div class="donation-amount">${formatSek(amount)}</div>
                 `;
-                els.feedList.appendChild(item);
+
+                last5ListEl.appendChild(li);
             });
         }
 
-        function triggerGoalCelebration() {
-            var duration = 3 * 1000;
-            var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-            var interval = setInterval(function () {
-                var timeLeft = animationEnd - Date.now();
-                if (timeLeft <= 0) return clearInterval(interval);
-                var particleCount = 50 * (timeLeft / duration);
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
-            }, 250);
+        function applySwishQrMode(last5) {
+            swishQrWrapEl.classList.toggle("d-none", !showSwishQr);
+            swishQrToggleEl.textContent = showSwishQr ? "Dölj Swish QR" : "Visa Swish QR";
+            renderLast5(last5);
         }
 
-        function triggerRecordBreaker() {
-            const end = Date.now() + 1000;
-            const colors = ['#bb0000', '#ffffff'];
-            (function frame() {
-                confetti({ particleCount: 2, angle: 60, spread: 55, origin: { x: 0 }, colors: colors });
-                confetti({ particleCount: 2, angle: 120, spread: 55, origin: { x: 1 }, colors: colors });
-                if (Date.now() < end) requestAnimationFrame(frame);
-            }());
+        function formatTimeHHMM(timeValue) {
+            if (!timeValue) return "--:--";
+            const text = String(timeValue).trim();
+            const match = text.match(/(\d{1,2}):(\d{2})/);
+            if (match) {
+                const hours = match[1].padStart(2, "0");
+                return `${hours}:${match[2]}`;
+            }
+            return "--:--";
         }
 
-        function toggleTheme() {
-            const body = document.body;
-            const label = document.getElementById('theme-label');
-            if (body.getAttribute('data-theme') === 'dark') {
-                body.removeAttribute('data-theme');
-                label.innerText = "☀️";
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                label.innerText = "🌙";
+        function setTheme(theme) {
+            const isDark = theme === "dark";
+            document.body.classList.toggle("theme-dark", isDark);
+            themeToggleEl.textContent = isDark ? "White mode" : "Dark mode";
+            localStorage.setItem(THEME_STORAGE_KEY, isDark ? "dark" : "light");
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+            if (savedTheme === "dark" || savedTheme === "light") {
+                setTheme(savedTheme);
+                return;
+            }
+            setTheme("light");
+        }
+
+        function launchRocket(originXPercent, colorHue = 220) {
+            const rocket = document.createElement("div");
+            rocket.className = "rocket";
+            rocket.style.left = `${originXPercent}vw`;
+            rocket.style.bottom = "0";
+            rocket.style.background = `linear-gradient(180deg, #f8f9fa 0%, hsl(${colorHue}, 85%, 50%) 100%)`;
+            rocket.style.boxShadow = `0 0 12px hsla(${colorHue}, 85%, 50%, 0.8)`;
+            document.body.appendChild(rocket);
+
+            rocket.addEventListener("animationend", () => {
+                rocket.remove();
+                confetti({
+                    particleCount: 70,
+                    spread: 70,
+                    startVelocity: 45,
+                    ticks: 220,
+                    origin: { x: Math.min(Math.max(originXPercent / 100, 0.05), 0.95), y: 0.28 }
+                });
+            }, { once: true });
+        }
+
+        function triggerFireworks(power = 1) {
+            const safePower = Math.min(Math.max(power, 1), 12);
+            const particleCount = Math.round(40 + safePower * 15);
+            const spread = Math.min(120, 55 + safePower * 4);
+
+            confetti({
+                particleCount,
+                spread,
+                startVelocity: 50,
+                ticks: 250,
+                origin: { x: 0.2, y: 0.6 }
+            });
+            confetti({
+                particleCount,
+                spread,
+                startVelocity: 50,
+                ticks: 250,
+                origin: { x: 0.8, y: 0.6 }
+            });
+            setTimeout(() => {
+                confetti({
+                    particleCount: Math.round(particleCount * 0.8),
+                    spread: spread + 10,
+                    startVelocity: 45,
+                    ticks: 240,
+                    origin: { x: 0.5, y: 0.4 }
+                });
+            }, 220);
+        }
+
+        function celebrateDonation(amount) {
+            const intensity = Math.max(1, Math.min(10, Math.ceil(amount / 500)));
+            const rockets = Math.max(1, Math.min(8, Math.ceil(amount / 1000)));
+
+            triggerFireworks(intensity);
+
+            for (let i = 0; i < rockets; i += 1) {
+                const origin = 10 + Math.random() * 80;
+                const hue = 180 + Math.round(Math.random() * 120);
+                setTimeout(() => launchRocket(origin, hue), i * 150);
             }
         }
 
-        function goToDonation() { window.location.href = 'donations.html'; }
-
-        function isMobileDevice() {
-            return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-        }
-
-        function openSwish() {
-            const swishNumber = "1235000559"; // your Swish number
-            const swishData = encodeURIComponent(
-                JSON.stringify({
-                    version: 1,
-                    payee: { value: swishNumber },
-                    //amount: { value: 200 },         // Optional: pre-fill an amount
-                    message: { value: "Från tiktok" }
-                })
-            );
-
-            if (isMobileDevice()) {
-                window.location.href = `swish://payment?data=${swishData}`;
+        function celebrateMilestone(milestoneNumber) {
+            triggerFireworks(6 + Math.min(milestoneNumber, 4));
+            for (let i = 0; i < 6; i += 1) {
+                setTimeout(() => launchRocket(12 + i * 14, 30 + i * 35), i * 100);
             }
         }
 
-        function simulateTest() {
-            let currentTotal = parseInt(els.totalAll.innerText.replace(/,/g, '')) || 1000;
-            let currentHigh = parseInt(els.highestTodayAmt.innerText.replace(/,/g, '')) || 100;
-            const fakeData = {
-                "total_alltime": currentTotal + 500,
-                "count_alltime": 50,
-                "total_today": 5000,
-                "count_today": 12,
-                "Highest_ever": { "amount": 2000, "message": "Big Donor" },
-                "Highest_today": { "amount": currentHigh + 150, "message": "Fictive Donor!" },
-                "last_messages": [
-                    { "timestamp": "2025-12-13T16:00", "amount": 500, "message": "Test Donation 1" }
-                ],
-                "last_updated": "2025-12-13"
-            };
-            updateDashboard(fakeData);
+        function maybeTriggerCelebrations(totalAmount, last5) {
+            if (previousTotalAmount === null) {
+                previousTotalAmount = totalAmount;
+                if (Array.isArray(last5) && last5.length > 0) {
+                    previousNewestDonationKey = donationKey(last5[0]);
+                }
+                return;
+            }
+
+            if (totalAmount > previousTotalAmount) {
+                const increase = totalAmount - previousTotalAmount;
+
+                const newestDonation = Array.isArray(last5) && last5.length > 0 ? last5[0] : null;
+                const newestKey = newestDonation ? donationKey(newestDonation) : null;
+                const newestAmount = newestDonation ? parseAmount(newestDonation.amount || 0) : 0;
+
+                if (newestKey && newestKey !== previousNewestDonationKey) {
+                    celebrateDonation(Math.max(newestAmount, increase));
+                } else {
+                    celebrateDonation(increase);
+                }
+
+                const previousMilestone = Math.floor(previousTotalAmount / 1000000);
+                const currentMilestone = Math.floor(totalAmount / 1000000);
+                for (let milestone = previousMilestone + 1; milestone <= Math.min(currentMilestone, 10); milestone += 1) {
+                    setTimeout(() => celebrateMilestone(milestone), 500 + (milestone - previousMilestone - 1) * 450);
+                }
+            }
+
+            previousTotalAmount = totalAmount;
+            if (Array.isArray(last5) && last5.length > 0) {
+                previousNewestDonationKey = donationKey(last5[0]);
+            }
         }
 
-        fetchData();
-        setInterval(fetchData, REFRESH_RATE);
+        async function refreshStats() {
+            try {
+                const response = await fetch(API_URL, { cache: "no-store" });
+                if (!response.ok) throw new Error(`Request failed: ${response.status}`);
+
+                const json = await response.json();
+                const payload = getPayload(json);
+
+                const totalAmount = parseAmount(payload.totalAmount || 0);
+                const last5 = Array.isArray(payload.last5) ? payload.last5 : [];
+
+                latestLast5Data = last5;
+                renderTotal(totalAmount);
+                applySwishQrMode(latestLast5Data);
+                maybeTriggerCelebrations(totalAmount, last5);
+
+                const now = new Date();
+                lastUpdatedEl.textContent = `Senast uppdaterad: ${now.toLocaleString("sv-SE")}`;
+            } catch (error) {
+                console.error("Failed to refresh stats", error);
+                lastUpdatedEl.textContent = "Kunde inte hämta data just nu.";
+            }
+        }
+
+        $(function () {
+            $("#footer-placeholder").load("footer.html", function () {
+                if (window.reapplyTranslations) {
+                    setTimeout(() => window.reapplyTranslations(), 50);
+                }
+            });
+        });
+
+        refreshStats();
+        setInterval(refreshStats, POLL_INTERVAL_MS);
+
+        initTheme();
+        themeToggleEl.addEventListener("click", () => {
+            const nextTheme = document.body.classList.contains("theme-dark") ? "light" : "dark";
+            setTheme(nextTheme);
+        });
+
+        swishQrToggleEl.addEventListener("click", () => {
+            showSwishQr = !showSwishQr;
+            applySwishQrMode(latestLast5Data);
+        });
     </script>
 </body>
 
