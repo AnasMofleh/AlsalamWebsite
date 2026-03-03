@@ -97,10 +97,9 @@
 
     const goal = 10000000;
     const $total = $("#stats-preview-total");
-    const $count = $("#stats-preview-count");
-    const $top = $("#stats-preview-top");
     const $progress = $("#stats-preview-progress");
     const $percentage = $("#stats-preview-percentage");
+    const $milestoneLeft = $("#stats-preview-milestone-left");
     const $message = $("#stats-preview-message");
     const defaultStatsPreviewMessage = $message.text().trim();
 
@@ -113,31 +112,28 @@
         if (!$total.length) return;
 
         const locale = "sv-SE";
-        const totalAlltime = Number(snapshot.total_alltime ?? snapshot.totalAlltime ?? 0);
-        const countToday = Number(snapshot.count_today ?? snapshot.countToday ?? 0);
-        const highestTodayAmountSource =
-            snapshot.highest_today_amount ??
-            snapshot.highestTodayAmount ??
-            (snapshot.Highest_today && snapshot.Highest_today.amount) ??
-            0;
-        const highestTodayAmount = Number(highestTodayAmountSource);
-        const highestTodayMessage =
-            snapshot.highest_today_message ??
-            (snapshot.Highest_today && snapshot.Highest_today.message) ??
-            snapshot.highestTodayMessage ??
-            "";
+        const totalAlltime = Number(snapshot.totalAmount ?? snapshot.total_alltime ?? snapshot.totalAlltime ?? 0);
+        const latestMessage = snapshot.latestMessage ?? "";
+        const latestTime = snapshot.latestTime ?? "";
 
         const targetGoal = Number(snapshot.goal ?? goal ?? 0);
         const pct = targetGoal > 0 ? Math.min((totalAlltime / targetGoal) * 100, 100) : 0;
+        const nextMilestone = Math.min(Math.floor(totalAlltime / 1000000) + 1, 10);
+        const nextMilestoneTarget = nextMilestone * 1000000;
+        const leftToMilestone = Math.max(nextMilestoneTarget - totalAlltime, 0);
 
         $total.text(`${totalAlltime.toLocaleString(locale)} kr`);
-        $count.text(`${countToday.toLocaleString(locale)}+`);
-        $top.text(`${highestTodayAmount.toLocaleString(locale)} kr`);
         $progress.css("width", `${pct.toFixed(1)}%`);
         $percentage.text(`${pct.toFixed(1)}%`);
+        if ($milestoneLeft.length) {
+            $milestoneLeft.text(
+                `Nästa milstolpe: ${nextMilestone} M • kvar ${leftToMilestone.toLocaleString(locale)} SEK`
+            );
+        }
 
-        if (highestTodayMessage) {
-            $message.text(`"${highestTodayMessage}"`).show();
+        if (latestMessage) {
+            const prefix = latestTime ? `Senaste ${latestTime}: ` : "Senaste: ";
+            $message.text(`${prefix}"${latestMessage}"`).show();
         } else if (defaultStatsPreviewMessage) {
             $message.text(defaultStatsPreviewMessage).show();
         } else {
@@ -170,14 +166,23 @@
         }
     }
 
+    function formatPreviewTimeHHMM(timeValue) {
+        if (!timeValue) return "";
+        const text = String(timeValue).trim();
+        const match = text.match(/(\d{1,2}):(\d{2})/);
+        if (!match) return "";
+        return `${match[1].padStart(2, "0")}:${match[2]}`;
+    }
+
     function updateStatsPreview(data) {
         if (!$total.length) return;
+        const payload = (data && data.data) ? data.data : data;
+        const last5 = Array.isArray(payload.last5) ? payload.last5 : [];
+        const latest = last5[0] || null;
         const snapshot = {
-            total_alltime: data.total_alltime,
-            total_today: data.total_today,
-            count_today: data.count_today,
-            highest_today_amount: data.Highest_today ? data.Highest_today.amount : 0,
-            highest_today_message: data.Highest_today ? (data.Highest_today.message || "") : "",
+            totalAmount: Number(payload.totalAmount ?? payload.total_alltime ?? 0),
+            latestMessage: latest && latest.message ? String(latest.message) : "",
+            latestTime: latest && latest.time ? formatPreviewTimeHHMM(latest.time) : "",
             goal,
         };
         applyStatsPreview(snapshot);
@@ -187,7 +192,7 @@
     async function fetchStatsPreview() {
         if (!$total.length) return;
         try {
-            const response = await fetch("https://script.google.com/macros/s/AKfycbyvsHmRWM96nR0xMFjUk1y0ox_Pohm0Rtd8MIfZYvvpevjokVmY-eU8ZIHZfN-tdUi8/exec");
+            const response = await fetch("https://script.google.com/macros/s/AKfycbxLXBaGS2rdrrvtFAxMGCAeK2elGSfbvRmjtxBhjbORf9gdHBHduzOXIzP2FCI501cMWA/exec");
             if (!response.ok) throw new Error(`Stats request failed with status ${response.status}`);
             const data = await response.json();
             updateStatsPreview(data);

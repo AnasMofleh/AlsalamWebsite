@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Al-Salam Donations Stats v2</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Pacifico&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --stats-bg: #f8f9fa;
+            --stats-card-bg: #ffffff;
+            --stats-text: #212529;
+            --stats-muted: #6c757d;
+            --stats-pill-bg: #f5f7fa;
+            --stats-pill-border: #e2e8f0;
+            --stats-pill-text: #34495e;
+        }
+
+        body.theme-dark {
+            --stats-bg: #0f172a;
+            --stats-card-bg: #1e293b;
+            --stats-text: #e2e8f0;
+            --stats-muted: #94a3b8;
+            --stats-pill-bg: #334155;
+            --stats-pill-border: #475569;
+            --stats-pill-text: #e2e8f0;
+        }
+
+        body {
+            background: var(--stats-bg);
+            color: var(--stats-text);
+            font-size: 1.12rem;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+
+        .stats-v2-wrap {
+            margin-top: 28px;
+            margin-bottom: 60px;
+        }
+
+        .stats-v2-card {
+            background: var(--stats-card-bg) !important;
+            color: var(--stats-text);
+            border-radius: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+        }
+
+        body.theme-dark .stats-v2-card {
+            border-color: rgba(148, 163, 184, 0.22);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .stats-v2-theme-btn {
+            border: 1px solid #d1d5db;
+            background: #fff;
+            color: #111827;
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .stats-v2-home-btn {
+            border-radius: 999px;
+            padding: 8px 16px;
+            font-weight: 700;
+        }
+
+        body.theme-dark .stats-v2-theme-btn {
+            border-color: #64748b;
+            background: #1f2937;
+            color: #e2e8f0;
+        }
+
+        .stats-v2-total {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            color: var(--bs-primary);
+            line-height: 1.1;
+            text-align: center;
+        }
+
+        .stats-v2-card h2 {
+            font-size: clamp(2rem, 4.2vw, 3rem);
+        }
+
+        body.theme-dark .stats-v2-card h2 {
+            color: #ffffff;
+        }
+
+        .stats-v2-card h4 {
+            font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+        }
+
+        body.theme-dark .stats-v2-card h4 {
+            color: #ffffff;
+        }
+
+        .stats-v2-card p,
+        .stats-v2-card small,
+        .stats-v2-card .meta,
+        .stats-v2-card .donation-amount,
+        .stats-v2-card .milestone-pill,
+        .stats-v2-card .badge,
+        .stats-v2-card .stats-v2-theme-btn,
+        .stats-v2-card .btn {
+            font-size: 1.08rem !important;
+        }
+
+        .stats-v2-progress {
+            height: 22px;
+            border-radius: 999px;
+            background: #e9ecef;
+            overflow: hidden;
+        }
+
+        .stats-v2-progress .bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #0d6efd 0%, #198754 100%);
+            transition: width 900ms ease;
+        }
+
+        .milestones {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .milestone-pill {
+            border-radius: 999px;
+            font-size: 0.85rem;
+            padding: 6px 12px;
+            background: var(--stats-pill-bg);
+            border: 1px solid var(--stats-pill-border);
+            color: var(--stats-pill-text);
+        }
+
+        .milestone-pill.closest {
+            background: #198754;
+            border-color: #198754;
+            color: #fff;
+        }
+
+        .donation-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .donation-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #eef2f7;
+        }
+
+        .donation-item:last-child {
+            border-bottom: none;
+        }
+
+        .donation-item .meta {
+            color: var(--stats-muted);
+            font-size: 0.9rem;
+        }
+
+        .donation-amount {
+            font-weight: 700;
+            color: #198754;
+            white-space: nowrap;
+        }
+
+        .donation-message {
+            font-size: 1.05rem;
+            line-height: 1.45;
+            font-weight: 600;
+            color: var(--stats-text);
+            margin-top: 4px;
+        }
+
+        .text-muted {
+            color: var(--stats-muted) !important;
+        }
+
+        .rocket {
+            position: fixed;
+            width: 6px;
+            height: 22px;
+            border-radius: 999px;
+            background: linear-gradient(180deg, #f8f9fa 0%, #0d6efd 100%);
+            box-shadow: 0 0 12px rgba(13, 110, 253, 0.8);
+            z-index: 9999;
+            pointer-events: none;
+            animation: rocket-up 850ms ease-out forwards;
+        }
+
+        @keyframes rocket-up {
+            from {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateY(-65vh) scale(0.85);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container stats-v2-wrap">
+        <div class="row g-4">
+            <div class="col-12">
+                <div class="stats-v2-card bg-white p-4 p-md-5 h-100">
+                    <div class="d-flex align-items-start justify-content-between flex-wrap gap-3">
+                        <div>
+                            <h2 class="mb-2">Tillsammans har vi:</h2>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <a href="index.html" class="btn btn-outline-primary stats-v2-home-btn">
+                                <i class="fas fa-home me-1"></i>Home
+                            </a>
+                            <button id="themeToggle" type="button" class="stats-v2-theme-btn">Dark mode</button>
+                            <span class="badge bg-success px-3 py-2">LIVE</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <div id="totalAmount" class="stats-v2-total">0 SEK</div>
+                        <p id="progressLabel" class="text-muted mb-0">0% av målet</p>
+                    </div>
+
+                    <div class="stats-v2-progress mt-3" role="progressbar" aria-label="Insamlingsstatus"
+                        aria-valuemin="0" aria-valuemax="100">
+                        <div id="progressBar" class="bar"></div>
+                    </div>
+
+                    <div class="d-flex justify-content-between text-muted mt-2">
+                        <small>0 SEK</small>
+                        <small>10 000 000 SEK</small>
+                    </div>
+
+                    <div id="milestones" class="milestones"></div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="stats-v2-card bg-white p-4 h-100">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h4 class="mb-0">Senaste 5 donationer</h4>
+                        <i class="fas fa-hand-holding-heart text-primary"></i>
+                    </div>
+                    <ul id="last5List" class="donation-list"></ul>
+                    <p id="lastUpdated" class="text-muted small mt-3 mb-0"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+    <script type="module" src="i18n/js/i18n.js" defer></script>
+
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbxLXBaGS2rdrrvtFAxMGCAeK2elGSfbvRmjtxBhjbORf9gdHBHduzOXIzP2FCI501cMWA/exec";
+        const GOAL_AMOUNT = 10000000;
+        const POLL_INTERVAL_MS = 5000;
+
+        const totalAmountEl = document.getElementById("totalAmount");
+        const progressLabelEl = document.getElementById("progressLabel");
+        const progressBarEl = document.getElementById("progressBar");
+        const milestonesEl = document.getElementById("milestones");
+        const last5ListEl = document.getElementById("last5List");
+        const lastUpdatedEl = document.getElementById("lastUpdated");
+        const themeToggleEl = document.getElementById("themeToggle");
+        const THEME_STORAGE_KEY = "alsalam-stats-v2-theme";
+
+        let previousTotalAmount = null;
+        let previousNewestDonationKey = null;
+
+        function parseAmount(value) {
+            if (typeof value === "number") return value;
+            if (typeof value !== "string") return 0;
+            const normalized = value.replace(/\s/g, "").replace(/,/g, ".").replace(/[^\d.-]/g, "");
+            const parsed = Number(normalized);
+            return Number.isFinite(parsed) ? parsed : 0;
+        }
+
+        function formatSek(value) {
+            return `${value.toLocaleString("sv-SE", {
+                minimumFractionDigits: value % 1 === 0 ? 0 : 2,
+                maximumFractionDigits: 2
+            })} SEK`;
+        }
+
+        function donationKey(donation) {
+            const date = donation.date || "";
+            const time = donation.time || "";
+            const account = donation.account || "";
+            const amount = parseAmount(donation.amount || 0);
+            const message = donation.message || "";
+            return `${date}|${time}|${account}|${amount}|${message}`;
+        }
+
+        function getPayload(json) {
+            if (json && json.data && (json.data.totalAmount !== undefined || Array.isArray(json.data.last5))) {
+                return json.data;
+            }
+            return json || {};
+        }
+
+        function renderMilestones(totalAmount) {
+            const nextMilestone = Math.min(Math.floor(totalAmount / 1000000) + 1, 10);
+            milestonesEl.innerHTML = "";
+
+            for (let i = 1; i <= 10; i += 1) {
+                const pill = document.createElement("span");
+                pill.className = `milestone-pill ${i === nextMilestone ? "closest" : ""}`;
+                const milestoneTarget = i * 1000000;
+                const leftAmount = Math.max(milestoneTarget - totalAmount, 0);
+                pill.textContent = i === nextMilestone ? `${i} M • kvar ${formatSek(leftAmount)}` : `${i} M`;
+                milestonesEl.appendChild(pill);
+            }
+        }
+
+        function renderTotal(totalAmount) {
+            const clampedPercent = Math.min((totalAmount / GOAL_AMOUNT) * 100, 100);
+            totalAmountEl.textContent = formatSek(totalAmount);
+            progressLabelEl.textContent = `${clampedPercent.toFixed(2)}% av målet`;
+            progressBarEl.style.width = `${clampedPercent}%`;
+            progressBarEl.parentElement.setAttribute("aria-valuenow", clampedPercent.toFixed(2));
+            renderMilestones(totalAmount);
+        }
+
+        function renderLast5(last5) {
+            last5ListEl.innerHTML = "";
+
+            if (!Array.isArray(last5) || last5.length === 0) {
+                const empty = document.createElement("li");
+                empty.className = "text-muted";
+                empty.textContent = "Inga donationer ännu.";
+                last5ListEl.appendChild(empty);
+                return;
+            }
+
+            last5.slice(0, 5).forEach((donation) => {
+                const li = document.createElement("li");
+                li.className = "donation-item";
+
+                const amount = parseAmount(donation.amount);
+                const time = formatTimeHHMM(donation.time || "");
+                const message = donation.message ? String(donation.message).trim() : "";
+                const messageHtml = message ? `<div class="donation-message">“${message}”</div>` : "";
+
+                li.innerHTML = `
+                    <div>
+                        <div class="meta"><strong>Tid:</strong> ${time}</div>
+                        ${messageHtml}
+                    </div>
+                    <div class="donation-amount">${formatSek(amount)}</div>
+                `;
+
+                last5ListEl.appendChild(li);
+            });
+        }
+
+        function formatTimeHHMM(timeValue) {
+            if (!timeValue) return "--:--";
+            const text = String(timeValue).trim();
+            const match = text.match(/(\d{1,2}):(\d{2})/);
+            if (match) {
+                const hours = match[1].padStart(2, "0");
+                return `${hours}:${match[2]}`;
+            }
+            return "--:--";
+        }
+
+        function setTheme(theme) {
+            const isDark = theme === "dark";
+            document.body.classList.toggle("theme-dark", isDark);
+            themeToggleEl.textContent = isDark ? "White mode" : "Dark mode";
+            localStorage.setItem(THEME_STORAGE_KEY, isDark ? "dark" : "light");
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+            if (savedTheme === "dark" || savedTheme === "light") {
+                setTheme(savedTheme);
+                return;
+            }
+            setTheme("light");
+        }
+
+        function launchRocket(originXPercent, colorHue = 220) {
+            const rocket = document.createElement("div");
+            rocket.className = "rocket";
+            rocket.style.left = `${originXPercent}vw`;
+            rocket.style.bottom = "0";
+            rocket.style.background = `linear-gradient(180deg, #f8f9fa 0%, hsl(${colorHue}, 85%, 50%) 100%)`;
+            rocket.style.boxShadow = `0 0 12px hsla(${colorHue}, 85%, 50%, 0.8)`;
+            document.body.appendChild(rocket);
+
+            rocket.addEventListener("animationend", () => {
+                rocket.remove();
+                confetti({
+                    particleCount: 70,
+                    spread: 70,
+                    startVelocity: 45,
+                    ticks: 220,
+                    origin: { x: Math.min(Math.max(originXPercent / 100, 0.05), 0.95), y: 0.28 }
+                });
+            }, { once: true });
+        }
+
+        function triggerFireworks(power = 1) {
+            const safePower = Math.min(Math.max(power, 1), 12);
+            const particleCount = Math.round(40 + safePower * 15);
+            const spread = Math.min(120, 55 + safePower * 4);
+
+            confetti({
+                particleCount,
+                spread,
+                startVelocity: 50,
+                ticks: 250,
+                origin: { x: 0.2, y: 0.6 }
+            });
+            confetti({
+                particleCount,
+                spread,
+                startVelocity: 50,
+                ticks: 250,
+                origin: { x: 0.8, y: 0.6 }
+            });
+            setTimeout(() => {
+                confetti({
+                    particleCount: Math.round(particleCount * 0.8),
+                    spread: spread + 10,
+                    startVelocity: 45,
+                    ticks: 240,
+                    origin: { x: 0.5, y: 0.4 }
+                });
+            }, 220);
+        }
+
+        function celebrateDonation(amount) {
+            const intensity = Math.max(1, Math.min(10, Math.ceil(amount / 500)));
+            const rockets = Math.max(1, Math.min(8, Math.ceil(amount / 1000)));
+
+            triggerFireworks(intensity);
+
+            for (let i = 0; i < rockets; i += 1) {
+                const origin = 10 + Math.random() * 80;
+                const hue = 180 + Math.round(Math.random() * 120);
+                setTimeout(() => launchRocket(origin, hue), i * 150);
+            }
+        }
+
+        function celebrateMilestone(milestoneNumber) {
+            triggerFireworks(6 + Math.min(milestoneNumber, 4));
+            for (let i = 0; i < 6; i += 1) {
+                setTimeout(() => launchRocket(12 + i * 14, 30 + i * 35), i * 100);
+            }
+        }
+
+        function maybeTriggerCelebrations(totalAmount, last5) {
+            if (previousTotalAmount === null) {
+                previousTotalAmount = totalAmount;
+                if (Array.isArray(last5) && last5.length > 0) {
+                    previousNewestDonationKey = donationKey(last5[0]);
+                }
+                return;
+            }
+
+            if (totalAmount > previousTotalAmount) {
+                const increase = totalAmount - previousTotalAmount;
+
+                const newestDonation = Array.isArray(last5) && last5.length > 0 ? last5[0] : null;
+                const newestKey = newestDonation ? donationKey(newestDonation) : null;
+                const newestAmount = newestDonation ? parseAmount(newestDonation.amount || 0) : 0;
+
+                if (newestKey && newestKey !== previousNewestDonationKey) {
+                    celebrateDonation(Math.max(newestAmount, increase));
+                } else {
+                    celebrateDonation(increase);
+                }
+
+                const previousMilestone = Math.floor(previousTotalAmount / 1000000);
+                const currentMilestone = Math.floor(totalAmount / 1000000);
+                for (let milestone = previousMilestone + 1; milestone <= Math.min(currentMilestone, 10); milestone += 1) {
+                    setTimeout(() => celebrateMilestone(milestone), 500 + (milestone - previousMilestone - 1) * 450);
+                }
+            }
+
+            previousTotalAmount = totalAmount;
+            if (Array.isArray(last5) && last5.length > 0) {
+                previousNewestDonationKey = donationKey(last5[0]);
+            }
+        }
+
+        async function refreshStats() {
+            try {
+                const response = await fetch(API_URL, { cache: "no-store" });
+                if (!response.ok) throw new Error(`Request failed: ${response.status}`);
+
+                const json = await response.json();
+                const payload = getPayload(json);
+
+                const totalAmount = parseAmount(payload.totalAmount || 0);
+                const last5 = Array.isArray(payload.last5) ? payload.last5 : [];
+
+                renderTotal(totalAmount);
+                renderLast5(last5);
+                maybeTriggerCelebrations(totalAmount, last5);
+
+                const now = new Date();
+                lastUpdatedEl.textContent = `Senast uppdaterad: ${now.toLocaleString("sv-SE")}`;
+            } catch (error) {
+                console.error("Failed to refresh stats", error);
+                lastUpdatedEl.textContent = "Kunde inte hämta data just nu.";
+            }
+        }
+
+        $(function () {
+            $("#footer-placeholder").load("footer.html", function () {
+                if (window.reapplyTranslations) {
+                    setTimeout(() => window.reapplyTranslations(), 50);
+                }
+            });
+        });
+
+        refreshStats();
+        setInterval(refreshStats, POLL_INTERVAL_MS);
+
+        initTheme();
+        themeToggleEl.addEventListener("click", () => {
+            const nextTheme = document.body.classList.contains("theme-dark") ? "light" : "dark";
+            setTheme(nextTheme);
+        });
+    </script>
+</body>
+
+</html>
