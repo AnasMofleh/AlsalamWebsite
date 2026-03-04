@@ -1524,7 +1524,7 @@
         // ===========================
         // API endpoints & Constants (UNCHANGED LOGIC)
         // ===========================
-        const MOBILE_API_URL = "https://script.google.com/macros/s/AKfycbyvsHmRWM96nR0xMFjUk1y0ox_Pohm0Rtd8MIfZYvvpevjokVmY-eU8ZIHZfN-tdUi8/exec";
+        const MOBILE_API_URL = "https://script.google.com/macros/s/AKfycbxLXBaGS2rdrrvtFAxMGCAeK2elGSfbvRmjtxBhjbORf9gdHBHduzOXIzP2FCI501cMWA/exec";
         const CARD_API_URL = "https://script.google.com/macros/s/AKfycby4xd1YkqdDe-xvshIuMpj53wCLM9kUClwb84Qtx5amrPd6xrUjKjJxiYSdEppweq4/exec";
         const GOAL = 10000000;
         const DAILY_GOAL = 1000000;
@@ -1587,7 +1587,8 @@
                 let cardData = null;
 
                 if (mobileResponse.status === 'fulfilled' && mobileResponse.value.ok) {
-                    mobileData = await mobileResponse.value.json();
+                    const mobileRaw = await mobileResponse.value.json();
+                    mobileData = (mobileRaw && mobileRaw.data) ? mobileRaw.data : mobileRaw;
                     console.log('=== RAW MOBILE PAYMENT DATA ===');
                     console.log(JSON.stringify(mobileData, null, 2));
                 }
@@ -1625,10 +1626,19 @@
 
             // Process Mobile payment data
             if (mobileData) {
-                combined.total_mobile = mobileData.total_alltime || 0;
+                combined.total_mobile = mobileData.totalAmount || mobileData.total_alltime || 0;
                 combined.total_combined += combined.total_mobile;
 
-                if (mobileData.last_messages) {
+                if (Array.isArray(mobileData.last5)) {
+                    mobileData.last5.forEach(msg => {
+                        combined.mobile_payments.push({
+                            amount: msg.amount || 0,
+                            message: msg.message || '-',
+                            timestamp: `${msg.date || ''} ${msg.time || ''}`.trim(),
+                            source: 'mobile'
+                        });
+                    });
+                } else if (mobileData.last_messages) {
                     mobileData.last_messages.forEach(msg => {
                         combined.mobile_payments.push({
                             amount: msg.amount || 0,
@@ -1639,13 +1649,21 @@
                     });
                 }
 
-                if (mobileData.Highest_ever && mobileData.Highest_ever.amount > combined.highest_amount) {
-                    combined.highest_amount = mobileData.Highest_ever.amount;
+                const mobileHighestFromSummary = mobileData.Highest_ever && mobileData.Highest_ever.amount
+                    ? mobileData.Highest_ever.amount
+                    : 0;
+                const mobileHighestFromLast5 = Array.isArray(mobileData.last5)
+                    ? mobileData.last5.reduce((max, item) => Math.max(max, parseFloat(item.amount) || 0), 0)
+                    : 0;
+                const mobileHighest = Math.max(mobileHighestFromSummary, mobileHighestFromLast5);
+
+                if (mobileHighest > combined.highest_amount) {
+                    combined.highest_amount = mobileHighest;
                     combined.highest_source = 'Mobilbetalning';
                 }
 
                 combined.total_today += mobileData.total_today || 0;
-                combined.count_today += mobileData.count_today || 0;
+                combined.count_today += mobileData.count_today || (Array.isArray(mobileData.last5) ? mobileData.last5.length : 0);
             }
 
             // Process Card payment data
