@@ -96,6 +96,8 @@
     });
 
     const goal = 10000000;
+    const SWISH_API_URL = "https://script.google.com/macros/s/AKfycbxLXBaGS2rdrrvtFAxMGCAeK2elGSfbvRmjtxBhjbORf9gdHBHduzOXIzP2FCI501cMWA/exec";
+    const STRIPE_API_URL = "https://script.google.com/macros/s/AKfycby4xd1YkqdDe-xvshIuMpj53wCLM9kUClwb84Qtx5amrPd6xrUjKjJxiYSdEppweq4/exec";
     const $total = $("#stats-preview-total");
     const $progress = $("#stats-preview-progress");
     const $percentage = $("#stats-preview-percentage");
@@ -174,13 +176,35 @@
         return `${match[1].padStart(2, "0")}:${match[2]}`;
     }
 
-    function updateStatsPreview(data) {
+    function parseAmountValue(input) {
+        if (typeof input === "number") return input;
+        const text = String(input == null ? "" : input).trim();
+        if (!text) return 0;
+        const normalized = text.replace(/\s|\u00A0/g, "").replace(/,/g, ".").replace(/[^\d.-]/g, "");
+        const parsed = Number(normalized);
+        return Number.isFinite(parsed) ? parsed : 0;
+    }
+
+    function parseStripeTotal(stripeRaw) {
+        const payload = stripeRaw && stripeRaw.data ? stripeRaw.data : stripeRaw;
+        if (!payload) return 0;
+
+        if (Array.isArray(payload)) {
+            return payload.reduce((sum, payment) => sum + parseAmountValue(payment.Amount ?? payment.amount ?? 0), 0);
+        }
+
+        return parseAmountValue(payload.total_stripe ?? payload.total_card ?? payload.totalAmount ?? 0);
+    }
+
+    function updateStatsPreview(swishRaw, stripeRaw) {
         if (!$total.length) return;
-        const payload = (data && data.data) ? data.data : data;
-        const last5 = Array.isArray(payload.last5) ? payload.last5 : [];
+        const payload = (swishRaw && swishRaw.data) ? swishRaw.data : swishRaw;
+        const last5 = Array.isArray(payload && payload.last5) ? payload.last5 : [];
         const latest = last5[0] || null;
+        const swishTotal = Number(payload && (payload.totalAmount ?? payload.total_alltime) ? (payload.totalAmount ?? payload.total_alltime) : 0);
+        const stripeTotal = parseStripeTotal(stripeRaw);
         const snapshot = {
-            totalAmount: Number(payload.totalAmount ?? payload.total_alltime ?? 0),
+            totalAmount: swishTotal + stripeTotal,
             latestMessage: latest && latest.message ? String(latest.message) : "",
             latestTime: latest && latest.time ? formatPreviewTimeHHMM(latest.time) : "",
             goal,
@@ -192,10 +216,22 @@
     async function fetchStatsPreview() {
         if (!$total.length) return;
         try {
-            const response = await fetch("https://script.google.com/macros/s/AKfycbxLXBaGS2rdrrvtFAxMGCAeK2elGSfbvRmjtxBhjbORf9gdHBHduzOXIzP2FCI501cMWA/exec");
-            if (!response.ok) throw new Error(`Stats request failed with status ${response.status}`);
-            const data = await response.json();
-            updateStatsPreview(data);
+            const [swishResponse, stripeResponse] = await Promise.allSettled([
+                fetch(SWISH_API_URL),
+                fetch(STRIPE_API_URL),
+            ]);
+
+            if (swishResponse.status !== "fulfilled" || !swishResponse.value.ok) {
+                throw new Error("Swish stats request failed");
+            }
+
+            const swishData = await swishResponse.value.json();
+            let stripeData = null;
+            if (stripeResponse.status === "fulfilled" && stripeResponse.value.ok) {
+                stripeData = await stripeResponse.value.json();
+            }
+
+            updateStatsPreview(swishData, stripeData);
         } catch (fetchError) {
             console.warn("Stats preview fetch failed", fetchError);
         }
