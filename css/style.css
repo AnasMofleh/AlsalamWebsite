@@ -383,6 +383,18 @@ html[dir="rtl"] .hero-row {
   font-size: 1.1rem;
 }
 
+@media (max-width: 768px) {
+  .stats-preview-btn {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+    gap: 6px;
+  }
+
+  .stats-preview-btn i {
+    font-size: 0.9rem;
+  }
+}
+
 .stats-snapshot {
   background: rgba(255, 255, 255, 0.9);
   border: 1px solid rgba(0, 0, 0, 0.05);
@@ -478,6 +490,14 @@ html[dir="rtl"] .hero-row {
 /* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
 
+  .container-fluid.hero {
+    margin-bottom: 0 !important;
+  }
+
+  #stats-preview {
+    margin-top: -20px;
+  }
+
   html,
   body {
 
@@ -506,6 +526,16 @@ html[dir="rtl"] .hero-row {
     transform: scalex(1.2);
     border-radius: 20px;
 
+  }
+
+  .hero-rightside iframe {
+    height: 700px;
+  }
+
+  .hero-leftside img {
+    height: 320px;
+    object-fit: cover;
+    object-position: top;
   }
 }
 

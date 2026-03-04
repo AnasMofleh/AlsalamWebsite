@@ -188,11 +188,34 @@
             border-radius: 8px;
         }
 
+        .live-badge-inline {
+            display: none;
+        }
+
         @media (max-width: 768px) {
             .stats-top-row {
                 padding-left: 0;
-                padding-right: 0;
+                padding-right: 84px;
                 margin-top: 64px;
+            }
+
+            .stats-v2-wrap .row.g-4 {
+                flex-direction: column !important;
+            }
+
+            .logo-corner {
+                top: 10px;
+                right: 10px;
+                align-items: flex-end;
+            }
+
+            .logo-corner .badge {
+                display: none;
+            }
+
+            .live-badge-inline {
+                display: inline-flex;
+                align-items: center;
             }
         }
 
@@ -408,6 +431,7 @@
                         <div class="stats-brand">
                             <h2 class="mb-0">Tillsammans har vi:</h2>
                         </div>
+                        <span class="badge bg-success px-3 py-2 live-badge-inline">LIVE</span>
                     </div>
 
                     <div class="mt-4">
@@ -488,6 +512,7 @@
         const themeToggleSwitchEl = document.getElementById("themeToggleSwitch");
         const swishQrToggleEl = document.getElementById("swishQrToggle");
         const swishQrWrapEl = document.getElementById("swishQrWrap");
+        const mobileQrQuery = window.matchMedia("(max-width: 768px)");
         const THEME_STORAGE_KEY = "alsalam-stats-v2-theme";
 
         let previousTotalAmount = null;
@@ -627,8 +652,12 @@
         }
 
         function applySwishQrMode(last5) {
-            swishQrWrapEl.classList.toggle("d-none", !showSwishQr);
-            swishQrToggleEl.textContent = showSwishQr ? "Dölj Swish QR" : "Visa Swish QR";
+            const forceMobileQr = mobileQrQuery.matches;
+            const shouldShowQr = forceMobileQr || showSwishQr;
+
+            swishQrWrapEl.classList.toggle("d-none", !shouldShowQr);
+            swishQrToggleEl.classList.toggle("d-none", forceMobileQr);
+            swishQrToggleEl.textContent = shouldShowQr ? "Dölj Swish QR" : "Visa Swish QR";
             renderLast5(last5);
         }
 
@@ -826,6 +855,10 @@
 
         swishQrToggleEl.addEventListener("click", () => {
             showSwishQr = !showSwishQr;
+            applySwishQrMode(latestLast5Data);
+        });
+
+        mobileQrQuery.addEventListener("change", () => {
             applySwishQrMode(latestLast5Data);
         });
     </script>
