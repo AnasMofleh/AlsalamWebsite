@@ -66,6 +66,87 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
         }
 
+        .stats-v2-card-main {
+            position: relative;
+        }
+
+        .theme-switch-corner {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .corner-controls-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-corner {
+            position: absolute;
+            top: 28px;
+            right: 14px;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .corner-logo {
+            width: 76px;
+            height: 76px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 28px;
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .theme-slider {
+            position: absolute;
+            inset: 0;
+            cursor: pointer;
+            background-color: #d1d5db;
+            border-radius: 999px;
+            transition: .2s;
+        }
+
+        .theme-slider:before {
+            position: absolute;
+            content: "";
+            width: 22px;
+            height: 22px;
+            left: 3px;
+            top: 3px;
+            border-radius: 50%;
+            background: #fff;
+            transition: .2s;
+        }
+
+        .theme-switch input:checked+.theme-slider {
+            background-color: #198754;
+        }
+
+        .theme-switch input:checked+.theme-slider:before {
+            transform: translateX(24px);
+        }
+
         body.theme-dark .stats-v2-card {
             border-color: rgba(148, 163, 184, 0.22);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
@@ -85,6 +166,34 @@
             border-radius: 999px;
             padding: 8px 16px;
             font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .stats-top-row {
+            padding-left: 0;
+            padding-right: 180px;
+            margin-top: 56px;
+        }
+
+        .stats-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .stats-brand-logo {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .stats-top-row {
+                padding-left: 0;
+                padding-right: 0;
+                margin-top: 64px;
+            }
         }
 
         body.theme-dark .stats-v2-theme-btn {
@@ -154,6 +263,18 @@
             border-radius: 999px;
             background: linear-gradient(90deg, #0d6efd 0%, #198754 100%);
             transition: width 900ms ease;
+        }
+
+        .stats-breakdown {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .stats-breakdown-item {
+            font-weight: 600;
         }
 
         .milestones {
@@ -267,17 +388,25 @@
     <div class="container stats-v2-wrap">
         <div class="row g-4">
             <div class="col-12">
-                <div class="stats-v2-card bg-white p-4 p-md-5 h-100">
-                    <div class="d-flex align-items-start justify-content-between flex-wrap gap-3">
-                        <div>
-                            <h2 class="mb-2">Tillsammans har vi:</h2>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
+                <div class="stats-v2-card stats-v2-card-main bg-white p-4 p-md-5 h-100">
+                    <div class="theme-switch-corner" title="Dark mode">
+                        <div class="corner-controls-row">
                             <a href="index.html" class="btn btn-outline-primary stats-v2-home-btn">
                                 <i class="fas fa-home me-1"></i>Home
                             </a>
-                            <button id="themeToggle" type="button" class="stats-v2-theme-btn">Dark mode</button>
-                            <span class="badge bg-success px-3 py-2">LIVE</span>
+                            <label class="theme-switch">
+                                <input id="themeToggleSwitch" type="checkbox" aria-label="Dark mode">
+                                <span class="theme-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="logo-corner">
+                        <img src="img/Al-Salam-Center-Logo.png" alt="Al Salam logo" class="corner-logo">
+                        <span class="badge bg-success px-3 py-2">LIVE</span>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 stats-top-row">
+                        <div class="stats-brand">
+                            <h2 class="mb-0">Tillsammans har vi:</h2>
                         </div>
                     </div>
 
@@ -297,6 +426,10 @@
                     </div>
 
                     <div id="milestones" class="milestones"></div>
+                    <div class="stats-breakdown text-muted">
+                        <span class="stats-breakdown-item">Swish: <span id="totalSwish">0 kr</span></span>
+                        <span class="stats-breakdown-item">Stripe: <span id="totalStripe">0 kr</span></span>
+                    </div>
                 </div>
             </div>
 
@@ -340,6 +473,7 @@
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbxLXBaGS2rdrrvtFAxMGCAeK2elGSfbvRmjtxBhjbORf9gdHBHduzOXIzP2FCI501cMWA/exec";
+        const CARD_API_URL = "https://script.google.com/macros/s/AKfycby4xd1YkqdDe-xvshIuMpj53wCLM9kUClwb84Qtx5amrPd6xrUjKjJxiYSdEppweq4/exec";
         const GOAL_AMOUNT = 10000000;
         const POLL_INTERVAL_MS = 5000;
 
@@ -349,7 +483,9 @@
         const milestonesEl = document.getElementById("milestones");
         const last5ListEl = document.getElementById("last5List");
         const lastUpdatedEl = document.getElementById("lastUpdated");
-        const themeToggleEl = document.getElementById("themeToggle");
+        const totalSwishEl = document.getElementById("totalSwish");
+        const totalStripeEl = document.getElementById("totalStripe");
+        const themeToggleSwitchEl = document.getElementById("themeToggleSwitch");
         const swishQrToggleEl = document.getElementById("swishQrToggle");
         const swishQrWrapEl = document.getElementById("swishQrWrap");
         const THEME_STORAGE_KEY = "alsalam-stats-v2-theme";
@@ -390,6 +526,49 @@
             return json || {};
         }
 
+        function parseStripeData(json) {
+            const payload = json && json.data ? json.data : json;
+            const result = { total: 0, donations: [] };
+
+            if (Array.isArray(payload)) {
+                payload.forEach((payment) => {
+                    const amount = parseAmount(payment.Amount ?? payment.amount ?? 0);
+                    result.total += amount;
+                    result.donations.push({
+                        date: payment.Date ?? payment.date ?? "",
+                        time: payment.Datetime ?? payment.timestamp ?? payment.time ?? "",
+                        amount,
+                        message: payment.Message || payment.message || payment.customer_name || payment.customer_email || "Stripe"
+                    });
+                });
+                return result;
+            }
+
+            result.total = parseAmount(payload.total_stripe ?? payload.total_card ?? payload.totalAmount ?? 0);
+            const recent = Array.isArray(payload.recent_payments) ? payload.recent_payments : (Array.isArray(payload.last5) ? payload.last5 : []);
+            recent.forEach((payment) => {
+                const amount = parseAmount(payment.Amount ?? payment.amount ?? 0);
+                result.donations.push({
+                    date: payment.Date ?? payment.date ?? "",
+                    time: payment.Datetime ?? payment.timestamp ?? payment.time ?? "",
+                    amount,
+                    message: payment.Message || payment.Messages || payment.message || payment.customer_name || payment.customer_email || "Stripe"
+                });
+            });
+
+            return result;
+        }
+
+        function toSortableTimestamp(donation) {
+            const dateText = donation.date ? String(donation.date).trim() : "";
+            const timeText = donation.time ? String(donation.time).trim() : "";
+            const combined = `${dateText} ${timeText}`.trim();
+            const parsed = new Date(combined);
+            if (!Number.isNaN(parsed.getTime())) return parsed.getTime();
+            const fallback = new Date(timeText);
+            return Number.isNaN(fallback.getTime()) ? 0 : fallback.getTime();
+        }
+
         function renderMilestones(totalAmount) {
             const nextMilestone = Math.min(Math.floor(totalAmount / 1000000) + 1, 10);
             milestonesEl.innerHTML = "";
@@ -404,9 +583,11 @@
             }
         }
 
-        function renderTotal(totalAmount) {
+        function renderTotal(totalAmount, swishAmount, stripeAmount) {
             const clampedPercent = Math.min((totalAmount / GOAL_AMOUNT) * 100, 100);
             totalAmountEl.textContent = formatSek(totalAmount);
+            totalSwishEl.textContent = formatSek(swishAmount);
+            totalStripeEl.textContent = formatSek(stripeAmount);
             progressLabelEl.textContent = `${clampedPercent.toFixed(2)}% av målet`;
             progressBarEl.style.width = `${clampedPercent}%`;
             progressBarEl.parentElement.setAttribute("aria-valuenow", clampedPercent.toFixed(2));
@@ -465,7 +646,7 @@
         function setTheme(theme) {
             const isDark = theme === "dark";
             document.body.classList.toggle("theme-dark", isDark);
-            themeToggleEl.textContent = isDark ? "White mode" : "Dark mode";
+            themeToggleSwitchEl.checked = isDark;
             localStorage.setItem(THEME_STORAGE_KEY, isDark ? "dark" : "light");
         }
 
@@ -586,17 +767,36 @@
 
         async function refreshStats() {
             try {
-                const response = await fetch(API_URL, { cache: "no-store" });
-                if (!response.ok) throw new Error(`Request failed: ${response.status}`);
+                const [swishResponse, stripeResponse] = await Promise.allSettled([
+                    fetch(API_URL, { cache: "no-store" }),
+                    fetch(CARD_API_URL, { cache: "no-store" })
+                ]);
 
-                const json = await response.json();
-                const payload = getPayload(json);
+                if (swishResponse.status !== "fulfilled" || !swishResponse.value.ok) {
+                    throw new Error("Swish request failed");
+                }
 
-                const totalAmount = parseAmount(payload.totalAmount || 0);
-                const last5 = Array.isArray(payload.last5) ? payload.last5 : [];
+                const swishJson = await swishResponse.value.json();
+                const swishPayload = getPayload(swishJson);
+                const swishTotal = parseAmount(swishPayload.totalAmount || 0);
+                const swishLast5 = Array.isArray(swishPayload.last5) ? swishPayload.last5 : [];
+
+                let stripeTotal = 0;
+                let stripeRecent = [];
+                if (stripeResponse.status === "fulfilled" && stripeResponse.value.ok) {
+                    const stripeJson = await stripeResponse.value.json();
+                    const stripeParsed = parseStripeData(stripeJson);
+                    stripeTotal = stripeParsed.total;
+                    stripeRecent = stripeParsed.donations;
+                }
+
+                const totalAmount = swishTotal + stripeTotal;
+                const last5 = [...swishLast5, ...stripeRecent]
+                    .sort((a, b) => toSortableTimestamp(b) - toSortableTimestamp(a))
+                    .slice(0, 5);
 
                 latestLast5Data = last5;
-                renderTotal(totalAmount);
+                renderTotal(totalAmount, swishTotal, stripeTotal);
                 applySwishQrMode(latestLast5Data);
                 maybeTriggerCelebrations(totalAmount, last5);
 
@@ -620,9 +820,8 @@
         setInterval(refreshStats, POLL_INTERVAL_MS);
 
         initTheme();
-        themeToggleEl.addEventListener("click", () => {
-            const nextTheme = document.body.classList.contains("theme-dark") ? "light" : "dark";
-            setTheme(nextTheme);
+        themeToggleSwitchEl.addEventListener("change", () => {
+            setTheme(themeToggleSwitchEl.checked ? "dark" : "light");
         });
 
         swishQrToggleEl.addEventListener("click", () => {
