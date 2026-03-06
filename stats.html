@@ -352,11 +352,89 @@
         }
 
         .donation-message {
-            font-size: 1.05rem;
+            font-size: 1.02rem;
             line-height: 1.45;
             font-weight: 600;
             color: var(--stats-text);
             margin-top: 4px;
+        }
+
+        .donation-side-col .stats-v2-card {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding-top: 64px !important;
+        }
+
+        .donation-side-col .donation-list {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .qr-switch-inline {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--stats-text);
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            z-index: 6;
+            background: var(--stats-card-bg);
+            border: 1px solid var(--stats-pill-border);
+            border-radius: 999px;
+            padding: 6px 10px;
+            max-width: calc(100% - 28px);
+        }
+
+        .donation-title-row {
+            margin-bottom: 12px;
+            padding-right: 6px;
+        }
+
+        .qr-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 26px;
+        }
+
+        .qr-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .qr-slider {
+            position: absolute;
+            inset: 0;
+            cursor: pointer;
+            background-color: #d1d5db;
+            border-radius: 999px;
+            transition: .2s;
+        }
+
+        .qr-slider:before {
+            position: absolute;
+            content: "";
+            width: 20px;
+            height: 20px;
+            left: 3px;
+            top: 3px;
+            border-radius: 50%;
+            background: #fff;
+            transition: .2s;
+        }
+
+        .qr-switch input:checked+.qr-slider {
+            background-color: #198754;
+        }
+
+        .qr-switch input:checked+.qr-slider:before {
+            transform: translateX(22px);
         }
 
         .swish-qr-wrap {
@@ -376,8 +454,33 @@
             border-radius: 10px;
         }
 
+        .qr-donations-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-top: 14px;
+            margin-bottom: 0;
+        }
+
+        .swish-number {
+            font-size: clamp(1.9rem, 4vw, 2.35rem);
+            font-weight: 800;
+            letter-spacing: 0.4px;
+            line-height: 1.15;
+        }
+
         .text-muted {
             color: var(--stats-muted) !important;
+        }
+
+        @media (max-width: 768px) {
+            .qr-switch-inline {
+                top: 10px;
+                right: 10px;
+            }
+
+            .donation-side-col .stats-v2-card {
+                padding-top: 60px !important;
+            }
         }
 
         .rocket {
@@ -410,7 +513,7 @@
 
     <div class="container stats-v2-wrap">
         <div class="row g-4">
-            <div class="col-12">
+            <div class="col-12 col-lg-9 stats-main-col">
                 <div class="stats-v2-card stats-v2-card-main bg-white p-4 p-md-5 h-100">
                     <div class="theme-switch-corner" title="Dark mode">
                         <div class="corner-controls-row">
@@ -457,26 +560,28 @@
                 </div>
             </div>
 
-            <div class="col-12">
+            <div class="col-12 col-lg-3 donation-side-col">
                 <div class="stats-v2-card bg-white p-4 h-100">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <h4 class="mb-0">Senaste 5 donationer</h4>
-                        <div class="d-flex align-items-center gap-2">
-                            <button id="swishQrToggle" type="button" class="btn btn-outline-success btn-sm">Visa Swish
-                                QR</button>
-                            <i class="fas fa-hand-holding-heart text-primary"></i>
-                        </div>
+                    <label id="swishQrToggleWrap" class="qr-switch-inline" for="swishQrToggle">
+                        <span>Visa QR</span>
+                        <span class="qr-switch">
+                            <input id="swishQrToggle" type="checkbox" aria-label="Visa Swish QR">
+                            <span class="qr-slider"></span>
+                        </span>
+                    </label>
+                    <div class="donation-title-row">
+                        <h4 id="topDonationsTitle" class="mb-0">Senaste 5 donationer</h4>
                     </div>
                     <div id="swishQrWrap" class="swish-qr-wrap d-none">
                         <img src="img/swishwakfQR.png" alt="Swish QR kod">
-                        <p class="mb-0 mt-2 text-muted">Skanna med Swish-appen för att donera</p>
-                        <p class="mb-0 mt-1"><strong>Swish: 123 5000 559</strong></p>
+                        <p class="mb-0 mt-2 swish-number">123 5000 559</p>
                         <a class="btn btn-success mt-3"
                             href="https://app.swish.nu/1/p/sw/?sw=1235000559&msg=Ramadan%20Alsalam" target="_blank"
                             rel="noopener noreferrer">
                             Donera med Swish
                         </a>
                     </div>
+                    <h4 id="qrDonationsTitle" class="mb-3 qr-donations-title d-none">Senaste 5 donationer</h4>
                     <ul id="last5List" class="donation-list"></ul>
                     <p id="lastUpdated" class="text-muted small mt-3 mb-0"></p>
                 </div>
@@ -511,7 +616,10 @@
         const totalStripeEl = document.getElementById("totalStripe");
         const themeToggleSwitchEl = document.getElementById("themeToggleSwitch");
         const swishQrToggleEl = document.getElementById("swishQrToggle");
+        const swishQrToggleWrapEl = document.getElementById("swishQrToggleWrap");
         const swishQrWrapEl = document.getElementById("swishQrWrap");
+        const topDonationsTitleEl = document.getElementById("topDonationsTitle");
+        const qrDonationsTitleEl = document.getElementById("qrDonationsTitle");
         const mobileQrQuery = window.matchMedia("(max-width: 768px)");
         const THEME_STORAGE_KEY = "alsalam-stats-v2-theme";
 
@@ -637,7 +745,7 @@
                 const amount = parseAmount(donation.amount);
                 const time = formatTimeHHMM(donation.time || "");
                 const message = donation.message ? String(donation.message).trim() : "";
-                const messageHtml = !showSwishQr && message ? `<div class="donation-message">“${message}”</div>` : "";
+                const messageHtml = message ? `<div class="donation-message">“${message}”</div>` : "";
 
                 li.innerHTML = `
                     <div>
@@ -656,8 +764,10 @@
             const shouldShowQr = forceMobileQr || showSwishQr;
 
             swishQrWrapEl.classList.toggle("d-none", !shouldShowQr);
-            swishQrToggleEl.classList.toggle("d-none", forceMobileQr);
-            swishQrToggleEl.textContent = shouldShowQr ? "Dölj Swish QR" : "Visa Swish QR";
+            swishQrToggleWrapEl.classList.toggle("d-none", forceMobileQr);
+            swishQrToggleEl.checked = shouldShowQr;
+            topDonationsTitleEl.classList.toggle("d-none", shouldShowQr);
+            qrDonationsTitleEl.classList.toggle("d-none", !shouldShowQr);
             renderLast5(last5);
         }
 
@@ -853,8 +963,8 @@
             setTheme(themeToggleSwitchEl.checked ? "dark" : "light");
         });
 
-        swishQrToggleEl.addEventListener("click", () => {
-            showSwishQr = !showSwishQr;
+        swishQrToggleEl.addEventListener("change", () => {
+            showSwishQr = swishQrToggleEl.checked;
             applySwishQrMode(latestLast5Data);
         });
 
