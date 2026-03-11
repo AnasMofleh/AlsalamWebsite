@@ -802,6 +802,32 @@ html[dir="rtl"] .hero-row {
   /* Show only the visible cards */
 }
 
+@media (max-width: 991.98px) {
+  .container.mt-5 > .row.justify-content-center {
+    flex-direction: column !important;
+  }
+
+  #card-one {
+    order: 1;
+  }
+
+  #card-two {
+    order: 2;
+  }
+
+  #card-three {
+    order: 3;
+  }
+
+  #card-four {
+    order: 4;
+  }
+
+  #card-five {
+    order: 99;
+  }
+}
+
 /* Circle Border - Equal Size for All */
 .circle-border {
   border: 3px solid var(--buttons);
