@@ -85,7 +85,10 @@
     "klarna-payment-methods-description": "Stödja moskén genom att använda andra betalnings metoder.",
     "monthly": "Månatlig Gåva",
     "monthly-description": "Stödja moskén via automatisk återkommande Gåva varje månad (likt Autogiro).",
-    "tax-donation": 	"Gåva via Skattsedel",
-   	"tax-donation-description":"Stödja moskén genom att ge din moskéavgiften via skattsedel varje år."
+    "tax-donation": "Gåva via Skattsedel",
+    "tax-donation-description": "Stödja moskén genom att ge din moskéavgiften via skattsedel varje år.",
+    "invite-donate": "Bjud in till donation",
+    "invite-donate-description": "Dela denna länk med familj och vänner så de också kan stödja moskén.",
+    "invite-donate-btn": "Dela donationslänk"
   }
 }

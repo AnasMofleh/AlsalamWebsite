@@ -60,29 +60,12 @@
                 </div>
                 <button class="donation-btn" onclick="openSwish()">Swisha</button>
             </div>
-            <!-- Swish Popup -->
-            <div id="swish-popup" class="popup" style="display: none;">
-                <div class="popup-content">
-                    <!-- Close Button -->
-                    <button class="close-btn" onclick="hideSwishPopup()">X</button>
-
-                    <!-- Popup Content -->
-                    <h4 style="text-align: center;" data-i18n="donations.swish-popup-title">Swish kräver mobil</h4>
-                    <p data-i18n="donations.swish-popup-description">Swish-betalning fungerar endast på mobiltelefoner med Swish-appen installerad.</p>
-                    <p data-i18n="donations.swish-popup-alternative">Alternativt kan du skanna QR-koden nedan:</p>
-                    <img src="img/swishwakfQR.png" alt="Swish QR"
-                        style="width: 100%; max-width: 200px; margin: 10px auto 10px; display: block;" />
-
-                    <!-- Close Button -->
-                    <button class="donation-btn" onclick="hideSwishPopup()" data-i18n="donations.close">Stäng</button>
-                </div>
-            </div>
-
 
             <div class="col-lg-4 donation-box" id="card-two">
                 <div class="row">
                     <h4 data-i18n="donations.klarna-payment-methods">Gåva via andra betalningssätt</h4>
-                    <p data-i18n="donations.klarna-payment-methods-description">Stödja moskén genom att använda andra betalnings metoder.</p>
+                    <p data-i18n="donations.klarna-payment-methods-description">Stödja moskén genom att använda andra
+                        betalnings metoder.</p>
                 </div>
                 <div class="circle-border">
                     <img src="img/pay.png" alt="International Donation Logo" class="donation-img">
@@ -96,7 +79,8 @@
             <div class="col-lg-4 donation-box" id="card-three">
                 <div class="row">
                     <h4 data-i18n="donations.monthly">Månatlig Gåva</h4>
-                    <p data-i18n="donations.monthly-description">Stödja moskén via automatisk återkommande Gåva varje månad (likt Autogiro).</p>
+                    <p data-i18n="donations.monthly-description">Stödja moskén via automatisk återkommande Gåva varje
+                        månad (likt Autogiro).</p>
                 </div>
                 <div class="circle-border">
                     <img src="img/sadaka.png" alt="Monthly Donation Icon" class="donation-img">
@@ -112,7 +96,8 @@
             <div class="col-lg-6 donation-box" id="card-four">
                 <div class="row">
                     <h4 data-i18n="donations.tax-donation">Gåva via Skattsedel</h4>
-                    <p data-i18n="donations.tax-donation-description">Stödja moskén genom att ge din moskéavgiften via skattsedel varje år.</p>
+                    <p data-i18n="donations.tax-donation-description">Stödja moskén genom att ge din moskéavgiften via
+                        skattsedel varje år.</p>
                 </div>
 
                 <!-- Replace circle-border image and button with iframe -->
@@ -123,6 +108,38 @@
                 </div>
             </div>
 
+            <div class="col-lg-4 donation-box" id="card-five">
+                <div class="row">
+                    <h4 data-i18n="donations.invite-donate">Bjud in till donation</h4>
+                    <p data-i18n="donations.invite-donate-description">Dela denna länk med familj och vänner så de också
+                        kan stödja moskén.</p>
+                </div>
+                <div class="circle-border">
+                    <i class="fas fa-share-alt" style="font-size: 80px; color: #1E6F30;"></i>
+                </div>
+                <a href="https://donera.alsalamcenter.se/" target="_blank" class="donation-btn"
+                    data-i18n="donations.invite-donate-btn">Dela donationslänk</a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Swish Popup -->
+    <div id="swish-popup" class="popup" style="display: none;">
+        <div class="popup-content">
+            <!-- Close Button -->
+            <button class="close-btn" onclick="hideSwishPopup()">X</button>
+
+            <!-- Popup Content -->
+            <h4 style="text-align: center;" data-i18n="donations.swish-popup-title">Swish kräver mobil</h4>
+            <p data-i18n="donations.swish-popup-description">Swish-betalning fungerar endast på mobiltelefoner med
+                Swish-appen installerad.</p>
+            <p data-i18n="donations.swish-popup-alternative">Alternativt kan du skanna QR-koden nedan:</p>
+            <img src="img/swishwakfQR.png" alt="Swish QR"
+                style="width: 100%; max-width: 200px; margin: 10px auto 10px; display: block;" />
+
+            <!-- Close Button -->
+            <button class="donation-btn" onclick="hideSwishPopup()" data-i18n="donations.close">Stäng</button>
         </div>
     </div>
 
@@ -175,7 +192,8 @@
             document.querySelector('#card-one'),
             document.querySelector('#card-two'),
             document.querySelector('#card-three'),
-            document.querySelector('#card-four')
+            document.querySelector('#card-four'),
+            document.querySelector('#card-five')
         ];
 
         buttons.forEach(button => {
@@ -185,20 +203,23 @@
 
                 // Show/hide cards based on active button
                 if (button.id === 'one-time') {
-                    cards[0].classList.add('visible'); // Show first card
-                    cards[1].classList.add('visible'); // Show last card
-                    cards[2].classList.remove('visible'); // Hide middle card
-                    cards[3].classList.remove('visible'); // Hide middle card
+                    cards[0].classList.add('visible');
+                    cards[1].classList.add('visible');
+                    cards[2].classList.remove('visible');
+                    cards[3].classList.remove('visible');
+                    cards[4].classList.add('visible');
                 } else if (button.id === 'monthly') {
-                    cards[0].classList.remove('visible'); // Hide middle card
-                    cards[1].classList.remove('visible'); // Show last card
-                    cards[2].classList.add('visible'); // Hide middle card
-                    cards[3].classList.remove('visible'); // Hide middle card
+                    cards[0].classList.remove('visible');
+                    cards[1].classList.remove('visible');
+                    cards[2].classList.add('visible');
+                    cards[3].classList.remove('visible');
+                    cards[4].classList.remove('visible');
                 } else if (button.id === 'yearly') {
-                    cards[0].classList.remove('visible'); // Hide middle card
-                    cards[1].classList.remove('visible'); // Show last card
-                    cards[2].classList.remove('visible'); // Hide middle card
-                    cards[3].classList.add('visible'); // Hide middle card
+                    cards[0].classList.remove('visible');
+                    cards[1].classList.remove('visible');
+                    cards[2].classList.remove('visible');
+                    cards[3].classList.add('visible');
+                    cards[4].classList.remove('visible');
                 }
             });
         });
@@ -206,19 +227,19 @@
         // Initial state: Show first and last cards
         document.querySelector('#one-time').click(); // Simulate click on "One-Time"
     </script>
-        <!-- i18n module (exposed as global `loadLanguage`) -->
+    <!-- i18n module (exposed as global `loadLanguage`) -->
     <script type="module" src="i18n/js/i18n.js" defer></script>
 
     <!-- Load Header and Footer -->
     <script>
         $(function () {
-            $("#header-placeholder").load("header.html", function() {
+            $("#header-placeholder").load("header.html", function () {
                 // Reapply translations after header loads
                 if (window.reapplyTranslations) {
                     setTimeout(() => window.reapplyTranslations(), 50);
                 }
             });
-            $("#footer-placeholder").load("footer.html", function() {
+            $("#footer-placeholder").load("footer.html", function () {
                 // Reapply translations after footer loads
                 if (window.reapplyTranslations) {
                     setTimeout(() => window.reapplyTranslations(), 50);

@@ -11,6 +11,17 @@
     };
     spinner(0);
 
+    // Also watch for dynamically injected spinners (from header.html loaded via .load())
+    var spinnerWatch = setInterval(function () {
+        var sp = document.getElementById('spinner');
+        if (sp && sp.classList.contains('show')) {
+            sp.classList.remove('show');
+            clearInterval(spinnerWatch);
+        }
+    }, 300);
+    // Stop watching after 5 seconds regardless
+    setTimeout(function () { clearInterval(spinnerWatch); }, 5000);
+
     // Initiate the wowjs
     new WOW().init();
 
@@ -77,6 +88,31 @@
         if (isDesktopNavbar()) return;
         closeDesktopDropdowns();
     });
+
+    // ── Mobile navbar fix for dynamically loaded header ──
+    var navInitInterval = setInterval(function () {
+        var navbarCollapse = document.getElementById('navbarCollapse');
+        if (!navbarCollapse) return;
+        if (typeof bootstrap === 'undefined') return;
+        clearInterval(navInitInterval);
+
+        // Initialize Bootstrap Dropdowns inside navbar
+        document.querySelectorAll('.navbar [data-bs-toggle="dropdown"]').forEach(function (el) {
+            if (!bootstrap.Dropdown.getInstance(el)) {
+                new bootstrap.Dropdown(el);
+            }
+        });
+
+        // Auto-close mobile navbar when a non-dropdown link is tapped
+        navbarCollapse.querySelectorAll('.nav-link:not(.dropdown-toggle)').forEach(function (link) {
+            link.addEventListener('click', function () {
+                var bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+                if (bsCollapse && navbarCollapse.classList.contains('show')) {
+                    bsCollapse.hide();
+                }
+            });
+        });
+    }, 200);
 
     // Testimonial carousel
     $(".testimonial-carousel").owlCarousel({

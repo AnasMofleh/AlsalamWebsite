@@ -1,24 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
+<!-- Spinner Start -->
+<div id="spinner"
+    class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-grow text-primary" role="status"></div>
+</div>
+<!-- Spinner End -->
 
-<head>
-    <!-- ...existing code... -->
-    <link rel="alternate" hreflang="sv" href="/sv">
-    <link rel="alternate" hreflang="en" href="/en">
-    <link rel="alternate" hreflang="ar" href="/ar">
-    
-</head>
-
-<body>
-    <!-- Spinner Start -->
-    <div id="spinner"
-        class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50 d-flex align-items-center justify-content-center">
-        <div class="spinner-grow text-primary" role="status"></div>
-    </div>
-    <!-- Spinner End -->
-
-    <!-- Add container div to control width -->
-    <div class="container-fluid" style="max-width: 1200px">
+<!-- Add container div to control width -->
+<div class="container-fluid" style="max-width: 1200px">
         <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-white py-3 rounded shadow-sm">
             <div class="container-fluid d-flex justify-content-between align-items-center">
                 <!-- Logo -->
@@ -145,15 +133,8 @@
     </div>
 
 
-    <!-- Add margin to prevent content from hiding behind navbar -->
-    <div style="margin-top: 75px"></div>
-
-    <!-- i18n module (exposed as global `loadLanguage`) -->
-    <script type="module" src="i18n/js/i18n.js" defer></script>
-
-</body>
-
-</html>
+<!-- Add margin to prevent content from hiding behind navbar -->
+<div style="margin-top: 75px"></div>
 
 <script>
     function setLang(lang) {
@@ -179,4 +160,10 @@
             if (mobile) mobile.textContent = map[lang];
         }
     }
+
+    // Remove spinner after header loads
+    (function() {
+        var sp = document.getElementById('spinner');
+        if (sp) sp.classList.remove('show');
+    })();
 </script>

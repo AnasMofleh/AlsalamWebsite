@@ -25,7 +25,6 @@
     "description": "Al Salam in Helsingborg is an Islamic association and mosque. A center for Muslims to turn to in all aspects of their lives, from prayer and jummah to marriage, knowledge, guidance in matters",
     "version-title": "Our Vision",
     "version-description": "Muslims should feel at home in the country, be able to practice and fully exercise their religion as Swedish Muslims."
-
   },
   "sponsors": {
     "title": "Our Sponsors",
@@ -88,7 +87,9 @@
     "monthly": "Monthly Donation",
     "monthly-description": "Support the mosque via automatic recurring donation every month (similar to Autogiro).",
     "tax-donation": "Donation via Tax Return",
-    "tax-donation-description": "Support the mosque by giving your mosque fee via tax return every year."
+    "tax-donation-description": "Support the mosque by giving your mosque fee via tax return every year.",
+    "invite-donate": "Invite Others to Donate",
+    "invite-donate-description": "Share this link with family and friends so they can also support the mosque.",
+    "invite-donate-btn": "Share Donation Link"
   }
-
 }
