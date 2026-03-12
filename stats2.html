@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Donationer - Al Salam Center</title>
+    <title>Donations - Al Salam Center</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
         rel="stylesheet">
@@ -673,6 +673,26 @@
             color: var(--card-payment);
         }
 
+        .country-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 20px;
+            vertical-align: middle;
+            letter-spacing: 0.3px;
+        }
+
+        [data-theme="dark"] .country-badge {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
         .donor-amount {
             font-weight: 900;
             font-size: 1.15rem;
@@ -1286,24 +1306,24 @@
         </div>
 
         <h1 class="hero-main-title">
-            Bygg Allahs Hus.
-            <span class="highlight">Tjäna Evig Belöning.</span>
+            Build Allah's House.
+            <span class="highlight">Earn Eternal Reward.</span>
         </h1>
 
         <p class="hero-subtitle">
-            Varje bön som utförs i denna moské kommer att räknas på din våg av goda gärningar.
+            Every prayer performed in this mosque will be counted on your scale of good deeds.
         </p>
 
         <!-- Raised / Goal -->
         <div class="raised-goal-row">
             <div class="raised-section">
-                <div class="raised-label">INSAMLAT</div>
+                <div class="raised-label">RAISED</div>
                 <div class="raised-value"><span id="total-combined">0</span> Kr</div>
             </div>
             <div class="raised-goal-divider">/</div>
             <div class="goal-section">
-                <div class="goal-label">MÅL</div>
-                <div class="goal-value">10M Kr</div>
+                <div class="goal-label">GOAL</div>
+                <div class="goal-value">1M Kr</div>
             </div>
         </div>
 
@@ -1316,25 +1336,10 @@
             </div>
         </div>
 
-        <!-- Daily Goal -->
-        <div class="daily-goal-section">
-            <div class="daily-goal-label">
-                <i class="fas fa-bullseye"></i> Dagens Mål
-            </div>
-            <div class="daily-goal-bar-row">
-                <div class="daily-goal-amount" id="total-today">0 Kr</div>
-                <div class="daily-goal-bar-wrap">
-                    <div class="daily-goal-fill" id="daily-progress-bar"></div>
-                </div>
-                <div class="daily-goal-target">av 1 000 000 Kr</div>
-            </div>
-            <div class="daily-goal-remaining" id="daily-remaining"></div>
-        </div>
-
         <!-- Donor Count -->
         <div class="donor-count">
             <i class="fas fa-users"></i>
-            <span><span id="count-today">0</span> donatorer har bidragit idag</span>
+            <span><span id="count-today">0</span> donors have contributed today</span>
         </div>
 
         <!-- Donation Amount Choices (Sponsor Tiers from company.html) -->
@@ -1344,7 +1349,7 @@
             </button>
             <button class="donation-amount-btn" onclick="goToSponsor('silver')">
                 🥈 25 000 Kr
-                <span class="popular-tag">Populär</span>
+                <span class="popular-tag">Popular</span>
             </button>
             <button class="donation-amount-btn" onclick="goToSponsor('gold')">
                 🥇 25 000+ Kr
@@ -1353,7 +1358,7 @@
 
         <!-- Custom Amount Button -->
         <button class="custom-amount-btn" onclick="goToDonation()">
-            <i class="fas fa-heart"></i> Valfritt Belopp
+            <i class="fas fa-heart"></i> Custom Amount
         </button>
 
         <!-- Payment Methods -->
@@ -1361,8 +1366,7 @@
             <div class="payment-badge"><i class="fas fa-credit-card"></i> Visa / Mastercard</div>
             <div class="payment-badge"><i class="fab fa-apple-pay"></i> Apple Pay</div>
             <div class="payment-badge"><i class="fab fa-google-pay"></i> Google Pay</div>
-            <div class="payment-badge"><i class="fas fa-mobile-alt"></i> Swish</div>
-            <div class="payment-badge"><i class="fas fa-lock"></i> Säker</div>
+            <div class="payment-badge"><i class="fas fa-lock"></i> Secure</div>
         </div>
     </div>
 
@@ -1373,10 +1377,10 @@
 
         <!-- Live Donations Feed -->
         <div class="live-donations-section fade-in">
-            <h2 class="section-title">Live Donationer</h2>
+            <h2 class="section-title">Live Donations</h2>
             <div class="live-feed-container">
                 <div class="live-feed-list" id="live-feed-list">
-                    <div class="loading-text">Laddar donationer...</div>
+                    <div class="loading-text">Loading donations...</div>
                 </div>
             </div>
         </div>
@@ -1384,24 +1388,24 @@
         <!-- Imagine the Reward -->
         <div class="reward-section fade-in">
             <h2 class="reward-title">
-                <i class="fas fa-heart"></i> Föreställ dig Belöningen
+                <i class="fas fa-heart"></i> Imagine the Reward
             </h2>
             <p class="reward-subtitle">
-                När någon ber, lär sig Koranen, eller gör du'a i denna moské — <strong>du delar i belöningen.</strong>
+                When someone prays, learns the Quran, or makes du'a in this mosque — <strong>you share in the reward.</strong>
             </p>
             <div class="hadith-card">
                 <div class="quote-icon">📖</div>
                 <p class="hadith-text">
-                    "När en människa dör upphör alla hennes gärningar utom tre: en pågående välgörenhet
-                    (Sadaqah Jariyah), nyttig kunskap, eller ett rättfärdigt barn som ber för dem."
+                    "When a person dies, all their deeds cease except three: an ongoing charity
+                    (Sadaqah Jariyah), beneficial knowledge, or a righteous child who prays for them."
                 </p>
-                <p class="hadith-source">— Profeten Muhammad ﷺ (Sahih Muslim)</p>
+                <p class="hadith-source">— Prophet Muhammad ﷺ (Sahih Muslim)</p>
             </div>
         </div>
 
         <!-- Top Donors -->
         <div class="top-donors-section fade-in">
-            <h2 class="section-title">🏆 Toppdonatorer</h2>
+            <h2 class="section-title">🏆 Top Donors</h2>
             <div class="top-donors-list" id="top-donors-list">
                 <!-- Populated by JS -->
             </div>
@@ -1409,75 +1413,47 @@
 
         <!-- Stats Summary Cards -->
         <div class="stats-cards-section fade-in">
-            <h2 class="section-title">Statistik</h2>
+            <h2 class="section-title">Statistics</h2>
             <div class="stats-grid">
                 <div class="stat-card highlight-card">
-                    <div class="stat-card-label">Högsta Donation</div>
+                    <div class="stat-card-label">Highest Donation</div>
                     <div class="stat-card-value"><span id="highest-amount">0</span> Kr</div>
                     <div class="stat-card-sub" id="highest-source">-</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-card-label">Genomsnittlig Donation</div>
+                    <div class="stat-card-label">Average Donation</div>
                     <div class="stat-card-value"><span id="average-amount">0</span> Kr</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-card-label">Donationer Idag</div>
+                    <div class="stat-card-label">Donations Today</div>
                     <div class="stat-card-value"><span id="count-today-stat">0</span></div>
-                    <div class="stat-card-sub">transaktioner</div>
+                    <div class="stat-card-sub">transactions</div>
                 </div>
             </div>
         </div>
 
-        <!-- Breakdown by Source -->
-        <div class="breakdown-section fade-in">
-            <div class="breakdown-title">
-                <i class="fas fa-chart-pie"></i> Uppdelning per källa
-            </div>
-            <div class="breakdown-row">
-                <div class="breakdown-label">
-                    <span>📱</span> Mobilbetalning (Swish)
-                </div>
-                <div class="breakdown-value"><span id="total-mobile">0</span> Kr</div>
-            </div>
-            <div class="breakdown-row">
-                <div class="breakdown-label">
-                    <span>💳</span> Kortbetalning (Stripe)
-                </div>
-                <div class="breakdown-value"><span id="total-card">0</span> Kr</div>
-            </div>
-        </div>
-
-        <!-- Swish Number -->
-        <div class="swish-section fade-in">
-            <div class="swish-title">📱 Mobilbetalning via Swish</div>
-            <div class="swish-number-display" onclick="openSwish()">
-                123 500 0559
-            </div>
-            <div class="swish-label">Tryck för att öppna Swish (mobil)</div>
-        </div>
-
-        <!-- Sponsor Packages (from company.html) -->
+        <!-- Sponsor Packages -->
         <div class="sponsor-section fade-in">
-            <h2 class="section-title">Företagssponsoring</h2>
-            <p class="sponsor-subtitle">Stöd Al-Salam Moské som företag och nå ut till vår gemenskap</p>
+            <h2 class="section-title">Corporate Sponsorship</h2>
+            <p class="sponsor-subtitle">Support Al-Salam Mosque as a company and reach our community</p>
             <div class="sponsor-grid">
                 <!-- Gold -->
                 <div class="sponsor-card">
                     <div class="sponsor-card-header gold-header">
                         <div class="sponsor-card-icon"><i class="fas fa-crown"></i></div>
-                        <div class="sponsor-card-title">Guld</div>
-                        <div class="sponsor-card-price">Över 25,000 kr</div>
+                        <div class="sponsor-card-title">Gold</div>
+                        <div class="sponsor-card-price">Over 25,000 Kr</div>
                     </div>
                     <div class="sponsor-card-body">
-                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Annonser på vår hemsida</div>
-                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Logotyp i Ramadan-schema</div>
-                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Personlig kontakt och anpassad sponsoring</div>
-                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Logotyp som sponsor på hemsidan</div>
-                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Erkännande för ditt stöd</div>
-                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Årligt sponsoravtal</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Ads on our website</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Logo in Ramadan schedule</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Personal contact and customized sponsorship</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Logo as sponsor on the website</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Recognition for your support</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Annual sponsorship agreement</div>
                     </div>
                     <div class="sponsor-card-footer">
-                        <button class="sponsor-cta-btn gold-btn" onclick="goToSponsor('gold')">Bli Guldsponsor</button>
+                        <button class="sponsor-cta-btn gold-btn" onclick="goToSponsor('gold')">Become Gold Sponsor</button>
                     </div>
                 </div>
 
@@ -1486,16 +1462,16 @@
                     <div class="sponsor-card-header silver-header">
                         <div class="sponsor-card-icon"><i class="fas fa-star"></i></div>
                         <div class="sponsor-card-title">Silver</div>
-                        <div class="sponsor-card-price">25,000 kr</div>
+                        <div class="sponsor-card-price">25,000 Kr</div>
                     </div>
                     <div class="sponsor-card-body">
-                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Logotyp i Ramadan-schema</div>
-                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Logotyp som sponsor på hemsidan</div>
-                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Erkännande för ditt stöd</div>
-                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Årligt sponsoravtal</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Logo in Ramadan schedule</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Logo as sponsor on the website</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Recognition for your support</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Annual sponsorship agreement</div>
                     </div>
                     <div class="sponsor-card-footer">
-                        <button class="sponsor-cta-btn silver-btn" onclick="goToSponsor('silver')">Bli Silversponsor</button>
+                        <button class="sponsor-cta-btn silver-btn" onclick="goToSponsor('silver')">Become Silver Sponsor</button>
                     </div>
                 </div>
 
@@ -1503,16 +1479,16 @@
                 <div class="sponsor-card">
                     <div class="sponsor-card-header bronze-header">
                         <div class="sponsor-card-icon"><i class="fas fa-handshake"></i></div>
-                        <div class="sponsor-card-title">Brons</div>
-                        <div class="sponsor-card-price">10,000 kr</div>
+                        <div class="sponsor-card-title">Bronze</div>
+                        <div class="sponsor-card-price">10,000 Kr</div>
                     </div>
                     <div class="sponsor-card-body">
-                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Logotyp som sponsor på hemsidan</div>
-                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Erkännande för ditt stöd</div>
-                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Årligt sponsoravtal</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Logo as sponsor on the website</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Recognition for your support</div>
+                        <div class="sponsor-benefit"><i class="fas fa-check-circle"></i> Annual sponsorship agreement</div>
                     </div>
                     <div class="sponsor-card-footer">
-                        <button class="sponsor-cta-btn bronze-btn" onclick="goToSponsor('bronze')">Bli Bronssponsor</button>
+                        <button class="sponsor-cta-btn bronze-btn" onclick="goToSponsor('bronze')">Become Bronze Sponsor</button>
                     </div>
                 </div>
             </div>
@@ -1524,10 +1500,8 @@
         // ===========================
         // API endpoints & Constants (UNCHANGED LOGIC)
         // ===========================
-        const MOBILE_API_URL = "https://script.google.com/macros/s/AKfycbxLXBaGS2rdrrvtFAxMGCAeK2elGSfbvRmjtxBhjbORf9gdHBHduzOXIzP2FCI501cMWA/exec";
         const CARD_API_URL = "https://script.google.com/macros/s/AKfycby4xd1YkqdDe-xvshIuMpj53wCLM9kUClwb84Qtx5amrPd6xrUjKjJxiYSdEppweq4/exec";
-        const GOAL = 10000000;
-        const DAILY_GOAL = 1000000;
+        const GOAL = 1000000;
         const REFRESH_RATE = 5000;
 
         let isFirstLoad = true;
@@ -1542,20 +1516,15 @@
 
         const els = {
             totalCombined: document.getElementById('total-combined'),
-            totalMobile: document.getElementById('total-mobile'),
-            totalCard: document.getElementById('total-card'),
             progressBar: document.getElementById('progress-bar'),
             progressPct: document.getElementById('progress-percentage'),
-            totalToday: document.getElementById('total-today'),
             countToday: document.getElementById('count-today'),
             countTodayStat: document.getElementById('count-today-stat'),
             highestAmount: document.getElementById('highest-amount'),
             highestSource: document.getElementById('highest-source'),
             averageAmount: document.getElementById('average-amount'),
             liveFeedList: document.getElementById('live-feed-list'),
-            topDonorsList: document.getElementById('top-donors-list'),
-            dailyProgressBar: document.getElementById('daily-progress-bar'),
-            dailyRemaining: document.getElementById('daily-remaining')
+            topDonorsList: document.getElementById('top-donors-list')
         };
 
         // ===========================
@@ -1574,97 +1543,40 @@
         }
 
         // ===========================
-        // Fetch Combined Data (UNCHANGED LOGIC)
+        // Fetch Card Data (Stripe only)
         // ===========================
         async function fetchCombinedData() {
             try {
-                const [mobileResponse, cardResponse] = await Promise.allSettled([
-                    fetch(MOBILE_API_URL),
-                    fetch(CARD_API_URL)
-                ]);
-
-                let mobileData = null;
+                const cardResponse = await fetch(CARD_API_URL);
                 let cardData = null;
 
-                if (mobileResponse.status === 'fulfilled' && mobileResponse.value.ok) {
-                    const mobileRaw = await mobileResponse.value.json();
-                    mobileData = (mobileRaw && mobileRaw.data) ? mobileRaw.data : mobileRaw;
-                    console.log('=== RAW MOBILE PAYMENT DATA ===');
-                    console.log(JSON.stringify(mobileData, null, 2));
-                }
-
-                if (cardResponse.status === 'fulfilled' && cardResponse.value.ok) {
-                    cardData = await cardResponse.value.json();
+                if (cardResponse.ok) {
+                    cardData = await cardResponse.json();
                     console.log('=== RAW CARD PAYMENT DATA ===');
                     console.log(JSON.stringify(cardData, null, 2));
                 }
 
-                const combinedData = combineData(mobileData, cardData);
-                updateDashboard(combinedData);
+                const data = combineData(cardData);
+                updateDashboard(data);
             } catch (error) {
                 console.error("Error fetching data:", error);
-                showError("Kunde inte hämta data. Försöker igen...");
+                showError("Could not load data. Retrying...");
             }
         }
 
         // ===========================
-        // Combine Data (UNCHANGED LOGIC)
+        // Combine Data (Card / Stripe only)
         // ===========================
-        function combineData(mobileData, cardData) {
+        function combineData(cardData) {
             const combined = {
-                total_mobile: 0,
-                total_card: 0,
                 total_combined: 0,
                 total_today: 0,
                 count_today: 0,
                 highest_amount: 0,
                 highest_source: '-',
                 average_amount: 0,
-                mobile_payments: [],
                 card_payments: []
             };
-
-            // Process Mobile payment data
-            if (mobileData) {
-                combined.total_mobile = mobileData.totalAmount || mobileData.total_alltime || 0;
-                combined.total_combined += combined.total_mobile;
-
-                if (Array.isArray(mobileData.last5)) {
-                    mobileData.last5.forEach(msg => {
-                        combined.mobile_payments.push({
-                            amount: msg.amount || 0,
-                            message: msg.message || '-',
-                            timestamp: `${msg.date || ''} ${msg.time || ''}`.trim(),
-                            source: 'mobile'
-                        });
-                    });
-                } else if (mobileData.last_messages) {
-                    mobileData.last_messages.forEach(msg => {
-                        combined.mobile_payments.push({
-                            amount: msg.amount || 0,
-                            message: msg.message || '-',
-                            timestamp: msg.timestamp,
-                            source: 'mobile'
-                        });
-                    });
-                }
-
-                const mobileHighestFromSummary = mobileData.Highest_ever && mobileData.Highest_ever.amount
-                    ? mobileData.Highest_ever.amount
-                    : 0;
-                const mobileHighestFromLast5 = Array.isArray(mobileData.last5)
-                    ? mobileData.last5.reduce((max, item) => Math.max(max, parseFloat(item.amount) || 0), 0)
-                    : 0;
-                const mobileHighest = Math.max(mobileHighestFromSummary, mobileHighestFromLast5);
-
-                if (mobileHighest > combined.highest_amount) {
-                    combined.highest_amount = mobileHighest;
-                    combined.highest_source = 'Mobilbetalning';
-                }
-
-                combined.total_today += mobileData.total_today || 0;
-                combined.count_today += mobileData.count_today || (Array.isArray(mobileData.last5) ? mobileData.last5.length : 0);
-            }
 
             // Process Card payment data
             if (cardData) {
@@ -1693,11 +1605,14 @@
                             card_highest = amount;
                         }
 
-                        let displayMessage = 'Tack för ditt stöd!';
+                        const name = payment.name || null;
+                        const country = payment.country || null;
+
+                        let displayMessage = 'Anonymous';
                         if (payment.Message && payment.Message.trim() !== '') {
                             displayMessage = payment.Message;
-                        } else if (payment.customer_name) {
-                            displayMessage = payment.customer_name;
+                        } else if (name) {
+                            displayMessage = name;
                         } else if (payment.customer_email) {
                             displayMessage = payment.customer_email;
                         }
@@ -1705,43 +1620,46 @@
                         combined.card_payments.push({
                             amount: amount,
                             message: displayMessage,
+                            name: name,
+                            country: country,
                             timestamp: payment.Datetime,
                             source: 'card',
                             payment_type: payment.payment_type
                         });
                     });
 
-                    combined.total_card = card_total;
-                    combined.total_combined += card_total;
-                    combined.total_today += card_today;
-                    combined.count_today += card_count_today;
+                    combined.total_combined = card_total;
+                    combined.total_today = card_today;
+                    combined.count_today = card_count_today;
 
                     if (card_highest > combined.highest_amount) {
                         combined.highest_amount = card_highest;
-                        combined.highest_source = 'Kortbetalning';
+                        combined.highest_source = 'Card Payment';
                     }
                 } else if (cardData.total_stripe || cardData.total_card) {
-                    combined.total_card = cardData.total_stripe || cardData.total_card || 0;
-                    combined.total_combined += combined.total_card;
-                    combined.total_today += cardData.total_today || 0;
-                    combined.count_today += cardData.count_today || 0;
+                    combined.total_combined = cardData.total_stripe || cardData.total_card || 0;
+                    combined.total_today = cardData.total_today || 0;
+                    combined.count_today = cardData.count_today || 0;
 
                     if ((cardData.highest_amount || 0) > combined.highest_amount) {
                         combined.highest_amount = cardData.highest_amount;
-                        combined.highest_source = 'Kortbetalning';
+                        combined.highest_source = 'Card Payment';
                     }
 
                     if (cardData.recent_payments) {
                         cardData.recent_payments.forEach(payment => {
-                            let displayMessage = 'Tack för ditt stöd!';
+                            const name = payment.name || null;
+                            const country = payment.country || null;
+
+                            let displayMessage = 'Anonymous';
                             if (payment.Message && payment.Message.trim() !== '') {
                                 displayMessage = payment.Message;
                             } else if (payment.Messages && payment.Messages.trim() !== '') {
                                 displayMessage = payment.Messages;
                             } else if (payment.message && payment.message.trim() !== '') {
                                 displayMessage = payment.message;
-                            } else if (payment.customer_name) {
-                                displayMessage = payment.customer_name;
+                            } else if (name) {
+                                displayMessage = name;
                             } else if (payment.customer_email) {
                                 displayMessage = payment.customer_email;
                             }
@@ -1749,6 +1667,8 @@
                             combined.card_payments.push({
                                 amount: payment.amount,
                                 message: displayMessage,
+                                name: name,
+                                country: country,
                                 timestamp: payment.timestamp,
                                 source: 'card',
                                 payment_type: payment.payment_type
@@ -1759,13 +1679,12 @@
             }
 
             // Calculate average
-            const totalPayments = combined.mobile_payments.length + combined.card_payments.length;
+            const totalPayments = combined.card_payments.length;
             if (totalPayments > 0) {
                 combined.average_amount = Math.round(combined.total_combined / totalPayments);
             }
 
-            // Sort payments by timestamp (newest first)
-            combined.mobile_payments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            // Sort by timestamp (newest first)
             combined.card_payments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
             return combined;
@@ -1814,7 +1733,7 @@
             const banner = document.createElement('div');
             banner.className = 'celebration-banner';
             const formattedAmount = donationAmount ? donationAmount.toLocaleString() + ' Kr' : '';
-            banner.innerHTML = `🎉 Ny donation${formattedAmount ? ': ' + formattedAmount : ''}! JazakAllahu Khairan! 🤲`;
+            banner.innerHTML = `🎉 New donation${formattedAmount ? ': ' + formattedAmount : ''}! JazakAllahu Khairan! 🤲`;
             document.body.appendChild(banner);
 
             // 4. Pulse the total amount
@@ -1847,25 +1766,14 @@
                 }
             }
 
-            // Update breakdown
-            els.totalMobile.innerText = data.total_mobile.toLocaleString();
-            els.totalCard.innerText = data.total_card.toLocaleString();
-
             // Update main progress bar
             const percentage = Math.min((data.total_combined / GOAL) * 100, 100).toFixed(1);
             els.progressBar.style.width = Math.max(parseFloat(percentage), 3) + "%";
             els.progressPct.innerText = percentage + "%";
 
             // Update today's stats
-            els.totalToday.innerText = data.total_today.toLocaleString() + " Kr";
             els.countToday.innerText = data.count_today;
             if (els.countTodayStat) els.countTodayStat.innerText = data.count_today;
-
-            // Daily goal progress
-            const dailyPct = Math.min((data.total_today / DAILY_GOAL) * 100, 100);
-            els.dailyProgressBar.style.width = dailyPct.toFixed(1) + "%";
-            const remaining = Math.max(DAILY_GOAL - data.total_today, 0);
-            els.dailyRemaining.innerText = remaining.toLocaleString() + " Kr kvar idag";
 
             // Update highest donation
             if (!isFirstLoad && data.highest_amount !== previousData.highest_amount) {
@@ -1876,9 +1784,8 @@
             // Update average
             els.averageAmount.innerText = data.average_amount.toLocaleString();
 
-            // Render live feed (combined, sorted by time)
-            const allPayments = [...data.mobile_payments, ...data.card_payments];
-            allPayments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            // Render live feed (card payments only, sorted by time)
+            const allPayments = [...data.card_payments];
 
             if (JSON.stringify(allPayments.slice(0, 20)) !== JSON.stringify(previousData._allPayments)) {
                 renderLiveFeed(allPayments.slice(0, 20));
@@ -1890,12 +1797,55 @@
         }
 
         // ===========================
-        // Render Live Feed (NEW - uses existing payment data)
+        // Country Flag Helper
+        // ===========================
+        const COUNTRY_CODES = {
+            'Afghanistan':'AF','Albania':'AL','Algeria':'DZ','Argentina':'AR','Armenia':'AM',
+            'Australia':'AU','Austria':'AT','Azerbaijan':'AZ','Bahrain':'BH','Bangladesh':'BD',
+            'Belgium':'BE','Bolivia':'BO','Bosnia and Herzegovina':'BA','Brazil':'BR','Bulgaria':'BG',
+            'Canada':'CA','Chile':'CL','China':'CN','Colombia':'CO','Croatia':'HR',
+            'Cyprus':'CY','Czech Republic':'CZ','Denmark':'DK','Ecuador':'EC','Egypt':'EG',
+            'Estonia':'EE','Ethiopia':'ET','Finland':'FI','France':'FR','Georgia':'GE',
+            'Germany':'DE','Ghana':'GH','Greece':'GR','Guatemala':'GT','Hungary':'HU',
+            'India':'IN','Indonesia':'ID','Iran':'IR','Iraq':'IQ','Ireland':'IE',
+            'Israel':'IL','Italy':'IT','Jamaica':'JM','Japan':'JP','Jordan':'JO',
+            'Kazakhstan':'KZ','Kenya':'KE','Kosovo':'XK','Kuwait':'KW','Latvia':'LV',
+            'Lebanon':'LB','Libya':'LY','Lithuania':'LT','Luxembourg':'LU','Malaysia':'MY',
+            'Maldives':'MV','Malta':'MT','Mauritania':'MR','Mexico':'MX','Moldova':'MD',
+            'Morocco':'MA','Netherlands':'NL','New Zealand':'NZ','Nigeria':'NG','Norway':'NO',
+            'Oman':'OM','Pakistan':'PK','Palestine':'PS','Panama':'PA','Peru':'PE',
+            'Philippines':'PH','Poland':'PL','Portugal':'PT','Qatar':'QA','Romania':'RO',
+            'Russia':'RU','Saudi Arabia':'SA','Senegal':'SN','Serbia':'RS','Singapore':'SG',
+            'Slovakia':'SK','Slovenia':'SI','Somalia':'SO','South Africa':'ZA','South Korea':'KR',
+            'Spain':'ES','Sri Lanka':'LK','Sudan':'SD','Sweden':'SE','Switzerland':'CH',
+            'Syria':'SY','Taiwan':'TW','Tajikistan':'TJ','Tanzania':'TZ','Thailand':'TH',
+            'Tunisia':'TN','Turkey':'TR','Turkmenistan':'TM','Uganda':'UG','Ukraine':'UA',
+            'United Arab Emirates':'AE','United Kingdom':'GB','United States':'US',
+            'USA':'US','UK':'GB','UAE':'AE','Uzbekistan':'UZ','Venezuela':'VE',
+            'Vietnam':'VN','Yemen':'YE','Zambia':'ZM','Zimbabwe':'ZW'
+        };
+
+        function getCountryFlag(country) {
+            if (!country || country.trim() === '') return null;
+            const trimmed = country.trim();
+            // Determine the 2-letter ISO code
+            let code = trimmed.length === 2
+                ? trimmed.toUpperCase()
+                : (COUNTRY_CODES[trimmed] || null);
+            // Build flag emoji from code
+            const flag = code
+                ? code.toUpperCase().replace(/./g, c => String.fromCodePoint(127397 + c.charCodeAt(0)))
+                : '🌍';
+            return { flag, name: trimmed, code };
+        }
+
+        // ===========================
+        // Render Live Feed
         // ===========================
         function renderLiveFeed(payments) {
             els.liveFeedList.innerHTML = "";
             if (!payments || payments.length === 0) {
-                els.liveFeedList.innerHTML = "<div class='loading-text'>Inga donationer ännu</div>";
+                els.liveFeedList.innerHTML = "<div class='loading-text'>No donations yet</div>";
                 return;
             }
 
@@ -1913,27 +1863,32 @@
                     const diffHours = Math.floor(diffMs / 3600000);
 
                     if (diffMins < 1) {
-                        timeStr = 'Just nu';
+                        timeStr = 'Just now';
                     } else if (diffMins < 60) {
-                        timeStr = diffMins + ' minuter sedan';
+                        timeStr = diffMins + ' minutes ago';
                     } else if (diffHours < 24) {
-                        timeStr = 'ca ' + diffHours + ' timmar sedan';
+                        timeStr = 'ca ' + diffHours + ' hours ago';
                     } else {
-                        timeStr = timeStr.split('T')[1].substring(0, 5);
+                        timeStr = timeStr.split('T')[0];
                     }
                 }
 
-                const sourceIcon = payment.source === 'mobile' ? '📱' : '💳';
-                const sourceClass = payment.source === 'mobile' ? 'mobile' : 'card';
-                const displayName = payment.message && payment.message !== '-' && payment.message !== 'Tack för ditt stöd!'
-                    ? payment.message
-                    : 'Anonym';
+                const displayName = payment.name && payment.name.trim() !== ''
+                    ? payment.name
+                    : (payment.message && payment.message !== '-' && payment.message !== 'Anonymous'
+                        ? payment.message
+                        : 'Anonymous');
+
+                const countryInfo = getCountryFlag(payment.country);
+                const countryStr = countryInfo
+                    ? `<span class="country-badge">${countryInfo.flag} ${countryInfo.name}</span>`
+                    : '';
 
                 item.innerHTML = `
-                    <div class="feed-source-icon ${sourceClass}">${sourceIcon}</div>
+                    <div class="feed-source-icon card">💳</div>
                     <div class="feed-item-info">
                         <div class="feed-item-name">
-                            ${displayName} donerade <span class="amount">${payment.amount?.toLocaleString() || '0'} Kr</span>
+                            ${displayName}${countryStr ? ' ' + countryStr : ''} donated <span class="amount">${payment.amount?.toLocaleString() || '0'} Kr</span>
                         </div>
                         <div class="feed-item-time">${timeStr}</div>
                     </div>
@@ -1943,7 +1898,7 @@
         }
 
         // ===========================
-        // Render Top Donors (NEW - uses existing payment data)
+        // Render Top Donors
         // ===========================
         function renderTopDonors(allPayments) {
             const topList = els.topDonorsList;
@@ -1953,7 +1908,7 @@
             const top3 = sorted.slice(0, 3);
 
             if (top3.length === 0) {
-                topList.innerHTML = "<div class='loading-text'>Inga toppdonatorer ännu</div>";
+                topList.innerHTML = "<div class='loading-text'>No top donors yet</div>";
                 return;
             }
 
@@ -1964,19 +1919,24 @@
                 const item = document.createElement('div');
                 item.className = `top-donor-item ${rankClasses[index] || ''}`;
 
-                const displayName = payment.message && payment.message !== '-' && payment.message !== 'Tack för ditt stöd!'
-                    ? payment.message
-                    : 'Anonym';
+                const displayName = payment.name && payment.name.trim() !== ''
+                    ? payment.name
+                    : (payment.message && payment.message !== '-' && payment.message !== 'Anonymous'
+                        ? payment.message
+                        : 'Anonymous');
 
-                const sourceClass = payment.source === 'mobile' ? 'mobile' : 'card';
-                const sourceLabel = payment.source === 'mobile' ? '📱' : '💳';
+                const countryInfo = getCountryFlag(payment.country);
+                const countryStr = countryInfo
+                    ? `<span class="country-badge">${countryInfo.flag} ${countryInfo.name}</span>`
+                    : '';
 
                 item.innerHTML = `
                     <div class="donor-rank ${rankLabels[index] || ''}">${index + 1}</div>
                     <div class="donor-info">
                         <div class="donor-name">
-                            ${sourceLabel} ${displayName}
-                            <span class="donor-source-badge ${sourceClass}">${payment.source === 'mobile' ? 'Swish' : 'Kort'}</span>
+                            💳 ${displayName}
+                            <span class="donor-source-badge card">Card</span>
+                            ${countryStr}
                         </div>
                     </div>
                     <div class="donor-amount">${payment.amount?.toLocaleString() || '0'} Kr</div>
@@ -1993,7 +1953,7 @@
         }
 
         // ===========================
-        // Theme Toggle (UNCHANGED)
+        // Theme Toggle
         // ===========================
         function toggleTheme() {
             const body = document.body;
@@ -2016,25 +1976,6 @@
 
         function goToSponsor(level) {
             window.location.href = 'company.html#' + level;
-        }
-
-        function isMobileDevice() {
-            return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-        }
-
-        function openSwish() {
-            const swishNumber = "1235000559";
-            const swishData = encodeURIComponent(
-                JSON.stringify({
-                    version: 1,
-                    payee: { value: swishNumber },
-                    message: { value: "Från hemsidan" }
-                })
-            );
-
-            if (isMobileDevice()) {
-                window.location.href = `swish://payment?data=${swishData}`;
-            }
         }
 
         // ===========================
