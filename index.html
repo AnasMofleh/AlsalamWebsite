@@ -93,11 +93,11 @@
                                 data-i18n="static.your-generosity-makes-difference">
                                 Din generositet gör skillnad varje dag.</p>
                             <div class="d-flex gap-2">
-                                <a href="stats.html" class="btn btn-primary btn-lg stats-preview-btn">
+                                <a href="/stats" class="btn btn-primary btn-lg stats-preview-btn">
                                     <span data-i18n="static.statistics">Statistik</span>
                                     <i class="fas fa-arrow-right ms-2"></i>
                                 </a>
-                                <a href="stats2.html" class="btn btn-outline-primary btn-lg stats-preview-btn">
+                                <a href="/stats2" class="btn btn-outline-primary btn-lg stats-preview-btn">
                                     Stripe Statistik
                                     <i class="fas fa-arrow-right ms-2"></i>
                                 </a>
@@ -213,7 +213,7 @@
             </div>
             <div class="row g-4 justify-content-center">
                 <div class="col-lg-6 col-xl-4">
-                    <a href="marrige.html" class="text-decoration-none text-dark">
+                    <a href="/marrige" class="text-decoration-none text-dark">
                         <div class="sermon-item wow fadeIn" data-wow-delay="0.3s">
                             <div class="overflow-hidden p-4 pb-0">
                                 <img src="img/marrigecontract.jpg" class="img-fluid w-100" alt="">
@@ -232,7 +232,7 @@
                     </a>
                 </div>
                 <div class="col-lg-6 col-xl-4">
-                    <a href="school.html" class="text-decoration-none text-dark">
+                    <a href="/school" class="text-decoration-none text-dark">
                         <div class="sermon-item wow fadeIn" data-wow-delay="0.1s">
                             <div class="overflow-hidden p-4 pb-0">
                                 <img src="img/school.jpg" class="img-fluid w-100" alt="">
@@ -374,7 +374,7 @@
 
 
     <!-- Footer Start -->
-    <div id="footer-placeholder"></div>
+    <div id="contact-us-placeholder"></div>
     <!-- Footer End -->
 
     <!-- JavaScript Libraries -->
@@ -405,7 +405,7 @@
                     setTimeout(() => window.reapplyTranslations(), 50);
                 }
             });
-            $("#footer-placeholder").load("footer.html", function () {
+            $("#contact-us-placeholder").load("contact-us.html", function () {
                 // Reapply translations after footer loads
                 if (window.reapplyTranslations) {
                     setTimeout(() => window.reapplyTranslations(), 50);
