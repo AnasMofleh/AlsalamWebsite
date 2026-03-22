@@ -7,11 +7,11 @@
 
 <!-- Add container div to control width -->
 <div class="container-fluid" style="max-width: 1200px">
-        <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-white py-3 rounded shadow-sm">
+        <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-white py-2 rounded shadow-sm">
             <div class="container-fluid d-flex justify-content-between align-items-center">
                 <!-- Logo -->
                 <div class="d-flex align-items-center">
-                    <a href="index.html" class="navbar-brand ms-lg-5">
+                    <a href="/" class="navbar-brand navbar-brand-logo ms-lg-5">
                         <img src="img/Al-Salam-Center-Logo.png" alt="Mosque Logo" class="img-fluid"
                             style="max-height: 60px" />
                     </a>
@@ -32,7 +32,7 @@
                     </div>
                 </div>
 
-                <button id="donate-button-mobile" onclick="window.location.href='donations.html'" data-i18n="donation">
+                <button id="donate-button-mobile" onclick="window.location.href='/donations'" data-i18n="donation">
                     Donera <i class="fas fa-heart"></i>
                 </button>
 
@@ -47,10 +47,10 @@
                 <div class="collapse navbar-collapse bg-white justify-content-center" id="navbarCollapse">
                     <!-- Desktop navigation: show two items + dropdown -->
                      <div class="navbar-nav  d-none d-lg-flex">
-                        <a href="index.html" class="nav-item nav-link" data-i18n="nav.home">HOME</a>
-                        <a href="index.html#Services" class="nav-item nav-link" data-i18n="nav.tjänster">TJÄNSTER</a>
+                        <a href="/" class="nav-item nav-link" data-i18n="nav.home">HOME</a>
+                        <a href="/#Services" class="nav-item nav-link" data-i18n="nav.tjänster">TJÄNSTER</a>
 
-                        <a href="donations.html" class="nav-item nav-link" data-i18n="nav.donationer">DONATIONER</a>
+                        <a href="/donations" class="nav-item nav-link" data-i18n="nav.donationer">DONATIONER</a>
 
                         <div class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="moreMenu" role="button"
@@ -58,9 +58,9 @@
 
                             </a>
                             <div class="dropdown-menu" aria-labelledby="moreMenu">
-                                <a class="dropdown-item" href="company.html" data-i18n="nav.company">FÖRETAG</a>
-                                <a class="dropdown-item" href="#footer" data-i18n="nav.contact">KONTAKTA OSS</a>
-                                <a class="dropdown-item" href="stats.html"> 
+                                <a class="dropdown-item" href="/company" data-i18n="nav.company">FÖRETAG</a>
+                                <a class="dropdown-item" href="#contact-us" data-i18n="nav.contact">KONTAKTA OSS</a>
+                                <a class="dropdown-item" href="/stats"> 
                                     <i class="fas fa-chart-line"></i>
                                     <span data-i18n="nav.stats">STATS</span>
                                 </a>
@@ -74,16 +74,16 @@
 
                     <!-- Mobile navigation: keep full list -->
                     <div class="navbar-nav align-items-center flex-column d-lg-none">
-                        <a href="index.html" class="nav-item nav-link active" data-i18n="nav.home">Home</a>
-                        <a href="index.html#Services" class="nav-item nav-link" data-i18n="nav.tjänster">Tjänster</a>
-                        <a href="donations.html" class="nav-item nav-link" data-i18n="nav.donationer">Donationer</a>
-                        <a href="company.html" class="nav-item nav-link" data-i18n="nav.company">Företag</a>
-                        <a href="stats.html" class="nav-item nav-link stats-cta-link">
+                        <a href="/" class="nav-item nav-link active" data-i18n="nav.home">Home</a>
+                        <a href="/#Services" class="nav-item nav-link" data-i18n="nav.tjänster">Tjänster</a>
+                        <a href="/donations" class="nav-item nav-link" data-i18n="nav.donationer">Donationer</a>
+                        <a href="/company" class="nav-item nav-link" data-i18n="nav.company">Företag</a>
+                        <a href="/stats" class="nav-item nav-link">
                             <i class="fas fa-chart-line"></i>
                             <span data-i18n="nav.stats">STATS</span>
                         </a>
 
-                        <a href="#footer" class="nav-item nav-link me-lg-5" data-i18n="nav.contact">Kontakt</a>
+                        <a href="#contact-us" class="nav-item nav-link me-lg-5" data-i18n="nav.contact">Kontakt</a>
 
                         <!-- Language selector (mobile only) - centered -->
                         <div class="nav-item dropdown d-flex justify-content-center w-100"
@@ -134,7 +134,7 @@
 
 
 <!-- Add margin to prevent content from hiding behind navbar -->
-<div style="margin-top: 75px"></div>
+<div style="margin-top: 64px"></div>
 
 <script>
     function setLang(lang) {
@@ -167,3 +167,4 @@
         if (sp) sp.classList.remove('show');
     })();
 </script>
+
