@@ -8,6 +8,11 @@ function resolveKey(translations, key) {
   return key.split('.').reduce((obj, part) => obj?.[part], translations);
 }
 
+function getTranslation(key, fallback = "") {
+  const value = resolveKey(currentTranslations, key);
+  return typeof value === "string" ? value : fallback;
+}
+
 
 // safe text replacement while preserving child elements
 function setElementTextPreserveChildren(el, text) {
@@ -15,12 +20,12 @@ function setElementTextPreserveChildren(el, text) {
     .some(n => n.nodeType === Node.ELEMENT_NODE);
 
   if (hasElementChildren) {
-    const textNode = Array.from(el.childNodes)
-      .find(n => n.nodeType === Node.TEXT_NODE);
+    // Remove all existing text nodes to avoid duplicated labels when language changes.
+    Array.from(el.childNodes)
+      .filter(n => n.nodeType === Node.TEXT_NODE)
+      .forEach(n => el.removeChild(n));
 
-    if (textNode) {
-      textNode.nodeValue = text ? ` ${text}` : '';
-    } else if (text) {
+    if (text) {
       el.appendChild(document.createTextNode(` ${text}`));
     }
   } else {
@@ -36,6 +41,40 @@ function updateLanguageSelector(lang) {
   }
 }
 
+function applyTranslations(translations) {
+  // Text content
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const value = resolveKey(translations, el.dataset.i18n);
+    if (typeof value === "string") {
+      setElementTextPreserveChildren(el, value);
+    }
+  });
+
+  // Placeholder attributes
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+    const value = resolveKey(translations, el.dataset.i18nPlaceholder);
+    if (typeof value === "string") {
+      el.setAttribute("placeholder", value);
+    }
+  });
+
+  // Title attributes
+  document.querySelectorAll("[data-i18n-title]").forEach(el => {
+    const value = resolveKey(translations, el.dataset.i18nTitle);
+    if (typeof value === "string") {
+      el.setAttribute("title", value);
+    }
+  });
+
+  // ARIA label attributes
+  document.querySelectorAll("[data-i18n-aria-label]").forEach(el => {
+    const value = resolveKey(translations, el.dataset.i18nAriaLabel);
+    if (typeof value === "string") {
+      el.setAttribute("aria-label", value);
+    }
+  });
+}
+
 
 // load i18n files and apply translations
 export async function loadLanguage(lang = DEFAULT_LANG) {
@@ -47,13 +86,7 @@ export async function loadLanguage(lang = DEFAULT_LANG) {
     currentTranslations = translations;
     currentLang = lang;
 
-    // Apply translations to all elements with data-i18n attribute
-    document.querySelectorAll("[data-i18n]").forEach(el => {
-      const value = resolveKey(translations, el.dataset.i18n);
-      if (typeof value === "string") {
-        setElementTextPreserveChildren(el, value);
-      }
-    });
+    applyTranslations(translations);
 
     // Update language selector dropdown
     updateLanguageSelector(lang);
@@ -70,6 +103,8 @@ export async function loadLanguage(lang = DEFAULT_LANG) {
 
     // Save to localStorage
     localStorage.setItem("lang", lang);
+
+    window.dispatchEvent(new CustomEvent("languageChanged", { detail: { lang } }));
     
     // Reinitialize sponsor carousel if it exists
     if (typeof window.reinitializeSponsors === 'function') {
@@ -85,12 +120,7 @@ export async function loadLanguage(lang = DEFAULT_LANG) {
 // Function to reapply translations after header/footer are loaded
 function reapplyTranslations() {
   if (currentTranslations && currentLang) {
-    document.querySelectorAll("[data-i18n]").forEach(el => {
-      const value = resolveKey(currentTranslations, el.dataset.i18n);
-      if (typeof value === "string") {
-        setElementTextPreserveChildren(el, value);
-      }
-    });
+    applyTranslations(currentTranslations);
     updateLanguageSelector(currentLang);
   }
 }
@@ -138,6 +168,7 @@ async function initApp() {
 
 window.loadLanguage = loadLanguage;
 window.reapplyTranslations = reapplyTranslations;
+window.getTranslation = getTranslation;
 
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {

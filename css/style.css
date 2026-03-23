@@ -503,6 +503,7 @@ html[dir="rtl"] .hero-row {
 @media (max-width: 991px) {
   #donate-button-mobile {
     display: block;
+    left: 20px;
   }
 
   .navbar-brand:not(.navbar-brand-logo) {
