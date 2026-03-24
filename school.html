@@ -378,6 +378,7 @@
             const t = (key, fallback = "") =>
                 typeof window.getTranslation === "function" ? window.getTranslation(key, fallback) : fallback;
 
+
             let currentStep = 0;
 
             function showStep(index) {
@@ -405,7 +406,13 @@
                     }
                 }
 
-                if (currentStep < steps.length - 1) {
+                    // Check FIFS verification when moving from step 0 (parents info)
+                    if (currentStep === 0 && !fifsVerificationPassed) {
+                        alert("Vänligen verifiera FIFS-medlemskap innan du fortsätter");
+                        return;
+                    }
+
+                    if (currentStep < steps.length - 1) {
                     showStep(currentStep + 1);
                 } else {
                     // Final submit

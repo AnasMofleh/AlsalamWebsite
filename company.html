@@ -94,8 +94,8 @@
                                 <i class="fas fa-envelope text-primary me-2"></i>
                                 <span class="fw-semibold" data-i18n="company.email">E-post:</span>
                             </div>
-                            <a href="mailto:alsalam.center@outlook.com"
-                                class="text-decoration-none text-break">alsalam.center@outlook.com</a>
+                            <a href="mailto:info@alsalamcenter.se"
+                                class="text-decoration-none text-break">info@alsalamcenter.se</a>
                         </div>
                     </div>
                     <div class="col-12 col-sm-6 col-md-5 col-lg-4">
@@ -105,7 +105,7 @@
                                 <span class="fw-semibold" data-i18n="company.whatsapp">WhatsApp:</span>
                             </div>
                             <a href="https://chat.whatsapp.com/IRiZCLCCM7lF4NHi2wBvmj"
-                                class="text-decoration-none">Kontakta oss</a>
+                                class="text-decoration-none" data-i18n="company.contact-us">Kontakta oss</a>
                         </div>
                     </div>
                 </div>
@@ -141,18 +141,18 @@
         function generateSponsorCard(config) {
             const {
                 id,
-                title,
-                price,
+                titleKey,
+                priceKey,
                 color,
                 icon,
-                benefits,
+                benefitKeys,
                 minAmount = 0
             } = config;
 
-            const benefitsList = benefits.map(benefit =>
+            const benefitsList = benefitKeys.map(key =>
                 `<div class="benefit-item">
                     <i class="fas fa-check-circle"></i>
-                    <span>${benefit}</span>
+                    <span data-i18n="company.${key}"></span>
                 </div>`
             ).join('');
 
@@ -170,11 +170,11 @@
                             <div class="package-icon">
                                 <i class="fas fa-${icon}"></i>
                             </div>
-                            <h3 class="package-title">${title}</h3>
-                            <div class="package-price">${price}</div>
+                            <h3 class="package-title" data-i18n="company.${titleKey}"></h3>
+                            <div class="package-price" data-i18n="company.${priceKey}"></div>
                         </div>
                         <div class="package-body">
-                            <div class="benefits-title">Fördelar som ingår:</div>
+                            <div class="benefits-title" data-i18n="company.benefits-title">Fördelar som ingår:</div>
                             <div class="benefits-list">
                                 ${benefitsList}
                             </div>
@@ -192,59 +192,59 @@
         }
 
         // Standard benefits that all sponsors get
-        const standardBenefits = [
-            'Logotyp som sponsor på hemsidan',
-            'Erkännande för ditt stöd',
-            'Årligt sponsoravtal'
+        const standardBenefitKeys = [
+            'benefit-1',
+            'benefit-2',
+            'benefit-3'
         ];
 
         // Additional benefits for different levels
-        const additionalBenefits = {
+        const additionalBenefitKeys = {
             gold: [
-                'Annonser på vår hemsida',
-                'Logotyp i Ramadan-schema',
-                'Personlig kontakt och anpassad sponsoring'
+                'benefit-4',
+                'benefit-5',
+                'benefit-6'
             ],
             silver: [
-                'Logotyp i Ramadan-schema'
+                'benefit-5'
             ],
             bronze: []
         };
 
         // Function to combine benefits
         function getBenefits(level) {
-            return [...additionalBenefits[level], ...standardBenefits];
+            return [...additionalBenefitKeys[level], ...standardBenefitKeys];
         }
 
         // Sponsor configurations
         const sponsorConfigs = [
             {
                 id: 'gold',
-                title: 'Guld',
-                price: 'Över 25,000 kr',
+                titleKey: 'sponsor-gold',
+                priceKey: 'sponsor-gold-price',
                 color: '#B8860B',
                 icon: 'crown',
                 minAmount: 25001,
                 buyButtonId: 'buy_btn_1SlEduG84lZUxh2hPwTCRTKp',
-                benefits: getBenefits('gold')
+                benefitKeys: getBenefits('gold')
             },
             {
                 id: 'silver',
-                title: 'Silver',
-                price: '25,000 kr',
+                titleKey: 'sponsor-silver',
+                priceKey: 'sponsor-silver-price',
                 color: '#C0C0C0',
                 icon: 'star',
                 buyButtonId: 'buy_btn_1ScXfNG84lZUxh2hkYOkdcKP',
-                benefits: getBenefits('silver')
+                benefitKeys: getBenefits('silver')
             },
             {
                 id: 'bronze',
-                title: 'Brons',
-                price: '10,000 kr',
+                titleKey: 'sponsor-bronze',
+                priceKey: 'sponsor-bronze-price',
                 color: '#CD7F32',
                 icon: 'handshake',
                 buyButtonId: 'buy_btn_1ScXWzG84lZUxh2hYtgs7TDS',
-                benefits: getBenefits('bronze')
+                benefitKeys: getBenefits('bronze')
             }
         ];
 
@@ -253,6 +253,10 @@
             const container = document.getElementById('sponsor-container');
             if (container) {
                 container.innerHTML = sponsorConfigs.map(config => generateSponsorCard(config)).join('');
+                // Apply translations to dynamically generated content
+                if (window.reapplyTranslations) {
+                    setTimeout(() => window.reapplyTranslations(), 50);
+                }
             }
         });
     </script>
