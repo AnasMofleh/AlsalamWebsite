@@ -69,7 +69,21 @@
     "question": "Do you have questions about our sponsorship packages?",
     "contact_description": "We are happy to help find the package that best suits your company.",
     "email": "Email:",
-    "whatsapp": "WhatsApp:"
+    "whatsapp": "WhatsApp:",
+    "contact-us": "Contact us",
+    "benefits-title": "Benefits included:",
+    "sponsor-gold": "Gold",
+    "sponsor-gold-price": "Over 25,000 SEK",
+    "sponsor-silver": "Silver",
+    "sponsor-silver-price": "25,000 SEK",
+    "sponsor-bronze": "Bronze",
+    "sponsor-bronze-price": "10,000 SEK",
+    "benefit-1": "Logo as sponsor on our website",
+    "benefit-2": "Recognition for your support",
+    "benefit-3": "Annual sponsorship agreement",
+    "benefit-4": "Advertisements on our website",
+    "benefit-5": "Logo in Ramadan schedule",
+    "benefit-6": "Personal contact and customized sponsorship"
   },
   "donations": {
     "title": "Donation Options",

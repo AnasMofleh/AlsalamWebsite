@@ -1825,6 +1825,20 @@ body {
   }
 }
 
+/* Reorder service cards on mobile - School first */
+@media (max-width: 768px) {
+  .sermon .row.g-4 {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .sermon .row.g-4 .col-lg-6:nth-child(2) {
+    order: 1;
+  }
+  .sermon .row.g-4 .col-lg-6:nth-child(1) {
+    order: 2;
+  }
+}
+
 /*** Sponsors Carousel End ***/
 
 

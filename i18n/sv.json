@@ -68,7 +68,21 @@
     "question": "Har du frågor om våra sponsoringspaket?",
     "contact_description": "Vi hjälper gärna till att hitta det paket som passar ditt företag bäst.",
     "email": "E-post:",
-    "whatsapp": "WhatsApp:"
+    "whatsapp": "WhatsApp:",
+    "contact-us": "Kontakta oss",
+    "benefits-title": "Fördelar som ingår:",
+    "sponsor-gold": "Guld",
+    "sponsor-gold-price": "Över 25,000 kr",
+    "sponsor-silver": "Silver",
+    "sponsor-silver-price": "25,000 kr",
+    "sponsor-bronze": "Brons",
+    "sponsor-bronze-price": "10,000 kr",
+    "benefit-1": "Logotyp som sponsor på hemsidan",
+    "benefit-2": "Erkännande för ditt stöd",
+    "benefit-3": "Årligt sponsoravtal",
+    "benefit-4": "Annonser på vår hemsida",
+    "benefit-5": "Logotyp i Ramadan-schema",
+    "benefit-6": "Personlig kontakt och anpassad sponsoring"
   },
   "donations": {
     "title": "Donationer",
