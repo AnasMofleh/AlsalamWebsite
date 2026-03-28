@@ -850,15 +850,33 @@
         }
 
         function celebrateDonation(amount) {
-            const intensity = Math.max(1, Math.min(10, Math.ceil(amount / 500)));
-            const rockets = Math.max(1, Math.min(8, Math.ceil(amount / 1000)));
+            if (amount <= 100) {
+                // Small – single gentle burst, no rockets
+                confetti({ particleCount: 35, spread: 45, startVelocity: 28, ticks: 140, origin: { x: 0.5, y: 0.6 } });
 
-            triggerFireworks(intensity);
+            } else if (amount <= 499) {
+                // Medium – two bursts from the sides
+                confetti({ particleCount: 60, spread: 60, startVelocity: 38, ticks: 180, origin: { x: 0.3, y: 0.6 } });
+                confetti({ particleCount: 60, spread: 60, startVelocity: 38, ticks: 180, origin: { x: 0.7, y: 0.6 } });
 
-            for (let i = 0; i < rockets; i += 1) {
-                const origin = 10 + Math.random() * 80;
-                const hue = 180 + Math.round(Math.random() * 120);
-                setTimeout(() => launchRocket(origin, hue), i * 150);
+            } else if (amount <= 999) {
+                // Large – fireworks + 2 rockets
+                triggerFireworks(4);
+                for (let i = 0; i < 2; i += 1) {
+                    const origin = 25 + i * 50;
+                    const hue = 180 + Math.round(Math.random() * 120);
+                    setTimeout(() => launchRocket(origin, hue), i * 150);
+                }
+
+            } else {
+                // Massive – big fireworks + many rockets
+                triggerFireworks(10);
+                const rockets = Math.max(4, Math.min(8, Math.ceil(amount / 1000)));
+                for (let i = 0; i < rockets; i += 1) {
+                    const origin = 10 + Math.random() * 80;
+                    const hue = 180 + Math.round(Math.random() * 120);
+                    setTimeout(() => launchRocket(origin, hue), i * 150);
+                }
             }
         }
 
@@ -868,6 +886,133 @@
                 setTimeout(() => launchRocket(12 + i * 14, 30 + i * 35), i * 100);
             }
         }
+
+        // ── Sound & confetti system ───────────────────────────────────
+        // Tiers based on how much the total increased (SEK):
+        //   small   0–100     two-note ding (C5→E5)       + single confetti burst
+        //   medium  101–499   three-note chord (E5→G5→B5) + two side bursts
+        //   large   500–999   four-note fanfare (C5→C6)   + fireworks + 2 rockets
+        //   massive ≥ 1000    six-note burst (C5→G6)      + big fireworks + many rockets
+
+        let audioCtx = null;
+
+        function getAudioCtx() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            return audioCtx;
+        }
+
+        // Warm up the AudioContext on the first user gesture so it's
+        // already in "running" state when a donation arrives.
+        function warmUpAudio() {
+            try {
+                const ctx = getAudioCtx();
+                if (ctx.state === "suspended") ctx.resume();
+            } catch (e) { /* ignore */ }
+            // Only need to do this once
+            ["click", "touchstart", "keydown"].forEach(evt =>
+                document.removeEventListener(evt, warmUpAudio));
+        }
+        ["click", "touchstart", "keydown"].forEach(evt =>
+            document.addEventListener(evt, warmUpAudio, { once: true, passive: true }));
+
+        function playTone(ctx, freq, startTime, duration, gainPeak, type = "sine", detune = 0) {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, startTime);
+            osc.detune.setValueAtTime(detune, startTime);
+            gain.gain.setValueAtTime(0, startTime);
+            gain.gain.linearRampToValueAtTime(gainPeak, startTime + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+            osc.start(startTime);
+            osc.stop(startTime + duration + 0.05);
+        }
+
+        function playSoundForIncrease(increase) {
+            try {
+                const ctx = getAudioCtx();
+                if (ctx.state === "suspended") ctx.resume();
+
+                const now = ctx.currentTime;
+
+                const C4 = 261.63;
+                const C5 = 523.25;
+                const E5 = 659.25;
+                const G5 = 783.99;
+                const C6 = 1046.5;
+                const E6 = 1318.5;
+                const G6 = 1567.98;
+                const C7 = 2093.0;
+
+                if (increase <= 50) {
+                    // Tiny donation – soft ping
+                    playTone(ctx, C5, now, 0.4, 0.15, "sine");
+
+                } else if (increase <= 150) {
+                    // Small donation – two-note ding
+                    playTone(ctx, C5, now, 0.55, 0.16, "sine");
+                    playTone(ctx, E5, now + 0.12, 0.6, 0.18, "sine");
+
+                } else if (increase <= 400) {
+                    // Medium donation – rising three-note jingle
+                    playTone(ctx, C5, now, 0.7, 0.18, "sine");
+                    playTone(ctx, E5, now + 0.10, 0.75, 0.20, "sine");
+                    playTone(ctx, G5, now + 0.20, 0.8, 0.22, "sine");
+
+                } else if (increase <= 800) {
+                    // Large donation – fanfare
+                    playTone(ctx, C5, now, 0.9, 0.22, "sine");
+                    playTone(ctx, E5, now + 0.10, 0.95, 0.22, "sine");
+                    playTone(ctx, G5, now + 0.20, 1.0, 0.24, "sine");
+                    playTone(ctx, C6, now + 0.32, 1.1, 0.28, "sine");
+
+                } else if (increase <= 1499) {
+                    // 1000 tier – catchy celebratory riff
+                    playTone(ctx, C5, now, 1.0, 0.18, "sine");
+                    playTone(ctx, E5, now + 0.07, 1.05, 0.18, "sine");
+                    playTone(ctx, G5, now + 0.14, 1.1, 0.20, "sine");
+
+                    // rhythmic double hit
+                    playTone(ctx, C6, now + 0.22, 1.2, 0.16, "sine");
+                    playTone(ctx, C6, now + 0.32, 1.2, 0.16, "sine");
+
+                    // bright lift
+                    playTone(ctx, E6, now + 0.42, 1.25, 0.24, "triangle");
+                    playTone(ctx, G6, now + 0.55, 1.3, 0.28, "triangle");
+
+                    // bass support
+                    playTone(ctx, C5, now, 0.35, 0.10, "square", -900);
+
+                } else {
+                    // 1500+ tier – dramatic alert + celebration
+
+                    // attention blasts
+                    playTone(ctx, G5, now, 1.2, 0.12, "sawtooth");
+                    playTone(ctx, G5, now + 0.12, 1.2, 0.12, "sawtooth");
+                    playTone(ctx, G5, now + 0.24, 1.2, 0.12, "sawtooth");
+
+                    // triumphant rise
+                    playTone(ctx, C6, now + 0.36, 1.3, 0.20, "sine");
+                    playTone(ctx, E6, now + 0.48, 1.35, 0.22, "sine");
+                    playTone(ctx, G6, now + 0.60, 1.4, 0.26, "sine");
+
+                    // big finale
+                    playTone(ctx, C7, now + 0.75, 1.6, 0.32, "triangle");
+
+                    // sparkle
+                    playTone(ctx, C7, now + 0.75, 1.6, 0.08, "triangle", 9);
+
+                    // sub bass punch
+                    playTone(ctx, C4, now, 0.6, 0.30, "sawtooth");
+                }
+
+            } catch (e) {
+                // ignore audio errors
+            }
+        }
+        // ─────────────────────────────────────────────────────────────
 
         function maybeTriggerCelebrations(totalAmount, last5) {
             if (previousTotalAmount === null) {
@@ -880,6 +1025,8 @@
 
             if (totalAmount > previousTotalAmount) {
                 const increase = totalAmount - previousTotalAmount;
+
+                playSoundForIncrease(increase);
 
                 const newestDonation = Array.isArray(last5) && last5.length > 0 ? last5[0] : null;
                 const newestKey = newestDonation ? donationKey(newestDonation) : null;
@@ -947,12 +1094,19 @@
             }
         }
 
-        $(function () {
-            $("#contact-us-placeholder").load("contact-us.html", function () {
-                if (window.reapplyTranslations) {
-                    setTimeout(() => window.reapplyTranslations(), 50);
+        document.addEventListener("DOMContentLoaded", function () {
+            function tryLoadContactUs() {
+                if (window.jQuery) {
+                    jQuery("#contact-us-placeholder").load("contact-us.html", function () {
+                        if (window.reapplyTranslations) {
+                            setTimeout(() => window.reapplyTranslations(), 50);
+                        }
+                    });
+                } else {
+                    setTimeout(tryLoadContactUs, 50);
                 }
-            });
+            }
+            tryLoadContactUs();
         });
 
         refreshStats();
