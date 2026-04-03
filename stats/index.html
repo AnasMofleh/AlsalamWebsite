@@ -59,6 +59,15 @@
             margin-bottom: 60px;
         }
 
+        .stats-layout {
+            --stats-main-width: 75%;
+            --stats-divider-size: 8px;
+        }
+
+        .stats-divider {
+            display: none;
+        }
+
         .stats-v2-card {
             background: var(--stats-card-bg) !important;
             color: var(--stats-text);
@@ -193,6 +202,75 @@
             display: none;
         }
 
+        @media (min-width: 992px) {
+            .stats-layout {
+                flex-wrap: nowrap;
+                align-items: stretch;
+                --bs-gutter-x: 0.35rem;
+            }
+
+            .stats-layout>.stats-main-col {
+                flex: 0 0 var(--stats-main-width);
+                width: var(--stats-main-width);
+                max-width: none;
+            }
+
+            .stats-layout>.donation-side-col {
+                flex: 1 1 0;
+                width: auto;
+                max-width: none;
+                min-width: 300px;
+            }
+
+            .stats-layout>.stats-divider {
+                display: flex;
+                flex: 0 0 var(--stats-divider-size);
+                width: var(--stats-divider-size);
+                max-width: var(--stats-divider-size);
+                align-items: stretch;
+                justify-content: center;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+                cursor: col-resize;
+                touch-action: none;
+                user-select: none;
+                outline: none;
+            }
+
+            .stats-layout>.stats-divider::before {
+                content: "";
+                width: 4px;
+                margin: 6px 0;
+                border-radius: 999px;
+                background: linear-gradient(180deg, rgba(13, 110, 253, 0.18) 0%, rgba(25, 135, 84, 0.55) 100%);
+                opacity: 0.6;
+                transition: opacity 0.2s ease, transform 0.2s ease;
+            }
+
+            .stats-layout>.stats-divider:hover::before,
+            .stats-layout>.stats-divider:focus-visible::before,
+            .stats-layout.is-resizing>.stats-divider::before {
+                opacity: 1;
+                transform: scaleX(1.15);
+            }
+
+            .stats-layout>.stats-main-col,
+            .stats-layout>.donation-side-col {
+                transition: flex-basis 0.18s ease, width 0.18s ease;
+            }
+
+            .stats-layout.is-resizing>.stats-main-col,
+            .stats-layout.is-resizing>.donation-side-col {
+                transition: none;
+            }
+        }
+
+        body.stats-is-resizing,
+        body.stats-is-resizing * {
+            cursor: col-resize !important;
+            user-select: none !important;
+        }
+
         @media (max-width: 768px) {
             .stats-top-row {
                 padding-left: 0;
@@ -238,6 +316,14 @@
             letter-spacing: -2px;
             direction: ltr;
             unicode-bidi: bidi-override;
+            white-space: nowrap;
+        }
+
+        .stats-v2-total-suffix {
+            font-size: 0.3em;
+            font-weight: 700;
+            letter-spacing: 0;
+            vertical-align: middle;
         }
 
         body.theme-dark .stats-v2-total {
@@ -321,6 +407,32 @@
             background: #0d6efd;
             border-color: #0d6efd;
             color: #fff;
+        }
+
+        .stats-sponsors {
+            --gap: 24px;
+            --speed-ltr: 22s;
+            margin-top: 22px;
+            padding-top: 18px;
+            border-top: 1px solid #eef2f7;
+        }
+
+        body.theme-dark .stats-sponsors {
+            border-top-color: rgba(148, 163, 184, 0.2);
+        }
+
+        .stats-sponsors .sponsor-wrap {
+            margin-bottom: 0;
+        }
+
+        .stats-sponsors .sponsor-item {
+            height: clamp(76px, 10vw, 108px);
+            padding: 8px 14px;
+        }
+
+        .stats-sponsors .sponsor-item img {
+            max-height: clamp(46px, 7vw, 72px);
+            max-width: clamp(96px, 16vw, 150px);
         }
 
         .donation-list {
@@ -469,11 +581,26 @@
             line-height: 1.15;
         }
 
+        .swish-number-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            text-decoration: none;
+            border-radius: 14px;
+        }
+
         .text-muted {
             color: var(--stats-muted) !important;
         }
 
         @media (max-width: 768px) {
+            .stats-sponsors {
+                --gap: 16px;
+                margin-top: 18px;
+                padding-top: 14px;
+            }
+
             .qr-switch-inline {
                 top: 10px;
                 right: 10px;
@@ -513,8 +640,8 @@
 <body>
 
     <div class="container stats-v2-wrap">
-        <div class="row g-4">
-            <div class="col-12 col-lg-9 stats-main-col">
+        <div id="statsLayout" class="row g-4 stats-layout">
+            <div id="statsMainCol" class="col-12 col-lg-9 stats-main-col">
                 <div class="stats-v2-card stats-v2-card-main bg-white p-4 p-md-5 h-100">
                     <div class="theme-switch-corner" title="Dark mode">
                         <div class="corner-controls-row">
@@ -554,6 +681,11 @@
                     </div>
 
                     <div id="milestones" class="milestones"></div>
+                    <div class="stats-sponsors" aria-label="Sponsorer">
+                        <div id="statsSponsorWrap" class="sponsor-wrap">
+                            <div id="statsSponsorTrack" class="sponsor-track ltr" role="list"></div>
+                        </div>
+                    </div>
                     <div class="stats-breakdown text-muted">
                         <span class="stats-breakdown-item">Swish: <span id="totalSwish">0 kr</span></span>
                         <span class="stats-breakdown-item">Stripe: <span id="totalStripe">0 kr</span></span>
@@ -561,7 +693,11 @@
                 </div>
             </div>
 
-            <div class="col-12 col-lg-3 donation-side-col">
+            <div id="statsResizeHandle" class="stats-divider" role="separator" aria-controls="statsMainCol statsSideCol"
+                aria-label="Adjust panel widths" aria-orientation="vertical" aria-valuemin="58" aria-valuemax="82"
+                aria-valuenow="75" tabindex="0"></div>
+
+            <div id="statsSideCol" class="col-12 col-lg-3 donation-side-col">
                 <div class="stats-v2-card bg-white p-4 h-100">
                     <label id="swishQrToggleWrap" class="qr-switch-inline" for="swishQrToggle">
                         <span>Visa QR</span>
@@ -575,11 +711,10 @@
                     </div>
                     <div id="swishQrWrap" class="swish-qr-wrap d-none">
                         <img src="img/swishwakfQR.png" alt="Swish QR kod">
-                        <p class="mb-0 mt-2 swish-number">123 5000 559</p>
-                        <a class="btn btn-success mt-3"
+                        <a class="btn btn-success mt-3 swish-number swish-number-btn"
                             href="https://app.swish.nu/1/p/sw/?sw=1235000559&msg=Ramadan%20Alsalam" target="_blank"
                             rel="noopener noreferrer">
-                            Donera med Swish
+                            123 5000 559
                         </a>
                     </div>
                     <h4 id="qrDonationsTitle" class="mb-3 qr-donations-title d-none">Senaste 5 donationer</h4>
@@ -623,6 +758,22 @@
         const qrDonationsTitleEl = document.getElementById("qrDonationsTitle");
         const mobileQrQuery = window.matchMedia("(max-width: 768px)");
         const THEME_STORAGE_KEY = "alsalam-stats-v2-theme";
+        const LAYOUT_STORAGE_KEY = "alsalam-stats-v2-main-width";
+        const sponsorWrapEl = document.getElementById("statsSponsorWrap");
+        const sponsorTrackEl = document.getElementById("statsSponsorTrack");
+        const statsLayoutEl = document.getElementById("statsLayout");
+        const statsResizeHandleEl = document.getElementById("statsResizeHandle");
+        const desktopResizeQuery = window.matchMedia("(min-width: 992px)");
+        const statsSponsorImages = [
+            "privtaBarn.png",
+            "a2m.png",
+            "jcFlytt.png",
+            "konsentdent.jpg",
+            "360tandklinik.jpeg",
+            "palmyra.png",
+            "sweethouse.png",
+            "astorptandlakare.png"
+        ];
 
         let previousTotalAmount = null;
         let previousNewestDonationKey = null;
@@ -704,10 +855,11 @@
         }
 
         function renderMilestones(totalAmount) {
-            const nextMilestone = Math.min(Math.floor(totalAmount / 1000000) + 1, 10);
+            const milestoneSteps = [3, 4, 5, 6, 7, 8, 9, 10];
+            const nextMilestone = milestoneSteps.find((step) => totalAmount < step * 1000000) ?? 10;
             milestonesEl.innerHTML = "";
 
-            for (let i = 1; i <= 10; i += 1) {
+            for (const i of milestoneSteps) {
                 const pill = document.createElement("span");
                 pill.className = `milestone-pill ${i === nextMilestone ? "closest" : ""}`;
                 const milestoneTarget = i * 1000000;
@@ -719,7 +871,10 @@
 
         function renderTotal(totalAmount, swishAmount, stripeAmount) {
             const clampedPercent = Math.min((totalAmount / GOAL_AMOUNT) * 100, 100);
-            totalAmountEl.textContent = formatSek(totalAmount);
+            totalAmountEl.innerHTML = `${totalAmount.toLocaleString("sv-SE", {
+                minimumFractionDigits: totalAmount % 1 === 0 ? 0 : 2,
+                maximumFractionDigits: 2
+            })}<span class="stats-v2-total-suffix"> kr</span>`;
             totalSwishEl.textContent = formatSek(swishAmount);
             totalStripeEl.textContent = formatSek(stripeAmount);
             progressLabelEl.textContent = `${clampedPercent.toFixed(2)}% av målet`;
@@ -768,7 +923,7 @@
             swishQrToggleWrapEl.classList.toggle("d-none", forceMobileQr);
             swishQrToggleEl.checked = shouldShowQr;
             topDonationsTitleEl.classList.toggle("d-none", shouldShowQr);
-            qrDonationsTitleEl.classList.toggle("d-none", !shouldShowQr);
+            qrDonationsTitleEl.classList.add("d-none");
             renderLast5(last5);
         }
 
@@ -781,6 +936,114 @@
                 return `${hours}:${match[2]}`;
             }
             return "--:--";
+        }
+
+        function buildSponsorItemsHtml(images) {
+            return images.map((name) => {
+                const safeName = name.replace(/[-_]/g, " ").replace(/\..+$/, "");
+                return `
+                    <div class="sponsor-item" role="listitem">
+                        <img src="img/sponsors/${name}" alt="${safeName}">
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function waitForSponsorImages(imgElements) {
+            return Promise.all(Array.from(imgElements).map((img) => {
+                if (img.complete) return Promise.resolve();
+                return new Promise((resolve) => {
+                    img.onload = img.onerror = resolve;
+                });
+            }));
+        }
+
+        async function initStatsSponsors() {
+            if (!sponsorWrapEl || !sponsorTrackEl || sponsorTrackEl.dataset.ready === "true") return;
+            if (!statsSponsorImages.length) return;
+
+            const singleTrackHtml = buildSponsorItemsHtml(statsSponsorImages);
+            sponsorTrackEl.innerHTML = singleTrackHtml + singleTrackHtml;
+            await waitForSponsorImages(sponsorTrackEl.querySelectorAll("img"));
+
+            sponsorTrackEl.dataset.ready = "true";
+            sponsorWrapEl.classList.add("is-ready");
+        }
+
+        function updateStatsLayoutWidth(widthPercent) {
+            if (!statsLayoutEl || !statsResizeHandleEl) return;
+
+            const clampedWidth = Math.min(Math.max(widthPercent, 58), 82);
+            statsLayoutEl.style.setProperty("--stats-main-width", `${clampedWidth}%`);
+            statsResizeHandleEl.setAttribute("aria-valuenow", String(Math.round(clampedWidth)));
+            localStorage.setItem(LAYOUT_STORAGE_KEY, String(clampedWidth));
+        }
+
+        function initResizableLayout() {
+            if (!statsLayoutEl || !statsResizeHandleEl) return;
+
+            const defaultWidth = 75;
+            const savedWidth = Number(localStorage.getItem(LAYOUT_STORAGE_KEY));
+            updateStatsLayoutWidth(Number.isFinite(savedWidth) ? savedWidth : defaultWidth);
+
+            let isResizing = false;
+
+            const handlePointerMove = (event) => {
+                if (!isResizing || !desktopResizeQuery.matches) return;
+
+                const layoutRect = statsLayoutEl.getBoundingClientRect();
+                const nextWidth = ((event.clientX - layoutRect.left) / layoutRect.width) * 100;
+                updateStatsLayoutWidth(nextWidth);
+            };
+
+            const stopResize = () => {
+                if (!isResizing) return;
+
+                isResizing = false;
+                statsLayoutEl.classList.remove("is-resizing");
+                document.body.classList.remove("stats-is-resizing");
+                window.removeEventListener("pointermove", handlePointerMove);
+                window.removeEventListener("pointerup", stopResize);
+                window.removeEventListener("pointercancel", stopResize);
+            };
+
+            statsResizeHandleEl.addEventListener("pointerdown", (event) => {
+                if (!desktopResizeQuery.matches) return;
+
+                isResizing = true;
+                statsLayoutEl.classList.add("is-resizing");
+                document.body.classList.add("stats-is-resizing");
+                statsResizeHandleEl.focus();
+                event.preventDefault();
+
+                window.addEventListener("pointermove", handlePointerMove);
+                window.addEventListener("pointerup", stopResize);
+                window.addEventListener("pointercancel", stopResize);
+            });
+
+            statsResizeHandleEl.addEventListener("dblclick", () => {
+                updateStatsLayoutWidth(defaultWidth);
+            });
+
+            statsResizeHandleEl.addEventListener("keydown", (event) => {
+                if (!desktopResizeQuery.matches) return;
+                if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+
+                event.preventDefault();
+                const currentWidth = parseFloat(statsLayoutEl.style.getPropertyValue("--stats-main-width")) || defaultWidth;
+                updateStatsLayoutWidth(currentWidth + (event.key === "ArrowLeft" ? -2 : 2));
+            });
+
+            desktopResizeQuery.addEventListener("change", (event) => {
+                if (!event.matches) {
+                    stopResize();
+                    statsLayoutEl.style.removeProperty("--stats-main-width");
+                    return;
+                }
+
+                const restoredWidth = Number(localStorage.getItem(LAYOUT_STORAGE_KEY));
+                updateStatsLayoutWidth(Number.isFinite(restoredWidth) ? restoredWidth : defaultWidth);
+            });
         }
 
         function setTheme(theme) {
@@ -956,6 +1219,8 @@
             });
         });
 
+        initStatsSponsors();
+        initResizableLayout();
         refreshStats();
         setInterval(refreshStats, POLL_INTERVAL_MS);
 
