@@ -323,6 +323,32 @@
             color: #fff;
         }
 
+        .stats-sponsors {
+            --gap: 24px;
+            --speed-ltr: 22s;
+            margin-top: 22px;
+            padding-top: 18px;
+            border-top: 1px solid #eef2f7;
+        }
+
+        body.theme-dark .stats-sponsors {
+            border-top-color: rgba(148, 163, 184, 0.2);
+        }
+
+        .stats-sponsors .sponsor-wrap {
+            margin-bottom: 0;
+        }
+
+        .stats-sponsors .sponsor-item {
+            height: clamp(76px, 10vw, 108px);
+            padding: 8px 14px;
+        }
+
+        .stats-sponsors .sponsor-item img {
+            max-height: clamp(46px, 7vw, 72px);
+            max-width: clamp(96px, 16vw, 150px);
+        }
+
         .donation-list {
             list-style: none;
             margin: 0;
@@ -474,6 +500,12 @@
         }
 
         @media (max-width: 768px) {
+            .stats-sponsors {
+                --gap: 16px;
+                margin-top: 18px;
+                padding-top: 14px;
+            }
+
             .qr-switch-inline {
                 top: 10px;
                 right: 10px;
@@ -554,6 +586,11 @@
                     </div>
 
                     <div id="milestones" class="milestones"></div>
+                    <div class="stats-sponsors" aria-label="Sponsorer">
+                        <div id="statsSponsorWrap" class="sponsor-wrap">
+                            <div id="statsSponsorTrack" class="sponsor-track ltr" role="list"></div>
+                        </div>
+                    </div>
                     <div class="stats-breakdown text-muted">
                         <span class="stats-breakdown-item">Swish: <span id="totalSwish">0 kr</span></span>
                         <span class="stats-breakdown-item">Stripe: <span id="totalStripe">0 kr</span></span>
@@ -623,6 +660,18 @@
         const qrDonationsTitleEl = document.getElementById("qrDonationsTitle");
         const mobileQrQuery = window.matchMedia("(max-width: 768px)");
         const THEME_STORAGE_KEY = "alsalam-stats-v2-theme";
+        const sponsorWrapEl = document.getElementById("statsSponsorWrap");
+        const sponsorTrackEl = document.getElementById("statsSponsorTrack");
+        const statsSponsorImages = [
+            "privtaBarn.png",
+            "a2m.png",
+            "jcFlytt.png",
+            "konsentdent.jpg",
+            "360tandklinik.jpeg",
+            "palmyra.png",
+            "sweethouse.png",
+            "astorptandlakare.png"
+        ];
 
         let previousTotalAmount = null;
         let previousNewestDonationKey = null;
@@ -781,6 +830,38 @@
                 return `${hours}:${match[2]}`;
             }
             return "--:--";
+        }
+
+        function buildSponsorItemsHtml(images) {
+            return images.map((name) => {
+                const safeName = name.replace(/[-_]/g, " ").replace(/\..+$/, "");
+                return `
+                    <div class="sponsor-item" role="listitem">
+                        <img src="img/sponsors/${name}" alt="${safeName}">
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function waitForSponsorImages(imgElements) {
+            return Promise.all(Array.from(imgElements).map((img) => {
+                if (img.complete) return Promise.resolve();
+                return new Promise((resolve) => {
+                    img.onload = img.onerror = resolve;
+                });
+            }));
+        }
+
+        async function initStatsSponsors() {
+            if (!sponsorWrapEl || !sponsorTrackEl || sponsorTrackEl.dataset.ready === "true") return;
+            if (!statsSponsorImages.length) return;
+
+            const singleTrackHtml = buildSponsorItemsHtml(statsSponsorImages);
+            sponsorTrackEl.innerHTML = singleTrackHtml + singleTrackHtml;
+            await waitForSponsorImages(sponsorTrackEl.querySelectorAll("img"));
+
+            sponsorTrackEl.dataset.ready = "true";
+            sponsorWrapEl.classList.add("is-ready");
         }
 
         function setTheme(theme) {
@@ -956,6 +1037,7 @@
             });
         });
 
+        initStatsSponsors();
         refreshStats();
         setInterval(refreshStats, POLL_INTERVAL_MS);
 
