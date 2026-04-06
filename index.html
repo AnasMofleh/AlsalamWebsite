@@ -235,10 +235,10 @@
 
 
                 <div class="col-lg-6 col-xl-4">
-                    <a href="/marrige" class="text-decoration-none text-dark">
+                    <a href="/marriage" class="text-decoration-none text-dark">
                         <div class="sermon-item wow fadeIn" data-wow-delay="0.3s">
                             <div class="overflow-hidden p-4 pb-0">
-                                <img src="img/marrigecontract.jpg" class="img-fluid w-100" alt="">
+                                <img src="img/marriagecontract.jpg" class="img-fluid w-100" alt="">
                             </div>
                             <div class="p-4">
                                 <span class="d-inline-block h4 lh-sm mb-3" data-i18n="services.marriage">Vigselintyg
@@ -355,24 +355,24 @@
     <script src="js/main.js"></script>
 
     <!-- i18n module (exposed as global `loadLanguage`) -->
-    <script type="module" src="i18n/js/i18n.js" defer></script>
+    <script type="module" src="/langugaes/js/i18n.js" defer></script>
 
     <!-- Load Header, Footer and Sponsors -->
     <script>
         $(function () {
-            $("#header-placeholder").load("header.html", function () {
+            $("#header-placeholder").load("/header.html", function () {
                 // Reapply translations after header loads
                 if (window.reapplyTranslations) {
                     setTimeout(() => window.reapplyTranslations(), 50);
                 }
             });
-            $("#contact-us-placeholder").load("contact-us.html", function () {
+            $("#contact-us-placeholder").load("/contact-us.html", function () {
                 // Reapply translations after footer loads
                 if (window.reapplyTranslations) {
                     setTimeout(() => window.reapplyTranslations(), 50);
                 }
             });
-            $("#sponsors-placeholder").load("sponsors.html", function () {
+            $("#sponsors-placeholder").load("/sponsors/sponsors.html", function () {
                 // Reapply translations after sponsors loads
                 if (window.reapplyTranslations) {
                     setTimeout(() => window.reapplyTranslations(), 100);

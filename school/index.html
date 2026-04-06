@@ -114,10 +114,7 @@
                                 <div>
                                     <label for="Pappans Personnummer" class="formbold-form-label" data-i18n="school.form.personal-number">Personnummer</label>
                                     <input type="text" name="Pappans Personnummer" id="Pappans Personnummer"
-                                        placeholder="199901019999" class="formbold-form-input" required
-                                        pattern="(19|20)\d{10}"
-                                        title="Personnummer måste vara 12 siffror och börja med 19 eller 20"
-                                        data-i18n-title="school.form.validation.personal-12-19-20" />
+                                        placeholder="199901019999" class="formbold-form-input" required />
                                 </div>
 
                             </div>
@@ -343,13 +340,13 @@
 
     <script>
         $(function () {
-            $("#header-placeholder").load("header.html", function() {
+            $("#header-placeholder").load("/header.html", function() {
                 // Reapply translations after header loads
                 if (window.reapplyTranslations) {
                     setTimeout(() => window.reapplyTranslations(), 50);
                 }
             });
-            $("#contact-us-placeholder").load("contact-us.html", function() {
+            $("#contact-us-placeholder").load("/contact-us.html", function() {
                 // Reapply translations after footer loads
                 if (window.reapplyTranslations) {
                     setTimeout(() => window.reapplyTranslations(), 50);
@@ -519,7 +516,7 @@
     </script>
 
     <!-- i18n module (exposed as global `loadLanguage`) -->
-    <script type="module" src="i18n/js/i18n.js" defer></script>
+    <script type="module" src="/langugaes/js/i18n.js" defer></script>
 </body>
 
 </html>

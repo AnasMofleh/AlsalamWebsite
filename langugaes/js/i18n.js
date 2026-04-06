@@ -76,10 +76,10 @@ function applyTranslations(translations) {
 }
 
 
-// load i18n files and apply translations
+// load translation files and apply translations
 export async function loadLanguage(lang = DEFAULT_LANG) {
   try {
-    const response = await fetch(`i18n/${lang}.json`);
+    const response = await fetch(`/langugaes/${lang}.json`);
     if (!response.ok) throw new Error("Translation file not found");
 
     const translations = await response.json();

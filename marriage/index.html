@@ -2,6 +2,7 @@
 <html lang="sv">
 
 <head>
+    <base href="/">
     <meta charset="utf-8">
     <title>Al-Salam Moské</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -129,13 +130,13 @@
     <!-- Load Header and Footer -->
     <script>
         $(function () {
-            $("#header-placeholder").load("header.html", function() {
+            $("#header-placeholder").load("/header.html", function() {
                 // Reapply translations after header loads
                 if (window.reapplyTranslations) {
                     setTimeout(() => window.reapplyTranslations(), 50);
                 }
             });
-            $("#contact-us-placeholder").load("contact-us.html", function() {
+            $("#contact-us-placeholder").load("/contact-us.html", function() {
                 // Reapply translations after footer loads
                 if (window.reapplyTranslations) {
                     setTimeout(() => window.reapplyTranslations(), 50);
@@ -155,7 +156,7 @@
         });
     </script>
     <!-- i18n module (exposed as global `loadLanguage`) -->
-    <script type="module" src="i18n/js/i18n.js" defer></script>
+    <script type="module" src="/langugaes/js/i18n.js" defer></script>
 </body>
 
 </html>

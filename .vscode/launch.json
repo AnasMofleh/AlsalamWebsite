@@ -7,8 +7,8 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Open school-success.html",
-            "url": "https://localhost:5500/school-success.html",
+            "name": "Open school-success route",
+            "url": "https://localhost:5500/school-success/",
             "webRoot": "${workspaceFolder}",
             "runtimeExecutable": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
         }
