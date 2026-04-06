@@ -6,20 +6,20 @@
 <!-- Spinner End -->
 
 <!-- Add container div to control width -->
-<div class="container-fluid" style="max-width: 1200px">
-        <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-white py-2 rounded shadow-sm">
-            <div class="container-fluid d-flex justify-content-between align-items-center">
+<div class="container-fluid site-header-shell">
+        <nav class="navbar fixed-top navbar-light navbar-expand-lg site-navbar py-2">
+            <div class="container-fluid site-navbar-inner d-flex justify-content-between align-items-center">
                 <!-- Logo -->
                 <div class="d-flex align-items-center">
                     <a href="/" class="navbar-brand navbar-brand-logo ms-lg-5">
-                        <img src="img/Al-Salam-Center-Logo.png" alt="Mosque Logo" class="img-fluid"
+                            <img src="/img/Al-Salam-Center-Logo.png" alt="Mosque Logo" class="img-fluid"
                             style="max-height: 60px" />
                     </a>
 
                     <!-- Language selector (desktop only) -->
 
                     <div class="nav-item dropdown ms-3 d-none d-lg-block">
-                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
+                        <a class="nav-link dropdown-toggle d-flex align-items-center header-lang-toggle" href="#" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-globe me-2"></i>
                             <span id="current-lang">Svenska</span>
@@ -32,8 +32,8 @@
                     </div>
                 </div>
 
-                <button id="donate-button-mobile" onclick="window.location.href='/donations'" data-i18n="donation">
-                    Donera <i class="fas fa-heart"></i>
+                <button id="donate-button-mobile" onclick="window.location.href='/donations'">
+                    <span data-i18n="donation">Donera </span><i class="fas fa-heart"></i>
                 </button>
 
 
@@ -44,9 +44,9 @@
                 </button>
 
                 <!-- Collapsible content -->
-                <div class="collapse navbar-collapse bg-white justify-content-center" id="navbarCollapse">
+                 <div class="collapse navbar-collapse site-navbar-collapse" id="navbarCollapse">
                     <!-- Desktop navigation: show two items + dropdown -->
-                     <div class="navbar-nav  d-none d-lg-flex">
+                     <div class="navbar-nav desktop-nav d-none d-lg-flex">
                         <a href="/" class="nav-item nav-link" data-i18n="nav.home">HOME</a>
                         <a href="/#Services" class="nav-item nav-link" data-i18n="nav.tjänster">TJÄNSTER</a>
 
@@ -74,13 +74,13 @@
 
                     <!-- Mobile navigation: keep full list -->
                     <div class="navbar-nav align-items-center flex-column d-lg-none">
-                        <a href="/" class="nav-item nav-link active" data-i18n="nav.home">Home</a>
+                        <a href="/" class="nav-item nav-link" data-i18n="nav.home">Home</a>
                         <a href="/#Services" class="nav-item nav-link" data-i18n="nav.tjänster">Tjänster</a>
                         <a href="/donations" class="nav-item nav-link" data-i18n="nav.donationer">Donationer</a>
                         <a href="/company" class="nav-item nav-link" data-i18n="nav.company">Företag</a>
                         <a href="/stats" class="nav-item nav-link">
-                            <i class="fas fa-chart-line"></i>
                             <span data-i18n="nav.stats">STATS</span>
+                            <i class="fas fa-chart-line"></i>
                         </a>
 
                         <a href="#contact-us" class="nav-item nav-link me-lg-5" data-i18n="nav.contact">Kontakt</a>
@@ -103,30 +103,30 @@
                     </div>
 
                     <!-- Social media buttons -->
-                    <div class="d-flex justify-content-center ms-4">
-                        <a class="btn btn-primary btn-sm me-2" href="https://chat.whatsapp.com/IRiZCLCCM7lF4NHi2wBvmj">
-                            <i class="fab fa-whatsapp"></i>
-                        </a>
-                        <a class="btn btn-primary btn-sm me-2" href="https://www.facebook.com/alsalam.center.se">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a class="btn btn-primary btn-sm me-2"
-                            href="https://www.instagram.com/alsalamcenterhelsingborg">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a class="btn btn-primary btn-sm me-2" href="https://www.tiktok.com/@alsalamcenterhelsingborg">
-                            <i class="fab fa-tiktok"></i>
-                        </a>
-
-                    </div>
-
-                    <!-- Swish button -->
-                    <span class="navbar-text">
-                        <div class="d-none d-xl-flex align-items-center ms-4">
-                            <img src="img/swish.png" alt="Swish Icon" class="me-2" style="width: 20px" />
-                            <span>Swish: 1235000559</span>
+                    <div class="header-utility-group d-flex flex-column flex-lg-row align-items-center">
+                        <div class="header-socials d-flex justify-content-center">
+                            <a class="btn btn-primary btn-sm me-2 social-link social-link-whatsapp" href="https://chat.whatsapp.com/IRiZCLCCM7lF4NHi2wBvmj">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            <a class="btn btn-primary btn-sm me-2 social-link social-link-facebook" href="https://www.facebook.com/alsalam.center.se">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a class="btn btn-primary btn-sm me-2 social-link social-link-instagram"
+                                href="https://www.instagram.com/alsalamcenterhelsingborg">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a class="btn btn-primary btn-sm social-link social-link-tiktok" href="https://www.tiktok.com/@alsalamcenterhelsingborg">
+                                <i class="fab fa-tiktok"></i>
+                            </a>
                         </div>
-                    </span>
+
+                        <span class="navbar-text">
+                            <div class="header-swish d-none d-xl-flex align-items-center">
+                                <img src="/img/swish.png" alt="Swish Icon" class="me-2" style="width: 20px" />
+                                <span>Swish: 1235000559</span>
+                            </div>
+                        </span>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -160,6 +160,43 @@
             if (mobile) mobile.textContent = map[lang];
         }
     }
+
+    (function highlightCurrentPage() {
+        const currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
+        const currentHash = window.location.hash;
+        const links = document.querySelectorAll('.navbar a[href]');
+        let dropdownHasMatch = false;
+
+        links.forEach((link) => {
+            const href = link.getAttribute('href');
+            if (!href || href.startsWith('http')) {
+                return;
+            }
+
+            const resolved = new URL(href, window.location.origin);
+            const linkPath = resolved.pathname.replace(/\/+$/, '') || '/';
+            const linkHash = resolved.hash;
+            const isHashLink = linkHash.length > 0;
+            const isMatch = isHashLink
+                ? currentPath === linkPath && currentHash === linkHash
+                : currentPath === linkPath;
+
+            if (isMatch) {
+                link.classList.add('is-current');
+                link.setAttribute('aria-current', 'page');
+                if (link.classList.contains('dropdown-item')) {
+                    dropdownHasMatch = true;
+                }
+            }
+        });
+
+        if (dropdownHasMatch) {
+            const moreMenu = document.getElementById('moreMenu');
+            if (moreMenu) {
+                moreMenu.classList.add('is-current');
+            }
+        }
+    })();
 
     // Remove spinner after header loads
     (function() {

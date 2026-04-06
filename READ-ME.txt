@@ -1,9 +1,43 @@
-  =>  Template Name    : THEMosque - Mosque Website Template
+Al-Salam Center Website
 
-  =>  Template Link    : https://htmlcodex.com/mosque-website-template
+This repository contains the public website for Al-Salam Center in Helsingborg, Sweden. The site is built as a static HTML, CSS, and JavaScript website and is deployed on:
 
-  =>  Template License : https://htmlcodex.com/license (or read the LICENSE.txt file)
+https://alsalamcenter.se
 
-  =>  Template Author  : HTML Codex
+Main features
 
-  =>  Author Website   : https://htmlcodex.com
+- Homepage with shared header, footer, and sponsors section
+- Donations page with Swish and Stripe-based donation flows
+- School registration flow and school success page
+- Company sponsorship page
+- Marriage application page
+- Sponsors page
+- Live donation statistics page
+- Swedish, English, and Arabic translations
+
+Project structure
+
+- index.html is the homepage
+- header.html is the shared site header
+- contact-us.html is the shared footer and contact section
+- company/, donations/, donation_redirect/, school/, school-success/, marriage/, sponsors/, and stats/ contain the route-based pages
+- langugaes/ contains translation JSON files and the translation loader used by the site
+
+Translations
+
+The website supports multiple languages through the files in the langugaes folder:
+
+- sv.json
+- en.json
+- ar.json
+- js/i18n.js
+
+Local development
+
+Run the site through a local web server instead of opening the files directly in the browser. Shared partials and translations are loaded dynamically, so some features will not work correctly over file://.
+
+If you use VS Code, Live Server is enough for local testing.
+
+Template attribution
+
+This project is based on the THEMosque template by HTML Codex. Attribution and license requirements still apply. See LICENSE.txt for the original template license and credit terms.

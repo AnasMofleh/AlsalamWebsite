@@ -734,7 +734,7 @@
     <script src="lib/waypoints/waypoints.min.js"></script>
     <script src="lib/owlcarousel/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
-    <script type="module" src="i18n/js/i18n.js" defer></script>
+    <script type="module" src="/langugaes/js/i18n.js" defer></script>
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbxLXBaGS2rdrrvtFAxMGCAeK2elGSfbvRmjtxBhjbORf9gdHBHduzOXIzP2FCI501cMWA/exec";
@@ -1212,7 +1212,7 @@
         }
 
         $(function () {
-            $("#contact-us-placeholder").load("contact-us.html", function () {
+            $("#contact-us-placeholder").load("/contact-us.html", function () {
                 if (window.reapplyTranslations) {
                     setTimeout(() => window.reapplyTranslations(), 50);
                 }
