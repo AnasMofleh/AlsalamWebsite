@@ -30,111 +30,78 @@
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
 
-    <style>
-        @media (max-width: 991px) {
-            .row.justify-content-center {
-                display: flex;
-                flex-wrap: wrap;
-            }
-            #card-one { order: 2; }
-            #card-two { order: 1; }
-        }
-    </style>
-
 </head>
 
-<body>
+<body class="donation-page-body">
     <!-- Header Start -->
     <div id="header-placeholder"></div>
     <!-- Header End -->
 
-    <div class="container mt-5 pt-5 text-center">
-        <div class="donations-section">
-            <h3 class="mb-4" data-i18n="donations.title">Donationsalternativ</h3>
-            <div class="tabs-group">
-                <button class="tab-button active" id="one-time" data-i18n="donations.one-time">Engång</button>
-                <button class="tab-button" id="monthly" data-i18n="donations.month">Månatlig</button>
-                <button class="tab-button" id="yearly" data-i18n="donations.year">Årlig</button>
-            </div>
-        </div>
-
-        <div class="row justify-content-center">
-
-            <div class="col-lg-4 donation-box" id="card-one">
-                <div class="row">
-                    <h4 data-i18n="donations.swish">Gåva via Swish</h4>
-                    <p data-i18n="donations.swish-description">Stödja moskén genom att swisha engångdonation "Gåva".</p>
+    <div class="container donation-page mt-5 pt-5">
+        <section class="donations-shell wow fadeInUp" data-wow-delay="0.1s">
+            <div class="donations-section">
+                <div class="donation-section-copy">
+                    <span class="donation-section-label" data-i18n="donations.section-label">Choose your donation path</span>
+                    <h3 data-i18n="donations.title">Donation Options</h3>
+                    <p data-i18n="donations.section-description">Each option below helps the mosque continue serving the community with gratitude and care.</p>
                 </div>
-                <div class="circle-border">
-                    <img src="img/swishwakfQR.png" alt="Swish Logo" class="donation-img">
-                </div>
-                <button class="donation-btn" onclick="openSwish()">Swisha</button>
-            </div>
-
-            <div class="col-lg-4 donation-box" id="card-two">
-                <div class="row">
-                    <h4 data-i18n="donations.klarna-payment-methods">Gåva via andra betalningssätt</h4>
-                    <p data-i18n="donations.klarna-payment-methods-description">Stödja moskén genom att använda andra
-                        betalnings metoder.</p>
-                </div>
-                <div class="circle-border">
-                    <img src="img/pay.png" alt="International Donation Logo" class="donation-img">
-                </div>
-                <script async src="https://js.stripe.com/v3/buy-button.js"></script>
-                <stripe-buy-button buy-button-id="buy_btn_1S3NspG84lZUxh2hjMuXI9tr"
-                    publishable-key="pk_live_51QOjFxG84lZUxh2hwRThSaug3j7zlPSL9Ts5OXxkOMw5KxHnvxusRgNIME8PtWpsFEGI9x2tSEvisU0269pHsNnm00kHzyvueL">
-                </stripe-buy-button>
-            </div>
-
-            <div class="col-lg-4 donation-box" id="card-three">
-                <div class="row">
-                    <h4 data-i18n="donations.monthly">Månatlig Gåva</h4>
-                    <p data-i18n="donations.monthly-description">Stödja moskén via automatisk återkommande Gåva varje
-                        månad (likt Autogiro).</p>
-                </div>
-                <div class="circle-border">
-                    <img src="img/sadaka.png" alt="Monthly Donation Icon" class="donation-img">
-                </div>
-                                <script async
-                                    src="https://js.stripe.com/v3/buy-button.js">
-                                </script>
-
-                                <stripe-buy-button
-                                    buy-button-id="buy_btn_1S3O36G84lZUxh2hb3x1mP1b"
-                                    publishable-key="pk_live_51QOjFxG84lZUxh2hwRThSaug3j7zlPSL9Ts5OXxkOMw5KxHnvxusRgNIME8PtWpsFEGI9x2tSEvisU0269pHsNnm00kHzyvueL"
-                                >
-                                </stripe-buy-button>
-            </div>
-
-            <div class="col-lg-6 donation-box" id="card-four">
-                <div class="row">
-                    <h4 data-i18n="donations.tax-donation">Gåva via Skattsedel</h4>
-                    <p data-i18n="donations.tax-donation-description">Stödja moskén genom att ge din moskéavgiften via
-                        skattsedel varje år.</p>
-                </div>
-
-                <!-- Replace circle-border image and button with iframe -->
-                <div class="iframe-container">
-                    <iframe src="https://medlem.fifs.se/SCH" width="100%" height="500"
-                        style="border: 2px solid #ccc; border-radius: 10px;" title="Ansökan via FIFS">
-                    </iframe>
+                <div class="tabs-group">
+                    <button class="tab-button active" id="one-time" data-i18n="donations.one-time">One-Time</button>
+                    <button class="tab-button" id="monthly" data-i18n="donations.month">Monthly</button>
+                    <button class="tab-button" id="yearly" data-i18n="donations.year">Yearly</button>
                 </div>
             </div>
 
-            <div class="col-lg-4 donation-box" id="card-five">
-                <div class="row">
-                    <h4 data-i18n="donations.invite-donate">Bjud in till donation</h4>
-                    <p data-i18n="donations.invite-donate-description">Dela denna länk med familj och vänner så de också
-                        kan stödja moskén.</p>
+            <div class="row justify-content-center donation-grid">
+                <div class="col-lg-4 col-md-6 donation-box" id="card-one">
+                    <div class="donation-card-content">
+                        <h4 data-i18n="donations.swish">Donation via Swish</h4>
+                        <p data-i18n="donations.swish-description">Support the mosque with a quick one-time donation via Swish.</p>
+                    </div>
+                    <div class="circle-border">
+                        <img src="img/swishwakfQR.png" alt="Swish QR code" class="donation-img">
+                    </div>
+                    <button class="donation-btn" onclick="openSwish()" data-i18n="donations.swish-button">Donate with Swish</button>
                 </div>
-                <div class="circle-border">
-                    <i class="fas fa-share-alt" style="font-size: 80px; color: #15546F;"></i>
+
+                <div class="col-lg-4 col-md-6 donation-box" id="card-two">
+                    <div class="donation-card-content">
+                        <h4 data-i18n="donations.klarna-payment-methods">Donation via Other Payment Methods</h4>
+                        <p data-i18n="donations.klarna-payment-methods-description">Support the mosque using card or other digital payment methods.</p>
+                    </div>
+                    <div class="circle-border">
+                        <img src="img/pay.png" alt="Digital payment methods" class="donation-img">
+                    </div>
+                    <button class="donation-btn" type="button" onclick="openCardDonationModal()"
+                        data-i18n="donations.card-modal-open">Donate</button>
                 </div>
-                <a href="https://donera.alsalamcenter.se/" target="_blank" class="donation-btn"
-                    data-i18n="donations.invite-donate-btn">Dela donationslänk</a>
+
+                <div class="col-lg-4 col-md-6 donation-box" id="card-three">
+                    <div class="donation-card-content">
+                        <h4 data-i18n="donations.monthly">Monthly Donation</h4>
+                        <p data-i18n="donations.monthly-description">Support the mosque with an automatic monthly donation that keeps giving.</p>
+                    </div>
+                    <div class="circle-border">
+                        <img src="img/sadaka.png" alt="Monthly donation icon" class="donation-img">
+                    </div>
+                    <stripe-buy-button buy-button-id="buy_btn_1S3O36G84lZUxh2hb3x1mP1b"
+                        publishable-key="pk_live_51QOjFxG84lZUxh2hwRThSaug3j7zlPSL9Ts5OXxkOMw5KxHnvxusRgNIME8PtWpsFEGI9x2tSEvisU0269pHsNnm00kHzyvueL">
+                    </stripe-buy-button>
+                </div>
+
+                <div class="col-lg-8 donation-box donation-box-wide" id="card-four">
+                    <div class="donation-card-content">
+                        <h4 data-i18n="donations.tax-donation">Donation via Tax Return</h4>
+                        <p data-i18n="donations.tax-donation-description">Support the mosque through your yearly tax-based contribution.</p>
+                    </div>
+                    <div class="iframe-container">
+                        <iframe src="https://medlem.fifs.se/SCH" width="100%" height="500" title="Ansokan via FIFS"></iframe>
+                    </div>
+                </div>
             </div>
 
-        </div>
+            <p class="donation-footer-note" data-i18n="donations.footer-note">Thank you for helping the mosque remain open, welcoming, and active.</p>
+        </section>
     </div>
 
     <!-- Swish Popup -->
@@ -153,6 +120,77 @@
 
             <!-- Close Button -->
             <button class="donation-btn" onclick="hideSwishPopup()" data-i18n="donations.close">Stäng</button>
+        </div>
+    </div>
+
+    <div id="card-donation-modal" class="popup donation-form-modal" style="display: none;">
+        <div class="popup-content donation-form-dialog">
+            <button class="close-btn" type="button" onclick="closeCardDonationModal()">X</button>
+
+            <h4 class="donation-form-title" data-i18n="donations.card-modal-title">Make a Donation</h4>
+
+            <div class="donation-amount-grid" id="donation-amount-grid">
+                <button class="donation-amount-chip" type="button" data-amount="50">50 €</button>
+                <button class="donation-amount-chip" type="button" data-amount="150">150 €</button>
+                <button class="donation-amount-chip" type="button" data-amount="300">300 €</button>
+                <button class="donation-amount-chip" type="button" data-amount="500">500 €</button>
+                <button class="donation-amount-chip" type="button" data-amount="1000">1000 €</button>
+                <button class="donation-amount-chip" type="button" data-amount="2500">2500 €</button>
+            </div>
+
+            <div class="donation-form-field">
+                <label for="card-donation-amount" data-i18n="donations.card-modal-custom-amount">Custom amount (€)</label>
+                <input id="card-donation-amount" type="number" min="0" inputmode="numeric"
+                    data-i18n-placeholder="donations.card-modal-custom-placeholder" placeholder="Enter amount">
+            </div>
+
+            <div class="donation-form-field">
+                <label for="card-donation-country" data-i18n="donations.card-modal-country">Country *</label>
+                <div class="donation-country-wrap">
+                    <span class="donation-country-flag" id="card-country-flag" aria-hidden="true">🇸🇪</span>
+                    <select id="card-donation-country">
+                        <option value="SE" data-i18n="donations.country-sweden">Sweden</option>
+                        <option value="NO" data-i18n="donations.country-norway">Norway</option>
+                        <option value="DK" data-i18n="donations.country-denmark">Denmark</option>
+                        <option value="FI" data-i18n="donations.country-finland">Finland</option>
+                        <option value="DE" data-i18n="donations.country-germany">Germany</option>
+                        <option value="GB" data-i18n="donations.country-united-kingdom">United Kingdom</option>
+                        <option value="OTHER" data-i18n="donations.country-other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="donation-form-field">
+                <label for="card-donation-name" data-i18n="donations.card-modal-name">Your name</label>
+                <input id="card-donation-name" type="text"
+                    data-i18n-placeholder="donations.card-modal-name-placeholder" placeholder="Enter your name">
+            </div>
+
+            <label class="donation-checkbox-row" for="card-donation-anonymous">
+                <input id="card-donation-anonymous" type="checkbox">
+                <span data-i18n="donations.card-modal-anonymous">Donate anonymously</span>
+            </label>
+
+            <div class="donation-form-field">
+                <label for="card-donation-note" data-i18n="donations.card-modal-note">Note (optional)</label>
+                <div class="donation-note-wrap">
+                    <textarea id="card-donation-note" maxlength="200"
+                        data-i18n-placeholder="donations.card-modal-note-placeholder" placeholder="Add a prayer or message (optional)"></textarea>
+                    <span class="donation-note-count" id="card-donation-note-count">0/200</span>
+                </div>
+            </div>
+
+            <p class="donation-form-error" id="card-donation-error" aria-live="polite"></p>
+
+            <button class="donation-form-submit" id="card-donation-submit" type="button" onclick="submitCardDonation()">
+                <i class="fas fa-heart" aria-hidden="true"></i>
+                <span id="card-donation-submit-label">Donate 0 €</span>
+            </button>
+
+            <p class="donation-form-security">
+                <i class="fas fa-lock" aria-hidden="true"></i>
+                <span data-i18n="donations.card-modal-security">Secure payment powered by Stripe</span>
+            </p>
         </div>
     </div>
 
@@ -200,13 +238,27 @@
     </script>
 
     <script>
+        const cardDonationState = {
+            selectedAmount: 0,
+            isSubmitting: false
+        };
+
+        const countryFlags = {
+            SE: '🇸🇪',
+            NO: '🇳🇴',
+            DK: '🇩🇰',
+            FI: '🇫🇮',
+            DE: '🇩🇪',
+            GB: '🇬🇧',
+            OTHER: '🌍'
+        };
+
         const buttons = document.querySelectorAll('.tab-button');
         const cards = [
             document.querySelector('#card-one'),
             document.querySelector('#card-two'),
             document.querySelector('#card-three'),
-            document.querySelector('#card-four'),
-            document.querySelector('#card-five')
+            document.querySelector('#card-four')
         ];
 
         buttons.forEach(button => {
@@ -220,25 +272,258 @@
                     cards[1].classList.add('visible');
                     cards[2].classList.remove('visible');
                     cards[3].classList.remove('visible');
-                    cards[4].classList.add('visible');
                 } else if (button.id === 'monthly') {
                     cards[0].classList.remove('visible');
                     cards[1].classList.remove('visible');
                     cards[2].classList.add('visible');
                     cards[3].classList.remove('visible');
-                    cards[4].classList.remove('visible');
                 } else if (button.id === 'yearly') {
                     cards[0].classList.remove('visible');
                     cards[1].classList.remove('visible');
                     cards[2].classList.remove('visible');
                     cards[3].classList.add('visible');
-                    cards[4].classList.remove('visible');
                 }
             });
         });
 
-        // Initial state: Show first and last cards
+        // Initial state: Show one-time donation options
         document.querySelector('#one-time').click(); // Simulate click on "One-Time"
+
+        const cardDonationModal = document.getElementById('card-donation-modal');
+        const amountButtons = Array.from(document.querySelectorAll('.donation-amount-chip'));
+        const amountInput = document.getElementById('card-donation-amount');
+        const countrySelect = document.getElementById('card-donation-country');
+        const countryFlag = document.getElementById('card-country-flag');
+        const donorNameInput = document.getElementById('card-donation-name');
+        const noteInput = document.getElementById('card-donation-note');
+        const noteCount = document.getElementById('card-donation-note-count');
+        const anonymousCheckbox = document.getElementById('card-donation-anonymous');
+        const donationError = document.getElementById('card-donation-error');
+        const donationSubmit = document.getElementById('card-donation-submit');
+        const donationSubmitLabel = document.getElementById('card-donation-submit-label');
+        const donationWebAppUrl = 'https://script.google.com/macros/s/AKfycbwz_fAOfZ_vuI7RlEzMt0i-jJtL8q-hOcAjRZrXND6otuV49mdIshBQ32oQjAIlRukL/exec';
+
+        function getCurrentLang() {
+            return localStorage.getItem('lang') || document.documentElement.lang || 'sv';
+        }
+
+        function formatDonationAmount(amount) {
+            const localeMap = {
+                en: 'en-GB',
+                sv: 'sv-SE',
+                ar: 'ar-SA'
+            };
+
+            return new Intl.NumberFormat(localeMap[getCurrentLang()] || 'sv-SE', {
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+
+        function getTranslatedTemplate(key, fallback) {
+            if (typeof window.getTranslation === 'function') {
+                return window.getTranslation(key, fallback);
+            }
+            return fallback;
+        }
+
+        function updateCardDonationLabel() {
+            const template = getTranslatedTemplate('donations.card-modal-donate-button', 'Donate {{amount}} €');
+            donationSubmitLabel.textContent = template.replace('{{amount}}', formatDonationAmount(cardDonationState.selectedAmount || 0));
+            donationSubmit.disabled = cardDonationState.selectedAmount <= 0 || cardDonationState.isSubmitting;
+        }
+
+        function updateNoteCount() {
+            noteCount.textContent = `${noteInput.value.length}/200`;
+        }
+
+        function updateCountryFlag() {
+            countryFlag.textContent = countryFlags[countrySelect.value] || countryFlags.OTHER;
+        }
+
+        function setSelectedAmount(amount) {
+            cardDonationState.selectedAmount = amount;
+            amountButtons.forEach((button) => {
+                button.classList.toggle('is-active', Number(button.dataset.amount) === amount);
+            });
+            updateCardDonationLabel();
+        }
+
+        function clearCardDonationError() {
+            donationError.textContent = '';
+        }
+
+        function setCardDonationError(key, fallback) {
+            donationError.textContent = getTranslatedTemplate(key, fallback);
+        }
+
+        function resetCardDonationForm() {
+            cardDonationState.selectedAmount = 0;
+            cardDonationState.isSubmitting = false;
+            amountInput.value = '';
+            countrySelect.value = 'SE';
+            donorNameInput.value = '';
+            donorNameInput.disabled = false;
+            noteInput.value = '';
+            anonymousCheckbox.checked = false;
+            clearCardDonationError();
+            updateCountryFlag();
+            updateNoteCount();
+            setSelectedAmount(0);
+        }
+
+        function openCardDonationModal() {
+            resetCardDonationForm();
+            cardDonationModal.style.display = 'flex';
+        }
+
+        function closeCardDonationModal() {
+            cardDonationModal.style.display = 'none';
+        }
+
+        function buildDonationIntent() {
+            return {
+                id: `donation_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+                amount: cardDonationState.selectedAmount,
+                country: countrySelect.value,
+                name: anonymousCheckbox.checked ? '' : donorNameInput.value.trim(),
+                note: noteInput.value.trim(),
+                anonymous: anonymousCheckbox.checked,
+                source: 'card-payment'
+            };
+        }
+
+        async function parseAppScriptResponse(response) {
+            const rawText = await response.text();
+
+            try {
+                return {
+                    ok: response.ok,
+                    data: JSON.parse(rawText)
+                };
+            } catch (error) {
+                return {
+                    ok: response.ok,
+                    data: {
+                        error: rawText || `Request failed with status ${response.status}`
+                    }
+                };
+            }
+        }
+
+        async function submitCardDonation() {
+            clearCardDonationError();
+
+            const typedAmount = Number(amountInput.value);
+            if (typedAmount > 0) {
+                setSelectedAmount(typedAmount);
+            }
+
+            if (cardDonationState.selectedAmount <= 0) {
+                setCardDonationError('donations.card-modal-error-amount', 'Please select or enter a donation amount.');
+                return;
+            }
+
+            if (!anonymousCheckbox.checked && !donorNameInput.value.trim()) {
+                setCardDonationError('donations.card-modal-error-name', 'Please enter your name or choose anonymous donation.');
+                donorNameInput.focus();
+                return;
+            }
+
+            cardDonationState.isSubmitting = true;
+            updateCardDonationLabel();
+
+            const intent = buildDonationIntent();
+            intent.action = "create-session";
+
+            // Build dynamic return URLs for Stripe
+            const origin = window.location.origin;
+            intent.successUrl = `${origin}/donation_redirect/?session_id={CHECKOUT_SESSION_ID}`;
+            intent.cancelUrl = `${origin}/donations/`;
+
+            try {
+                const response = await fetch(donationWebAppUrl, {
+                    method: "POST",
+                    redirect: "follow",
+                    headers: {
+                        "Content-Type": "text/plain;charset=utf-8"
+                    },
+                    cache: "no-store",
+                    body: JSON.stringify(intent)
+                });
+
+                const result = await parseAppScriptResponse(response);
+                if (!result.ok) {
+                    throw new Error(result.data.error || 'Could not create Stripe checkout session.');
+                }
+
+                if (result.data.status === "ok" && result.data.session_url) {
+                    window.location.assign(result.data.session_url);
+                    return;
+                }
+
+                throw new Error(result.data.error || 'Apps Script did not return a checkout URL.');
+            } catch (error) {
+                console.error("Checkout launch failed:", error);
+                setCardDonationError('donations.card-modal-error-checkout', error.message || 'Could not connect to checkout service.');
+            }
+
+            cardDonationState.isSubmitting = false;
+            updateCardDonationLabel();
+        }
+
+        amountButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                amountInput.value = '';
+                setSelectedAmount(Number(button.dataset.amount));
+                clearCardDonationError();
+            });
+        });
+
+        amountInput.addEventListener('input', () => {
+            const value = Number(amountInput.value);
+            if (value > 0) {
+                setSelectedAmount(value);
+                amountButtons.forEach((button) => button.classList.remove('is-active'));
+            } else {
+                setSelectedAmount(0);
+            }
+            clearCardDonationError();
+        });
+
+        countrySelect.addEventListener('change', updateCountryFlag);
+
+        noteInput.addEventListener('input', () => {
+            updateNoteCount();
+            clearCardDonationError();
+        });
+
+        donorNameInput.addEventListener('input', clearCardDonationError);
+
+        anonymousCheckbox.addEventListener('change', () => {
+            donorNameInput.disabled = anonymousCheckbox.checked;
+            if (anonymousCheckbox.checked) {
+                donorNameInput.value = '';
+                clearCardDonationError();
+            }
+        });
+
+        cardDonationModal.addEventListener('click', (event) => {
+            if (event.target === cardDonationModal) {
+                closeCardDonationModal();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                hideSwishPopup();
+                closeCardDonationModal();
+            }
+        });
+
+        window.addEventListener('languageChanged', updateCardDonationLabel);
+        updateCountryFlag();
+        updateNoteCount();
+        updateCardDonationLabel();
     </script>
     <!-- i18n module (exposed as global `loadLanguage`) -->
     <script type="module" src="/langugaes/js/i18n.js" defer></script>
