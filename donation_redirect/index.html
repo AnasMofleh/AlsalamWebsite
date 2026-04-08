@@ -4,81 +4,487 @@
 <head>
     <base href="/">
     <meta charset="UTF-8">
-    <title>Thank You – Al Salam Center Mosque</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Thank You - Al Salam Center Mosque</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 80px;
+        :root {
+            --mosque-green: #196F15;
+            --mosque-teal: #15546F;
+            --mosque-gold: #F1C152;
+            --text-main: #163647;
+            --text-soft: #5A7380;
         }
 
-        .status {
-            margin-top: 20px;
-            font-size: 18px;
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Open Sans", sans-serif;
+            color: var(--text-main);
+            background:
+                radial-gradient(circle at top left, rgba(25, 111, 21, 0.16), transparent 28%),
+                radial-gradient(circle at top right, rgba(21, 84, 111, 0.18), transparent 30%),
+                linear-gradient(180deg, #f3fbf6 0%, #f9fbfd 48%, #ffffff 100%);
+            overflow-x: hidden;
+        }
+
+        .thanks-orb {
+            position: fixed;
+            border-radius: 999px;
+            filter: blur(8px);
+            opacity: 0.42;
+            pointer-events: none;
+            animation: floatOrb 10s ease-in-out infinite;
+        }
+
+        .thanks-orb-one {
+            width: 220px;
+            height: 220px;
+            top: -40px;
+            left: -60px;
+            background: rgba(25, 111, 21, 0.18);
+        }
+
+        .thanks-orb-two {
+            width: 260px;
+            height: 260px;
+            bottom: -100px;
+            right: -40px;
+            background: rgba(21, 84, 111, 0.18);
+            animation-delay: 2s;
+        }
+
+        .thanks-shell {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 32px 18px;
+        }
+
+        .thanks-card {
+            width: min(100%, 860px);
+            position: relative;
+            overflow: hidden;
+            border-radius: 34px;
+            background: rgba(255, 255, 255, 0.94);
+            border: 1px solid rgba(21, 84, 111, 0.1);
+            box-shadow: 0 30px 70px rgba(11, 33, 46, 0.16);
+            padding: 34px;
+        }
+
+        .thanks-card::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto;
+            height: 6px;
+            background: linear-gradient(90deg, var(--mosque-green) 0%, var(--mosque-teal) 55%, var(--mosque-gold) 100%);
+        }
+
+        .thanks-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .thanks-brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .thanks-logo-shell {
+            width: 94px;
+            height: 94px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(145deg, #ffffff 0%, #edf8f0 100%);
+            box-shadow: 0 18px 36px rgba(10, 28, 42, 0.12);
+            animation: softPulse 4.6s ease-in-out infinite;
+        }
+
+        .thanks-logo-shell img {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+        }
+
+        .thanks-brand-copy strong {
+            display: block;
+            font-size: 1.05rem;
+        }
+
+        .thanks-brand-copy span {
+            color: var(--text-soft);
+            font-size: 0.95rem;
+        }
+
+        .thanks-language-switcher {
+            display: inline-flex;
+            gap: 8px;
+            padding: 6px;
+            border-radius: 999px;
+            background: rgba(21, 84, 111, 0.06);
+            border: 1px solid rgba(21, 84, 111, 0.08);
+        }
+
+        .lang-chip {
+            border: none;
+            border-radius: 999px;
+            padding: 10px 14px;
+            background: transparent;
+            color: var(--mosque-teal);
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .lang-chip:hover,
+        .lang-chip:focus {
+            transform: translateY(-1px);
+        }
+
+        .lang-chip.is-active {
+            background: linear-gradient(135deg, var(--mosque-teal) 0%, var(--mosque-green) 100%);
+            color: #ffffff;
+            box-shadow: 0 12px 24px rgba(21, 84, 111, 0.16);
+        }
+
+        .thanks-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(25, 111, 21, 0.08);
+            color: var(--mosque-green);
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .thanks-title {
+            margin: 20px 0 14px;
+            font-size: clamp(2.2rem, 5vw, 3.6rem);
+            line-height: 1.03;
+        }
+
+        .thanks-description {
+            margin: 0;
+            max-width: 640px;
+            font-size: 1.08rem;
+            color: var(--text-soft);
+        }
+
+        .thanks-blessing {
+            margin-top: 22px;
+            padding: 18px 20px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(241, 193, 82, 0.16), rgba(25, 111, 21, 0.08));
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        .thanks-status {
+            margin-top: 22px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 18px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(21, 84, 111, 0.08), rgba(25, 111, 21, 0.08));
+            border: 1px solid rgba(21, 84, 111, 0.08);
+            color: var(--mosque-teal);
+            font-weight: 700;
+        }
+
+        .thanks-status::before {
+            content: "";
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--mosque-green), var(--mosque-teal));
+            box-shadow: 0 0 0 8px rgba(25, 111, 21, 0.08);
+            animation: statusBlink 1.8s ease-in-out infinite;
+        }
+
+        .thanks-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 28px;
+        }
+
+        .thanks-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 52px;
+            padding: 12px 22px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 800;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease;
+        }
+
+        .thanks-action-primary {
+            background: linear-gradient(135deg, var(--mosque-teal) 0%, var(--mosque-green) 100%);
+            color: #ffffff;
+            box-shadow: 0 16px 30px rgba(21, 84, 111, 0.16);
+        }
+
+        .thanks-action-secondary {
+            border: 1px solid rgba(21, 84, 111, 0.14);
+            background: #ffffff;
+            color: var(--mosque-teal);
+        }
+
+        .thanks-action:hover {
+            transform: translateY(-2px);
+        }
+
+        html[dir="rtl"] body {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .thanks-topbar,
+        html[dir="rtl"] .thanks-brand,
+        html[dir="rtl"] .thanks-actions {
+            flex-direction: row-reverse;
+        }
+
+        @keyframes floatOrb {
+            0%,
+            100% {
+                transform: translate3d(0, 0, 0);
+            }
+
+            50% {
+                transform: translate3d(0, -18px, 0);
+            }
+        }
+
+        @keyframes softPulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.04);
+            }
+        }
+
+        @keyframes statusBlink {
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.55;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .thanks-card {
+                padding: 24px 20px;
+                border-radius: 26px;
+            }
+
+            .thanks-topbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            html[dir="rtl"] .thanks-topbar {
+                align-items: flex-end;
+            }
+
+            .thanks-brand {
+                align-items: flex-start;
+            }
+
+            .thanks-logo-shell {
+                width: 84px;
+                height: 84px;
+            }
+
+            .thanks-logo-shell img {
+                width: 58px;
+                height: 58px;
+            }
+
+            .thanks-language-switcher {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .lang-chip {
+                flex: 1 1 0;
+            }
+
+            .thanks-actions,
+            html[dir="rtl"] .thanks-actions {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 
 <body>
+    <div class="thanks-orb thanks-orb-one"></div>
+    <div class="thanks-orb thanks-orb-two"></div>
 
-    <h1>Thank You for Your Donation 🤍</h1>
+    <main class="thanks-shell">
+        <section class="thanks-card">
+            <div class="thanks-topbar">
+                <div class="thanks-brand">
+                    <div class="thanks-logo-shell">
+                        <img src="/img/Al-Salam-Center-Logo.png" alt="Al-Salam Mosque logo">
+                    </div>
+                    <div class="thanks-brand-copy">
+                        <strong>Al-Salam Center Mosque</strong>
+                        <span>Helsingborg</span>
+                    </div>
+                </div>
 
-    <p>
-        We sincerely thank you for your generous donation to<br>
-        <strong>Al Salam Center Mosque – Helsingborg</strong>.
-    </p>
+                <div class="thanks-language-switcher" aria-label="Language switcher">
+                    <button type="button" class="lang-chip" data-lang="sv" onclick="setLang('sv')">SV</button>
+                    <button type="button" class="lang-chip" data-lang="en" onclick="setLang('en')">EN</button>
+                    <button type="button" class="lang-chip" data-lang="ar" onclick="setLang('ar')">AR</button>
+                </div>
+            </div>
 
-    <div class="status" id="status">
-        Processing your donation...
-    </div>
+            <span class="thanks-kicker" data-i18n="donationRedirect.kicker">Jazakum Allahu khayran</span>
+            <h1 class="thanks-title" data-i18n="donationRedirect.title">Thank you for your donation</h1>
+            <p class="thanks-description" data-i18n="donationRedirect.description">Your gift helps sustain prayer, education, and community care at Al-Salam Center Mosque in Helsingborg.</p>
 
-    <p>
-        May Allah reward you and accept your charity.
-    </p>
+            <div class="thanks-blessing" data-i18n="donationRedirect.blessing">May Allah accept your charity and multiply its reward.</div>
 
-    <a href="/">Return to homepage</a>
-<script>
-    const params = new URLSearchParams(window.location.search);
-    const sessionId = params.get("session_id");
+            <div class="thanks-status" id="status">Processing your donation...</div>
 
-    const statusEl = document.getElementById("status");
+            <div class="thanks-actions">
+                <a href="/" class="thanks-action thanks-action-primary" data-i18n="donationRedirect.home">Return to homepage</a>
+                <a href="/donations" class="thanks-action thanks-action-secondary" data-i18n="donationRedirect.donate-again">Back to donations</a>
+            </div>
+        </section>
+    </main>
 
-    // Replace this with your actual Web App URL
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwz_fAOfZ_vuI7RlEzMt0i-jJtL8q-hOcAjRZrXND6otuV49mdIshBQ32oQjAIlRukL/exec"; 
+    <script type="module" src="/langugaes/js/i18n.js" defer></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const sessionId = params.get("session_id");
+        const statusEl = document.getElementById("status");
 
-    if (!sessionId) {
-        statusEl.innerText = "Missing payment reference.";
-    } else {
-        fetch(WEB_APP_URL, {
-            method: "POST",
-            redirect: "follow", // Important: GAS redirects responses
-            headers: {
-                "Content-Type": "text/plain;charset=utf-8", // 'text/plain' avoids CORS preflight checks
-            },
-            // FIX: You must convert the object to a string
-            body: JSON.stringify({
-                session_id: sessionId
-            })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.status === "ok") {
-                statusEl.innerText = "Your donation has been successfully recorded. Thank you!";
-            } else {
-                console.error("Server Error:", data);
-                statusEl.innerText = "Donation received. Thank you for your support.";
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwz_fAOfZ_vuI7RlEzMt0i-jJtL8q-hOcAjRZrXND6otuV49mdIshBQ32oQjAIlRukL/exec";
+        const fallbackStatusText = {
+            "donationRedirect.status-processing": "Processing your donation...",
+            "donationRedirect.status-missing": "Missing payment reference.",
+            "donationRedirect.status-success": "Your donation has been successfully recorded. Thank you!",
+            "donationRedirect.status-fallback": "Donation received. Thank you for your support.",
+            "donationRedirect.page-title": "Thank You - Al Salam Center Mosque"
+        };
+
+        let activeStatusKey = "donationRedirect.status-processing";
+
+        function updateLanguageButtons(lang) {
+            document.querySelectorAll(".lang-chip").forEach((button) => {
+                button.classList.toggle("is-active", button.dataset.lang === lang);
+            });
+        }
+
+        function translateValue(key) {
+            if (typeof window.getTranslation === "function") {
+                return window.getTranslation(key, fallbackStatusText[key] || "");
             }
-        })
-        .catch((error) => {
-            console.error("Fetch Error:", error); // Log the error to console for debugging
-            statusEl.innerText = "Donation received. Thank you for your support.";
+            return fallbackStatusText[key] || "";
+        }
+
+        function updateStatusText() {
+            statusEl.textContent = translateValue(activeStatusKey);
+            document.title = translateValue("donationRedirect.page-title") || document.title;
+        }
+
+        function setLang(lang) {
+            updateLanguageButtons(lang);
+            if (typeof window.loadLanguage === "function") {
+                window.loadLanguage(lang);
+            }
+        }
+
+        async function sendDonationRecord() {
+            if (!sessionId) {
+                activeStatusKey = "donationRedirect.status-missing";
+                updateStatusText();
+                return;
+            }
+
+            activeStatusKey = "donationRedirect.status-processing";
+            updateStatusText();
+
+            // Send action explicitly alongside session_id
+            const payloadBody = {
+                action: "record-donation",
+                session_id: sessionId
+            };
+
+            try {
+                const response = await fetch(WEB_APP_URL, {
+                    method: "POST",
+                    redirect: "follow",
+                    headers: {
+                        "Content-Type": "text/plain;charset=utf-8"
+                    },
+                    body: JSON.stringify(payloadBody)
+                });
+
+                // Clear any legacy local storage fallback safety
+                localStorage.removeItem('pendingCardDonationIntent');
+
+                let data = {};
+                try {
+                    data = await response.json();
+                } catch (parseError) {
+                    data = {};
+                }
+
+                activeStatusKey = data.status === "ok"
+                    ? "donationRedirect.status-success"
+                    : "donationRedirect.status-fallback";
+            } catch (error) {
+                console.error("Fetch Error:", error);
+                activeStatusKey = "donationRedirect.status-fallback";
+            }
+
+            updateStatusText();
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedLang = localStorage.getItem("lang") || "sv";
+            updateLanguageButtons(savedLang);
+            updateStatusText();
+            sendDonationRecord();
         });
-    }
-</script>
 
-
-   
-
+        window.addEventListener("languageChanged", (event) => {
+            updateLanguageButtons(event.detail.lang);
+            updateStatusText();
+        });
+    </script>
 </body>
 
 </html>
