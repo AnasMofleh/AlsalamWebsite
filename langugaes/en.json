@@ -172,8 +172,8 @@
     "popup-term-11": "Students should not bring valuables. If they do, it is at their own risk. The school is not responsible for lost or damaged items.",
     "form": {
       "title": "Registration Form",
-      "step-parent": "Parent Information",
-      "step-children": "Children Information",
+      "step-parent": "Parents",
+      "step-children": "Children",
       "step-confirm": "Confirm",
       "father-info": "Father's information:",
       "mother-info": "Mother's information 2:",

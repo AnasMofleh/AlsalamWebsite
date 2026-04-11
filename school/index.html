@@ -90,11 +90,11 @@
                             <ul>
                                 <li class="formbold-step-menu1 active" data-i18n="school.form.step-parent">
                                     <span>1</span>
-                                    Föräldrar information
+                                    Föräldrar
                                 </li>
                                 <li class="formbold-step-menu2" data-i18n="school.form.step-children">
                                     <span>2</span>
-                                    Barnen information
+                                    Barnen
                                 </li>
                                 <li class="formbold-step-menu3" data-i18n="school.form.step-confirm">
                                     <span>3</span>
@@ -106,26 +106,18 @@
                         <div class="formbold-form-step-1 active">
                             <p data-i18n="school.form.father-info">Pappans information:</p>
                             <div class="formbold-input-flex">
-                                <div>
+                                <div class="formbold-input-full-width">
                                     <label for="Pappans Namn" class="formbold-form-label" data-i18n="school.form.full-name">För- och efternamn</label>
                                     <input type="text" name="Pappans Namn" placeholder="Taha Ali" id="Pappans Namn"
                                         class="formbold-form-input" required />
                                 </div>
-                                <div>
-                                    <label for="Pappans Personnummer" class="formbold-form-label" data-i18n="school.form.personal-number">Personnummer</label>
-                                    <input type="text" name="Pappans Personnummer" id="Pappans Personnummer"
-                                        placeholder="199901019999" class="formbold-form-input" required />
-                                </div>
-
                             </div>
 
                             <div class="formbold-input-flex">
                                 <div>
-                                    <label for="Pappans Email" class="formbold-form-label" data-i18n="school.form.email">Mejladress</label>
-                                    <input type="email" name="Pappans Email" placeholder="tahaali@gmail.com"
-                                        id="Pappans Email" class="formbold-form-input" required
-                                        title="Ange en giltig e-postadress"
-                                        data-i18n-title="school.form.validation.email" />
+                                    <label for="Pappans Personnummer" class="formbold-form-label" data-i18n="school.form.personal-number">Personnummer</label>
+                                    <input type="text" name="Pappans Personnummer" id="Pappans Personnummer"
+                                        placeholder="199901019999" class="formbold-form-input" required />
                                 </div>
                                 <div>
                                     <label for="Pappans Mobilnummer" class="formbold-form-label" data-i18n="school.form.mobile">Mobilnummer</label>
@@ -133,6 +125,17 @@
                                         placeholder="0731234567" class="formbold-form-input" required pattern="07\d{8}"
                                         title="Mobilnummer måste vara 10 siffror som börjar med 07"
                                         data-i18n-title="school.form.validation.mobile-07" />
+                                </div>
+
+                            </div>
+
+                            <div class="formbold-input-flex">
+                                <div class="formbold-input-full-width">
+                                    <label for="Pappans Email" class="formbold-form-label" data-i18n="school.form.email">Mejladress</label>
+                                    <input type="email" name="Pappans Email" placeholder="tahaali@gmail.com"
+                                        id="Pappans Email" class="formbold-form-input" required
+                                        title="Ange en giltig e-postadress"
+                                        data-i18n-title="school.form.validation.email" />
                                 </div>
 
                             </div>
@@ -177,11 +180,14 @@
                             </div>
 
                             <div class="formbold-input-flex" style="margin-top: 1rem;">
-                                <div>
+                                <div class="formbold-input-full-width">
                                     <label for="Adress" class="formbold-form-label" data-i18n="school.form.address">Adress</label>
                                     <input type="text" name="Adress" id="Adress" placeholder="Södergatan 65"
                                         class="formbold-form-input" required />
                                 </div>
+                            </div>
+
+                            <div class="formbold-input-flex">
                                 <div>
                                     <label for="Postnummer" class="formbold-form-label" data-i18n="school.form.postcode">Postnummer</label>
                                     <input type="text" name="Postnummer" id="Postnummer" placeholder="25219"
@@ -286,11 +292,11 @@
 
 
                         <div class="formbold-form-btn-wrapper">
-                            <button class="formbold-back-btn" data-i18n="school.form.back">
+                                <button type="button" class="formbold-back-btn" data-i18n="school.form.back">
                                 Back
                             </button>
 
-                            <button class="formbold-btn">
+                                <button type="button" class="formbold-btn">
                                 <span class="formbold-next-label" data-i18n="school.form.next">Next Step</span>
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -376,6 +382,9 @@
             const t = (key, fallback = "") =>
                 typeof window.getTranslation === "function" ? window.getTranslation(key, fallback) : fallback;
 
+            const isFifsVerificationRequired = () =>
+                typeof window.fifsVerificationPassed !== "undefined";
+
 
             let currentStep = 0;
 
@@ -404,13 +413,13 @@
                     }
                 }
 
-                    // Check FIFS verification when moving from step 0 (parents info)
-                    if (currentStep === 0 && !fifsVerificationPassed) {
+                // Only enforce FIFS verification if the page defines that flow.
+                if (currentStep === 0 && isFifsVerificationRequired() && !window.fifsVerificationPassed) {
                         alert("Vänligen verifiera FIFS-medlemskap innan du fortsätter");
                         return;
                     }
 
-                    if (currentStep < steps.length - 1) {
+                if (currentStep < steps.length - 1) {
                     showStep(currentStep + 1);
                 } else {
                     // Final submit
