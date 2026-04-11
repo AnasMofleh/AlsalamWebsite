@@ -171,8 +171,8 @@
     "popup-term-11": "Eleverna bör inte ta med värdesaker. Om det ändå sker, är det på egen risk. Skolan ansvarar inte för borttappade eller förstörda föremål.",
     "form": {
       "title": "Registreringsformulär",
-      "step-parent": "Föräldrar information",
-      "step-children": "Barnen information",
+      "step-parent": "Föräldrar",
+      "step-children": "Barnen",
       "step-confirm": "Bekräfta",
       "father-info": "Pappans information:",
       "mother-info": "Mammans information 2:",

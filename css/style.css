@@ -628,11 +628,35 @@ html[dir="rtl"] .hero-row {
 
 @media (max-width: 991px) {
   .site-header-shell {
-    padding: 0;
+    padding: 0 0 2px;
   }
 
   .navbar {
-    border-radius: 0 0 24px 24px;
+    border-radius: 0 0 20px 20px;
+  }
+
+  .navbar .container-fluid {
+    padding: 0 16px;
+  }
+
+  .site-navbar {
+    padding-top: 0.45rem !important;
+    padding-bottom: 0.45rem !important;
+  }
+
+  .navbar-brand-logo {
+    width: 62px;
+    height: 62px;
+  }
+
+  .navbar-brand-logo img {
+    width: 46px;
+    height: 46px;
+  }
+
+  .navbar .navbar-toggler {
+    padding: 7px 10px;
+    border-radius: 14px;
   }
 
   .navbar .navbar-nav .stats-cta-link {
@@ -786,6 +810,9 @@ html[dir="rtl"] .hero-row {
   #donate-button-mobile {
     display: block;
     left: 20px;
+    top: 16px;
+    padding: 10px 20px;
+    font-size: 15px;
   }
 
   .navbar-brand:not(.navbar-brand-logo) {
@@ -1955,8 +1982,8 @@ body {
 }
 
 .formbold-steps {
-  padding-bottom: 18px;
-  margin-bottom: 35px;
+  padding-bottom: 14px;
+  margin-bottom: 24px;
   border-bottom: 1px solid #dde3ec;
 }
 
@@ -1965,17 +1992,21 @@ body {
   margin: 0;
   list-style: none;
   display: flex;
-  gap: 40px;
+  justify-content: space-between;
+  gap: 16px;
 }
 
 .formbold-steps li {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
+  flex: 1 1 0;
+  min-width: 0;
   font-weight: 500;
-  font-size: 16px;
-  line-height: 24px;
+  font-size: 15px;
+  line-height: 20px;
   color: #536387;
+  white-space: nowrap;
 }
 
 .formbold-steps li span {
@@ -2001,6 +2032,31 @@ body {
   color: #ffffff;
 }
 
+@media (max-width: 767.98px) {
+  .formbold-steps {
+    padding-bottom: 12px;
+    margin-bottom: 18px;
+  }
+
+  .formbold-steps ul {
+    gap: 8px;
+  }
+
+  .formbold-steps li {
+    gap: 6px;
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  .formbold-steps li span {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+    line-height: 18px;
+    flex-shrink: 0;
+  }
+}
+
 .formbold-input-flex {
   display: flex;
   gap: 20px;
@@ -2009,6 +2065,10 @@ body {
 
 .formbold-input-flex>div {
   width: 50%;
+}
+
+.formbold-input-flex>.formbold-input-full-width {
+  width: 100%;
 }
 
 .formbold-form-input {
