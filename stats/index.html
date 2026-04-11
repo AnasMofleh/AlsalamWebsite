@@ -4,7 +4,7 @@
 <head>
     <base href="/">
     <meta charset="utf-8">
-    <title>Al-Salam Donations Stats v2</title>
+    <title>Al-Salam Donations Stats</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -52,11 +52,16 @@
             color: var(--stats-text);
             font-size: 1.12rem;
             transition: background-color 0.25s ease, color 0.25s ease;
+            overflow-x: hidden;
         }
 
-        .stats-v2-wrap {
+        .stats-wrap {
             margin-top: 28px;
             margin-bottom: 60px;
+            width: 100%;
+            max-width: none;
+            padding-left: clamp(12px, 2vw, 28px);
+            padding-right: clamp(12px, 2vw, 28px);
         }
 
         .stats-layout {
@@ -68,16 +73,18 @@
             display: none;
         }
 
-        .stats-v2-card {
+        .stats-card {
             background: var(--stats-card-bg) !important;
             color: var(--stats-text);
             border-radius: 16px;
             border: 1px solid rgba(0, 0, 0, 0.06);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
         }
 
-        .stats-v2-card-main {
+        .stats-card-main {
             position: relative;
+            overflow: visible;
         }
 
         .theme-switch-corner {
@@ -157,12 +164,12 @@
             transform: translateX(24px);
         }
 
-        body.theme-dark .stats-v2-card {
+        body.theme-dark .stats-card {
             border-color: rgba(148, 163, 184, 0.22);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
         }
 
-        .stats-v2-theme-btn {
+        .stats-theme-btn {
             border: 1px solid #d1d5db;
             background: #fff;
             color: #111827;
@@ -172,17 +179,37 @@
             font-weight: 600;
         }
 
-        .stats-v2-home-btn {
+        .stats-home-btn,
+        .stats-donate-btn {
             border-radius: 999px;
             padding: 8px 16px;
             font-weight: 700;
             margin-bottom: 6px;
         }
 
+        .stats-donate-btn {
+            box-shadow: 0 10px 24px rgba(25, 111, 21, 0.2);
+        }
+
+        .side-donate-btn {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            z-index: 6;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .stats-top-row {
             padding-left: 0;
-            padding-right: 180px;
+            padding-right: clamp(96px, 14vw, 180px);
             margin-top: 56px;
+            min-width: 0;
+        }
+
+        .stats-total-block {
+            margin-top: 1.5rem;
         }
 
         .stats-brand {
@@ -273,13 +300,15 @@
 
         @media (max-width: 768px) {
             .stats-top-row {
-                padding-left: 0;
-                padding-right: 84px;
-                margin-top: 64px;
+                display: none !important;
             }
 
-            .stats-v2-wrap .row.g-4 {
+            .stats-wrap .row.g-4 {
                 flex-direction: column !important;
+            }
+
+            .stats-brand {
+                display: none;
             }
 
             .logo-corner {
@@ -293,19 +322,32 @@
             }
 
             .live-badge-inline {
-                display: inline-flex;
-                align-items: center;
+                display: none !important;
+            }
+
+            .stats-total-block {
+                margin-top: 108px;
+            }
+
+            .stats-total {
+                font-size: clamp(2.9rem, 12.5vw, 4.5rem) !important;
+                line-height: 1 !important;
+                white-space: normal !important;
+                overflow-wrap: anywhere !important;
+                word-break: break-word !important;
+                overflow: hidden !important;
+                max-width: 100% !important;
             }
         }
 
-        body.theme-dark .stats-v2-theme-btn {
+        body.theme-dark .stats-theme-btn {
             border-color: #64748b;
             background: #1f2937;
             color: #e2e8f0;
         }
 
-        .stats-v2-total {
-            font-size: clamp(4rem, 12vw, 8rem);
+        .stats-total {
+            font-size: clamp(4rem, 11.5vw, 10rem);
             font-weight: 800;
             background: linear-gradient(90deg, #196F15 0%, #15546F 100%);
             -webkit-background-clip: text;
@@ -317,57 +359,62 @@
             direction: ltr;
             unicode-bidi: bidi-override;
             white-space: nowrap;
+            overflow: visible;
+            max-width: none;
+            margin-inline: auto;
+            padding-inline: clamp(4px, 1vw, 14px);
         }
 
-        .stats-v2-total-suffix {
+        .stats-total-suffix {
             font-size: 0.3em;
             font-weight: 700;
             letter-spacing: 0;
             vertical-align: middle;
+            white-space: nowrap;
         }
 
-        body.theme-dark .stats-v2-total {
+        body.theme-dark .stats-total {
             background: linear-gradient(90deg, #3a9fd4 0%, #2ecc71 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .stats-v2-card h2 {
+        .stats-card h2 {
             font-size: clamp(2rem, 4.2vw, 3rem);
         }
 
-        body.theme-dark .stats-v2-card h2 {
+        body.theme-dark .stats-card h2 {
             color: #ffffff;
         }
 
-        .stats-v2-card h4 {
+        .stats-card h4 {
             font-size: clamp(1.6rem, 3.2vw, 2.2rem);
         }
 
-        body.theme-dark .stats-v2-card h4 {
+        body.theme-dark .stats-card h4 {
             color: #ffffff;
         }
 
-        .stats-v2-card p,
-        .stats-v2-card small,
-        .stats-v2-card .meta,
-        .stats-v2-card .donation-amount,
-        .stats-v2-card .milestone-pill,
-        .stats-v2-card .badge,
-        .stats-v2-card .stats-v2-theme-btn,
-        .stats-v2-card .btn {
+        .stats-card p,
+        .stats-card small,
+        .stats-card .meta,
+        .stats-card .donation-amount,
+        .stats-card .milestone-pill,
+        .stats-card .badge,
+        .stats-card .stats-theme-btn,
+        .stats-card .btn {
             font-size: 1.08rem !important;
         }
 
-        .stats-v2-progress {
+        .stats-progress {
             height: 22px;
             border-radius: 999px;
             background: #e9ecef;
             overflow: hidden;
         }
 
-        .stats-v2-progress .bar {
+        .stats-progress .bar {
             height: 100%;
             width: 0%;
             border-radius: 999px;
@@ -472,7 +519,7 @@
             margin-top: 4px;
         }
 
-        .donation-side-col .stats-v2-card {
+        .donation-side-col .stats-card {
             display: flex;
             flex-direction: column;
             position: relative;
@@ -553,6 +600,9 @@
         .swish-qr-wrap {
             margin-top: 12px;
             margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
             border: 1px dashed var(--stats-pill-border);
             border-radius: 12px;
@@ -585,9 +635,12 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 100%;
+            width: min(100%, 230px);
+            margin-left: auto;
+            margin-right: auto;
             text-decoration: none;
             border-radius: 14px;
+            text-align: center;
         }
 
         .text-muted {
@@ -601,13 +654,23 @@
                 padding-top: 14px;
             }
 
-            .qr-switch-inline {
-                top: 10px;
-                right: 10px;
+            .side-donate-btn {
+                position: static;
+                display: inline-flex;
+                margin-bottom: 12px;
+                align-self: center;
+                margin-left: auto;
+                margin-right: auto;
             }
 
-            .donation-side-col .stats-v2-card {
-                padding-top: 60px !important;
+            .qr-switch-inline {
+                position: static;
+                margin-bottom: 12px;
+                max-width: 100%;
+            }
+
+            .donation-side-col .stats-card {
+                padding-top: 24px !important;
             }
         }
 
@@ -639,13 +702,13 @@
 
 <body>
 
-    <div class="container stats-v2-wrap">
+    <div class="container-fluid stats-wrap">
         <div id="statsLayout" class="row g-4 stats-layout">
             <div id="statsMainCol" class="col-12 col-lg-9 stats-main-col">
-                <div class="stats-v2-card stats-v2-card-main bg-white p-4 p-md-5 h-100">
+                <div class="stats-card stats-card-main bg-white p-4 p-md-5 h-100">
                     <div class="theme-switch-corner" title="Dark mode">
                         <div class="corner-controls-row">
-                            <a href="/" class="btn btn-outline-primary stats-v2-home-btn">
+                            <a href="/" class="btn btn-outline-primary stats-home-btn">
                                 <i class="fas fa-home me-1"></i>Home
                             </a>
                             <label class="theme-switch">
@@ -665,19 +728,19 @@
                         <span class="badge bg-success px-3 py-2 live-badge-inline">LIVE</span>
                     </div>
 
-                    <div class="mt-4">
-                        <div id="totalAmount" class="stats-v2-total">0</div>
+                    <div class="stats-total-block">
+                        <div id="totalAmount" class="stats-total">0</div>
                         <p id="progressLabel" class="text-muted mb-0">0% av målet</p>
                     </div>
 
-                    <div class="stats-v2-progress mt-3" role="progressbar" aria-label="Insamlingsstatus"
+                    <div class="stats-progress mt-3" role="progressbar" aria-label="Insamlingsstatus"
                         aria-valuemin="0" aria-valuemax="100">
                         <div id="progressBar" class="bar"></div>
                     </div>
 
                     <div class="d-flex justify-content-between text-muted mt-2">
                         <small>0 kr</small>
-                        <small>10 000 000 kr</small>
+                        <small>10 000 000 SEK</small>
                     </div>
 
                     <div id="milestones" class="milestones"></div>
@@ -698,7 +761,10 @@
                 aria-valuenow="75" tabindex="0"></div>
 
             <div id="statsSideCol" class="col-12 col-lg-3 donation-side-col">
-                <div class="stats-v2-card bg-white p-4 h-100">
+                <div class="stats-card bg-white p-4 h-100">
+                    <a href="/donations/" class="btn btn-success stats-donate-btn side-donate-btn">
+                        <i class="fas fa-heart me-1"></i>Donera
+                    </a>
                     <label id="swishQrToggleWrap" class="qr-switch-inline" for="swishQrToggle">
                         <span>Visa QR</span>
                         <span class="qr-switch">
@@ -757,8 +823,8 @@
         const topDonationsTitleEl = document.getElementById("topDonationsTitle");
         const qrDonationsTitleEl = document.getElementById("qrDonationsTitle");
         const mobileQrQuery = window.matchMedia("(max-width: 768px)");
-        const THEME_STORAGE_KEY = "alsalam-stats-v2-theme";
-        const LAYOUT_STORAGE_KEY = "alsalam-stats-v2-main-width";
+        const THEME_STORAGE_KEY = "alsalam-stats-theme";
+        const LAYOUT_STORAGE_KEY = "alsalam-stats-main-width";
         const sponsorWrapEl = document.getElementById("statsSponsorWrap");
         const sponsorTrackEl = document.getElementById("statsSponsorTrack");
         const statsLayoutEl = document.getElementById("statsLayout");
@@ -874,7 +940,7 @@
             totalAmountEl.innerHTML = `${totalAmount.toLocaleString("sv-SE", {
                 minimumFractionDigits: totalAmount % 1 === 0 ? 0 : 2,
                 maximumFractionDigits: 2
-            })}<span class="stats-v2-total-suffix"> kr</span>`;
+            })}<span class="stats-total-suffix"> kr</span>`;
             totalSwishEl.textContent = formatSek(swishAmount);
             totalStripeEl.textContent = formatSek(stripeAmount);
             progressLabelEl.textContent = `${clampedPercent.toFixed(2)}% av målet`;
