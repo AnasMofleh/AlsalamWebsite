@@ -846,6 +846,13 @@
         let showSwishQr = false;
         let latestLast5Data = [];
 
+        // ── Poll synchronization ──────────────────────────────────────
+        // Incremented each poll cycle; guards against stale responses from
+        // a previous slow poll overwriting a newer committed total.
+        let pollSeqId = 0;
+        let lastKnownSwishTotal = 0;
+        let lastKnownStripeTotal = 0;
+
         function parseAmount(value) {
             if (typeof value === "number") return value;
             if (typeof value !== "string") return 0;
@@ -935,14 +942,15 @@
             }
         }
 
-        function renderTotal(totalAmount, swishAmount, stripeAmount) {
+        // Updates the big combined total, progress bar, and milestones.
+        // Called only after BOTH Swish and Stripe have returned valid data
+        // in the same poll cycle.
+        function renderCombinedTotal(totalAmount) {
             const clampedPercent = Math.min((totalAmount / GOAL_AMOUNT) * 100, 100);
             totalAmountEl.innerHTML = `${totalAmount.toLocaleString("sv-SE", {
                 minimumFractionDigits: totalAmount % 1 === 0 ? 0 : 2,
                 maximumFractionDigits: 2
             })}<span class="stats-total-suffix"> kr</span>`;
-            totalSwishEl.textContent = formatSek(swishAmount);
-            totalStripeEl.textContent = formatSek(stripeAmount);
             progressLabelEl.textContent = `${clampedPercent.toFixed(2)}% av målet`;
             progressBarEl.style.width = `${clampedPercent}%`;
             progressBarEl.parentElement.setAttribute("aria-valuenow", clampedPercent.toFixed(2));
@@ -1139,44 +1147,50 @@
 
             rocket.addEventListener("animationend", () => {
                 rocket.remove();
-                confetti({
-                    particleCount: 70,
-                    spread: 70,
-                    startVelocity: 45,
-                    ticks: 220,
-                    origin: { x: Math.min(Math.max(originXPercent / 100, 0.05), 0.95), y: 0.28 }
-                });
+                try {
+                    confetti({
+                        particleCount: 70,
+                        spread: 70,
+                        startVelocity: 45,
+                        ticks: 220,
+                        origin: { x: Math.min(Math.max(originXPercent / 100, 0.05), 0.95), y: 0.28 }
+                    });
+                } catch (e) { /* ignore if confetti unavailable */ }
             }, { once: true });
         }
 
         function triggerFireworks(power = 1) {
-            const safePower = Math.min(Math.max(power, 1), 12);
-            const particleCount = Math.round(40 + safePower * 15);
-            const spread = Math.min(120, 55 + safePower * 4);
+            try {
+                const safePower = Math.min(Math.max(power, 1), 12);
+                const particleCount = Math.round(40 + safePower * 15);
+                const spread = Math.min(120, 55 + safePower * 4);
 
-            confetti({
-                particleCount,
-                spread,
-                startVelocity: 50,
-                ticks: 250,
-                origin: { x: 0.2, y: 0.6 }
-            });
-            confetti({
-                particleCount,
-                spread,
-                startVelocity: 50,
-                ticks: 250,
-                origin: { x: 0.8, y: 0.6 }
-            });
-            setTimeout(() => {
                 confetti({
-                    particleCount: Math.round(particleCount * 0.8),
-                    spread: spread + 10,
-                    startVelocity: 45,
-                    ticks: 240,
-                    origin: { x: 0.5, y: 0.4 }
+                    particleCount,
+                    spread,
+                    startVelocity: 50,
+                    ticks: 250,
+                    origin: { x: 0.2, y: 0.6 }
                 });
-            }, 220);
+                confetti({
+                    particleCount,
+                    spread,
+                    startVelocity: 50,
+                    ticks: 250,
+                    origin: { x: 0.8, y: 0.6 }
+                });
+                setTimeout(() => {
+                    try {
+                        confetti({
+                            particleCount: Math.round(particleCount * 0.8),
+                            spread: spread + 10,
+                            startVelocity: 45,
+                            ticks: 240,
+                            origin: { x: 0.5, y: 0.4 }
+                        });
+                    } catch (e) { /* ignore */ }
+                }, 220);
+            } catch (e) { /* ignore if confetti unavailable */ }
         }
 
         function celebrateDonation(amount) {
@@ -1191,6 +1205,134 @@
                 setTimeout(() => launchRocket(origin, hue), i * 150);
             }
         }
+
+
+        // ── Sound & confetti system ───────────────────────────────────
+        // Tiers based on how much the total increased (SEK):
+        //   small   0–100     two-note ding (C5→E5)       + single confetti burst
+        //   medium  101–499   three-note chord (E5→G5→B5) + two side bursts
+        //   large   500–999   four-note fanfare (C5→C6)   + fireworks + 2 rockets
+        //   massive ≥ 1000    six-note burst (C5→G6)      + big fireworks + many rockets
+
+        let audioCtx = null;
+
+        function getAudioCtx() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            return audioCtx;
+        }
+
+        // Warm up the AudioContext on the first user gesture so it's
+        // already in "running" state when a donation arrives.
+        function warmUpAudio() {
+            try {
+                const ctx = getAudioCtx();
+                if (ctx.state === "suspended") ctx.resume();
+            } catch (e) { /* ignore */ }
+            // Only need to do this once
+            ["click", "touchstart", "keydown"].forEach(evt =>
+                document.removeEventListener(evt, warmUpAudio));
+        }
+        ["click", "touchstart", "keydown"].forEach(evt =>
+            document.addEventListener(evt, warmUpAudio, { once: true, passive: true }));
+
+        function playTone(ctx, freq, startTime, duration, gainPeak, type = "sine", detune = 0) {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, startTime);
+            osc.detune.setValueAtTime(detune, startTime);
+            gain.gain.setValueAtTime(0, startTime);
+            gain.gain.linearRampToValueAtTime(gainPeak, startTime + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+            osc.start(startTime);
+            osc.stop(startTime + duration + 0.05);
+        }
+
+        function playSoundForIncrease(increase) {
+            try {
+                const ctx = getAudioCtx();
+                if (ctx.state === "suspended") ctx.resume();
+
+                const now = ctx.currentTime;
+
+                const C4 = 261.63;
+                const C5 = 523.25;
+                const E5 = 659.25;
+                const G5 = 783.99;
+                const C6 = 1046.5;
+                const E6 = 1318.5;
+                const G6 = 1567.98;
+                const C7 = 2093.0;
+
+                if (increase <= 50) {
+                    // Tiny donation – soft ping
+                    playTone(ctx, C5, now, 0.4, 0.15, "sine");
+
+                } else if (increase <= 150) {
+                    // Small donation – two-note ding
+                    playTone(ctx, C5, now, 0.55, 0.16, "sine");
+                    playTone(ctx, E5, now + 0.12, 0.6, 0.18, "sine");
+
+                } else if (increase <= 400) {
+                    // Medium donation – rising three-note jingle
+                    playTone(ctx, C5, now, 0.7, 0.18, "sine");
+                    playTone(ctx, E5, now + 0.10, 0.75, 0.20, "sine");
+                    playTone(ctx, G5, now + 0.20, 0.8, 0.22, "sine");
+
+                } else if (increase <= 800) {
+                    // Large donation – fanfare
+                    playTone(ctx, C5, now, 0.9, 0.22, "sine");
+                    playTone(ctx, E5, now + 0.10, 0.95, 0.22, "sine");
+                    playTone(ctx, G5, now + 0.20, 1.0, 0.24, "sine");
+                    playTone(ctx, C6, now + 0.32, 1.1, 0.28, "sine");
+
+                } else if (increase <= 1499) {
+                    // 1000 tier – catchy celebratory riff
+                    playTone(ctx, C5, now, 1.0, 0.18, "sine");
+                    playTone(ctx, E5, now + 0.07, 1.05, 0.18, "sine");
+                    playTone(ctx, G5, now + 0.14, 1.1, 0.20, "sine");
+
+                    // rhythmic double hit
+                    playTone(ctx, C6, now + 0.22, 1.2, 0.16, "sine");
+                    playTone(ctx, C6, now + 0.32, 1.2, 0.16, "sine");
+
+                    // bright lift
+                    playTone(ctx, E6, now + 0.42, 1.25, 0.24, "triangle");
+                    playTone(ctx, G6, now + 0.55, 1.3, 0.28, "triangle");
+
+                    // bass support
+                    playTone(ctx, C5, now, 0.35, 0.10, "square", -900);
+
+                } else {
+                    // 1500+ tier – dramatic alert + celebration
+
+                    // attention blasts
+                    playTone(ctx, G5, now, 1.2, 0.12, "sawtooth");
+                    playTone(ctx, G5, now + 0.12, 1.2, 0.12, "sawtooth");
+                    playTone(ctx, G5, now + 0.24, 1.2, 0.12, "sawtooth");
+
+                    // triumphant rise
+                    playTone(ctx, C6, now + 0.36, 1.3, 0.20, "sine");
+                    playTone(ctx, E6, now + 0.48, 1.35, 0.22, "sine");
+                    playTone(ctx, G6, now + 0.60, 1.4, 0.26, "sine");
+
+                    // big finale
+                    playTone(ctx, C7, now + 0.75, 1.6, 0.32, "triangle");
+
+                    // sparkle
+                    playTone(ctx, C7, now + 0.75, 1.6, 0.08, "triangle", 9);
+
+                    // sub bass punch
+                    playTone(ctx, C4, now, 0.6, 0.30, "sawtooth");
+                }
+
+            } catch (e) {
+                // ignore audio errors
+            }
+        }
+        // ─────────────────────────────────────────────────────────────
 
         function celebrateMilestone(milestoneNumber) {
             triggerFireworks(6 + Math.min(milestoneNumber, 4));
@@ -1210,6 +1352,9 @@
 
             if (totalAmount > previousTotalAmount) {
                 const increase = totalAmount - previousTotalAmount;
+
+                // Play sound for the increase
+                playSoundForIncrease(increase);
 
                 const newestDonation = Array.isArray(last5) && last5.length > 0 ? last5[0] : null;
                 const newestKey = newestDonation ? donationKey(newestDonation) : null;
@@ -1235,42 +1380,81 @@
         }
 
         async function refreshStats() {
+            // Each poll gets a unique sequence id. If a newer poll has already
+            // started by the time an async step resumes, we discard stale data.
+            const mySeq = ++pollSeqId;
+
             try {
-                const [swishResponse, stripeResponse] = await Promise.allSettled([
+                const [swishResult, stripeResult] = await Promise.allSettled([
                     fetch(API_URL, { cache: "no-store" }),
                     fetch(CARD_API_URL, { cache: "no-store" })
                 ]);
 
-                if (swishResponse.status !== "fulfilled" || !swishResponse.value.ok) {
-                    throw new Error("Swish request failed");
-                }
+                if (mySeq !== pollSeqId) return;
 
-                const swishJson = await swishResponse.value.json();
-                const swishPayload = getPayload(swishJson);
-                const swishTotal = parseAmount(swishPayload.totalAmount || 0);
-                const swishLast5 = Array.isArray(swishPayload.last5) ? swishPayload.last5 : [];
-
-                let stripeTotal = 0;
+                // null = this source failed this poll cycle
+                let swishTotal = null;
+                let swishLast5 = [];
+                let stripeTotal = null;
                 let stripeRecent = [];
-                if (stripeResponse.status === "fulfilled" && stripeResponse.value.ok) {
-                    const stripeJson = await stripeResponse.value.json();
-                    const stripeParsed = parseStripeData(stripeJson);
-                    stripeTotal = stripeParsed.total;
-                    stripeRecent = stripeParsed.donations;
+
+                // ── Parse Swish ──────────────────────────────────────────
+                if (swishResult.status === "fulfilled" && swishResult.value.ok) {
+                    try {
+                        const swishJson = await swishResult.value.json();
+                        if (mySeq !== pollSeqId) return;
+                        const swishPayload = getPayload(swishJson);
+                        swishTotal = parseAmount(swishPayload.totalAmount || 0);
+                        swishLast5 = Array.isArray(swishPayload.last5) ? swishPayload.last5 : [];
+                        lastKnownSwishTotal = swishTotal;
+                        // Source-local label updates independently of combined total
+                        totalSwishEl.textContent = formatSek(swishTotal);
+                    } catch (e) {
+                        console.warn("Failed to parse Swish response", e);
+                    }
                 }
 
-                const totalAmount = swishTotal + stripeTotal;
-                const last5 = [...swishLast5, ...stripeRecent]
-                    .sort((a, b) => toSortableTimestamp(b) - toSortableTimestamp(a))
-                    .slice(0, 5);
+                // ── Parse Stripe ─────────────────────────────────────────
+                if (stripeResult.status === "fulfilled" && stripeResult.value.ok) {
+                    try {
+                        const stripeJson = await stripeResult.value.json();
+                        if (mySeq !== pollSeqId) return;
+                        const stripeParsed = parseStripeData(stripeJson);
+                        stripeTotal = stripeParsed.total;
+                        stripeRecent = stripeParsed.donations;
+                        lastKnownStripeTotal = stripeTotal;
+                        // Source-local label updates independently of combined total
+                        totalStripeEl.textContent = formatSek(stripeTotal);
+                    } catch (e) {
+                        console.warn("Failed to parse Stripe response", e);
+                    }
+                }
 
-                latestLast5Data = last5;
-                renderTotal(totalAmount, swishTotal, stripeTotal);
-                applySwishQrMode(latestLast5Data);
-                maybeTriggerCelebrations(totalAmount, last5);
+                // ── Combined commit ──────────────────────────────────────
+                // Only update the main total, progress, milestones, recent
+                // donations list, and trigger celebrations when BOTH sources
+                // returned valid data in this poll cycle.
+                if (swishTotal !== null && stripeTotal !== null) {
+                    const combinedTotal = swishTotal + stripeTotal;
+                    const last5 = [...swishLast5, ...stripeRecent]
+                        .sort((a, b) => toSortableTimestamp(b) - toSortableTimestamp(a))
+                        .slice(0, 5);
 
-                const now = new Date();
-                lastUpdatedEl.textContent = `Senast uppdaterad: ${now.toLocaleString("sv-SE")}`;
+                    latestLast5Data = last5;
+                    renderCombinedTotal(combinedTotal);
+                    applySwishQrMode(latestLast5Data);
+                    maybeTriggerCelebrations(combinedTotal, last5);
+
+                    const now = new Date();
+                    lastUpdatedEl.textContent = `Senast uppdaterad: ${now.toLocaleString("sv-SE")}`;
+                } else {
+                    // One or both sources unavailable — hold the committed total
+                    // steady and show which sources are still pending.
+                    const pending = [];
+                    if (swishTotal === null) pending.push("Swish");
+                    if (stripeTotal === null) pending.push("Stripe");
+                    lastUpdatedEl.textContent = `Väntar på: ${pending.join(", ")} …`;
+                }
             } catch (error) {
                 console.error("Failed to refresh stats", error);
                 lastUpdatedEl.textContent = "Kunde inte hämta data just nu.";
