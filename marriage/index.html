@@ -36,78 +36,284 @@
     <div id="header-placeholder"></div>
     <!-- Header End -->
 
-    <!-- Marriage Application Form Start -->
+    <!-- Marriage Application Flow Start -->
     <div class="container py-5">
         <div class="text-center mb-5">
-            <h1 class="display-4">Äktenskapsansökan</h1>
-            <p class="lead">Fyll i formuläret nedan för att ansöka om äktenskapsceremoni</p>
+            <h1 class="display-4" data-i18n="marriage.title">Äktenskapsansökan</h1>
+            <p class="lead" data-i18n="marriage.subtitle">Följ stegen nedan för att ansöka om äktenskapsceremoni</p>
         </div>
 
-        <!-- Google Calendar Booking Embed 
-        <div class="form-container" style="max-height:80vh; overflow-y:auto; border-radius:10px;">
-            <iframe src="https://calendar.app.google/xJKawfzhunAH9xWj6" style="border: 0; width: 100%; height: 800px;" frameborder="0" scrolling="yes" title="Boka tid för vigselcertifikat"></iframe>
-            <div class="text-muted small mt-2">Om bokningsformuläret inte visas, <a href="https://calendar.app.google/xJKawfzhunAH9xWj6" target="_blank" rel="noopener">klicka här för att boka tid i nytt fönster</a>.</div>
-        </div>-->
-        
-    </div>
-    <!-- Marriage Application Form End -->
-
-    <div id="contact-us-placeholder"></div>
-
-    <!-- Terms & Requirements Modal -->
-    <div class="modal fade" id="requirementsModal" tabindex="-1" aria-labelledby="requirementsModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="requirementsModalLabel">Viktigt innan du fyller i formuläret</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Stäng"></button>
-                </div>
-                <div class="modal-body" style="max-height: 450px; overflow-y: auto;">
-                    <p>
-                        Innan du fyller i ansökan om äktenskap måste båda parter läsa villkoren noggrant och förbereda
-                        alla nödvändiga dokument.
-                        Äkta paret måste fylla i den elektroniska ansökan och boka en tid i förväg för att komma till
-                        moskén, lämna in dokumenten och genomföra den religiösa vigseln.
-                    </p>
-                    <p>
-                        För mer information om de nödvändiga dokumenten och tidsbokningen, se listan nedan.
-                    </p>
-                    <h6 class="mt-3"><strong>Dokument som krävs för att genomföra det religiösa
-                            äktenskapskontraktet:</strong></h6>
-                    <ul>
-                        <li>
-                            Familjebevis från Skatteverket för både brud och brudgum, för att
-                            visa civilstånd. <strong>Observera:</strong> Dokumentet får inte vara äldre än en månad.
-                        </li>
-                        <li>
-                            Original svensk identitetshandling eller motsvarande, till exempel pass eller körkort.
-                        </li>
-                        <li>
-                            Betalning av avgiften på 1200 SEK (inklusive 25% moms).
-                            <br>Avgiften betalas med kort i samband med att den elektroniska ansökan fylls i.
-                        </li>
-                        <li>
-                            Ifyllande av den elektroniska ansökan och bokning av tid i förväg.
-                        </li>
-                    </ul>
-                    <p class="mt-3"><strong>Viktigt!</strong></p>
-                    <p>
-                        Det är nödvändigt att boka en tid i förväg för att lämna in dokumenten och genomföra den
-                        religiösa vigseln.
-                        Moskén kan tyvärr inte ta emot par som kommer utan bokad tid.
-                    </p>
-                    <p>
-                        Observera att vigseln i moskén har <strong>endast religiös giltighet</strong> och ingen juridisk
-                        giltighet hos svenska myndigheter.
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Jag förstår</button>
+        <!-- Step Progress Indicator -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-10">
+                <div class="d-flex align-items-center justify-content-between position-relative marriage-steps-bar">
+                    <div class="marriage-step active" data-step="1">
+                        <div class="marriage-step-circle">1</div>
+                        <span class="marriage-step-label" data-i18n="marriage.step0-label">Information</span>
+                    </div>
+                    <div class="marriage-step-line"></div>
+                    <div class="marriage-step" data-step="2">
+                        <div class="marriage-step-circle">2</div>
+                        <span class="marriage-step-label" data-i18n="marriage.step2-label">Boka tid</span>
+                    </div>
+                    <div class="marriage-step-line"></div>
+                    <div class="marriage-step" data-step="3">
+                        <div class="marriage-step-circle">3</div>
+                        <span class="marriage-step-label" data-i18n="marriage.step3-label">Fyll i formulär</span>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- Step 1: Information & Payment -->
+        <div id="step-1" class="marriage-step-content">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-body p-5">
+                            <div class="text-center mb-4">
+                                <div class="mb-3">
+                                    <i class="fas fa-info-circle fa-3x text-warning"></i>
+                                </div>
+                                <h3 data-i18n="marriage.info-title">Viktigt innan du fyller i formuläret</h3>
+                            </div>
+                            <p data-i18n="marriage.info-intro">
+                                Innan du fyller i ansökan om äktenskap måste båda parter läsa villkoren noggrant och förbereda
+                                alla nödvändiga dokument.
+                                Äkta paret måste fylla i den elektroniska ansökan och boka en tid i förväg för att komma till
+                                moskén, lämna in dokumenten och genomföra den religiösa vigseln.
+                            </p>
+                            <p data-i18n="marriage.info-docs-intro">
+                                För mer information om de nödvändiga dokumenten och tidsbokningen, se listan nedan.
+                            </p>
+                            <h6 class="mt-3"><strong data-i18n="marriage.info-docs-heading">Dokument som krävs för att genomföra det religiösa
+                                    äktenskapskontraktet:</strong></h6>
+                            <ul>
+                                <li data-i18n-html="marriage.info-doc1">
+                                    Familjebevis från Skatteverket för både brud och brudgum, för att
+                                    visa civilstånd. <strong>Observera:</strong> Dokumentet får inte vara äldre än en månad.
+                                </li>
+                                <li data-i18n="marriage.info-doc2">
+                                    Original svensk identitetshandling eller motsvarande, till exempel pass eller körkort.
+                                </li>
+                                <li data-i18n-html="marriage.info-doc3">
+                                    Betalning av avgiften på 1200 SEK (inklusive 25% moms).
+                                    <br>Avgiften betalas med kort i samband med att den elektroniska ansökan fylls i.
+                                </li>
+                                <li data-i18n="marriage.info-doc4">
+                                    Ifyllande av den elektroniska ansökan och bokning av tid i förväg.
+                                </li>
+                            </ul>
+                            <p class="mt-3"><strong data-i18n="marriage.info-important-heading">Viktigt!</strong></p>
+                            <p data-i18n="marriage.info-important-text">
+                                Det är nödvändigt att boka en tid i förväg för att lämna in dokumenten och genomföra den
+                                religiösa vigseln.
+                                Moskén kan tyvärr inte ta emot par som kommer utan bokad tid.
+                            </p>
+                            <p data-i18n-html="marriage.info-disclaimer">
+                                Observera att vigseln i moskén har <strong>endast religiös giltighet</strong> och ingen juridisk
+                                giltighet hos svenska myndigheter.
+                            </p>
+
+                            <!-- Payment Section -->
+                            <hr class="my-4">
+                            <div class="text-center">
+                                <div class="mb-3">
+                                    <i class="fas fa-credit-card fa-2x text-primary"></i>
+                                </div>
+                                <p class="text-muted mb-3" data-i18n="marriage.step1-description">Avgiften för religiös äktenskapsceremoni är 1 200 SEK (inklusive 25% moms). Betalningen sker via Stripe.</p>
+                                <a id="marriage-payment-link" href="https://buy.stripe.com/5kQdR93Nl2Jy6Vd5oEfw407" target="_blank" rel="noopener" class="btn btn-primary btn-lg px-5 py-3 mb-3">
+                                    <i class="fas fa-lock me-2"></i>
+                                    <span data-i18n="marriage.pay-button">Betala 1 200 SEK</span>
+                                </a>
+                                <p class="text-muted small" data-i18n="marriage.step1-note">Du omdirigeras till en säker betalningssida. Återvänd hit efter betalning för att fortsätta.</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Booking -->
+        <div id="step-2" class="marriage-step-content" style="display:none;">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-body p-4">
+                            <div class="text-center mb-4">
+                                <div class="mb-3">
+                                    <i class="fas fa-calendar-alt fa-3x text-success"></i>
+                                </div>
+                                <h3 data-i18n="marriage.step2-title">Boka en tid</h3>
+                                <p class="text-muted" data-i18n="marriage.step2-description">Välj en ledig tid i kalendern nedan för att boka er vigselceremoni.</p>
+                            </div>
+                            <div class="form-container" style="max-height:80vh; overflow-y:auto; border-radius:10px;">
+                                <iframe src="https://calendar.app.google/xJKawfzhunAH9xWj6" style="border: 0; width: 100%; height: 800px;" frameborder="0" scrolling="yes" title="Boka tid för vigselcertifikat"></iframe>
+                                <div class="text-muted small mt-2" data-i18n-html="marriage.booking-fallback">Om bokningsformuläret inte visas, <a href="https://calendar.app.google/xJKawfzhunAH9xWj6" target="_blank" rel="noopener">klicka här för att boka tid i nytt fönster</a>.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-3">
+                        <button class="btn btn-outline-secondary me-2" onclick="marriageGoToStep(1)"><i class="fas fa-arrow-left me-1"></i> <span data-i18n="marriage.prev-step">Tillbaka</span></button>
+                        <button class="btn btn-outline-secondary" onclick="marriageGoToStep(3)" data-i18n="marriage.next-step-booking">Jag har bokat — gå vidare</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Contract Form (inline) -->
+        <div id="step-3" class="marriage-step-content" style="display:none;">
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-body p-4">
+                            <div class="text-center mb-4">
+                                <div class="mb-3">
+                                    <i class="fas fa-file-signature fa-3x text-info"></i>
+                                </div>
+                                <h3 data-i18n="marriage.step3-title">Fyll i äktenskapskontraktet</h3>
+                                <p class="text-muted" data-i18n="marriage.step3-description">Fyll i det elektroniska äktenskapskontraktet. Ni kan göra detta när som helst innan ert bokade besök.</p>
+                            </div>
+
+                            <!-- Contract Form Content -->
+                            <div id="marriage-form-container">
+                                <div class="contract-toolbar">
+                                    <div class="contract-language-toolbar" aria-label="Choose document language">
+                                        <button type="button" class="active" data-lang="sv" onclick="setFormLanguage('sv')">Svenska</button>
+                                        <button type="button" data-lang="en" onclick="setFormLanguage('en')">English</button>
+                                        <button type="button" data-lang="ar" onclick="setFormLanguage('ar')">العربية</button>
+                                    </div>
+                                </div>
+
+                                <div class="contract-sheet-wrap">
+                                    <div id="contract" class="contract-sheet">
+                                        <div class="contract-title">
+                                            <div id="contractTitle" class="contract-title-text">Islamiskt äktenskapskontrakt</div>
+                                        </div>
+
+                                        <div class="contract-subtitle">
+                                            <div id="contractSubtitle">Äktenskapskontrakt i enlighet med islamisk sedvana och med fastställd Mahr (hemgift) och villkor.</div>
+                                        </div>
+
+                                        <div class="contract-grid">
+                                            <div class="contract-cell">
+                                                <div id="wifeLabel" class="contract-label">Maka</div>
+                                                <input id="wifeNameInput" class="contract-input" value="" />
+                                            </div>
+                                            <div class="contract-cell">
+                                                <div id="husbandLabel" class="contract-label">Make</div>
+                                                <input id="husbandNameInput" class="contract-input" value="" />
+                                            </div>
+                                            <div class="contract-cell">
+                                                <div id="wifePersonalIdLabel" class="contract-label">Personnummer</div>
+                                                <input id="wifePersonalIdInput" class="contract-input" value="" />
+                                            </div>
+                                            <div class="contract-cell">
+                                                <div id="husbandPersonalIdLabel" class="contract-label">Personnummer</div>
+                                                <input id="husbandPersonalIdInput" class="contract-input" value="" />
+                                            </div>
+                                            <div class="contract-cell">
+                                                <div id="wifeBirthPlaceLabel" class="contract-label">Födelseort</div>
+                                                <input id="wifeBirthPlaceInput" class="contract-input" value="" />
+                                            </div>
+                                            <div class="contract-cell">
+                                                <div id="husbandBirthPlaceLabel" class="contract-label">Födelseort</div>
+                                                <input id="husbandBirthPlaceInput" class="contract-input" value="" />
+                                            </div>
+                                            <div class="contract-cell">
+                                                <div id="wifeMaritalStatusLabel" class="contract-label">Civilstånd</div>
+                                                <select id="wifeMaritalStatusInput" class="contract-input"></select>
+                                            </div>
+                                            <div class="contract-cell">
+                                                <div id="husbandMaritalStatusLabel" class="contract-label">Civilstånd</div>
+                                                <select id="husbandMaritalStatusInput" class="contract-input"></select>
+                                            </div>
+                                            <div class="contract-cell">
+                                                <div id="deferredDowryLabel" class="contract-label">Uppskjuten hemgift</div>
+                                                <input id="deferredDowryInput" class="contract-input" value="" />
+                                            </div>
+                                            <div class="contract-cell">
+                                                <div id="dowryLabel" class="contract-label">Hemgift</div>
+                                                <input id="dowryInput" class="contract-input" value="" />
+                                            </div>
+                                        </div>
+
+                                        <div class="contract-terms">
+                                            <div id="contractTerms">Al salam Moské's imamkommitté har rätt att säga upp detta kontrakt om någon av makarna begär det.</div>
+                                        </div>
+
+                                        <div class="contract-signature-grid">
+                                            <div class="contract-sig-cell">
+                                                <div id="wifeSignatureLabel" class="contract-sig-label">Underskrift maka</div>
+                                                <canvas class="contract-sig-line signature-pad"></canvas>
+                                            </div>
+                                            <div class="contract-sig-cell">
+                                                <div id="husbandSignatureLabel" class="contract-sig-label">Underskrift make</div>
+                                                <canvas class="contract-sig-line signature-pad"></canvas>
+                                            </div>
+                                            <div class="contract-sig-cell">
+                                                <div id="witness2Label" class="contract-sig-label">Vittne 2</div>
+                                                <canvas class="contract-sig-line signature-pad"></canvas>
+                                            </div>
+                                            <div class="contract-sig-cell">
+                                                <div id="witness1Label" class="contract-sig-label">Vittne 1</div>
+                                                <canvas class="contract-sig-line signature-pad"></canvas>
+                                            </div>
+                                            <div class="contract-sig-cell">
+                                                <div id="imamLabel" class="contract-sig-label">Imam</div>
+                                                <canvas class="contract-sig-line signature-pad"></canvas>
+                                            </div>
+                                            <div class="contract-sig-cell">
+                                                <div id="waliLabel" class="contract-sig-label">Wali</div>
+                                                <canvas class="contract-sig-line signature-pad"></canvas>
+                                            </div>
+                                        </div>
+
+                                        <div class="contract-last-grid">
+                                            <div class="contract-last-cell">
+                                                <div id="dateLabel" class="contract-label small">Datum</div>
+                                                <input id="dateInput" class="contract-input" type="date" value="" />
+                                            </div>
+                                            <div class="contract-last-cell">
+                                                <div id="placeLabel" class="contract-label small">Plats</div>
+                                                <input id="placeInput" class="contract-input" value="" />
+                                            </div>
+                                        </div>
+
+                                        <div class="contract-notice">
+                                            <div id="contractNotice">Detta är ett religiöst äktenskapskontrakt som inte kan registreras hos Skatteverket.</div>
+                                        </div>
+                                    </div>
+
+                                    <div id="previewBox" class="contract-preview-box">
+                                        <iframe id="previewFrame"></iframe>
+                                    </div>
+
+                                    <div class="contract-toolbar-actions">
+                                        <button id="downloadButton" class="primary" type="button" onclick="downloadPDF()">Ladda ner PDF</button>
+                                        <button id="previewButton" type="button" onclick="previewPDF()">Förhandsgranska PDF</button>
+                                        <button id="sendButton" class="success" type="button" onclick="sendPDF()">Skicka</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Contract Form Content -->
+
+                        </div>
+                    </div>
+                    <div class="text-center mt-3">
+                        <button class="btn btn-outline-secondary" onclick="marriageGoToStep(2)"><i class="fas fa-arrow-left me-1"></i> <span data-i18n="marriage.prev-step">Tillbaka</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
+    <!-- Marriage Application Flow End -->
+
+    <div id="contact-us-placeholder"></div>
+
+
 
     <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -138,16 +344,391 @@
         });
     </script>
 
-    <!-- Show Requirements Modal on Page Load -->
+
+
+    <!-- Marriage Step Navigation -->
     <script>
-        $(document).ready(function () {
-            const modal = new bootstrap.Modal(document.getElementById('requirementsModal'), {
-                backdrop: 'static',
-                keyboard: false
+        function marriageGoToStep(step) {
+            document.querySelectorAll('.marriage-step-content').forEach(el => el.style.display = 'none');
+            const target = document.getElementById('step-' + step);
+            if (target) target.style.display = 'block';
+
+            document.querySelectorAll('.marriage-step').forEach(el => {
+                const s = parseInt(el.dataset.step);
+                el.classList.toggle('active', s <= step);
+                el.classList.toggle('completed', s < step);
             });
-            modal.show();
+
+            document.querySelectorAll('.marriage-step-line').forEach((line, i) => {
+                line.classList.toggle('active', (i + 1) < step);
+            });
+
+            // Initialize contract form signature pads when step 3 becomes visible
+            if (step === 3 && window.initContractForm) {
+                setTimeout(window.initContractForm, 50);
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Auto-navigate if ?step=X is in the URL (e.g. Stripe redirect after payment)
+        document.addEventListener('DOMContentLoaded', function() {
+            const params = new URLSearchParams(window.location.search);
+            const step = parseInt(params.get('step'));
+            if (step >= 1 && step <= 3) {
+                marriageGoToStep(step);
+            }
         });
     </script>
+
+    <!-- Marriage Steps Inline Styles -->
+    <style>
+        .marriage-steps-bar {
+            padding: 0 10px;
+        }
+        .marriage-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+        }
+        .marriage-step-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #e9ecef;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            border: 3px solid #dee2e6;
+            transition: all 0.3s ease;
+        }
+        .marriage-step.active .marriage-step-circle {
+            background: #0d6efd;
+            color: #fff;
+            border-color: #0d6efd;
+        }
+        .marriage-step.completed .marriage-step-circle {
+            background: #198754;
+            color: #fff;
+            border-color: #198754;
+        }
+        .marriage-step-label {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #6c757d;
+        }
+        .marriage-step.active .marriage-step-label {
+            color: #0d6efd;
+        }
+        .marriage-step.completed .marriage-step-label {
+            color: #198754;
+        }
+        .marriage-step-line {
+            flex: 1;
+            height: 4px;
+            background: #dee2e6;
+            border-radius: 2px;
+            margin: 0 8px;
+            margin-bottom: 28px;
+            transition: background 0.3s ease;
+        }
+        .marriage-step-line.active {
+            background: #198754;
+        }
+        @media (max-width: 576px) {
+            .marriage-step-circle {
+                width: 38px;
+                height: 38px;
+                font-size: 1rem;
+            }
+            .marriage-step-label {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+
+    <!-- Contract Form Styles (scoped) -->
+    <style>
+        #marriage-form-container { font-family: Arial, Helvetica, sans-serif; }
+        .contract-toolbar { max-width: 1100px; margin: 0 auto 18px auto; display: flex; justify-content: center; }
+        .contract-language-toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: center; }
+        .contract-language-toolbar button { border: 1px solid #333; background: #fff; padding: 9px 16px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 14px; }
+        .contract-language-toolbar button.active { background: #15546f; color: #fff; border-color: #15546f; }
+        .contract-sheet-wrap { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .contract-sheet { width: 100%; max-width: 210mm; margin: 0 auto; background: #fff; border: 1px solid #c7bcae; padding: 50px 20px 16px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,.12); overflow: hidden; }
+        .contract-sheet::before, .contract-sheet::after { content: ""; position: absolute; width: clamp(150px, 18vw, 210px); height: clamp(150px, 18vw, 210px); background: url("/marriage/img/corner_upper_left.png") no-repeat center / contain; pointer-events: none; z-index: 0; }
+        .contract-sheet::before { top: clamp(-28px, -2.5vw, -12px); left: clamp(-28px, -2.5vw, -12px); }
+        .contract-sheet::after { top: clamp(-28px, -2.5vw, -12px); right: clamp(-28px, -2.5vw, -12px); transform: rotate(90deg); }
+        .contract-sheet > * { position: relative; z-index: 1; }
+        .contract-sheet.is-ar .contract-title, .contract-sheet.is-ar .contract-subtitle, .contract-sheet.is-ar .contract-terms, .contract-sheet.is-ar .contract-notice, .contract-sheet.is-ar .contract-label, .contract-sheet.is-ar .contract-sig-label, .contract-sheet.is-ar .contract-last-cell { direction: rtl; font-family: "Tahoma", "Arial", sans-serif; }
+        .contract-sheet.is-ar .contract-label, .contract-sheet.is-ar .contract-sig-label { text-align: right; }
+        .contract-sheet.is-ar .contract-cell, .contract-sheet.is-ar .contract-last-cell { flex-direction: row-reverse; }
+        .contract-sheet.is-ar .contract-input { text-align: right; }
+        .contract-title { text-align: center; line-height: 1.12; margin-top: 8px; margin-bottom: 12px; }
+        .contract-title-text { font-size: clamp(24px, 3vw, 30px); font-weight: 700; }
+        .contract-subtitle { text-align: center; font-size: 14px; line-height: 1.55; margin: 8px 0 16px 0; }
+        .contract-grid { display: grid; grid-template-columns: 1fr 1fr; border: 1.5px solid #222; border-bottom: none; }
+        .contract-cell { border-right: 1.5px solid #222; border-bottom: 1.5px solid #222; min-height: 46px; padding: 8px 10px; display: flex; align-items: center; gap: 6px; font-size: 14px; }
+        .contract-cell:nth-child(2n) { border-right: none; }
+        .contract-label { min-width: 100px; font-size: 13px; color: #111; font-weight: 700; }
+        .contract-label.small { min-width: 76px; }
+        .contract-input { width: 100%; border: none; outline: none; background: transparent; font-size: 15px; font-family: inherit; color: #111; }
+        .contract-input::placeholder { color: #888; }
+        select.contract-input { cursor: pointer; }
+        .contract-terms { border: 1.5px solid #222; border-top: none; padding: 10px 12px; line-height: 1.7; font-size: 14px; text-align: center; }
+        .contract-signature-grid { display: grid; grid-template-columns: 1fr 1fr; border: 1.5px solid #222; border-top: none; }
+        .contract-sig-cell { border-right: 1.5px solid #222; border-bottom: 1.5px solid #222; min-height: 90px; padding: 8px 10px; }
+        .contract-sig-cell:nth-child(2n) { border-right: none; }
+        .contract-sig-label { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+        .contract-sig-line { display: block; width: 100%; height: 64px; border: 1px solid #b7b7b7; border-radius: 8px; background: transparent; cursor: crosshair; touch-action: none; }
+        .contract-last-grid { display: grid; grid-template-columns: 1fr 1fr; border: 1.5px solid #222; border-top: none; }
+        .contract-last-cell { border-right: 1.5px solid #222; border-bottom: 1.5px solid #222; padding: 8px 10px; min-height: 52px; display: flex; align-items: center; gap: 6px; }
+        .contract-last-cell:nth-child(2n) { border-right: none; }
+        .contract-notice { margin-top: 14px; border: 2px solid #b54b4b; color: #b54b4b; padding: 10px 14px; text-align: center; line-height: 1.7; font-size: 14px; font-weight: 700; }
+        .contract-preview-box { border: 1px solid #bbb; background: #fff; min-height: 420px; border-radius: 8px; overflow: hidden; display: none; }
+        .contract-preview-box iframe { width: 100%; height: 70vh; border: 0; display: block; }
+        .contract-toolbar-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: center; }
+        .contract-toolbar-actions button { border: 1px solid #333; background: #fff; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 14px; }
+        .contract-toolbar-actions button.primary { background: #111; color: #fff; }
+        .contract-toolbar-actions button.success { background: #196f15; color: #fff; border-color: #196f15; }
+        @media (max-width: 900px) {
+            .contract-grid, .contract-signature-grid, .contract-last-grid { grid-template-columns: 1fr; }
+            .contract-cell:nth-child(2n), .contract-sig-cell:nth-child(2n), .contract-last-cell:nth-child(2n) { border-right: none; }
+        }
+        @media print {
+            .contract-toolbar, .contract-toolbar-actions, .contract-preview-box { display: none !important; }
+            .contract-sheet { box-shadow: none; border: none; margin: 0; width: 210mm; min-height: 297mm; padding: 18mm 10mm 10mm 10mm; }
+        }
+    </style>
+
+    <!-- html2pdf library for contract -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- Contract Form Script -->
+    <script>
+    (function() {
+        const defaultRecipient = 'info@alsalamcenter.se';
+        let currentFormLanguage = localStorage.getItem('lang') || 'sv';
+        const STORAGE_KEY = 'marriage-contract-draft';
+        const FIELD_IDS = ['wifeNameInput','husbandNameInput','wifePersonalIdInput','husbandPersonalIdInput','wifeBirthPlaceInput','husbandBirthPlaceInput','wifeMaritalStatusInput','husbandMaritalStatusInput','deferredDowryInput','dowryInput','dateInput','placeInput'];
+
+        const formTranslations = {
+            sv: {
+                controls: { download: 'Ladda ner PDF', preview: 'Förhandsgranska PDF', send: 'Skicka', confirmSend: 'Skicka den svenska versionen av kontraktet till ' + defaultRecipient + '?', sendSuccess: 'Den svenska versionen av kontraktet skickades till ' + defaultRecipient + '.', sendFailed: 'Skickandet misslyckades: ' },
+                document: { title: 'Islamiskt äktenskapskontrakt', subtitle: 'Äktenskapskontrakt i enlighet med islamisk sedvana och med fastställd Mahr (hemgift) och villkor.', wifeLabel: 'Maka', husbandLabel: 'Make', personalIdLabel: 'Personnummer', birthPlaceLabel: 'Födelseort', maritalStatusLabel: 'Civilstånd', deferredDowryLabel: 'Uppskjuten hemgift', dowryLabel: 'Hemgift', terms: "Al salam Moské's imamkommitté har rätt att säga upp detta kontrakt om någon av makarna begär det.", wifeSignatureLabel: 'Underskrift maka', husbandSignatureLabel: 'Underskrift make', witness2Label: 'Vittne 2', witness1Label: 'Vittne 1', imamLabel: 'Imam', waliLabel: 'Wali', dateLabel: 'Datum', placeLabel: 'Plats', notice: 'Detta är ett religiöst äktenskapskontrakt som inte kan registreras hos Skatteverket.' },
+                maritalStatusOptions: { empty: '', single: 'Ogift', married: 'Gift', divorced: 'Skild', widowed: 'Änka/Änkling' }
+            },
+            en: {
+                controls: { download: 'Download PDF', preview: 'Preview PDF', send: 'Send', confirmSend: 'Send the Swedish version of this contract to ' + defaultRecipient + '?', sendSuccess: 'The Swedish version of the contract was sent to ' + defaultRecipient + '.', sendFailed: 'Send failed: ' },
+                document: { title: 'Islamic marriage contract', subtitle: 'Marriage contract in accordance with Islamic custom and with stipulated dowry and terms.', wifeLabel: 'Wife', husbandLabel: 'Husband', personalIdLabel: 'Personal identity number', birthPlaceLabel: 'Place of birth', maritalStatusLabel: 'Marital status', deferredDowryLabel: 'Deferred dowry', dowryLabel: 'Dowry', terms: "Al salam Moské's imamkommitté har rätt att säga upp detta kontrakt om någon av makarna begär det.", wifeSignatureLabel: 'Wife signature', husbandSignatureLabel: 'Husband signature', witness2Label: 'Witness 2', witness1Label: 'Witness 1', imamLabel: 'Imam', waliLabel: 'Wali', dateLabel: 'Date', placeLabel: 'Place', notice: 'This is a religious marriage contract and it cannot be registered at the Swedish Tax Agency.' },
+                maritalStatusOptions: { empty: '', single: 'Single', married: 'Married', divorced: 'Divorced', widowed: 'Widowed' }
+            },
+            ar: {
+                controls: { download: 'تنزيل PDF', preview: 'معاينة PDF', send: 'إرسال', confirmSend: 'إرسال النسخة السويدية من العقد إلى ' + defaultRecipient + '؟', sendSuccess: 'تم إرسال النسخة السويدية من العقد إلى ' + defaultRecipient + '.', sendFailed: 'فشل الإرسال: ' },
+                document: { title: 'عقد زواج إسلامي', subtitle: 'أبرم الزوجان عقد زواجهما وفق الشريعة الإسلامية وحددا المهر والشروط.', wifeLabel: 'الزوجة', husbandLabel: 'الزوج', personalIdLabel: 'الرقم الشخصي', birthPlaceLabel: 'مكان الميلاد', maritalStatusLabel: 'الحالة الاجتماعية', deferredDowryLabel: 'المهر المؤجل', dowryLabel: 'المهر', terms: 'اللجنة الشرعية في مسجد السلام لها الحق بإنهاء هذا العقد إذا طلب ذلك أحد الزوجين.', wifeSignatureLabel: 'توقيع الزوجة', husbandSignatureLabel: 'توقيع الزوج', witness2Label: 'الشاهد الثاني', witness1Label: 'الشاهد الأول', imamLabel: 'الإمام', waliLabel: 'الولي', dateLabel: 'التاريخ', placeLabel: 'المكان', notice: 'هذا عقد زواج ديني غير قابل للتسجيل لدى دائرة الضرية (Skatteverket).' },
+                maritalStatusOptions: { empty: '', single: 'أعزب', married: 'متزوج', divorced: 'مطلق', widowed: 'أرمل' }
+            }
+        };
+
+        const pdfOptions = { margin: 0, filename: 'islamic-marriage-contract.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true, scrollY: 0 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
+
+        function setText(id, value) { const el = document.getElementById(id); if (el) el.textContent = value; }
+
+        // --- localStorage save/restore ---
+        let saveTimer = null;
+        function saveFormData() {
+            clearTimeout(saveTimer);
+            saveTimer = setTimeout(function() {
+                const data = { lang: currentFormLanguage, fields: {}, signatures: [] };
+                FIELD_IDS.forEach(function(id) { const el = document.getElementById(id); if (el) data.fields[id] = el.value; });
+                document.querySelectorAll('#marriage-form-container .signature-pad').forEach(function(c) {
+                    data.signatures.push(c.dataset.hasDrawing === 'true' ? c.toDataURL() : null);
+                });
+                try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
+            }, 500);
+        }
+
+        function restoreFormData() {
+            let data;
+            try { data = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch(e) { return; }
+            if (!data) return;
+            if (data.fields) {
+                FIELD_IDS.forEach(function(id) { const el = document.getElementById(id); if (el && data.fields[id] !== undefined) el.value = data.fields[id]; });
+            }
+            if (data.lang) renderFormLanguage(data.lang);
+            if (data.signatures) {
+                const pads = document.querySelectorAll('#marriage-form-container .signature-pad');
+                data.signatures.forEach(function(src, i) {
+                    if (!src || !pads[i]) return;
+                    const canvas = pads[i];
+                    const img = new Image();
+                    img.onload = function() {
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, canvas.getBoundingClientRect().width, canvas.getBoundingClientRect().height);
+                        canvas.dataset.hasDrawing = 'true';
+                    };
+                    img.src = src;
+                });
+            }
+        }
+
+        function clearFormData() {
+            try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+        }
+
+        function setSelectOptions(id, options) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const cur = el.value;
+            el.innerHTML = '';
+            Object.entries(options).forEach(([v, l]) => { const o = document.createElement('option'); o.value = v === 'empty' ? '' : v; o.textContent = l; el.appendChild(o); });
+            el.value = cur; if (el.value !== cur) el.value = '';
+        }
+
+        function renderFormLanguage(lang, opts = {}) {
+            const sel = formTranslations[lang] ? lang : 'sv';
+            const c = formTranslations[sel];
+            if (opts.updateCurrent !== false) currentFormLanguage = sel;
+
+            setText('downloadButton', c.controls.download);
+            setText('previewButton', c.controls.preview);
+            setText('sendButton', c.controls.send);
+            setText('contractTitle', c.document.title);
+            setText('contractSubtitle', c.document.subtitle);
+            setText('wifeLabel', c.document.wifeLabel);
+            setText('husbandLabel', c.document.husbandLabel);
+            setText('wifePersonalIdLabel', c.document.personalIdLabel);
+            setText('husbandPersonalIdLabel', c.document.personalIdLabel);
+            setText('wifeBirthPlaceLabel', c.document.birthPlaceLabel);
+            setText('husbandBirthPlaceLabel', c.document.birthPlaceLabel);
+            setText('wifeMaritalStatusLabel', c.document.maritalStatusLabel);
+            setText('husbandMaritalStatusLabel', c.document.maritalStatusLabel);
+            setSelectOptions('wifeMaritalStatusInput', c.maritalStatusOptions);
+            setSelectOptions('husbandMaritalStatusInput', c.maritalStatusOptions);
+            setText('deferredDowryLabel', c.document.deferredDowryLabel);
+            setText('dowryLabel', c.document.dowryLabel);
+            setText('contractTerms', c.document.terms);
+            setText('wifeSignatureLabel', c.document.wifeSignatureLabel);
+            setText('husbandSignatureLabel', c.document.husbandSignatureLabel);
+            setText('witness2Label', c.document.witness2Label);
+            setText('witness1Label', c.document.witness1Label);
+            setText('imamLabel', c.document.imamLabel);
+            setText('waliLabel', c.document.waliLabel);
+            setText('dateLabel', c.document.dateLabel);
+            setText('placeLabel', c.document.placeLabel);
+            setText('contractNotice', c.document.notice);
+
+            const sheet = document.getElementById('contract');
+            if (sheet) sheet.classList.toggle('is-ar', sel === 'ar');
+
+            if (opts.updateControls !== false) {
+                document.querySelectorAll('.contract-language-toolbar button').forEach(b => b.classList.toggle('active', b.dataset.lang === sel));
+            }
+        }
+
+        window.setFormLanguage = function(lang) { renderFormLanguage(lang); saveFormData(); };
+
+        function resizeSignaturePad(canvas) {
+            const ratio = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            const w = Math.max(Math.floor(rect.width), 1);
+            const h = Math.max(Math.floor(rect.height), 1);
+            const existing = canvas.dataset.hasDrawing === 'true' ? canvas.toDataURL() : null;
+            canvas.width = w * ratio; canvas.height = h * ratio;
+            const ctx = canvas.getContext('2d');
+            ctx.setTransform(1,0,0,1,0,0); ctx.scale(ratio, ratio);
+            ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#111'; ctx.fillStyle = '#111';
+            ctx.clearRect(0, 0, w, h);
+            if (existing) { const img = new Image(); img.onload = () => ctx.drawImage(img, 0, 0, w, h); img.src = existing; }
+        }
+
+        function setupSignaturePad(canvas) {
+            let drawing = false, moved = false, lx = 0, ly = 0;
+            resizeSignaturePad(canvas);
+            function pt(e) { const r = canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+            canvas.dataset.hasDrawing = 'false';
+            canvas.addEventListener('pointerdown', e => { const p = pt(e); drawing = true; moved = false; lx = p.x; ly = p.y; canvas.setPointerCapture(e.pointerId); });
+            canvas.addEventListener('pointermove', e => { if (!drawing) return; const p = pt(e); const ctx = canvas.getContext('2d'); ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(p.x, p.y); ctx.stroke(); lx = p.x; ly = p.y; moved = true; canvas.dataset.hasDrawing = 'true'; });
+            const stop = () => { if (!drawing) return; if (!moved) { const ctx = canvas.getContext('2d'); ctx.beginPath(); ctx.arc(lx, ly, 1.2, 0, Math.PI*2); ctx.fill(); canvas.dataset.hasDrawing = 'true'; } drawing = false; saveFormData(); };
+            canvas.addEventListener('pointerup', stop);
+            canvas.addEventListener('pointerleave', stop);
+            canvas.addEventListener('pointercancel', stop);
+        }
+
+        function initForm() {
+            document.querySelectorAll('#marriage-form-container .signature-pad').forEach(c => setupSignaturePad(c));
+            window.addEventListener('resize', () => { document.querySelectorAll('#marriage-form-container .signature-pad').forEach(c => resizeSignaturePad(c)); });
+            renderFormLanguage(currentFormLanguage);
+            restoreFormData();
+            // Auto-save on input/change for all form fields
+            document.querySelectorAll('#marriage-form-container input, #marriage-form-container select').forEach(el => {
+                el.addEventListener('input', saveFormData);
+                el.addEventListener('change', saveFormData);
+            });
+        }
+
+        window.downloadPDF = async function() {
+            await html2pdf().set(pdfOptions).from(document.getElementById('contract')).save();
+        };
+
+        window.previewPDF = async function() {
+            const uri = await html2pdf().set(pdfOptions).from(document.getElementById('contract')).outputPdf('datauristring');
+            const box = document.getElementById('previewBox');
+            document.getElementById('previewFrame').src = uri;
+            box.style.display = 'block';
+            box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+
+        window.sendPDF = async function() {
+            const msgs = formTranslations[currentFormLanguage].controls;
+            if (!window.confirm(msgs.confirmSend)) return;
+            const prev = currentFormLanguage;
+            let blob;
+            try {
+                renderFormLanguage('sv', { updateCurrent: false, updateControls: false });
+                await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+                blob = await html2pdf().set(pdfOptions).from(document.getElementById('contract')).toPdf().outputPdf('blob');
+            } finally { renderFormLanguage(prev, { updateCurrent: false, updateControls: false }); }
+            const fd = new FormData();
+            fd.append('recipient', defaultRecipient);
+            fd.append('pdf', blob, 'islamic-marriage-contract.pdf');
+            const res = await fetch('/api/send-pdf', { method: 'POST', body: fd });
+            if (!res.ok) { alert(msgs.sendFailed + await res.text()); return; }
+            clearFormData();
+            alert(msgs.sendSuccess);
+        };
+
+        // Initialize signature pads when step 3 becomes visible
+        let formInitialized = false;
+        window.initContractForm = function() {
+            if (formInitialized) return;
+            formInitialized = true;
+            initForm();
+        };
+
+        // Sync form language when site language changes
+        window.addEventListener('languageChanged', function(e) {
+            if (e.detail && e.detail.lang && formTranslations[e.detail.lang]) {
+                renderFormLanguage(e.detail.lang);
+                saveFormData();
+            }
+        });
+
+        // Also init if page loads directly on step 3
+        document.addEventListener('DOMContentLoaded', function() {
+            const step3 = document.getElementById('step-3');
+            if (step3 && step3.style.display !== 'none') {
+                window.initContractForm();
+            }
+        });
+    })();
+    </script>
+
     <!-- i18n module (exposed as global `loadLanguage`) -->
     <script type="module" src="/langugaes/js/i18n.js" defer></script>
 </body>

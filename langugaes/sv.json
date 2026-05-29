@@ -207,5 +207,39 @@
         "personal-12-19-20": "Personnummer måste vara 12 siffror och börja med 19 eller 20"
       }
     }
+  },
+  "marriage": {
+    "title": "Äktenskapsansökan",
+    "subtitle": "Följ stegen nedan för att ansöka om äktenskapsceremoni",
+    "info-title": "Viktigt innan du fyller i formuläret",
+    "info-intro": "Innan du fyller i ansökan om äktenskap måste båda parter läsa villkoren noggrant och förbereda alla nödvändiga dokument. Äkta paret måste fylla i den elektroniska ansökan och boka en tid i förväg för att komma till moskén, lämna in dokumenten och genomföra den religiösa vigseln.",
+    "info-docs-intro": "För mer information om de nödvändiga dokumenten och tidsbokningen, se listan nedan.",
+    "info-docs-heading": "Dokument som krävs för att genomföra det religiösa äktenskapskontraktet:",
+    "info-doc1": "Familjebevis från Skatteverket för både brud och brudgum, för att visa civilstånd. <strong>Observera:</strong> Dokumentet får inte vara äldre än en månad.",
+    "info-doc2": "Original svensk identitetshandling eller motsvarande, till exempel pass eller körkort.",
+    "info-doc3": "Betalning av avgiften på 1200 SEK (inklusive 25% moms).<br>Avgiften betalas med kort i samband med att den elektroniska ansökan fylls i.",
+    "info-doc4": "Ifyllande av den elektroniska ansökan och bokning av tid i förväg.",
+    "info-important-heading": "Viktigt!",
+    "info-important-text": "Det är nödvändigt att boka en tid i förväg för att lämna in dokumenten och genomföra den religiösa vigseln. Moskén kan tyvärr inte ta emot par som kommer utan bokad tid.",
+    "info-disclaimer": "Observera att vigseln i moskén har <strong>endast religiös giltighet</strong> och ingen juridisk giltighet hos svenska myndigheter.",
+    "info-continue": "Jag har betalat — gå vidare",
+    "step0-label": "Information",
+    "step1-label": "Betalning",
+    "step2-label": "Boka tid",
+    "step3-label": "Fyll i formulär",
+    "step1-title": "Betala avgiften",
+    "step1-description": "Avgiften för religiös äktenskapsceremoni är 1 200 SEK (inklusive 25% moms). Betalningen sker via Stripe.",
+    "step1-note": "Du omdirigeras till en säker betalningssida. Återvänd hit efter betalning för att fortsätta.",
+    "pay-button": "Betala 1 200 SEK",
+    "next-step": "Jag har betalat — gå vidare",
+    "step2-title": "Boka en tid",
+    "step2-description": "Välj en ledig tid i kalendern nedan för att boka er vigselceremoni.",
+    "booking-fallback": "Om bokningsformuläret inte visas, <a href='https://calendar.app.google/xJKawfzhunAH9xWj6' target='_blank' rel='noopener'>klicka här för att boka tid i nytt fönster</a>.",
+    "prev-step": "Tillbaka",
+    "next-step-booking": "Jag har bokat — gå vidare",
+    "step3-title": "Fyll i äktenskapskontraktet",
+    "step3-description": "Fyll i det elektroniska äktenskapskontraktet. Ni kan göra detta när som helst innan ert bokade besök.",
+    "step3-note": "När formuläret är ifyllt kan ni skicka det direkt till moskén via e-post från formulärsidan.",
+    "form-button": "Öppna äktenskapskontraktet"
   }
 }
