@@ -208,5 +208,39 @@
         "personal-12-19-20": "Personal number must be 12 digits and start with 19 or 20"
       }
     }
+  },
+  "marriage": {
+    "title": "Marriage Application",
+    "subtitle": "Follow the steps below to apply for a marriage ceremony",
+    "info-title": "Important information before filling in the form",
+    "info-intro": "Before filling in the marriage application, both parties must read the terms carefully and prepare all necessary documents. The couple must fill in the electronic application and book an appointment in advance to come to the mosque, submit the documents and carry out the religious marriage ceremony.",
+    "info-docs-intro": "For more information about the required documents and appointment booking, see the list below.",
+    "info-docs-heading": "Documents required to carry out the religious marriage contract:",
+    "info-doc1": "Family certificate from Skatteverket (Swedish Tax Agency) for both bride and groom, to show civil status. <strong>Note:</strong> The document must not be older than one month.",
+    "info-doc2": "Original Swedish identity document or equivalent, for example passport or driving license.",
+    "info-doc3": "Payment of the fee of 1,200 SEK (including 25% VAT).<br>The fee is paid by card when the electronic application is filled in.",
+    "info-doc4": "Completion of the electronic application and booking an appointment in advance.",
+    "info-important-heading": "Important!",
+    "info-important-text": "It is necessary to book an appointment in advance to submit the documents and carry out the religious marriage ceremony. The mosque unfortunately cannot receive couples who come without a booked appointment.",
+    "info-disclaimer": "Please note that the marriage ceremony in the mosque has <strong>only religious validity</strong> and no legal validity with Swedish authorities.",
+    "info-continue": "I have paid — continue",
+    "step0-label": "Information",
+    "step1-label": "Payment",
+    "step2-label": "Book appointment",
+    "step3-label": "Fill in form",
+    "step1-title": "Pay the fee",
+    "step1-description": "The fee for the religious marriage ceremony is 1,200 SEK (including 25% VAT). Payment is made via Stripe.",
+    "step1-note": "You will be redirected to a secure payment page. Return here after payment to continue.",
+    "pay-button": "Pay 1,200 SEK",
+    "next-step": "I have paid — continue",
+    "step2-title": "Book an appointment",
+    "step2-description": "Choose an available time in the calendar below to book your marriage ceremony.",
+    "booking-fallback": "If the booking form does not appear, <a href='https://calendar.app.google/xJKawfzhunAH9xWj6' target='_blank' rel='noopener'>click here to book in a new window</a>.",
+    "prev-step": "Back",
+    "next-step-booking": "I have booked — continue",
+    "step3-title": "Fill in the marriage contract",
+    "step3-description": "Fill in the electronic marriage contract. You can do this at any time before your booked visit.",
+    "step3-note": "Once the form is completed, you can send it directly to the mosque via email from the form page.",
+    "form-button": "Open the marriage contract"
   }
 }

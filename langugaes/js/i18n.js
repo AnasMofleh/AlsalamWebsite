@@ -50,6 +50,14 @@ function applyTranslations(translations) {
     }
   });
 
+  // HTML content (supports tags like <strong>, <br>, <a>)
+  document.querySelectorAll("[data-i18n-html]").forEach(el => {
+    const value = resolveKey(translations, el.dataset.i18nHtml);
+    if (typeof value === "string") {
+      el.innerHTML = value;
+    }
+  });
+
   // Placeholder attributes
   document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
     const value = resolveKey(translations, el.dataset.i18nPlaceholder);
