@@ -1823,8 +1823,13 @@ html[dir="rtl"] .close-btn {
 
   .donation-logo-ring,
   .circle-border {
-    width: 138px;
-    height: 138px;
+    width: 170px;
+    height: 170px;
+  }
+
+  .donation-img {
+    width: 86%;
+    height: 86%;
   }
 
   .donation-logo-image {
@@ -1841,7 +1846,10 @@ html[dir="rtl"] .close-btn {
   }
 
   .tab-button {
-    width: 100%;
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    flex: 1 1 auto;
+    white-space: nowrap;
   }
 
   .popup-content {
