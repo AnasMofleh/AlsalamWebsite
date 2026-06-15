@@ -295,6 +295,25 @@
                                         <button id="previewButton" type="button" onclick="previewPDF()">Förhandsgranska PDF</button>
                                         <button id="sendButton" class="success" type="button" onclick="sendPDF()">Skicka</button>
                                     </div>
+
+                                    <!-- Confirm Send Modal -->
+                                    <div id="sendConfirmOverlay" class="send-confirm-overlay" style="display:none;">
+                                        <div class="send-confirm-box">
+                                            <p id="sendConfirmBody">Är du säker på att all information stämmer och vill skicka in formuläret?</p>
+                                            <div class="send-confirm-buttons">
+                                                <button id="sendConfirmCancelBtn" type="button" class="send-confirm-cancel">Avbryt</button>
+                                                <button id="sendConfirmSendBtn" type="button" class="send-confirm-send">Skicka</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Loading Overlay -->
+                                    <div id="sendLoadingOverlay" class="send-loading-overlay" style="display:none;">
+                                        <div class="send-loading-box">
+                                            <div class="send-spinner"></div>
+                                            <p id="sendLoadingText">Skickar formuläret …</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <!-- End Contract Form Content -->
@@ -496,6 +515,24 @@
         .contract-toolbar-actions button { border: 1px solid #333; background: #fff; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 14px; }
         .contract-toolbar-actions button.primary { background: #111; color: #fff; }
         .contract-toolbar-actions button.success { background: #196f15; color: #fff; border-color: #196f15; }
+
+        /* Send confirm modal */
+        .send-confirm-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 10000; display: flex; align-items: center; justify-content: center; }
+        .send-confirm-box { background: #fff; border-radius: 14px; padding: 32px 28px; max-width: 440px; width: 92%; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.25); }
+        .send-confirm-box p { font-size: 16px; margin: 0 0 24px 0; line-height: 1.55; color: #222; }
+        .send-confirm-buttons { display: flex; gap: 12px; justify-content: center; }
+        .send-confirm-buttons button { border: none; padding: 10px 28px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; }
+        .send-confirm-cancel { background: #e0e0e0; color: #333; }
+        .send-confirm-cancel:hover { background: #ccc; }
+        .send-confirm-send { background: #196f15; color: #fff; }
+        .send-confirm-send:hover { background: #145a11; }
+
+        /* Loading overlay */
+        .send-loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 10001; display: flex; align-items: center; justify-content: center; }
+        .send-loading-box { text-align: center; color: #fff; }
+        .send-spinner { width: 56px; height: 56px; border: 5px solid rgba(255,255,255,0.25); border-top-color: #fff; border-radius: 50%; animation: send-spin 0.8s linear infinite; margin: 0 auto 20px auto; }
+        @keyframes send-spin { to { transform: rotate(360deg); } }
+        .send-loading-box p { font-size: 17px; margin: 0; }
         @media (max-width: 900px) {
             .contract-grid, .contract-signature-grid, .contract-last-grid { grid-template-columns: 1fr; }
             .contract-cell:nth-child(2n), .contract-sig-cell:nth-child(2n), .contract-last-cell:nth-child(2n) { border-right: none; }
@@ -515,21 +552,22 @@
         const defaultRecipient = 'info@alsalamcenter.se';
         let currentFormLanguage = localStorage.getItem('lang') || 'sv';
         const STORAGE_KEY = 'marriage-contract-draft';
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbyBdihaThtMfp_qYi16SRr9gP9fd9X9a7yO-PNZLCxMVfukwN9Wja2AN_tPT1HuIqBP/exec';
         const FIELD_IDS = ['wifeNameInput','husbandNameInput','wifePersonalIdInput','husbandPersonalIdInput','wifeBirthPlaceInput','husbandBirthPlaceInput','wifeMaritalStatusInput','husbandMaritalStatusInput','deferredDowryInput','dowryInput','dateInput','placeInput'];
 
         const formTranslations = {
             sv: {
-                controls: { download: 'Ladda ner PDF', preview: 'Förhandsgranska PDF', send: 'Skicka', confirmSend: 'Skicka den svenska versionen av kontraktet till ' + defaultRecipient + '?', sendSuccess: 'Den svenska versionen av kontraktet skickades till ' + defaultRecipient + '.', sendFailed: 'Skickandet misslyckades: ' },
+                controls: { download: 'Ladda ner PDF', preview: 'Förhandsgranska PDF', send: 'Skicka', confirmBody: 'Är du säker på att all information stämmer och vill skicka in formuläret?', confirmCancel: 'Avbryt', confirmSendBtn: 'Skicka', loading: 'Skickar formuläret …', downloadDone: 'PDF nedladdad. Laddar upp svensk version …', uploadSuccess: 'Formuläret har skickats in. Vi kontaktar er om mer information behövs.', uploadFailed: 'Något gick fel. Försök igen eller kontakta moskén direkt.' },
                 document: { title: 'Islamiskt äktenskapskontrakt', subtitle: 'Äktenskapskontrakt i enlighet med islamisk sedvana och med fastställd Mahr (hemgift) och villkor.', wifeLabel: 'Maka', husbandLabel: 'Make', personalIdLabel: 'Personnummer', birthPlaceLabel: 'Födelseort', maritalStatusLabel: 'Civilstånd', deferredDowryLabel: 'Uppskjuten hemgift', dowryLabel: 'Hemgift', terms: "Al salam Moské's imamkommitté har rätt att säga upp detta kontrakt om någon av makarna begär det.", wifeSignatureLabel: 'Underskrift maka', husbandSignatureLabel: 'Underskrift make', witness2Label: 'Vittne 2', witness1Label: 'Vittne 1', imamLabel: 'Imam', waliLabel: 'Wali', dateLabel: 'Datum', placeLabel: 'Plats', notice: 'Detta är ett religiöst äktenskapskontrakt som inte kan registreras hos Skatteverket.' },
                 maritalStatusOptions: { empty: '', single: 'Ogift', married: 'Gift', divorced: 'Skild', widowed: 'Änka/Änkling' }
             },
             en: {
-                controls: { download: 'Download PDF', preview: 'Preview PDF', send: 'Send', confirmSend: 'Send the Swedish version of this contract to ' + defaultRecipient + '?', sendSuccess: 'The Swedish version of the contract was sent to ' + defaultRecipient + '.', sendFailed: 'Send failed: ' },
+                controls: { download: 'Download PDF', preview: 'Preview PDF', send: 'Send', confirmBody: 'Are you sure all the information is correct and you want to submit the form?', confirmCancel: 'Cancel', confirmSendBtn: 'Send', loading: 'Submitting form …', downloadDone: 'PDF downloaded. Uploading Swedish version …', uploadSuccess: 'Form submitted. We will contact you if more information is needed.', uploadFailed: 'Something went wrong. Please try again or contact the mosque directly.' },
                 document: { title: 'Islamic marriage contract', subtitle: 'Marriage contract in accordance with Islamic custom and with stipulated dowry and terms.', wifeLabel: 'Wife', husbandLabel: 'Husband', personalIdLabel: 'Personal identity number', birthPlaceLabel: 'Place of birth', maritalStatusLabel: 'Marital status', deferredDowryLabel: 'Deferred dowry', dowryLabel: 'Dowry', terms: "Al salam Moské's imamkommitté har rätt att säga upp detta kontrakt om någon av makarna begär det.", wifeSignatureLabel: 'Wife signature', husbandSignatureLabel: 'Husband signature', witness2Label: 'Witness 2', witness1Label: 'Witness 1', imamLabel: 'Imam', waliLabel: 'Wali', dateLabel: 'Date', placeLabel: 'Place', notice: 'This is a religious marriage contract and it cannot be registered at the Swedish Tax Agency.' },
                 maritalStatusOptions: { empty: '', single: 'Single', married: 'Married', divorced: 'Divorced', widowed: 'Widowed' }
             },
             ar: {
-                controls: { download: 'تنزيل PDF', preview: 'معاينة PDF', send: 'إرسال', confirmSend: 'إرسال النسخة السويدية من العقد إلى ' + defaultRecipient + '؟', sendSuccess: 'تم إرسال النسخة السويدية من العقد إلى ' + defaultRecipient + '.', sendFailed: 'فشل الإرسال: ' },
+                controls: { download: 'تنزيل PDF', preview: 'معاينة PDF', send: 'إرسال', confirmBody: 'هل أنت متأكد من صحة جميع المعلومات وتريد إرسال النموذج؟', confirmCancel: 'إلغاء', confirmSendBtn: 'إرسال', loading: 'جاري إرسال النموذج …', downloadDone: 'تم تنزيل PDF. جاري رفع النسخة السويدية …', uploadSuccess: 'تم إرسال النموذج. سنتواصل معكم إذا لزمت معلومات إضافية.', uploadFailed: 'حدث خطأ ما. يرجى المحاولة مرة أخرى أو الاتصال بالمسجد مباشرة.' },
                 document: { title: 'عقد زواج إسلامي', subtitle: 'أبرم الزوجان عقد زواجهما وفق الشريعة الإسلامية وحددا المهر والشروط.', wifeLabel: 'الزوجة', husbandLabel: 'الزوج', personalIdLabel: 'الرقم الشخصي', birthPlaceLabel: 'مكان الميلاد', maritalStatusLabel: 'الحالة الاجتماعية', deferredDowryLabel: 'المهر المؤجل', dowryLabel: 'المهر', terms: 'اللجنة الشرعية في مسجد السلام لها الحق بإنهاء هذا العقد إذا طلب ذلك أحد الزوجين.', wifeSignatureLabel: 'توقيع الزوجة', husbandSignatureLabel: 'توقيع الزوج', witness2Label: 'الشاهد الثاني', witness1Label: 'الشاهد الأول', imamLabel: 'الإمام', waliLabel: 'الولي', dateLabel: 'التاريخ', placeLabel: 'المكان', notice: 'هذا عقد زواج ديني غير قابل للتسجيل لدى دائرة الضرية (Skatteverket).' },
                 maritalStatusOptions: { empty: '', single: 'أعزب', married: 'متزوج', divorced: 'مطلق', widowed: 'أرمل' }
             }
@@ -579,6 +617,77 @@
 
         function clearFormData() {
             try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+        }
+
+        function resetFormFields() {
+            FIELD_IDS.forEach(function(id) { const el = document.getElementById(id); if (el) el.value = ''; });
+            document.querySelectorAll('#marriage-form-container .signature-pad').forEach(function(c) {
+                var ctx = c.getContext('2d');
+                ctx.clearRect(0, 0, c.width, c.height);
+                c.dataset.hasDrawing = 'false';
+            });
+        }
+
+        // Field label map for validation messages
+        const FIELD_LABELS = {
+            wifeNameInput: { sv:'Makans namn', en:"Wife's name", ar:'اسم الزوجة' },
+            husbandNameInput: { sv:'Makens namn', en:"Husband's name", ar:'اسم الزوج' },
+            wifePersonalIdInput: { sv:'Makans personnummer', en:"Wife's personal ID", ar:'الرقم الشخصي للزوجة' },
+            husbandPersonalIdInput: { sv:'Makens personnummer', en:"Husband's personal ID", ar:'الرقم الشخصي للزوج' },
+            wifeBirthPlaceInput: { sv:'Makans födelseort', en:"Wife's birth place", ar:'مكان ميلاد الزوجة' },
+            husbandBirthPlaceInput: { sv:'Makens födelseort', en:"Husband's birth place", ar:'مكان ميلاد الزوج' },
+            wifeMaritalStatusInput: { sv:'Makans civilstånd', en:"Wife's marital status", ar:'الحالة الاجتماعية للزوجة' },
+            husbandMaritalStatusInput: { sv:'Makens civilstånd', en:"Husband's marital status", ar:'الحالة الاجتماعية للزوج' },
+            deferredDowryInput: { sv:'Uppskjuten hemgift', en:'Deferred dowry', ar:'المهر المؤجل' },
+            dowryInput: { sv:'Hemgift', en:'Dowry', ar:'المهر' },
+            dateInput: { sv:'Datum', en:'Date', ar:'التاريخ' },
+            placeInput: { sv:'Plats', en:'Place', ar:'المكان' }
+        };
+
+        function getValidationMessages() {
+            if (currentFormLanguage === 'en') return { fillAll:'Please fill in all fields before sending.', fillSignatures:'Please draw all six signatures.', missing:'The following fields are empty: ' };
+            if (currentFormLanguage === 'ar') return { fillAll:'يرجى ملء جميع الحقول قبل الإرسال.', fillSignatures:'يرجى رسم جميع التوقيعات الستة.', missing:'الحقول التالية فارغة: ' };
+            return { fillAll:'Vänligen fyll i alla fält innan du skickar.', fillSignatures:'Vänligen rita alla sex underskrifter.', missing:'Följande fält är tomma: ' };
+        }
+
+        function validateForm() {
+            const msgs = getValidationMessages();
+            const emptyFields = [];
+            const emptySignatures = [];
+
+            FIELD_IDS.forEach(function(id) {
+                const el = document.getElementById(id);
+                if (!el || !el.value || el.value.trim() === '') {
+                    emptyFields.push(id);
+                }
+            });
+
+            document.querySelectorAll('#marriage-form-container .signature-pad').forEach(function(c, i) {
+                if (c.dataset.hasDrawing !== 'true') {
+                    emptySignatures.push(i);
+                }
+            });
+
+            if (emptyFields.length > 0 || emptySignatures.length > 0) {
+                let msg = '';
+                if (emptyFields.length > 0) {
+                    const names = emptyFields.map(function(id) {
+                        return FIELD_LABELS[id] ? (FIELD_LABELS[id][currentFormLanguage] || FIELD_LABELS[id]['sv']) : id;
+                    });
+                    msg += msgs.missing + names.join(', ') + '.';
+                }
+                if (emptySignatures.length > 0) {
+                    if (msg) msg += '\n\n';
+                    msg += msgs.fillSignatures;
+                }
+                alert(msg);
+                if (emptyFields.length > 0) {
+                    const firstEmpty = document.getElementById(emptyFields[0]);
+                    if (firstEmpty) firstEmpty.focus();
+                }
+                return false;
+            }
+            return true;
         }
 
         function setSelectOptions(id, options) {
@@ -684,23 +793,95 @@
             box.scrollIntoView({ behavior: 'smooth', block: 'start' });
         };
 
-        window.sendPDF = async function() {
+        window.sendPDF = function() {
             const msgs = formTranslations[currentFormLanguage].controls;
-            if (!window.confirm(msgs.confirmSend)) return;
-            const prev = currentFormLanguage;
-            let blob;
-            try {
-                renderFormLanguage('sv', { updateCurrent: false, updateControls: false });
-                await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
-                blob = await html2pdf().set(pdfOptions).from(document.getElementById('contract')).toPdf().outputPdf('blob');
-            } finally { renderFormLanguage(prev, { updateCurrent: false, updateControls: false }); }
-            const fd = new FormData();
-            fd.append('recipient', defaultRecipient);
-            fd.append('pdf', blob, 'islamic-marriage-contract.pdf');
-            const res = await fetch('/api/send-pdf', { method: 'POST', body: fd });
-            if (!res.ok) { alert(msgs.sendFailed + await res.text()); return; }
-            clearFormData();
-            alert(msgs.sendSuccess);
+            if (!validateForm()) return;
+
+            // Show custom confirmation modal
+            const overlay = document.getElementById('sendConfirmOverlay');
+            const cancelBtn = document.getElementById('sendConfirmCancelBtn');
+            const sendBtn = document.getElementById('sendConfirmSendBtn');
+
+            document.getElementById('sendConfirmBody').textContent = msgs.confirmBody;
+            cancelBtn.textContent = msgs.confirmCancel;
+            sendBtn.textContent = msgs.confirmSendBtn;
+            overlay.style.display = 'flex';
+
+            function hideConfirm() {
+                overlay.style.display = 'none';
+                cancelBtn.removeEventListener('click', onCancel);
+                sendBtn.removeEventListener('click', onSend);
+            }
+
+            function onCancel() { hideConfirm(); }
+
+            async function onSend() {
+                hideConfirm();
+                // Show loading overlay
+                const loadOverlay = document.getElementById('sendLoadingOverlay');
+                document.getElementById('sendLoadingText').textContent = msgs.loading;
+                loadOverlay.style.display = 'flex';
+
+                const userLang = currentFormLanguage;
+                try {
+                    // 1) Download PDF in the user's current language
+                    await html2pdf().set(pdfOptions).from(document.getElementById('contract')).save();
+                } catch(e) {
+                    alert(msgs.uploadFailed);
+                    loadOverlay.style.display = 'none';
+                    return;
+                }
+
+                // 2) Switch to Swedish and generate PDF blob for upload
+                const prev = currentFormLanguage;
+                let blob;
+                try {
+                    renderFormLanguage('sv', { updateCurrent: false, updateControls: false });
+                    await new Promise(function(r) { requestAnimationFrame(function() { requestAnimationFrame(r); }); });
+                    blob = await html2pdf().set(pdfOptions).from(document.getElementById('contract')).toPdf().outputPdf('blob');
+                } catch(e) {
+                    alert(msgs.uploadFailed);
+                    loadOverlay.style.display = 'none';
+                    renderFormLanguage(prev, { updateCurrent: false, updateControls: false });
+                    return;
+                } finally {
+                    renderFormLanguage(prev, { updateCurrent: false, updateControls: false });
+                }
+
+                // 3) Upload Swedish PDF to Google Apps Script
+                try {
+                    const reader = new FileReader();
+                    const base64Promise = new Promise(function(resolve) {
+                        reader.onloadend = function() { resolve(reader.result.split(',')[1]); };
+                    });
+                    reader.readAsDataURL(blob);
+                    const base64 = await base64Promise;
+
+                    const getVal = function(id) { const el = document.getElementById(id); return el ? el.value : ''; };
+
+                    const params = new URLSearchParams();
+                    params.append('pdf', base64);
+                    params.append('filename', 'islamic-marriage-contract.pdf');
+                    params.append('wifeName', getVal('wifeNameInput'));
+                    params.append('husbandName', getVal('husbandNameInput'));
+                    params.append('date', getVal('dateInput'));
+
+                    const res = await fetch(GAS_URL, { method: 'POST', body: params });
+                    const result = await res.json();
+                    if (!res.ok || !result.success) throw new Error(result.error || 'Upload failed');
+
+                    alert(msgs.uploadSuccess);
+                    loadOverlay.style.display = 'none';
+                    clearFormData();
+                    resetFormFields();
+                } catch(e) {
+                    alert(msgs.uploadFailed);
+                    loadOverlay.style.display = 'none';
+                }
+            }
+
+            cancelBtn.addEventListener('click', onCancel);
+            sendBtn.addEventListener('click', onSend);
         };
 
         // Initialize signature pads when step 3 becomes visible
