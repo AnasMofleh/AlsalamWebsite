@@ -10,7 +10,9 @@
     "company": "الشركة",
     "contact": "اتصل بنا",
     "stats": "الإحصائيات",
-    "more": "المزيد"
+    "more": "المزيد",
+    "membership": "العضوية",
+    "membership": "العضوية"
   },
   "static": {
     "collection-for": "جمع التبرعات المباشر لـ",
@@ -140,7 +142,16 @@
     "invite-donate": "ادعُ الآخرين للتبرع",
     "invite-donate-description": "شارك هذه الصفحة مع العائلة والأصدقاء ليتمكن مزيد من الناس من دعم المسجد.",
     "invite-donate-btn": "شارك صفحة التبرع",
-    "footer-note": "شكراً لمساهمتك في إبقاء المسجد مفتوحًا ومرحبًا ونشطًا."
+    "footer-note": "شكراً لمساهمتك في إبقاء المسجد مفتوحًا ومرحبًا ونشطًا.",
+    "tax-check-placeholder": "YYYYMMDD-XXXX",
+    "tax-check-button": "تحقق من العضوية",
+    "tax-check-hint": "أدخل رقمك الشخصي السويدي لمعرفة ما إذا كنت عضوًا عبر الإقرار الضريبي",
+    "tax-check-err": " — رقم شخصي غير صالح",
+    "tax-check-checking": "...جار التحقق",
+    "tax-check-member-yes": "عضو FIFS",
+    "tax-check-member-since": "عضو منذ",
+    "tax-check-not-found": "ليس عضوًا",
+    "tax-check-register": "سجل الآن"
   },
   "donationRedirect": {
     "page-title": "شكراً لك - مسجد السلام",
