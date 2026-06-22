@@ -10,7 +10,9 @@
     "company": "COMPANY",
     "contact": "CONTACT US",
     "stats": "STATISTICS",
-    "more": "MORE"
+    "more": "MORE",
+    "membership": "MEMBERSHIP",
+    "membership": "MEMBERSHIP"
   },
   "static": {
     "collection-for": "Live collection for",
@@ -140,7 +142,16 @@
     "invite-donate": "Invite Others to Donate",
     "invite-donate-description": "Share this page with family and friends so more people can support the mosque.",
     "invite-donate-btn": "Share the donation page",
-    "footer-note": "Thank you for helping the mosque remain open, welcoming, and active."
+    "footer-note": "Thank you for helping the mosque remain open, welcoming, and active.",
+    "tax-check-placeholder": "YYYYMMDD-XXXX",
+    "tax-check-button": "Check membership",
+    "tax-check-hint": "Enter your Swedish personal number to see if you are already a member via tax return",
+    "tax-check-err": " — Invalid personal number",
+    "tax-check-checking": "Checking...",
+    "tax-check-member-yes": "FIFS Member",
+    "tax-check-member-since": "Member since",
+    "tax-check-not-found": "Not a member",
+    "tax-check-register": "Register now"
   },
   "donationRedirect": {
     "page-title": "Thank You - Al Salam Center Mosque",

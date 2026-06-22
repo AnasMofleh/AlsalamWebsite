@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="utf-8">
+    <title>Medlemsportal — Al Salam Center</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <style>
+        :root{--green:#1a8a1f;--green-lt:#e8f5e9;--gold:#e8b331;--red:#dc3545;--bg:#f5f7f5;--card:#fff;--text:#1a1a1a;--muted:#6b7280;--border:#e5e7eb;--shadow:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.04);}
+        *{box-sizing:border-box;margin:0;padding:0;}
+        body{font-family:"Plus Jakarta Sans",sans-serif;background:var(--bg);color:var(--text);height:100vh;height:100dvh;overflow:hidden;-webkit-font-smoothing:antialiased;}
+        .app{height:100vh;height:100dvh;display:flex;flex-direction:column;max-width:900px;margin:0 auto;padding:20px 28px 14px;}
+        .topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-shrink:0;margin-bottom:14px;}
+        .topbar-brand{display:flex;align-items:center;gap:14px;}
+        .topbar-logo{width:72px;height:72px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 6px rgba(26,138,31,.12),0 6px 24px rgba(0,0,0,.08);overflow:hidden;}
+        .topbar-logo img{width:100%;height:100%;object-fit:contain;padding:6px;}
+        .topbar-brand h1{font-size:1.6rem;font-weight:800;letter-spacing:-.02em;}
+        .topbar-brand h1 span{color:var(--green);}
+        .lang-pills{display:flex;gap:5px;background:var(--card);border-radius:16px;padding:5px;box-shadow:var(--shadow);}
+        .lang-pills button{background:none;border:none;padding:10px 20px;border-radius:13px;font-size:.9rem;font-weight:700;cursor:pointer;color:var(--muted);transition:all .2s;font-family:inherit;}
+        .lang-pills button.active{background:var(--green);color:#fff;box-shadow:0 2px 12px rgba(26,138,31,.25);}
+        .search-bar{display:flex;gap:14px;flex-shrink:0;margin-bottom:8px;}
+        .search-bar input{flex:1;height:64px;padding:0 24px;border:2px solid var(--border);border-radius:18px;font-size:1.3rem;font-weight:600;letter-spacing:.05em;font-family:inherit;color:var(--text);background:var(--card);transition:border .3s,box-shadow .3s;}
+        .search-bar input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 6px rgba(26,138,31,.1);}
+        .search-bar input.error{border-color:var(--red);}
+        .search-bar input.success{border-color:var(--green);}
+        .btn-go{height:64px;padding:0 38px;border:none;border-radius:18px;background:var(--green);color:#fff;font-weight:700;font-size:1.2rem;cursor:pointer;transition:all .2s;white-space:nowrap;font-family:inherit;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+        .btn-go:hover{background:#157519;transform:translateY(-1px);box-shadow:0 8px 28px rgba(26,138,31,.3);}
+        .btn-go:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none;}
+        .hint-row{font-size:.85rem;color:var(--muted);flex-shrink:0;min-height:24px;padding:0 4px;margin-bottom:12px;}
+        .hint-row .err{color:var(--red);display:none;}
+        .cards-area{flex:1;display:flex;flex-direction:column;gap:12px;overflow:hidden;min-height:0;}
+        .chk-card{background:var(--card);border-radius:20px;padding:0 24px;box-shadow:var(--shadow);border:2px solid transparent;display:flex;align-items:center;gap:18px;height:0;opacity:0;overflow:hidden;transition:all .45s ease;flex-shrink:0;}
+        .chk-card.visible{height:84px;opacity:1;padding:14px 24px;}
+        .chk-card.success{border-color:rgba(26,138,31,.25);background:var(--green-lt);}
+        .chk-card.fail{border-color:rgba(220,53,69,.2);background:#fff5f5;}
+        .chk-card.locked{border-color:var(--border);opacity:.5;}
+        .chk-card.locked.visible{opacity:.5;}
+        .chk-card .cc-icon{width:48px;height:48px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.25rem;}
+        .chk-card.success .cc-icon{background:var(--green);color:#fff;}
+        .chk-card.fail .cc-icon{background:var(--red);color:#fff;}
+        .chk-card.locked .cc-icon{background:#e5e7eb;color:#9ca3af;}
+        .chk-card .cc-body{flex:1;min-width:0;}
+        .chk-card .cc-body h4{font-size:1.05rem;font-weight:700;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+        .chk-card .cc-body .cc-sub{font-size:.85rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+        .chk-card .cc-body .cc-sub b{color:var(--green);}
+        .chk-card .cc-pts{font-weight:800;font-size:1.05rem;color:var(--green);white-space:nowrap;flex-shrink:0;}
+        .chk-card .cc-btn{flex-shrink:0;padding:9px 22px;border-radius:13px;font-weight:700;font-size:.88rem;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:7px;transition:transform .15s;}
+        .chk-card .cc-btn:hover{transform:translateY(-1px);}
+        .cc-btn.go{background:var(--green);color:#fff;}
+        .cc-btn.red{background:var(--red);color:#fff;}
+        /* Spinning points circle */
+        .pts-circle-wrap{flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:10px 0 0;opacity:0;transition:opacity .5s;}
+        .pts-circle-wrap.show{opacity:1;}
+        .pts-circle{position:relative;width:130px;height:130px;}
+        .pts-circle svg{width:100%;height:100%;}
+        .pts-circle .ring-bg{fill:none;stroke:var(--border);stroke-width:7;}
+        .pts-circle .ring-fg{fill:none;stroke:url(#ptsGrad);stroke-width:7;stroke-linecap:round;transform-origin:50% 50%;animation:spinRing 3s linear infinite;}
+        @keyframes spinRing{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+        .pts-circle .circle-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+        .pts-circle .circle-num{font-size:2.4rem;font-weight:800;color:var(--green);line-height:1;}
+        .pts-circle .circle-lbl{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:2px;}
+        .pts-circle .circle-lvl{font-size:.68rem;font-weight:700;margin-top:2px;}
+        .lvl-tag{display:inline-flex;align-items:center;gap:4px;padding:6px 16px;border-radius:999px;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;}
+        .lvl-tag.l1{background:#fef3c7;color:#b45309;}
+        .lvl-tag.l2{background:#f0fdf4;color:#166534;}
+        .lvl-tag.l3{background:#ecfdf5;color:#065f46;}
+        .lvl-tag.l4{background:#fef9c3;color:#854d0e;}
+        .lvl-tag.l5{background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e;border:1px solid #fbbf24;}
+        .timer-wrap{flex-shrink:0;height:5px;background:var(--border);border-radius:3px;overflow:hidden;opacity:0;transition:opacity .3s;}
+        .timer-wrap.show{opacity:1;}
+        .timer-fill{height:100%;background:var(--green);width:100%;transition:width 60s linear;}
+        .confetti-container{position:fixed;inset:0;pointer-events:none;z-index:999;display:none;}
+        .confetti-container.active{display:block;}
+        .confetti-piece{position:absolute;width:10px;height:10px;animation:cf2 linear forwards;}
+        @keyframes cf2{0%{transform:translate(0,0) rotate(0deg);opacity:1;}70%{opacity:.8;}100%{transform:translate(var(--dx),var(--dy)) rotate(var(--rot));opacity:0;}}
+        @media(max-width:500px){.topbar-brand h1{font-size:1.1rem;}.btn-go{padding:0 18px;font-size:1rem;}.chk-card .cc-btn{font-size:.7rem;padding:6px 12px;}}
+        /* Keypad */
+        .keypad{flex-shrink:0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:8px;overflow:hidden;max-height:300px;transition:max-height .4s ease,opacity .4s ease,margin .4s ease;}
+        .keypad.hidden{max-height:0;opacity:0;margin-bottom:0;}
+        .kp-btn{height:58px;border:none;border-radius:16px;font-size:1.6rem;font-weight:700;font-family:inherit;cursor:pointer;transition:all .15s;background:var(--card);color:var(--text);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;}
+        .kp-btn:active{transform:scale(.95);background:#e5e7eb;}
+        .kp-btn.kp-bs{font-size:1.3rem;color:var(--muted);}
+        .kp-btn.kp-go{background:var(--green);color:#fff;font-size:1.1rem;gap:6px;}
+        .kp-btn.kp-go:active{background:#157519;}
+        @media(max-width:500px){.kp-btn{height:48px;font-size:1.3rem;border-radius:14px;}.kp-btn.kp-go{font-size:1rem;}}
+    </style>
+</head>
+<body>
+<div class="app">
+    <div class="topbar">
+        <div class="topbar-brand">
+            <a href="/" class="topbar-logo"><img src="/img/Al-Salam-Center-Logo.png" alt="Logo"></a>
+            <h1>Medlems<span>portal</span></h1>
+        </div>
+        <div class="lang-pills" id="langBtns">
+            <button data-lang="sv" class="active">SV</button>
+            <button data-lang="en">EN</button>
+            <button data-lang="ar">AR</button>
+        </div>
+    </div>
+    <div class="search-bar">
+        <input type="text" id="pnr" placeholder="ÅÅÅÅMMDD-XXXX" maxlength="13" autocomplete="off" data-tr-placeholder="ph">
+        <button class="btn-go" id="btnGo" onclick="doCheck()"><i class="fas fa-search"></i> <span data-tr="go">Kontrollera</span></button>
+    </div>
+    <div class="hint-row"><span data-tr="hint">Ange ditt svenska personnummer</span><span class="err" id="pnrErr" data-tr="err"> — Ogiltigt personnummer</span></div>
+    <div class="keypad" id="keypad">
+        <button class="kp-btn" onclick="kpType('1')">1</button>
+        <button class="kp-btn" onclick="kpType('2')">2</button>
+        <button class="kp-btn" onclick="kpType('3')">3</button>
+        <button class="kp-btn" onclick="kpType('4')">4</button>
+        <button class="kp-btn" onclick="kpType('5')">5</button>
+        <button class="kp-btn" onclick="kpType('6')">6</button>
+        <button class="kp-btn" onclick="kpType('7')">7</button>
+        <button class="kp-btn" onclick="kpType('8')">8</button>
+        <button class="kp-btn" onclick="kpType('9')">9</button>
+        <button class="kp-btn kp-bs" onclick="kpBack()"><i class="fas fa-backspace"></i></button>
+        <button class="kp-btn" onclick="kpType('0')">0</button>
+        <button class="kp-btn kp-go" onclick="doCheck()"><i class="fas fa-check"></i> <span data-tr="go">Kontrollera</span></button>
+    </div>
+    <div class="cards-area" id="cardsArea">
+        <div class="chk-card" id="card1"><div class="cc-icon"><i class="fas fa-id-card"></i></div><div class="cc-body"><h4 data-tr="c1t">FIFS Medlemskap</h4><span class="cc-sub" data-tr="c1s">Via skattsedel</span></div><div class="cc-pts"></div></div>
+        <div class="chk-card locked" id="card2"><div class="cc-icon"><i class="fas fa-calendar-check"></i></div><div class="cc-body"><h4 data-tr="c2t">Månadsgivare</h4><span class="cc-sub" data-tr="soon">Kommer snart</span></div><div class="cc-pts"></div></div>
+        <div class="chk-card locked" id="card3"><div class="cc-icon"><i class="fas fa-hand-holding-heart"></i></div><div class="cc-body"><h4 data-tr="c3t">Donator</h4><span class="cc-sub" data-tr="soon">Kommer snart</span></div><div class="cc-pts"></div></div>
+        <div class="chk-card locked" id="card4"><div class="cc-icon"><i class="fas fa-school"></i></div><div class="cc-body"><h4 data-tr="c4t">Skolregistrering</h4><span class="cc-sub" data-tr="soon">Kommer snart</span></div><div class="cc-pts"></div></div>
+    </div>
+    <div class="pts-circle-wrap" id="ptsFooter">
+        <div class="pts-circle">
+            <svg viewBox="0 0 110 110">
+                <defs><linearGradient id="ptsGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1a8a1f"/><stop offset="50%" stop-color="#e8b331"/><stop offset="100%" stop-color="#1a8a1f"/></linearGradient></defs>
+                <circle class="ring-bg" cx="55" cy="55" r="48"/>
+                <circle class="ring-fg" cx="55" cy="55" r="48" stroke-dasharray="150 150" stroke-dashoffset="0"/>
+            </svg>
+            <div class="circle-center">
+                <span class="circle-num" id="ptsNum">0</span>
+                <span class="circle-lbl" data-tr="totalPts">Poäng</span>
+                <span class="circle-lvl lvl-tag l1" id="lvlTag" data-tr="l1">🌱 Ny Medlem</span>
+            </div>
+        </div>
+    </div>
+    <div class="timer-wrap" id="timerWrap"><div class="timer-fill" id="timerFill"></div></div>
+</div>
+<div class="confetti-container" id="confetti"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+(function(){
+"use strict";
+var TR={sv:{ph:"ÅÅÅÅMMDD-XXXX",go:"Kontrollera",hint:"Ange ditt svenska personnummer",err:" — Ogiltigt personnummer",soon:"Kommer snart",totalPts:"Totala Poäng",c1t:"FIFS Medlemskap",c1s:"Via skattsedel",c2t:"Månadsgivare",c3t:"Donator",c4t:"Skolregistrering",memberYes:"Medlem via FIFS",since:"Medlem sedan",pts:"poäng",notFound:"Ej medlem",registerNow:"Registrera dig",checking:"Kontrollerar...",l1:"🌱 Ny Medlem",l2:"🌿 Aktiv Medlem",l3:"🌳 Engagerad",l4:"⭐ Stöttepelare",l5:"👑 Guldmedlem"},en:{ph:"YYYYMMDD-XXXX",go:"Check",hint:"Enter Swedish personal number",err:" — Invalid number",soon:"Coming soon",totalPts:"Total Points",c1t:"FIFS Membership",c1s:"Via tax return",c2t:"Monthly Giver",c3t:"Donor",c4t:"School Registration",memberYes:"FIFS Member",since:"Member since",pts:"pts",notFound:"Not a member",registerNow:"Register now",checking:"Checking...",l1:"🌱 New Member",l2:"🌿 Active",l3:"🌳 Engaged",l4:"⭐ Pillar",l5:"👑 Gold"},ar:{ph:"YYYYMMDD-XXXX",go:"تحقق",hint:"أدخل رقمك الشخصي السويدي",err:" — رقم غير صالح",soon:"قريباً",totalPts:"مجموع النقاط",c1t:"عضوية FIFS",c1s:"عبر الإقرار الضريبي",c2t:"متبرع شهري",c3t:"متبرع",c4t:"التسجيل في المدرسة",memberYes:"عضو FIFS",since:"عضو منذ",pts:"نقطة",notFound:"ليس عضواً",registerNow:"سجل الآن",checking:"...جار التحقق",l1:"🌱 عضو جديد",l2:"🌿 نشط",l3:"🌳 متفاعل",l4:"⭐ داعم",l5:"👑 ذهبي"}};
+var LVLS=[{key:"l1",css:"l1",min:0,max:109},{key:"l2",css:"l2",min:110,max:129},{key:"l3",css:"l3",min:130,max:149},{key:"l4",css:"l4",min:150,max:199},{key:"l5",css:"l5",min:200,max:9999}];
+var BASE=100,PER_YR=10,lang="sv",timer=null;
+function t(k){return(TR[lang]&&TR[lang][k])||k;}
+function applyTr(){document.querySelectorAll("[data-tr]").forEach(function(e){var v=t(e.getAttribute("data-tr"));if(v)e.textContent=v;});document.querySelectorAll("[data-tr-placeholder]").forEach(function(e){var v=t(e.getAttribute("data-tr-placeholder"));if(v)e.placeholder=v;});document.documentElement.lang=lang;document.documentElement.dir=lang==="ar"?"rtl":"ltr";}
+function setLang(l){lang=l;localStorage.setItem("klang",l);document.querySelectorAll("#langBtns button").forEach(function(b){b.classList.toggle("active",b.getAttribute("data-lang")===l);});applyTr();}
+document.querySelectorAll("#langBtns button").forEach(function(b){b.addEventListener("click",function(){setLang(this.getAttribute("data-lang"));});});
+setLang(localStorage.getItem("klang")||"sv");
+function calc(ms){var y=0;if(ms){var s=new Date(ms),n=new Date();y=Math.floor((n-s)/(365.25*86400000));if(y<0)y=0;}return{pts:BASE+y*PER_YR,yrs:y};}
+function getLvl(pts){for(var i=LVLS.length-1;i>=0;i--){if(pts>=LVLS[i].min)return LVLS[i];}return LVLS[0];}
+var $pnr=$("#pnr"),$err=$("#pnrErr"),$btn=$("#btnGo");
+$pnr.on("input",function(){var v=this.value.replace(/[^0-9]/g,"");if(v.length>8)v=v.slice(0,8)+"-"+v.slice(8,12);this.value=v;$pnr.removeClass("error success");$err.hide();});
+$pnr.on("keydown",function(e){if(e.key==="Enter"){e.preventDefault();doCheck();}});
+function valid(p){return /^\d{8}-\d{4}$/.test(p);}
+function startTimer(){clearTimeout(timer);$("#timerWrap").addClass("show");$("#timerFill").css({width:"100%",transition:"none"});void $("#timerFill")[0].offsetHeight;$("#timerFill").css({width:"0%",transition:"width 60s linear"});timer=setTimeout(resetAll,60000);}
+function resetAll(){clearTimeout(timer);$("#timerWrap").removeClass("show");$("#ptsFooter").removeClass("show");$("#ptsNum").text("0");$("#lvlTag").text(t("l1")).attr("class","lvl-tag l1");$("#keypad").removeClass("hidden");["card1","card2","card3","card4"].forEach(function(id){$("#"+id).removeClass("visible success fail locked");if(id!=="card1")$("#"+id).addClass("locked");$("#"+id+" .cc-icon").html(id==="card1"?"<i class=\"fas fa-id-card\"></i>":id==="card2"?"<i class=\"fas fa-calendar-check\"></i>":id==="card3"?"<i class=\"fas fa-hand-holding-heart\"></i>":"<i class=\"fas fa-school\"></i>");$("#"+id+" .cc-body h4").text(t(id==="card1"?"c1t":id==="card2"?"c2t":id==="card3"?"c3t":"c4t"));$("#"+id+" .cc-body .cc-sub").text(id==="card1"?t("c1s"):t("soon")).css("color","");$("#"+id+" .cc-pts").text("");$("#"+id+" .cc-btn").remove();});$pnr.val("").removeClass("error success");$err.hide();$btn.prop("disabled",false);$("#confetti").removeClass("active").empty();}
+function fireConfetti(){var c=$("#confetti"),cols=["#1a8a1f","#e8b331","#15546F","#f0c94a","#4ade80","#ffd93d","#ff6b6b"];c.addClass("active");for(var i=0;i<60;i++){var fromLeft=i%2===0;var p=$("<div class=\"confetti-piece\"></div>");var angle=-30+Math.random()*60;var dist=200+Math.random()*400;var dx=(fromLeft?1:-1)*Math.cos(angle*Math.PI/180)*dist;var dy=-Math.sin(angle*Math.PI/180)*dist-(Math.random()*100);p.css({left:fromLeft?"0":"auto",right:fromLeft?"auto":"0",bottom:"0",background:cols[Math.floor(Math.random()*cols.length)],width:(8+Math.random()*10)+"px",height:(8+Math.random()*10)+"px",borderRadius:Math.random()>.5?"50%":"2px",animationDuration:(2.2+Math.random()*2.5)+"s",animationDelay:Math.random()*.8+"s","--dx":dx+"px","--dy":dy+"px","--rot":(Math.random()*720-360)+"deg"});c.append(p);}setTimeout(function(){c.removeClass("active").empty();},4000);}
+function revealCards(){var d=0;setTimeout(function(){$("#card1").addClass("visible");},d);d+=100;setTimeout(function(){$("#card2").addClass("visible");},d);d+=350;setTimeout(function(){$("#card3").addClass("visible");},d);d+=350;setTimeout(function(){$("#card4").addClass("visible");},d);d+=350;setTimeout(function(){$("#ptsFooter").addClass("show");fireConfetti();startTimer();},d);}
+function setCardSuccess(id,title,sub,pts){$("#"+id).addClass("success").removeClass("locked");$("#"+id+" .cc-icon").html("<i class=\"fas fa-check\"></i>");$("#"+id+" .cc-body h4").text(title);$("#"+id+" .cc-body .cc-sub").html(sub);$("#"+id+" .cc-pts").text("+"+pts+" "+t("pts"));}
+function setCardFail(id,title,sub,regUrl){$("#"+id).addClass("fail").removeClass("locked");$("#"+id+" .cc-icon").html("<i class=\"fas fa-times\"></i>");$("#"+id+" .cc-body h4").text(title);$("#"+id+" .cc-body .cc-sub").html(sub);$("#"+id+" .cc-pts").text("");$("#"+id+" .cc-btn").remove();$("#"+id).append("<a href=\""+regUrl+"\" target=\"_blank\" rel=\"noopener\" class=\"cc-btn red\"><i class=\"fas fa-external-link-alt\"></i> "+t("registerNow")+"</a>");}
+function kpType(d){var v=$pnr.val().replace(/[^0-9]/g,"");if(v.length>=12)return;v+=d;if(v.length>8)v=v.slice(0,8)+"-"+v.slice(8);$pnr.val(v);$pnr.removeClass("error success");$err.hide();}
+function kpBack(){var v=$pnr.val().replace(/[^0-9]/g,"");v=v.slice(0,-1);if(v.length>8)v=v.slice(0,8)+"-"+v.slice(8);$pnr.val(v);$pnr.removeClass("error success");$err.hide();}
+window.kpType=kpType;window.kpBack=kpBack;
+window.doCheck=function(){var p=$pnr.val().trim();$err.hide();$pnr.removeClass("error success");if(!valid(p)){$pnr.addClass("error");$err.show();$pnr.focus();return;}$pnr.addClass("success");$btn.prop("disabled",true);resetAll();$("#keypad").addClass("hidden");$("#card1").addClass("visible");$("#card1 .cc-icon").html("<i class=\"fas fa-spinner fa-spin\"></i>");$("#card1 .cc-body h4").text(t("c1t"));$("#card1 .cc-body .cc-sub").text(t("checking")).css("color","var(--muted)");$("#card1 .cc-pts").text("");var url="https://medlem.fifs.se/registrera/"+p+"/SCH";fetchProxy(url).then(function(r){if(r.isMember){var pts=calc(r.memberSince);var sub=t("since")+" <b>"+r.memberSinceFormatted+"</b>";setCardSuccess("card1",t("memberYes"),sub,pts.pts);$("#ptsNum").text(pts.pts);var l=getLvl(pts.pts);$("#lvlTag").text(t(l.key)).attr("class","lvl-tag "+l.css);}else{var regUrl="https://medlem.fifs.se/registrera/"+p+"/SCH";setCardFail("card1",t("notFound"),t("notFound"),regUrl);$("#ptsNum").text("0");}revealCards();}).catch(function(){var regUrl="https://medlem.fifs.se/registrera/"+p+"/SCH";setCardFail("card1",t("notFound"),t("notFound"),regUrl);$("#ptsNum").text("0");revealCards();});};
+function fetchProxy(url){function tryF(u){return fetch(u).then(function(r){if(!r.ok)throw Error("HTTP "+r.status);return r.text();});}function parse(html){var isM=/Du är redan medlem/i.test(html)||/är redan medlem/i.test(html);var ms="",msf="";if(isM){var dm=html.match(/sedan\s*(\d{4})-(\d{2})-(\d{2})/i);if(!dm)dm=html.match(/medlem.*?(\d{4})-(\d{2})-(\d{2})/is);if(!dm)dm=html.match(/(\d{4})-(\d{2})-(\d{2})/);if(dm){ms=dm[1]+"-"+dm[2]+"-"+dm[3];var mo=["januari","februari","mars","april","maj","juni","juli","augusti","september","oktober","november","december"];var mi=parseInt(dm[2],10)-1,d=parseInt(dm[3],10);msf=mi>=0&&mi<12?d+" "+mo[mi]+" "+dm[1]:ms;}}return{isMember:isM,memberSince:ms,memberSinceFormatted:msf};}return tryF("https://api.allorigins.win/raw?url="+encodeURIComponent(url)).then(parse).catch(function(){return tryF("https://corsproxy.io/?"+encodeURIComponent(url)).then(parse);});}
+})();
+</script>
+</body>
+</html>

@@ -30,6 +30,136 @@
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
 
+    <style>
+        /* Tax / Membership Check */
+        .tax-check-area {
+            margin-top: 20px;
+        }
+        .tax-check-input-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .tax-check-input-row input {
+            flex: 1;
+            min-width: 200px;
+            height: 52px;
+            padding: 0 18px;
+            border: 2px solid #dee2e6;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            background: #fff;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            font-family: inherit;
+        }
+        .tax-check-input-row input:focus {
+            outline: none;
+            border-color: #15546F;
+            box-shadow: 0 0 0 4px rgba(21,84,111,0.1);
+        }
+        .tax-check-input-row input.error {
+            border-color: #dc3545;
+        }
+        .tax-check-input-row input.success {
+            border-color: #28a745;
+        }
+        .tax-check-btn {
+            white-space: nowrap;
+            display: flex !important;
+            align-items: center;
+            gap: 8px;
+            height: 52px;
+            padding: 0 28px !important;
+        }
+        .tax-check-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .tax-check-hint {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-top: 10px;
+            min-height: 20px;
+        }
+        .tax-check-hint .err {
+            color: #dc3545;
+            display: none;
+        }
+        .tax-result-card {
+            margin-top: 20px;
+            border-radius: 20px;
+            padding: 18px 24px;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04);
+        }
+        .tax-result-card.success {
+            border-color: rgba(26,138,31,.25);
+            background: #e8f5e9;
+        }
+        .tax-result-card.fail {
+            border-color: rgba(220,53,69,.2);
+            background: #fff5f5;
+        }
+        .tax-result-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        .tax-result-card.success .tax-result-icon {
+            background: #1a8a1f;
+            color: #fff;
+        }
+        .tax-result-card.fail .tax-result-icon {
+            background: #dc3545;
+            color: #fff;
+        }
+        .tax-result-body {
+            flex: 1;
+            min-width: 0;
+        }
+        .tax-result-body h4 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin: 0 0 2px;
+        }
+        .tax-result-body .tax-result-sub {
+            font-size: 0.85rem;
+            color: #6b7280;
+        }
+        .tax-result-body .tax-result-sub b {
+            color: #1a8a1f;
+        }
+        .tax-result-link {
+            flex-shrink: 0;
+            padding: 9px 22px;
+            border-radius: 13px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: transform 0.15s, background 0.2s;
+            background: #dc3545;
+            color: #fff;
+        }
+        .tax-result-link:hover {
+            transform: translateY(-1px);
+            background: #c82333;
+            color: #fff;
+        }
+    </style>
 </head>
 
 <body class="donation-page-body">
@@ -94,8 +224,27 @@
                         <h4 data-i18n="donations.tax-donation">Donation via Tax Return</h4>
                         <p data-i18n="donations.tax-donation-description">Support the mosque through your yearly tax-based contribution.</p>
                     </div>
-                    <div class="iframe-container">
-                        <iframe src="https://medlem.fifs.se/SCH" width="100%" height="500" title="Ansokan via FIFS"></iframe>
+                    <div class="tax-check-area">
+                        <div class="tax-check-input-row">
+                            <input type="text" id="tax-pnr" placeholder="ÅÅÅÅMMDD-XXXX" maxlength="13" autocomplete="off" data-i18n-placeholder="donations.tax-check-placeholder">
+                            <button class="donation-btn tax-check-btn" id="tax-check-btn" onclick="checkTaxMembership()">
+                                <i class="fas fa-search"></i> <span data-i18n="donations.tax-check-button">Kontrollera medlemskap</span>
+                            </button>
+                        </div>
+                        <div class="tax-check-hint">
+                            <span data-i18n="donations.tax-check-hint">Ange ditt svenska personnummer för att se om du redan är medlem via skattsedeln</span>
+                            <span class="err" id="tax-pnr-err" data-i18n="donations.tax-check-err"> — Ogiltigt personnummer</span>
+                        </div>
+                        <div class="tax-result-card" id="tax-result" style="display:none;">
+                            <div class="tax-result-icon" id="tax-result-icon"><i class="fas fa-spinner fa-spin"></i></div>
+                            <div class="tax-result-body">
+                                <h4 id="tax-result-title"></h4>
+                                <span class="tax-result-sub" id="tax-result-sub"></span>
+                            </div>
+                            <a class="tax-result-link" id="tax-result-link" href="#" target="_blank" rel="noopener" style="display:none;">
+                                <i class="fas fa-external-link-alt"></i> <span data-i18n="donations.tax-check-register">Registrera dig</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -544,6 +693,119 @@
                 }
             });
         });
+    </script>
+    <script>
+        // ---- Tax / Membership Check ----
+        (function(){
+            const $pnr = $('#tax-pnr');
+            const $err = $('#tax-pnr-err');
+            const $btn = $('#tax-check-btn');
+            const $result = $('#tax-result');
+            const $resultIcon = $('#tax-result-icon');
+            const $resultTitle = $('#tax-result-title');
+            const $resultSub = $('#tax-result-sub');
+            const $resultLink = $('#tax-result-link');
+
+            // Auto-format PNR input: YYYYMMDD-XXXX
+            $pnr.on('input', function(){
+                let v = this.value.replace(/[^0-9]/g, '');
+                if (v.length > 8) v = v.slice(0,8) + '-' + v.slice(8, 12);
+                this.value = v;
+                $pnr.removeClass('error success');
+                $err.hide();
+            });
+
+            $pnr.on('keydown', function(e){
+                if (e.key === 'Enter') { e.preventDefault(); checkTaxMembership(); }
+            });
+
+            function validPNR(p){ return /^\d{8}-\d{4}$/.test(p); }
+
+            function t(key, fallback){
+                if (typeof window.getTranslation === 'function') {
+                    return window.getTranslation(key, fallback);
+                }
+                return fallback || key;
+            }
+
+            function fetchProxy(url){
+                function tryF(u){
+                    return fetch(u).then(function(r){
+                        if (!r.ok) throw Error('HTTP ' + r.status);
+                        return r.text();
+                    });
+                }
+                function parse(html){
+                    var isM = /Du är redan medlem/i.test(html) || /är redan medlem/i.test(html);
+                    var ms = '', msf = '';
+                    if (isM){
+                        var dm = html.match(/sedan\s*(\d{4})-(\d{2})-(\d{2})/i);
+                        if (!dm) dm = html.match(/medlem.*?(\d{4})-(\d{2})-(\d{2})/is);
+                        if (!dm) dm = html.match(/(\d{4})-(\d{2})-(\d{2})/);
+                        if (dm){
+                            ms = dm[1] + '-' + dm[2] + '-' + dm[3];
+                            var mo = ['januari','februari','mars','april','maj','juni','juli','augusti','september','oktober','november','december'];
+                            var mi = parseInt(dm[2],10)-1, d = parseInt(dm[3],10);
+                            msf = mi>=0 && mi<12 ? d + ' ' + mo[mi] + ' ' + dm[1] : ms;
+                        }
+                    }
+                    return { isMember: isM, memberSince: ms, memberSinceFormatted: msf };
+                }
+                return tryF('https://api.allorigins.win/raw?url=' + encodeURIComponent(url))
+                    .then(parse)
+                    .catch(function(){
+                        return tryF('https://corsproxy.io/?' + encodeURIComponent(url)).then(parse);
+                    });
+            }
+
+            window.checkTaxMembership = function(){
+                var p = $pnr.val().trim();
+                $err.hide();
+                $pnr.removeClass('error success');
+                if (!validPNR(p)){
+                    $pnr.addClass('error');
+                    $err.show();
+                    $pnr.focus();
+                    return;
+                }
+                $pnr.addClass('success');
+                $btn.prop('disabled', true);
+
+                // Show loading state
+                $result.css('display','flex').removeClass('success fail');
+                $resultIcon.html('<i class="fas fa-spinner fa-spin"></i>');
+                $resultTitle.text(t('donations.tax-check-checking', 'Kontrollerar...'));
+                $resultSub.text('');
+                $resultLink.hide();
+
+                var url = 'https://medlem.fifs.se/registrera/' + p + '/SCH';
+                var regUrl = url;
+
+                fetchProxy(url).then(function(r){
+                    if (r.isMember){
+                        $result.addClass('success').removeClass('fail');
+                        $resultIcon.html('<i class="fas fa-check"></i>');
+                        $resultTitle.text(t('donations.tax-check-member-yes', 'Medlem via FIFS'));
+                        $resultSub.html(t('donations.tax-check-member-since', 'Medlem sedan') + ' <b>' + r.memberSinceFormatted + '</b>');
+                        $resultLink.hide();
+                    } else {
+                        $result.addClass('fail').removeClass('success');
+                        $resultIcon.html('<i class="fas fa-times"></i>');
+                        $resultTitle.text(t('donations.tax-check-not-found', 'Ej medlem'));
+                        $resultSub.text(t('donations.tax-check-not-found', 'Ej medlem'));
+                        $resultLink.attr('href', regUrl).show();
+                    }
+                    $btn.prop('disabled', false);
+                }).catch(function(){
+                    $result.addClass('fail').removeClass('success');
+                    $resultIcon.html('<i class="fas fa-times"></i>');
+                    $resultTitle.text(t('donations.tax-check-not-found', 'Ej medlem'));
+                    $resultSub.text(t('donations.tax-check-not-found', 'Ej medlem'));
+                    $resultLink.attr('href', regUrl).show();
+                    $btn.prop('disabled', false);
+                });
+            };
+        })();
     </script>
 </body>
 

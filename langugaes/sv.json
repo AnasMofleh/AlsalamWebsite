@@ -10,7 +10,9 @@
     "company": "FÖRETAG",
     "contact": "KONTAKTA OSS",
     "stats": "STATISTIK",
-    "more": "MER"
+    "more": "MER",
+    "membership": "MEDLEMSKAP",
+    "membership": "MEDLEMSKAP"
   },
   "static": {
     "collection-for": "Insamling i realtid för",
@@ -139,7 +141,16 @@
     "invite-donate": "Bjud in till donation",
     "invite-donate-description": "Dela sidan med familj och vänner så att fler kan stödja moskén.",
     "invite-donate-btn": "Dela donationssidan",
-    "footer-note": "Tack för att du hjälper moskén att förbli öppen, varm och aktiv."
+    "footer-note": "Tack för att du hjälper moskén att förbli öppen, varm och aktiv.",
+    "tax-check-placeholder": "ÅÅÅÅMMDD-XXXX",
+    "tax-check-button": "Kontrollera medlemskap",
+    "tax-check-hint": "Ange ditt svenska personnummer för att se om du redan är medlem via skattsedeln",
+    "tax-check-err": " — Ogiltigt personnummer",
+    "tax-check-checking": "Kontrollerar...",
+    "tax-check-member-yes": "Medlem via FIFS",
+    "tax-check-member-since": "Medlem sedan",
+    "tax-check-not-found": "Ej medlem",
+    "tax-check-register": "Registrera dig"
   },
   "donationRedirect": {
     "page-title": "Tack - Al Salam Center Moské",
