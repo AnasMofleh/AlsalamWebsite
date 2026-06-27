@@ -373,6 +373,62 @@
                 }
             });
             $("#sponsors-placeholder").load("/sponsors/sponsors.html", function () {
+                // Initialize the sponsors carousel (script can't run via innerHTML)
+                const SPONSOR_PATH = '/img/sponsors/';
+                const sponsorImages = [
+                    'a2m.png',
+                    'jcFlytt.png',
+                    'konsentdent.jpg',
+                    '360tandklinik.jpeg',
+                    'palmyra.png',
+                    'privtaBarn.png',
+                    'sweethouse.png',
+                    'astorptandlakare.png',
+                    'TamimSalong.png',
+                    'bazarAlsham.jpeg'
+                ];
+
+                const wrapLtr = document.getElementById('wrap-ltr');
+                const wrapRtl = document.getElementById('wrap-rtl');
+                const trackLtr = document.getElementById('track-ltr');
+                const trackRtl = document.getElementById('track-rtl');
+
+                if (!wrapLtr || !wrapRtl || !trackLtr || !trackRtl) return;
+
+                function shuffle(arr) {
+                    const a = arr.slice();
+                    for (let i = a.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [a[i], a[j]] = [a[j], a[i]];
+                    }
+                    return a;
+                }
+
+                function buildTrackHtml(images) {
+                    return images.map(name => {
+                        const safeName = name.replace(/[-_]/g, ' ').replace(/\..+$/, '');
+                        return '<div class="sponsor-item" role="listitem"><img src="' + SPONSOR_PATH + name + '" alt="' + safeName + '"></div>';
+                    }).join('');
+                }
+
+                const ltrImages = shuffle(sponsorImages);
+                const rtlImages = shuffle(sponsorImages);
+                const ltrHtml = buildTrackHtml(ltrImages);
+                const rtlHtml = buildTrackHtml(rtlImages);
+
+                trackLtr.innerHTML = ltrHtml + ltrHtml;
+                trackRtl.innerHTML = rtlHtml + rtlHtml;
+
+                // Wait for images then reveal
+                const imgs = document.querySelectorAll('#wrap-ltr .sponsor-item img, #wrap-rtl .sponsor-item img');
+                Promise.all(Array.from(imgs).map(img => {
+                    if (img.complete) return Promise.resolve();
+                    return new Promise(res => { img.onload = img.onerror = res; });
+                })).then(() => {
+                    wrapLtr.classList.add('is-ready');
+                    wrapRtl.classList.add('is-ready');
+                });
+
                 // Reapply translations after sponsors loads
                 if (window.reapplyTranslations) {
                     setTimeout(() => window.reapplyTranslations(), 100);

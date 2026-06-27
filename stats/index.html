@@ -831,14 +831,16 @@
         const statsResizeHandleEl = document.getElementById("statsResizeHandle");
         const desktopResizeQuery = window.matchMedia("(min-width: 992px)");
         const statsSponsorImages = [
-            "privtaBarn.png",
             "a2m.png",
             "jcFlytt.png",
             "konsentdent.jpg",
             "360tandklinik.jpeg",
             "palmyra.png",
+            "privtaBarn.png",
             "sweethouse.png",
-            "astorptandlakare.png"
+            "astorptandlakare.png",
+            "TamimSalong.png",
+            "bazarAlsham.jpeg"
         ];
 
         let previousTotalAmount = null;
@@ -1032,12 +1034,23 @@
             }));
         }
 
+        function shuffle(arr) {
+            const a = arr.slice();
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
         async function initStatsSponsors() {
             if (!sponsorWrapEl || !sponsorTrackEl || sponsorTrackEl.dataset.ready === "true") return;
             if (!statsSponsorImages.length) return;
 
-            const singleTrackHtml = buildSponsorItemsHtml(statsSponsorImages);
-            sponsorTrackEl.innerHTML = singleTrackHtml + singleTrackHtml;
+            const shuffled = shuffle(statsSponsorImages);
+            const trackHtml = buildSponsorItemsHtml(shuffled);
+
+            sponsorTrackEl.innerHTML = trackHtml + trackHtml;
             await waitForSponsorImages(sponsorTrackEl.querySelectorAll("img"));
 
             sponsorTrackEl.dataset.ready = "true";

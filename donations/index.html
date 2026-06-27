@@ -729,32 +729,13 @@
             }
 
             function fetchProxy(url){
-                function tryF(u){
-                    return fetch(u).then(function(r){
+                // Extract PNR from URL: https://medlem.fifs.se/registrera/{pnr}/SCH
+                var pnr = url.split('/registrera/')[1];
+                if (pnr) pnr = pnr.split('/')[0];
+                return fetch('https://script.google.com/macros/s/AKfycbxZ08tC4z_P815a44QCUYxZTAvRnYay3W6k3XENWH5-X0T07l4fFiqdJJS1zrd0uOv64g/exec?pnr=' + encodeURIComponent(pnr))
+                    .then(function(r){
                         if (!r.ok) throw Error('HTTP ' + r.status);
-                        return r.text();
-                    });
-                }
-                function parse(html){
-                    var isM = /Du är redan medlem/i.test(html) || /är redan medlem/i.test(html);
-                    var ms = '', msf = '';
-                    if (isM){
-                        var dm = html.match(/sedan\s*(\d{4})-(\d{2})-(\d{2})/i);
-                        if (!dm) dm = html.match(/medlem.*?(\d{4})-(\d{2})-(\d{2})/is);
-                        if (!dm) dm = html.match(/(\d{4})-(\d{2})-(\d{2})/);
-                        if (dm){
-                            ms = dm[1] + '-' + dm[2] + '-' + dm[3];
-                            var mo = ['januari','februari','mars','april','maj','juni','juli','augusti','september','oktober','november','december'];
-                            var mi = parseInt(dm[2],10)-1, d = parseInt(dm[3],10);
-                            msf = mi>=0 && mi<12 ? d + ' ' + mo[mi] + ' ' + dm[1] : ms;
-                        }
-                    }
-                    return { isMember: isM, memberSince: ms, memberSinceFormatted: msf };
-                }
-                return tryF('https://api.allorigins.win/raw?url=' + encodeURIComponent(url))
-                    .then(parse)
-                    .catch(function(){
-                        return tryF('https://corsproxy.io/?' + encodeURIComponent(url)).then(parse);
+                        return r.json();
                     });
             }
 
