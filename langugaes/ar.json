@@ -217,7 +217,21 @@
         "postcode-5": "يجب أن يتكون الرمز البريدي من 5 أرقام",
         "personal-12": "يجب أن يتكون الرقم الشخصي من 12 رقمًا",
         "personal-12-19-20": "يجب أن يتكون الرقم الشخصي من 12 رقمًا ويبدأ بـ 19 أو 20"
-      }
+      },
+      "step-membership": "العضوية",
+      "step-children-confirm": "الأطفال والتأكيد",
+      "membership-intro": "أدخل رقمك الشخصي للتحقق من عضوية FIFS. يجب أن يكون أحد الوالدين عضوًا.",
+      "membership-placeholder": "YYYYMMDD-XXXX",
+      "membership-check-btn": "تحقق من العضوية",
+      "membership-hint": "أدخل رقمك الشخصي السويدي للتحقق من عضوية FIFS",
+      "membership-err": " — رقم شخصي غير صالح",
+      "membership-checking": "...جار التحقق",
+      "membership-yes": "عضو FIFS",
+      "membership-since": "عضو منذ",
+      "membership-not-found": "ليس عضوًا",
+      "membership-register": "سجل الآن",
+      "membership-verified-hint": "تم التحقق من العضوية. انقر على \"الخطوة التالية\" للمتابعة.",
+      "membership-required": "يجب عليك التحقق من عضوية FIFS قبل المتابعة."
     }
   },
   "marriage": {
@@ -253,5 +267,19 @@
     "step3-description": "املأ عقد الزواج الإلكتروني. يمكنكم القيام بذلك في أي وقت قبل موعدكم المحجوز.",
     "step3-note": "بمجرد إكمال النموذج، يمكنكم إرساله مباشرة إلى المسجد عبر البريد الإلكتروني من صفحة النموذج.",
     "form-button": "فتح عقد الزواج"
+  },
+  "statsPage": {
+    "home": "الرئيسية",
+    "together": "معًا جمعنا:",
+    "donate": "تبرع",
+    "showQr": "إظهار QR",
+    "latestDonations": "آخر 5 تبرعات",
+    "noDonations": "لا توجد تبرعات حتى الآن.",
+    "time": "الوقت:",
+    "lastUpdated": "آخر تحديث:",
+    "waitingFor": "في انتظار:",
+    "fetchError": "تعذر جلب البيانات حاليًا.",
+    "ofGoal": "% من الهدف",
+    "left": "متبقي"
   }
 }
