@@ -217,7 +217,21 @@
         "postcode-5": "Postal code must be 5 digits",
         "personal-12": "Personal number must be 12 digits",
         "personal-12-19-20": "Personal number must be 12 digits and start with 19 or 20"
-      }
+      },
+      "step-membership": "Membership",
+      "step-children-confirm": "Children & Confirm",
+      "membership-intro": "Enter your personal number to verify FIFS membership. One parent must be a member.",
+      "membership-placeholder": "YYYYMMDD-XXXX",
+      "membership-check-btn": "Check Membership",
+      "membership-hint": "Enter your Swedish personal number to verify FIFS membership",
+      "membership-err": " — Invalid personal number",
+      "membership-checking": "Checking...",
+      "membership-yes": "FIFS Member",
+      "membership-since": "Member since",
+      "membership-not-found": "Not a member",
+      "membership-register": "Register now",
+      "membership-verified-hint": "Membership verified. Click \"Next Step\" to continue.",
+      "membership-required": "You must verify your FIFS membership before proceeding."
     }
   },
   "marriage": {
@@ -253,5 +267,19 @@
     "step3-description": "Fill in the electronic marriage contract. You can do this at any time before your booked visit.",
     "step3-note": "Once the form is completed, you can send it directly to the mosque via email from the form page.",
     "form-button": "Open the marriage contract"
+  },
+  "statsPage": {
+    "home": "Home",
+    "together": "Together we have:",
+    "donate": "Donate",
+    "showQr": "Show QR",
+    "latestDonations": "Latest 5 donations",
+    "noDonations": "No donations yet.",
+    "time": "Time:",
+    "lastUpdated": "Last updated:",
+    "waitingFor": "Waiting for:",
+    "fetchError": "Could not fetch data right now.",
+    "ofGoal": "% of goal",
+    "left": "left"
   }
 }

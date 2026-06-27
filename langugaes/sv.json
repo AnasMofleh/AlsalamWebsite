@@ -216,7 +216,21 @@
         "postcode-5": "Postnummer måste vara 5 siffror",
         "personal-12": "Personnummer måste vara 12 siffror",
         "personal-12-19-20": "Personnummer måste vara 12 siffror och börja med 19 eller 20"
-      }
+      },
+      "step-membership": "Medlemskap",
+      "step-children-confirm": "Barn & Bekräfta",
+      "membership-intro": "Ange ditt personnummer för att verifiera FIFS-medlemskap. En av föräldrarna måste vara medlem.",
+      "membership-placeholder": "ÅÅÅÅMMDD-XXXX",
+      "membership-check-btn": "Kontrollera medlemskap",
+      "membership-hint": "Ange ditt svenska personnummer för att verifiera FIFS-medlemskap",
+      "membership-err": " — Ogiltigt personnummer",
+      "membership-checking": "Kontrollerar...",
+      "membership-yes": "Medlem via FIFS",
+      "membership-since": "Medlem sedan",
+      "membership-not-found": "Ej medlem",
+      "membership-register": "Registrera dig",
+      "membership-verified-hint": "Medlemskap verifierat. Klicka på \"Nästa steg\" för att fortsätta.",
+      "membership-required": "Du måste verifiera ditt FIFS-medlemskap innan du går vidare."
     }
   },
   "marriage": {
@@ -252,5 +266,19 @@
     "step3-description": "Fyll i det elektroniska äktenskapskontraktet. Ni kan göra detta när som helst innan ert bokade besök.",
     "step3-note": "När formuläret är ifyllt kan ni skicka det direkt till moskén via e-post från formulärsidan.",
     "form-button": "Öppna äktenskapskontraktet"
+  },
+  "statsPage": {
+    "home": "Hem",
+    "together": "Tillsammans har vi:",
+    "donate": "Donera",
+    "showQr": "Visa QR",
+    "latestDonations": "Senaste 5 donationer",
+    "noDonations": "Inga donationer ännu.",
+    "time": "Tid:",
+    "lastUpdated": "Senast uppdaterad:",
+    "waitingFor": "Väntar på:",
+    "fetchError": "Kunde inte hämta data just nu.",
+    "ofGoal": "% av målet",
+    "left": "kvar"
   }
 }

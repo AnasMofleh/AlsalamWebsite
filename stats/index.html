@@ -697,6 +697,49 @@
                 opacity: 0;
             }
         }
+
+        /* ── RTL overrides for Arabic ─────────────────────────── */
+        html[dir="rtl"] .theme-switch-corner {
+            left: auto;
+            right: 14px;
+        }
+
+        html[dir="rtl"] .logo-corner {
+            right: auto;
+            left: 14px;
+        }
+
+        html[dir="rtl"] .side-donate-btn {
+            left: auto;
+            right: 14px;
+        }
+
+        html[dir="rtl"] .qr-switch-inline {
+            right: auto;
+            left: 14px;
+        }
+
+        html[dir="rtl"] .stats-top-row {
+            padding-left: clamp(96px, 14vw, 180px);
+            padding-right: 0;
+        }
+
+        html[dir="rtl"] .donation-side-col .donation-list {
+            padding-right: 0;
+            padding-left: 4px;
+        }
+
+        html[dir="rtl"] .donation-title-row {
+            padding-right: 0;
+            padding-left: 6px;
+        }
+
+        @media (max-width: 768px) {
+            html[dir="rtl"] .logo-corner {
+                right: auto;
+                left: 10px;
+            }
+        }
     </style>
 </head>
 
@@ -709,7 +752,7 @@
                     <div class="theme-switch-corner" title="Dark mode">
                         <div class="corner-controls-row">
                             <a href="/" class="btn btn-outline-primary stats-home-btn">
-                                <i class="fas fa-home me-1"></i>Home
+                                <i class="fas fa-home me-1"></i><span data-i18n="statsPage.home">Home</span>
                             </a>
                             <label class="theme-switch">
                                 <input id="themeToggleSwitch" type="checkbox" aria-label="Dark mode">
@@ -723,7 +766,7 @@
                     </div>
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 stats-top-row">
                         <div class="stats-brand">
-                            <h2 class="mb-0">Tillsammans har vi:</h2>
+                            <h2 class="mb-0" data-i18n="statsPage.together">Tillsammans har vi:</h2>
                         </div>
                         <span class="badge bg-success px-3 py-2 live-badge-inline">LIVE</span>
                     </div>
@@ -739,8 +782,8 @@
                     </div>
 
                     <div class="d-flex justify-content-between text-muted mt-2">
-                        <small>0 kr</small>
-                        <small>10 000 000 SEK</small>
+                        <small><span dir="ltr">0 kr</span></small>
+                        <small><span dir="ltr">10 000 000 kr</span></small>
                     </div>
 
                     <div id="milestones" class="milestones"></div>
@@ -750,8 +793,8 @@
                         </div>
                     </div>
                     <div class="stats-breakdown text-muted">
-                        <span class="stats-breakdown-item">Swish: <span id="totalSwish">0 kr</span></span>
-                        <span class="stats-breakdown-item">Stripe: <span id="totalStripe">0 kr</span></span>
+                        <span class="stats-breakdown-item">Swish: <span id="totalSwish" dir="ltr">0 kr</span></span>
+                        <span class="stats-breakdown-item">Stripe: <span id="totalStripe" dir="ltr">0 kr</span></span>
                     </div>
                 </div>
             </div>
@@ -763,17 +806,17 @@
             <div id="statsSideCol" class="col-12 col-lg-3 donation-side-col">
                 <div class="stats-card bg-white p-4 h-100">
                     <a href="/donations/" class="btn btn-success stats-donate-btn side-donate-btn">
-                        <i class="fas fa-heart me-1"></i>Donera
+                        <i class="fas fa-heart me-1"></i><span data-i18n="statsPage.donate">Donera</span>
                     </a>
                     <label id="swishQrToggleWrap" class="qr-switch-inline" for="swishQrToggle">
-                        <span>Visa QR</span>
+                        <span data-i18n="statsPage.showQr">Visa QR</span>
                         <span class="qr-switch">
                             <input id="swishQrToggle" type="checkbox" aria-label="Visa Swish QR">
                             <span class="qr-slider"></span>
                         </span>
                     </label>
                     <div class="donation-title-row">
-                        <h4 id="topDonationsTitle" class="mb-0">Senaste 5 donationer</h4>
+                        <h4 id="topDonationsTitle" class="mb-0" data-i18n="statsPage.latestDonations">Senaste 5 donationer</h4>
                     </div>
                     <div id="swishQrWrap" class="swish-qr-wrap d-none">
                         <img src="img/swishwakfQR.png" alt="Swish QR kod">
@@ -867,7 +910,7 @@
             return `${value.toLocaleString("sv-SE", {
                 minimumFractionDigits: value % 1 === 0 ? 0 : 2,
                 maximumFractionDigits: 2
-            })} kr`;
+            }).replace(/\s/g, " ")} kr`;
         }
 
         function donationKey(donation) {
@@ -930,8 +973,11 @@
         }
 
         function renderMilestones(totalAmount) {
-            const milestoneSteps = [3, 4, 5, 6, 7, 8, 9, 10];
+            const milestoneSteps = [5, 6, 7, 8, 9, 10];
             const nextMilestone = milestoneSteps.find((step) => totalAmount < step * 1000000) ?? 10;
+            const leftLabel = (typeof window.getTranslation === 'function')
+                ? window.getTranslation('statsPage.left', 'kvar')
+                : 'kvar';
             milestonesEl.innerHTML = "";
 
             for (const i of milestoneSteps) {
@@ -939,7 +985,7 @@
                 pill.className = `milestone-pill ${i === nextMilestone ? "closest" : ""}`;
                 const milestoneTarget = i * 1000000;
                 const leftAmount = Math.max(milestoneTarget - totalAmount, 0);
-                pill.textContent = i === nextMilestone ? `${i} M • kvar ${formatSek(leftAmount)}` : `${i} M`;
+                pill.textContent = i === nextMilestone ? `${i} M • ${leftLabel} ${formatSek(leftAmount)}` : `${i} M`;
                 milestonesEl.appendChild(pill);
             }
         }
@@ -952,8 +998,11 @@
             totalAmountEl.innerHTML = `${totalAmount.toLocaleString("sv-SE", {
                 minimumFractionDigits: totalAmount % 1 === 0 ? 0 : 2,
                 maximumFractionDigits: 2
-            })}<span class="stats-total-suffix"> kr</span>`;
-            progressLabelEl.textContent = `${clampedPercent.toFixed(2)}% av målet`;
+            }).replace(/\s/g, " ")}<span class="stats-total-suffix"> kr</span>`;
+            const goalLabel = (typeof window.getTranslation === 'function')
+                ? window.getTranslation('statsPage.ofGoal', '% av målet')
+                : '% av målet';
+            progressLabelEl.textContent = `${clampedPercent.toFixed(2)}${goalLabel}`;
             progressBarEl.style.width = `${clampedPercent}%`;
             progressBarEl.parentElement.setAttribute("aria-valuenow", clampedPercent.toFixed(2));
             renderMilestones(totalAmount);
@@ -984,7 +1033,7 @@
                         <div class="meta"><strong>Tid:</strong> ${time}</div>
                         ${messageHtml}
                     </div>
-                    <div class="donation-amount">${formatSek(amount)}</div>
+                    <div class="donation-amount"><span dir="ltr">${formatSek(amount)}</span></div>
                 `;
 
                 last5ListEl.appendChild(li);

@@ -22,6 +22,148 @@
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+
+    <style>
+        /* Membership Checker (Step 1) */
+        .tax-check-area {
+            margin-top: 20px;
+        }
+        .tax-check-input-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .tax-check-input-row input {
+            flex: 1;
+            min-width: 200px;
+            height: 52px;
+            padding: 0 18px;
+            border: 2px solid #dee2e6;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            background: #fff;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            font-family: inherit;
+        }
+        .tax-check-input-row input:focus {
+            outline: none;
+            border-color: #15546F;
+            box-shadow: 0 0 0 4px rgba(21,84,111,0.1);
+        }
+        .tax-check-input-row input.error {
+            border-color: #dc3545;
+        }
+        .tax-check-input-row input.success {
+            border-color: #28a745;
+        }
+        .tax-check-btn {
+            white-space: nowrap;
+            display: flex !important;
+            align-items: center;
+            gap: 8px;
+            height: 52px;
+            padding: 0 28px !important;
+        }
+        .tax-check-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .tax-check-hint {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-top: 10px;
+            min-height: 20px;
+        }
+        .tax-check-hint .err {
+            color: #dc3545;
+            display: none;
+        }
+        .tax-result-card {
+            margin-top: 20px;
+            border-radius: 20px;
+            padding: 18px 24px;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04);
+        }
+        .tax-result-card.success {
+            border-color: rgba(26,138,31,.25);
+            background: #e8f5e9;
+        }
+        .tax-result-card.fail {
+            border-color: rgba(220,53,69,.2);
+            background: #fff5f5;
+        }
+        .tax-result-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        .tax-result-card.success .tax-result-icon {
+            background: #1a8a1f;
+            color: #fff;
+        }
+        .tax-result-card.fail .tax-result-icon {
+            background: #dc3545;
+            color: #fff;
+        }
+        .tax-result-body {
+            flex: 1;
+            min-width: 0;
+        }
+        .tax-result-body h4 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin: 0 0 2px;
+        }
+        .tax-result-body .tax-result-sub {
+            font-size: 0.85rem;
+            color: #6b7280;
+        }
+        .tax-result-body .tax-result-sub b {
+            color: #1a8a1f;
+        }
+        .tax-result-link {
+            flex-shrink: 0;
+            padding: 9px 22px;
+            border-radius: 13px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: transform 0.15s, background 0.2s;
+            background: #dc3545;
+            color: #fff;
+        }
+        .tax-result-link:hover {
+            transform: translateY(-1px);
+            background: #c82333;
+            color: #fff;
+        }
+        /* Step-1 verified hint */
+        .step-1-next-hint {
+            display: none;
+            margin-top: 16px;
+            font-size: 0.9rem;
+            color: #28a745;
+            font-weight: 500;
+        }
+        .step-1-next-hint.visible {
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
@@ -88,22 +230,79 @@
                         action="https://script.google.com/macros/s/AKfycbwWHS1yB_oEpYHk16T3OOkHetyeBcGh0RHSXk518U5_lbHee9Ne4W0djxm6HwI6t1V7Hw/exec">
                         <div class="formbold-steps">
                             <ul>
-                                <li class="formbold-step-menu1 active" data-i18n="school.form.step-parent">
+                                <li class="formbold-step-menu1 active" data-i18n="school.form.step-membership">
                                     <span>1</span>
+                                    Medlemskap
+                                </li>
+                                <li class="formbold-step-menu2" data-i18n="school.form.step-parent">
+                                    <span>2</span>
                                     Föräldrar
                                 </li>
-                                <li class="formbold-step-menu2" data-i18n="school.form.step-children">
-                                    <span>2</span>
-                                    Barnen
-                                </li>
-                                <li class="formbold-step-menu3" data-i18n="school.form.step-confirm">
+                                <li class="formbold-step-menu3" data-i18n="school.form.step-children-confirm">
                                     <span>3</span>
-                                    Bekräfta
+                                    Barn & Bekräfta
                                 </li>
                             </ul>
                         </div>
 
                         <div class="formbold-form-step-1 active">
+                            <p data-i18n="school.form.membership-intro">Ange ditt personnummer för att verifiera FIFS-medlemskap. En av föräldrarna måste vara medlem.</p>
+
+                            <div class="tax-check-area">
+                                <div class="tax-check-input-row">
+                                    <input type="text" id="school-pnr"
+                                           placeholder="ÅÅÅÅMMDD-XXXX"
+                                           maxlength="13"
+                                           autocomplete="off"
+                                           data-i18n-placeholder="school.form.membership-placeholder">
+                                    <button type="button" class="donation-btn tax-check-btn" id="school-check-btn">
+                                        <i class="fas fa-search"></i>
+                                        <span data-i18n="school.form.membership-check-btn">Kontrollera medlemskap</span>
+                                    </button>
+                                </div>
+                                <div class="tax-check-hint">
+                                    <span data-i18n="school.form.membership-hint">Ange ditt svenska personnummer för att verifiera FIFS-medlemskap</span>
+                                    <span class="err" id="school-pnr-err" data-i18n="school.form.membership-err"> — Ogiltigt personnummer</span>
+                                </div>
+                                <div class="tax-result-card" id="school-result" style="display:none;">
+                                    <div class="tax-result-icon" id="school-result-icon">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                    </div>
+                                    <div class="tax-result-body">
+                                        <h4 id="school-result-title"></h4>
+                                        <span class="tax-result-sub" id="school-result-sub"></span>
+                                    </div>
+                                    <a class="tax-result-link" id="school-result-link" href="#"
+                                       target="_blank" rel="noopener" style="display:none;">
+                                        <i class="fas fa-external-link-alt"></i>
+                                        <span data-i18n="school.form.membership-register">Registrera dig</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <p class="step-1-next-hint" id="step-1-next-hint"
+                               data-i18n="school.form.membership-verified-hint">
+                               Medlemskap verifierat. Klicka på "Nästa steg" för att fortsätta.
+                            </p>
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        <div class="formbold-form-step-2">
                             <p data-i18n="school.form.father-info">Pappans information:</p>
                             <div class="formbold-input-flex">
                                 <div class="formbold-input-full-width">
@@ -126,7 +325,6 @@
                                         title="Mobilnummer måste vara 10 siffror som börjar med 07"
                                         data-i18n-title="school.form.validation.mobile-07" />
                                 </div>
-
                             </div>
 
                             <div class="formbold-input-flex">
@@ -137,10 +335,7 @@
                                         title="Ange en giltig e-postadress"
                                         data-i18n-title="school.form.validation.email" />
                                 </div>
-
                             </div>
-
-
 
                             <button type="button" onclick="toggleSecondParent(this)" class="formbold-add-button" data-i18n="school.form.add-mother">
                                 ➕ Lägg till Mammans information
@@ -161,7 +356,6 @@
                                         <input type="text" name="Mammans Personnummer" id="Mammans Personnummer"
                                             placeholder="199901019999" class="formbold-form-input">
                                     </div>
-
                                 </div>
 
                                 <div class="formbold-input-flex">
@@ -175,7 +369,6 @@
                                         <input type="text" name="Mammans Mobilnummer" placeholder="0701234567"
                                             id="Mammans Mobilnummer" class="formbold-form-input" />
                                     </div>
-
                                 </div>
                             </div>
 
@@ -209,19 +402,8 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-                        <div class="formbold-form-step-2">
+                        <div class="formbold-form-step-3">
                             <!-- Container for all children -->
-
                             <div id="childrenContainer">
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
                                     <p style="margin: 0;" data-i18n="school.form.child-1">Barn 1</p>
@@ -257,19 +439,10 @@
                                 style="margin-bottom: 1rem;">
                                 ➕ Lägg till Barn
                             </button>
-                        </div>
 
-
-
-
-
-
-
-                        <div class="formbold-form-step-3">
+                            <!-- Day Selection -->
                             <div class="formbold-form-confirm">
                                 <div class="container" style="display: flex; justify-content: space-around;">
-
-
                                     <fieldset>
                                         <legend data-i18n="school.form.school-day">Skoldag:</legend>
                                         <div class="form-check">
@@ -382,11 +555,9 @@
             const t = (key, fallback = "") =>
                 typeof window.getTranslation === "function" ? window.getTranslation(key, fallback) : fallback;
 
-            const isFifsVerificationRequired = () =>
-                typeof window.fifsVerificationPassed !== "undefined";
-
-
             let currentStep = 0;
+            let verifiedPNR = null;
+            let membershipVerified = false;
 
             function showStep(index) {
                 steps.forEach((s, i) => s.classList.toggle("active", i === index));
@@ -399,6 +570,14 @@
                 }
                 currentStep = index;
                 spinner.style.display = "none";
+
+                // Pre-fill father's PNR from verified membership check (step 2)
+                if (index === 1 && verifiedPNR) {
+                    const fatherPnrInput = document.getElementById("Pappans Personnummer");
+                    if (fatherPnrInput && !fatherPnrInput.value) {
+                        fatherPnrInput.value = verifiedPNR;
+                    }
+                }
             }
 
             btnNext.addEventListener("click", async (e) => {
@@ -413,11 +592,12 @@
                     }
                 }
 
-                // Only enforce FIFS verification if the page defines that flow.
-                if (currentStep === 0 && isFifsVerificationRequired() && !window.fifsVerificationPassed) {
-                        alert("Vänligen verifiera FIFS-medlemskap innan du fortsätter");
-                        return;
-                    }
+                // Gate: step 1 requires verified membership
+                if (currentStep === 0 && !membershipVerified) {
+                    alert(t("school.form.membership-required",
+                        "Du måste verifiera ditt FIFS-medlemskap innan du går vidare."));
+                    return;
+                }
 
                 if (currentStep < steps.length - 1) {
                     showStep(currentStep + 1);
@@ -514,6 +694,122 @@
 
                 container.appendChild(childDiv);
             };
+
+            // ---- Membership Checker (Step 1) ----
+
+            function fetchProxy(pnr) {
+                return fetch(
+                    'https://script.google.com/macros/s/AKfycbxZ08tC4z_P815a44QCUYxZTAvRnYay3W6k3XENWH5-X0T07l4fFiqdJJS1zrd0uOv64g/exec?pnr=' +
+                    encodeURIComponent(pnr)
+                ).then(function(r) {
+                    if (!r.ok) throw Error('HTTP ' + r.status);
+                    return r.json();
+                });
+            }
+
+            function checkMembership() {
+                const pnrInput = document.getElementById('school-pnr');
+                const errSpan = document.getElementById('school-pnr-err');
+                const checkBtn = document.getElementById('school-check-btn');
+                const resultCard = document.getElementById('school-result');
+                const resultIcon = document.getElementById('school-result-icon');
+                const resultTitle = document.getElementById('school-result-title');
+                const resultSub = document.getElementById('school-result-sub');
+                const resultLink = document.getElementById('school-result-link');
+                const nextHint = document.getElementById('step-1-next-hint');
+
+                const p = pnrInput.value.trim();
+
+                // Reset state
+                errSpan.style.display = 'none';
+                pnrInput.classList.remove('error', 'success');
+                membershipVerified = false;
+                verifiedPNR = null;
+                nextHint.classList.remove('visible');
+
+                // Validate format
+                if (!/^\d{8}-\d{4}$/.test(p)) {
+                    pnrInput.classList.add('error');
+                    errSpan.style.display = 'inline';
+                    pnrInput.focus();
+                    return;
+                }
+
+                pnrInput.classList.add('success');
+                checkBtn.disabled = true;
+
+                // Loading state
+                resultCard.style.display = 'flex';
+                resultCard.classList.remove('success', 'fail');
+                resultIcon.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                resultTitle.textContent = t('school.form.membership-checking', 'Kontrollerar...');
+                resultSub.textContent = '';
+                resultLink.style.display = 'none';
+
+                const regUrl = 'https://medlem.fifs.se/registrera/' + p + '/SCH';
+
+                fetchProxy(p).then(function(r) {
+                    if (r.isMember) {
+                        resultCard.classList.add('success');
+                        resultCard.classList.remove('fail');
+                        resultIcon.innerHTML = '<i class="fas fa-check"></i>';
+                        resultTitle.textContent = t('school.form.membership-yes', 'Medlem via FIFS');
+                        resultSub.innerHTML = t('school.form.membership-since', 'Medlem sedan') +
+                            ' <b>' + r.memberSinceFormatted + '</b>';
+                        resultLink.style.display = 'none';
+                        membershipVerified = true;
+                        verifiedPNR = p;
+                        nextHint.classList.add('visible');
+                    } else {
+                        resultCard.classList.add('fail');
+                        resultCard.classList.remove('success');
+                        resultIcon.innerHTML = '<i class="fas fa-times"></i>';
+                        resultTitle.textContent = t('school.form.membership-not-found', 'Ej medlem');
+                        resultSub.textContent = t('school.form.membership-not-found', 'Ej medlem');
+                        resultLink.href = regUrl;
+                        resultLink.style.display = 'inline-flex';
+                        membershipVerified = false;
+                        verifiedPNR = null;
+                    }
+                    checkBtn.disabled = false;
+                }).catch(function() {
+                    resultCard.classList.add('fail');
+                    resultCard.classList.remove('success');
+                    resultIcon.innerHTML = '<i class="fas fa-times"></i>';
+                    resultTitle.textContent = t('school.form.membership-not-found', 'Ej medlem');
+                    resultSub.textContent = t('school.form.membership-not-found', 'Ej medlem');
+                    resultLink.href = regUrl;
+                    resultLink.style.display = 'inline-flex';
+                    checkBtn.disabled = false;
+                    membershipVerified = false;
+                    verifiedPNR = null;
+                });
+            }
+
+            // PNR input: auto-format
+            const pnrInput = document.getElementById('school-pnr');
+            if (pnrInput) {
+                pnrInput.addEventListener('input', function() {
+                    let v = this.value.replace(/[^0-9]/g, '');
+                    if (v.length > 8) v = v.slice(0, 8) + '-' + v.slice(8, 12);
+                    this.value = v;
+                    this.classList.remove('error', 'success');
+                    document.getElementById('school-pnr-err').style.display = 'none';
+                });
+
+                pnrInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        checkMembership();
+                    }
+                });
+            }
+
+            // Check button click
+            const checkBtn = document.getElementById('school-check-btn');
+            if (checkBtn) {
+                checkBtn.addEventListener('click', checkMembership);
+            }
 
             // Init
             showStep(0);
