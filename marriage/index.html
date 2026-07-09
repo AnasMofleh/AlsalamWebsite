@@ -246,27 +246,27 @@
                                         <div class="contract-signature-grid">
                                             <div class="contract-sig-cell">
                                                 <div id="wifeSignatureLabel" class="contract-sig-label">Underskrift maka</div>
-                                                <canvas class="contract-sig-line signature-pad"></canvas>
+                                                <div class="sig-canvas-wrap"><canvas class="contract-sig-line signature-pad"></canvas><button type="button" class="sig-clear-btn" title="Rensa underskrift">↺</button></div>
                                             </div>
                                             <div class="contract-sig-cell">
                                                 <div id="husbandSignatureLabel" class="contract-sig-label">Underskrift make</div>
-                                                <canvas class="contract-sig-line signature-pad"></canvas>
+                                                <div class="sig-canvas-wrap"><canvas class="contract-sig-line signature-pad"></canvas><button type="button" class="sig-clear-btn" title="Rensa underskrift">↺</button></div>
                                             </div>
                                             <div class="contract-sig-cell">
                                                 <div id="witness2Label" class="contract-sig-label">Vittne 2</div>
-                                                <canvas class="contract-sig-line signature-pad"></canvas>
+                                                <div class="sig-canvas-wrap"><canvas class="contract-sig-line signature-pad"></canvas><button type="button" class="sig-clear-btn" title="Rensa underskrift">↺</button></div>
                                             </div>
                                             <div class="contract-sig-cell">
                                                 <div id="witness1Label" class="contract-sig-label">Vittne 1</div>
-                                                <canvas class="contract-sig-line signature-pad"></canvas>
+                                                <div class="sig-canvas-wrap"><canvas class="contract-sig-line signature-pad"></canvas><button type="button" class="sig-clear-btn" title="Rensa underskrift">↺</button></div>
                                             </div>
                                             <div class="contract-sig-cell">
                                                 <div id="imamLabel" class="contract-sig-label">Imam</div>
-                                                <canvas class="contract-sig-line signature-pad"></canvas>
+                                                <div class="sig-canvas-wrap"><canvas class="contract-sig-line signature-pad"></canvas><button type="button" class="sig-clear-btn" title="Rensa underskrift">↺</button></div>
                                             </div>
                                             <div class="contract-sig-cell">
                                                 <div id="waliLabel" class="contract-sig-label">Wali</div>
-                                                <canvas class="contract-sig-line signature-pad"></canvas>
+                                                <div class="sig-canvas-wrap"><canvas class="contract-sig-line signature-pad"></canvas><button type="button" class="sig-clear-btn" title="Rensa underskrift">↺</button></div>
                                             </div>
                                         </div>
 
@@ -504,7 +504,10 @@
         .contract-sig-cell { border-right: 1.5px solid #222; border-bottom: 1.5px solid #222; min-height: 90px; padding: 8px 10px; }
         .contract-sig-cell:nth-child(2n) { border-right: none; }
         .contract-sig-label { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
-        .contract-sig-line { display: block; width: 100%; height: 64px; border: 1px solid #b7b7b7; border-radius: 8px; background: transparent; cursor: crosshair; touch-action: none; }
+        .sig-canvas-wrap { position: relative; display: block; }
+        .sig-canvas-wrap .signature-pad { display: block; width: 100%; height: 64px; border: 1px solid #b7b7b7; border-radius: 8px; background: transparent; cursor: crosshair; touch-action: none; }
+        .sig-clear-btn { position: absolute; top: 4px; right: 4px; background: rgba(255,255,255,0.9); border: 1px solid #ccc; border-radius: 50%; width: 26px; height: 26px; font-size: 15px; line-height: 24px; cursor: pointer; padding: 0; color: #888; z-index: 2; display: flex; align-items: center; justify-content: center; transition: color 0.15s, border-color 0.15s; }
+        .sig-clear-btn:hover { color: #d9534f; border-color: #d9534f; }
         .contract-last-grid { display: grid; grid-template-columns: 1fr 1fr; border: 1.5px solid #222; border-top: none; }
         .contract-last-cell { border-right: 1.5px solid #222; border-bottom: 1.5px solid #222; padding: 8px 10px; min-height: 52px; display: flex; align-items: center; gap: 6px; }
         .contract-last-cell:nth-child(2n) { border-right: none; }
@@ -769,15 +772,69 @@
             canvas.addEventListener('pointercancel', stop);
         }
 
+        // Strip Arabic-script characters from input (blocks: 0600-06FF, 0750-077F, 08A0-08FF, FB50-FDFF, FE70-FEFF)
+        function stripArabicChars(str) {
+            var result = '';
+            for (var i = 0; i < str.length; i++) {
+                var code = str.charCodeAt(i);
+                if ((code >= 0x0600 && code <= 0x06FF) ||
+                    (code >= 0x0750 && code <= 0x077F) ||
+                    (code >= 0x08A0 && code <= 0x08FF) ||
+                    (code >= 0xFB50 && code <= 0xFDFF) ||
+                    (code >= 0xFE70 && code <= 0xFEFF)) {
+                    continue;
+                }
+                result += str.charAt(i);
+            }
+            return result;
+        }
+
         function initForm() {
             document.querySelectorAll('#marriage-form-container .signature-pad').forEach(c => setupSignaturePad(c));
             window.addEventListener('resize', () => { document.querySelectorAll('#marriage-form-container .signature-pad').forEach(c => resizeSignaturePad(c)); });
             renderFormLanguage(currentFormLanguage);
             restoreFormData();
-            // Auto-save on input/change for all form fields
+            // Auto-save on input/change for all form fields; block Arabic letters in text inputs
+            var lastArabicAlert = 0;
             document.querySelectorAll('#marriage-form-container input, #marriage-form-container select').forEach(el => {
-                el.addEventListener('input', saveFormData);
+                el.addEventListener('input', function() {
+                    // Only strip Arabic from text inputs, not date/select
+                    if (el.tagName === 'INPUT' && el.type !== 'date') {
+                        const cleaned = stripArabicChars(el.value);
+                        if (cleaned !== el.value) {
+                            // Save cursor position before modifying
+                            var pos = el.selectionStart;
+                            var diff = el.value.length - cleaned.length;
+                            el.value = cleaned;
+                            // Restore cursor position accounting for removed chars
+                            var newPos = Math.max(0, pos - diff + (el.value.length - cleaned.length));
+                            el.setSelectionRange(newPos, newPos);
+                            // Show alert in Arabic (debounced: max once every 2.5s)
+                            var now = Date.now();
+                            if (now - lastArabicAlert > 2500) {
+                                lastArabicAlert = now;
+                                alert('الرجاء الكتابة باللغة السويدية أو الإنجليزية فقط\n\nVänligen skriv på svenska eller engelska.');
+                            }
+                        }
+                    }
+                    saveFormData();
+                });
                 el.addEventListener('change', saveFormData);
+            });
+            // Signature clear/retry buttons
+            document.querySelectorAll('#marriage-form-container .sig-clear-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    const wrap = btn.closest('.sig-canvas-wrap');
+                    const canvas = wrap ? wrap.querySelector('.signature-pad') : null;
+                    if (canvas) {
+                        const ctx = canvas.getContext('2d');
+                        const w = canvas.getBoundingClientRect().width;
+                        const h = canvas.getBoundingClientRect().height;
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        canvas.dataset.hasDrawing = 'false';
+                        saveFormData();
+                    }
+                });
             });
         }
 
