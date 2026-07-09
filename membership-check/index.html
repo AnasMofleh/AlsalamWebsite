@@ -343,6 +343,22 @@
             color: #fff;
         }
 
+        /* Results row — circle + pyramid side by side on tablet+, stacked on mobile */
+        .results-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-shrink: 0;
+        }
+
+        @media(max-width:600px) {
+            .results-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
         /* Spinning points circle */
         .pts-circle-wrap {
             flex-shrink: 0;
@@ -360,8 +376,8 @@
 
         .pts-circle {
             position: relative;
-            width: 130px;
-            height: 130px;
+            width: 170px;
+            height: 170px;
         }
 
         .pts-circle svg {
@@ -404,24 +420,10 @@
         }
 
         .pts-circle .circle-num {
-            font-size: 2.4rem;
+            font-size: 3.4rem;
             font-weight: 800;
             color: var(--green);
             line-height: 1;
-        }
-
-        .pts-circle .circle-lbl {
-            font-size: .68rem;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: .08em;
-            margin-top: 2px;
-        }
-
-        .pts-circle .circle-lvl {
-            font-size: .68rem;
-            font-weight: 700;
-            margin-top: 2px;
         }
 
         .lvl-tag {
@@ -462,6 +464,213 @@
             border: 1px solid #fbbf24;
         }
 
+        /* ── Level Pyramid ── */
+        .pyramid-wrap {
+            flex-shrink: 0;
+            opacity: 0;
+            transition: opacity .5s;
+            padding: 0 12px;
+            margin-bottom: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .pyramid-wrap.show {
+            opacity: 1;
+        }
+
+        /* Arrow points INTO the pyramid from the outer side */
+        .pyr-arrow {
+            position: absolute;
+            right: -22px;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            border-right: 18px solid var(--green);
+            transition: top .5s ease;
+            opacity: 0;
+            filter: drop-shadow(0 0 6px rgba(26, 138, 31, .5));
+            z-index: 5;
+        }
+
+        [dir="rtl"] .pyr-arrow {
+            right: auto;
+            left: -22px;
+            border-right: none;
+            border-left: 18px solid var(--green);
+        }
+
+        .pyr-arrow.show {
+            opacity: 1;
+            animation: arrowBounce .7s ease-in-out infinite;
+        }
+
+        [dir="rtl"] .pyr-arrow.show {
+            animation: arrowBounceRtl .7s ease-in-out infinite;
+        }
+
+        @keyframes arrowBounce {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            50% {
+                transform: translateX(8px);
+            }
+        }
+
+        @keyframes arrowBounceRtl {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            50% {
+                transform: translateX(-8px);
+            }
+        }
+
+        .pyramid {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            width: 100%;
+            max-width: 360px;
+        }
+
+        .pyr-level {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            height: 28px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: .72rem;
+            transition: all .4s ease;
+            position: relative;
+            cursor: default;
+            border: 2px solid var(--border);
+            background: #f9fafb;
+            color: var(--muted);
+            clip-path: polygon(6% 0, 94% 0, 100% 100%, 0% 100%);
+        }
+
+        .pyr-level.l1w {
+            width: 100%;
+        }
+
+        .pyr-level.l2w {
+            width: 80%;
+        }
+
+        .pyr-level.l3w {
+            width: 64%;
+        }
+
+        .pyr-level.l4w {
+            width: 50%;
+        }
+
+        .pyr-level.l5w {
+            width: 38%;
+        }
+
+        .pyr-level.done {
+            background: #c8e6c9;
+            border-color: #a5d6a7;
+            color: #2e7d32;
+        }
+
+        .pyr-level.current {
+            background: var(--green);
+            border-color: #157519;
+            color: #fff;
+            height: 34px;
+            font-size: .82rem;
+            box-shadow: 0 0 20px rgba(26, 138, 31, .35), 0 4px 12px rgba(26, 138, 31, .2);
+            animation: pyrPulse 2s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        @keyframes pyrPulse {
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(26, 138, 31, .35), 0 4px 12px rgba(26, 138, 31, .2);
+            }
+
+            50% {
+                box-shadow: 0 0 32px rgba(26, 138, 31, .5), 0 6px 20px rgba(26, 138, 31, .3);
+            }
+        }
+
+        .pyr-icon {
+            font-size: .85rem;
+            flex-shrink: 0;
+        }
+
+        .pyr-level.current .pyr-icon {
+            font-size: 1rem;
+        }
+
+        .pyr-name {
+            white-space: nowrap;
+        }
+
+        .pyr-pts {
+            font-size: .6rem;
+            opacity: .7;
+            white-space: nowrap;
+        }
+
+        .pyramid-info {
+            text-align: center;
+            font-size: .7rem;
+            font-weight: 600;
+            color: var(--muted);
+            margin-top: 8px;
+        }
+
+        .pyramid-info b {
+            color: var(--green);
+        }
+
+        @media(max-width:500px) {
+            .pyr-level {
+                height: 24px;
+                font-size: .62rem;
+                gap: 4px;
+                border-radius: 5px;
+            }
+
+            .pyr-level.current {
+                height: 28px;
+                font-size: .7rem;
+            }
+
+            .pyr-icon {
+                font-size: .7rem;
+            }
+
+            .pyr-level.current .pyr-icon {
+                font-size: .85rem;
+            }
+
+            .pyr-pts {
+                font-size: .52rem;
+            }
+
+            .pyramid {
+                max-width: 300px;
+            }
+        }
+
         .timer-wrap {
             flex-shrink: 0;
             height: 5px;
@@ -480,7 +689,7 @@
             height: 100%;
             background: var(--green);
             width: 100%;
-            transition: width 60s linear;
+            transition: width 90s linear;
         }
 
         .confetti-container {
@@ -651,7 +860,7 @@
             <div class="chk-card locked" id="card2">
                 <div class="cc-icon"><i class="fas fa-calendar-check"></i></div>
                 <div class="cc-body">
-                    <h4 data-tr="c2t">Månadsgivare</h4><span class="cc-sub" data-tr="soon">Kommer snart</span>
+                    <h4 data-tr="c2t">Månadsgivare</h4><span class="cc-sub" data-tr="c2s">Via autogiro</span>
                 </div>
                 <div class="cc-pts"></div>
             </div>
@@ -670,6 +879,7 @@
                 <div class="cc-pts"></div>
             </div>
         </div>
+        <div class="results-row" id="resultsRow">
         <div class="pts-circle-wrap" id="ptsFooter">
             <div class="pts-circle">
                 <svg viewBox="0 0 110 110">
@@ -681,14 +891,18 @@
                         </linearGradient>
                     </defs>
                     <circle class="ring-bg" cx="55" cy="55" r="48" />
-                    <circle class="ring-fg" cx="55" cy="55" r="48" stroke-dasharray="150 150" stroke-dashoffset="0" />
+                    <circle class="ring-fg" cx="55" cy="55" r="48" stroke-dasharray="301.6 301.6" stroke-dashoffset="301.6" />
                 </svg>
                 <div class="circle-center">
                     <span class="circle-num" id="ptsNum">0</span>
-                    <span class="circle-lbl" data-tr="totalPts">Poäng</span>
-                    <span class="circle-lvl lvl-tag l1" id="lvlTag" data-tr="l1">🌱 Ny Medlem</span>
                 </div>
             </div>
+        </div>
+        <div class="pyramid-wrap" id="pyramidWrap">
+            <div class="pyr-arrow" id="pyrArrow"></div>
+            <div class="pyramid" id="pyramid"></div>
+            <div class="pyramid-info" id="pyramidInfo"></div>
+        </div>
         </div>
         <div class="timer-wrap" id="timerWrap">
             <div class="timer-fill" id="timerFill"></div>
@@ -700,31 +914,38 @@
     <script>
         (function () {
             "use strict";
-            var TR = { sv: { ph: "ÅÅÅÅMMDD-XXXX", go: "Kontrollera", hint: "Ange ditt svenska personnummer", err: " — Ogiltigt personnummer", soon: "Kommer snart", totalPts: "Totala Poäng", c1t: "FIFS Medlemskap", c1s: "Via skattsedel", c2t: "Månadsgivare", c3t: "Donator", c4t: "Skolregistrering", memberYes: "Medlem via FIFS", since: "Medlem sedan", pts: "poäng", notFound: "Ej medlem", registerNow: "Registrera dig", checking: "Kontrollerar...", l1: "🌱 Ny Medlem", l2: "🌿 Aktiv Medlem", l3: "🌳 Engagerad", l4: "⭐ Stöttepelare", l5: "👑 Guldmedlem" }, en: { ph: "YYYYMMDD-XXXX", go: "Check", hint: "Enter Swedish personal number", err: " — Invalid number", soon: "Coming soon", totalPts: "Total Points", c1t: "FIFS Membership", c1s: "Via tax return", c2t: "Monthly Giver", c3t: "Donor", c4t: "School Registration", memberYes: "FIFS Member", since: "Member since", pts: "pts", notFound: "Not a member", registerNow: "Register now", checking: "Checking...", l1: "🌱 New Member", l2: "🌿 Active", l3: "🌳 Engaged", l4: "⭐ Pillar", l5: "👑 Gold" }, ar: { ph: "YYYYMMDD-XXXX", go: "تحقق", hint: "أدخل رقمك الشخصي السويدي", err: " — رقم غير صالح", soon: "قريباً", totalPts: "مجموع النقاط", c1t: "عضوية FIFS", c1s: "عبر الإقرار الضريبي", c2t: "متبرع شهري", c3t: "متبرع", c4t: "التسجيل في المدرسة", memberYes: "عضو FIFS", since: "عضو منذ", pts: "نقطة", notFound: "ليس عضواً", registerNow: "سجل الآن", checking: "...جار التحقق", l1: "🌱 عضو جديد", l2: "🌿 نشط", l3: "🌳 متفاعل", l4: "⭐ داعم", l5: "👑 ذهبي" } };
-            var LVLS = [{ key: "l1", css: "l1", min: 0, max: 109 }, { key: "l2", css: "l2", min: 110, max: 129 }, { key: "l3", css: "l3", min: 130, max: 149 }, { key: "l4", css: "l4", min: 150, max: 199 }, { key: "l5", css: "l5", min: 200, max: 9999 }];
-            var BASE = 100, PER_YR = 10, lang = "sv", timer = null;
+            var TR = { sv: { ph: "ÅÅÅÅMMDD-XXXX", go: "Kontrollera", hint: "Ange ditt svenska personnummer", err: " — Ogiltigt personnummer", soon: "Kommer snart", totalPts: "Totala Poäng", c1t: "FIFS Medlemskap", c1s: "Via skattsedel", c2t: "Månadsgivare", c3t: "Donator", c4t: "Skolregistrering", memberYes: "Medlem via FIFS", since: "Medlem sedan", pts: "poäng", notFound: "Ej medlem", registerNow: "Registrera dig", checking: "Kontrollerar...", l1: "🌱 Ny Medlem", l2: "🌿 Aktiv Medlem", l3: "🌳 Engagerad", l4: "⭐ Stöttepelare", l5: "👑 Guldmedlem", l1s: "Ny", l2s: "Aktiv", l3s: "Engagerad", l4s: "Stöttare", l5s: "Guld", c2s: "Via autogiro", monthlyMemberYes: "Månadsgivare aktiv", monthlyNotFound: "Ingen aktiv autogiro", monthlyAmount: "Månadsbelopp: {{amount}} kr/mån", becomeMonthly: "Bli månadsgivare", nextLvl: "{{pts}} poäng kvar till {{lvl}}", maxLvl: "Högsta nivån 🎉" }, en: { ph: "YYYYMMDD-XXXX", go: "Check", hint: "Enter Swedish personal number", err: " — Invalid number", soon: "Coming soon", totalPts: "Total Points", c1t: "FIFS Membership", c1s: "Via tax return", c2t: "Monthly Giver", c3t: "Donor", c4t: "School Registration", memberYes: "FIFS Member", since: "Member since", pts: "pts", notFound: "Not a member", registerNow: "Register now", checking: "Checking...", l1: "🌱 New Member", l2: "🌿 Active", l3: "🌳 Engaged", l4: "⭐ Pillar", l5: "👑 Gold", l1s: "New", l2s: "Active", l3s: "Engaged", l4s: "Pillar", l5s: "Gold", c2s: "Via direct debit", monthlyMemberYes: "Monthly donor active", monthlyNotFound: "No active autogiro", monthlyAmount: "Monthly: {{amount}} SEK/mo", becomeMonthly: "Become a monthly donor", nextLvl: "{{pts}} pts to {{lvl}}", maxLvl: "Max level 🎉" }, ar: { ph: "YYYYMMDD-XXXX", go: "تحقق", hint: "أدخل رقمك الشخصي السويدي", err: " — رقم غير صالح", soon: "قريباً", totalPts: "مجموع النقاط", c1t: "عضوية FIFS", c1s: "عبر الإقرار الضريبي", c2t: "متبرع شهري", c3t: "متبرع", c4t: "التسجيل في المدرسة", memberYes: "عضو FIFS", since: "عضو منذ", pts: "نقطة", notFound: "ليس عضواً", registerNow: "سجل الآن", checking: "...جار التحقق", l1: "🌱 عضو جديد", l2: "🌿 نشط", l3: "🌳 متفاعل", l4: "⭐ داعم", l5: "👑 ذهبي", l1s: "جديد", l2s: "نشط", l3s: "متفاعل", l4s: "داعم", l5s: "ذهبي", c2s: "عبر الخصم المباشر", monthlyMemberYes: "متبرع شهري نشط", monthlyNotFound: "لا يوجد خصم مباشر نشط", monthlyAmount: "المبلغ الشهري: {{amount}} كر/شهر", becomeMonthly: "كن متبرعاً شهرياً", nextLvl: "{{pts}} نقطة إلى {{lvl}}", maxLvl: "أعلى مستوى 🎉" } };
+            var LVLS = [{ key: "l1", css: "l1", min: 0, max: 199 }, { key: "l2", css: "l2", min: 200, max: 699 }, { key: "l3", css: "l3", min: 700, max: 1499 }, { key: "l4", css: "l4", min: 1500, max: 2999 }, { key: "l5", css: "l5", min: 3000, max: 99999 }];
+            var BASE_FIFS = 100, PER_DAY = 1, BASE_MONTHLY = 100, PER_SEK = 1, lang = "sv", timer = null;
             function t(k) { return (TR[lang] && TR[lang][k]) || k; }
             function applyTr() { document.querySelectorAll("[data-tr]").forEach(function (e) { var v = t(e.getAttribute("data-tr")); if (v) e.textContent = v; }); document.querySelectorAll("[data-tr-placeholder]").forEach(function (e) { var v = t(e.getAttribute("data-tr-placeholder")); if (v) e.placeholder = v; }); document.documentElement.lang = lang; document.documentElement.dir = lang === "ar" ? "rtl" : "ltr"; }
-            function setLang(l) { lang = l; localStorage.setItem("klang", l); document.querySelectorAll("#langBtns button").forEach(function (b) { b.classList.toggle("active", b.getAttribute("data-lang") === l); }); applyTr(); }
+            function setLang(l) { lang = l; localStorage.setItem("klang", l); document.querySelectorAll("#langBtns button").forEach(function (b) { b.classList.toggle("active", b.getAttribute("data-lang") === l); }); applyTr(); buildPyramid(); }
             document.querySelectorAll("#langBtns button").forEach(function (b) { b.addEventListener("click", function () { setLang(this.getAttribute("data-lang")); }); });
             setLang(localStorage.getItem("klang") || "sv");
-            function calc(ms) { var y = 0; if (ms) { var s = new Date(ms), n = new Date(); y = Math.floor((n - s) / (365.25 * 86400000)); if (y < 0) y = 0; } return { pts: BASE + y * PER_YR, yrs: y }; }
+            function buildPyramid() { var s = ""; for (var i = LVLS.length - 1; i >= 0; i--) { var lvl = LVLS[i]; s += "<div class=\"pyr-level " + lvl.key + "w\" data-lvl=\"" + lvl.key + "\"><span class=\"pyr-name\">" + t(lvl.key + "s") + "</span><span class=\"pyr-pts\">" + lvl.min + "+</span></div>"; } $("#pyramid").html(s); }
+            buildPyramid();
+            function calcFifsPoints(memberSince) { if (!memberSince) return 0; var s = new Date(memberSince), n = new Date(); var days = Math.round((n - s) / 86400000); if (days < 0) days = 0; return BASE_FIFS + days * PER_DAY; }
+            function calcMonthlyPoints(monthlyAmount) { if (!monthlyAmount || monthlyAmount <= 0) return 0; return BASE_MONTHLY + monthlyAmount * PER_SEK; }
+            function calcTotal(fifsMemberSince, isMonthlyDonor, monthlyAmount) { var fifsPts = calcFifsPoints(fifsMemberSince); var monthlyPts = isMonthlyDonor ? calcMonthlyPoints(monthlyAmount) : 0; return { total: fifsPts + monthlyPts, fifs: fifsPts, monthly: monthlyPts }; }
             function getLvl(pts) { for (var i = LVLS.length - 1; i >= 0; i--) { if (pts >= LVLS[i].min) return LVLS[i]; } return LVLS[0]; }
+            function updatePtsDisplay(total) { var RING = 2 * Math.PI * 48; var lvl = getLvl(total); var nextIdx = -1; for (var i = 0; i < LVLS.length; i++) { if (LVLS[i].key === lvl.key) { nextIdx = i + 1; break; } } $("#ptsNum").text(total); var progress = nextIdx < LVLS.length ? (total - lvl.min) / (LVLS[nextIdx].min - lvl.min) : 1; $(".ring-fg").attr("stroke-dasharray", RING + " " + RING).attr("stroke-dashoffset", RING * (1 - Math.min(1, Math.max(0, progress)))); updatePyramid(total, lvl, nextIdx); }
+            function updatePyramid(total, lvl, nextIdx) { var curIdx = nextIdx - 1; $("#pyramid .pyr-level").each(function () { var s = $(this), k = s.data("lvl"); s.removeClass("done current"); var idx = -1; for (var i = 0; i < LVLS.length; i++) { if (LVLS[i].key === k) { idx = i; break; } } if (idx < curIdx) s.addClass("done"); if (idx === curIdx) s.addClass("current"); }); if (nextIdx < LVLS.length) { var next = LVLS[nextIdx]; $("#pyramidInfo").html(t("nextLvl").replace("{{pts}}", "<b>" + (next.min - total) + "</b>").replace("{{lvl}}", "<b>" + t(next.key) + "</b>")); } else { $("#pyramidInfo").text(t("maxLvl")); } var $cur = $("#pyramid .pyr-level.current"); if ($cur.length) { var wo = $("#pyramidWrap").offset(), co = $cur.offset(); var relTop = co.top - wo.top + $cur.outerHeight() / 2 - 12; $("#pyrArrow").css("top", relTop + "px").addClass("show"); } else { $("#pyrArrow").removeClass("show"); } }
             var $pnr = $("#pnr"), $err = $("#pnrErr"), $btn = $("#btnGo");
             $pnr.on("input", function () { var v = this.value.replace(/[^0-9]/g, ""); if (v.length > 8) v = v.slice(0, 8) + "-" + v.slice(8, 12); this.value = v; $pnr.removeClass("error success"); $err.hide(); });
             $pnr.on("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); doCheck(); } });
             function valid(p) { return /^\d{8}-\d{4}$/.test(p); }
-            function startTimer() { clearTimeout(timer); $("#timerWrap").addClass("show"); $("#timerFill").css({ width: "100%", transition: "none" }); void $("#timerFill")[0].offsetHeight; $("#timerFill").css({ width: "0%", transition: "width 60s linear" }); timer = setTimeout(resetAll, 60000); }
-            function resetAll() { clearTimeout(timer); $("#timerWrap").removeClass("show"); $("#ptsFooter").removeClass("show"); $("#ptsNum").text("0"); $("#lvlTag").text(t("l1")).attr("class", "lvl-tag l1"); $("#keypad").removeClass("hidden");["card1", "card2", "card3", "card4"].forEach(function (id) { $("#" + id).removeClass("visible success fail locked"); if (id !== "card1") $("#" + id).addClass("locked"); $("#" + id + " .cc-icon").html(id === "card1" ? "<i class=\"fas fa-id-card\"></i>" : id === "card2" ? "<i class=\"fas fa-calendar-check\"></i>" : id === "card3" ? "<i class=\"fas fa-hand-holding-heart\"></i>" : "<i class=\"fas fa-school\"></i>"); $("#" + id + " .cc-body h4").text(t(id === "card1" ? "c1t" : id === "card2" ? "c2t" : id === "card3" ? "c3t" : "c4t")); $("#" + id + " .cc-body .cc-sub").text(id === "card1" ? t("c1s") : t("soon")).css("color", ""); $("#" + id + " .cc-pts").text(""); $("#" + id + " .cc-btn").remove(); }); $pnr.val("").removeClass("error success"); $err.hide(); $btn.prop("disabled", false); $("#confetti").removeClass("active").empty(); }
+            function startTimer() { clearTimeout(timer); $("#timerWrap").addClass("show"); $("#timerFill").css({ width: "100%", transition: "none" }); void $("#timerFill")[0].offsetHeight; $("#timerFill").css({ width: "0%", transition: "width 90s linear" }); timer = setTimeout(resetAll, 90000); }
+            function resetAll() { clearTimeout(timer); $("#timerWrap").removeClass("show"); $("#ptsFooter").removeClass("show"); $("#pyramidWrap").removeClass("show"); $("#pyramidInfo").text(""); $("#pyramid .pyr-level").removeClass("done current"); $("#pyrArrow").removeClass("show"); $("#ptsNum").text("0"); $(".ring-fg").attr("stroke-dasharray", "301.6 301.6").attr("stroke-dashoffset", "301.6"); $("#keypad").removeClass("hidden");["card1", "card2", "card3", "card4"].forEach(function (id) { $("#" + id).removeClass("visible success fail locked"); if (id !== "card1" && id !== "card2") $("#" + id).addClass("locked"); $("#" + id + " .cc-icon").html(id === "card1" ? "<i class=\"fas fa-id-card\"></i>" : id === "card2" ? "<i class=\"fas fa-calendar-check\"></i>" : id === "card3" ? "<i class=\"fas fa-hand-holding-heart\"></i>" : "<i class=\"fas fa-school\"></i>"); $("#" + id + " .cc-body h4").text(t(id === "card1" ? "c1t" : id === "card2" ? "c2t" : id === "card3" ? "c3t" : "c4t")); $("#" + id + " .cc-body .cc-sub").text(id === "card1" ? t("c1s") : id === "card2" ? t("c2s") : t("soon")).css("color", ""); $("#" + id + " .cc-pts").text(""); $("#" + id + " .cc-btn").remove(); }); $pnr.val("").removeClass("error success"); $err.hide(); $btn.prop("disabled", false); $("#confetti").removeClass("active").empty(); }
             function fireConfetti() { var c = $("#confetti"), cols = ["#1a8a1f", "#e8b331", "#15546F", "#f0c94a", "#4ade80", "#ffd93d", "#ff6b6b"]; c.addClass("active"); for (var i = 0; i < 60; i++) { var fromLeft = i % 2 === 0; var p = $("<div class=\"confetti-piece\"></div>"); var angle = -30 + Math.random() * 60; var dist = 200 + Math.random() * 400; var dx = (fromLeft ? 1 : -1) * Math.cos(angle * Math.PI / 180) * dist; var dy = -Math.sin(angle * Math.PI / 180) * dist - (Math.random() * 100); p.css({ left: fromLeft ? "0" : "auto", right: fromLeft ? "auto" : "0", bottom: "0", background: cols[Math.floor(Math.random() * cols.length)], width: (8 + Math.random() * 10) + "px", height: (8 + Math.random() * 10) + "px", borderRadius: Math.random() > .5 ? "50%" : "2px", animationDuration: (2.2 + Math.random() * 2.5) + "s", animationDelay: Math.random() * .8 + "s", "--dx": dx + "px", "--dy": dy + "px", "--rot": (Math.random() * 720 - 360) + "deg" }); c.append(p); } setTimeout(function () { c.removeClass("active").empty(); }, 4000); }
-            function revealCards() { var d = 0; setTimeout(function () { $("#card1").addClass("visible"); }, d); d += 100; setTimeout(function () { $("#card2").addClass("visible"); }, d); d += 350; setTimeout(function () { $("#card3").addClass("visible"); }, d); d += 350; setTimeout(function () { $("#card4").addClass("visible"); }, d); d += 350; setTimeout(function () { $("#ptsFooter").addClass("show"); fireConfetti(); startTimer(); }, d); }
+            function revealCards() { var d = 0; setTimeout(function () { $("#card1").addClass("visible"); }, d); d += 100; setTimeout(function () { $("#card2").addClass("visible"); }, d); d += 350; setTimeout(function () { $("#card3").addClass("visible"); }, d); d += 350; setTimeout(function () { $("#card4").addClass("visible"); }, d); d += 350; setTimeout(function () { $("#ptsFooter").addClass("show"); $("#pyramidWrap").addClass("show"); fireConfetti(); startTimer(); }, d); }
             function setCardSuccess(id, title, sub, pts) { $("#" + id).addClass("success").removeClass("locked"); $("#" + id + " .cc-icon").html("<i class=\"fas fa-check\"></i>"); $("#" + id + " .cc-body h4").text(title); $("#" + id + " .cc-body .cc-sub").html(sub); $("#" + id + " .cc-pts").text("+" + pts + " " + t("pts")); }
             function setCardFail(id, title, sub, regUrl) { $("#" + id).addClass("fail").removeClass("locked"); $("#" + id + " .cc-icon").html("<i class=\"fas fa-times\"></i>"); $("#" + id + " .cc-body h4").text(title); $("#" + id + " .cc-body .cc-sub").html(sub); $("#" + id + " .cc-pts").text(""); $("#" + id + " .cc-btn").remove(); $("#" + id).append("<a href=\"" + regUrl + "\" target=\"_blank\" rel=\"noopener\" class=\"cc-btn red\"><i class=\"fas fa-external-link-alt\"></i> " + t("registerNow") + "</a>"); }
             function kpType(d) { var v = $pnr.val().replace(/[^0-9]/g, ""); if (v.length >= 12) return; v += d; if (v.length > 8) v = v.slice(0, 8) + "-" + v.slice(8); $pnr.val(v); $pnr.removeClass("error success"); $err.hide(); }
             function kpBack() { var v = $pnr.val().replace(/[^0-9]/g, ""); v = v.slice(0, -1); if (v.length > 8) v = v.slice(0, 8) + "-" + v.slice(8); $pnr.val(v); $pnr.removeClass("error success"); $err.hide(); }
             window.kpType = kpType; window.kpBack = kpBack;
-            window.doCheck = function () { var p = $pnr.val().trim(); $err.hide(); $pnr.removeClass("error success"); if (!valid(p)) { $pnr.addClass("error"); $err.show(); $pnr.focus(); return; } $pnr.addClass("success"); $btn.prop("disabled", true); resetAll(); $("#keypad").addClass("hidden"); $("#card1").addClass("visible"); $("#card1 .cc-icon").html("<i class=\"fas fa-spinner fa-spin\"></i>"); $("#card1 .cc-body h4").text(t("c1t")); $("#card1 .cc-body .cc-sub").text(t("checking")).css("color", "var(--muted)"); $("#card1 .cc-pts").text(""); var url = "https://medlem.fifs.se/registrera/" + p + "/SCH"; fetchProxy(url).then(function (r) { if (r.isMember) { var pts = calc(r.memberSince); var sub = t("since") + " <b>" + r.memberSinceFormatted + "</b>"; setCardSuccess("card1", t("memberYes"), sub, pts.pts); $("#ptsNum").text(pts.pts); var l = getLvl(pts.pts); $("#lvlTag").text(t(l.key)).attr("class", "lvl-tag " + l.css); } else { var regUrl = "https://medlem.fifs.se/registrera/" + p + "/SCH"; setCardFail("card1", t("notFound"), t("notFound"), regUrl); $("#ptsNum").text("0"); } revealCards(); }).catch(function () { var regUrl = "https://medlem.fifs.se/registrera/" + p + "/SCH"; setCardFail("card1", t("notFound"), t("notFound"), regUrl); $("#ptsNum").text("0"); revealCards(); }); };
-            function fetchProxy(url) { var pnr = url.split("/registrera/")[1]; if (pnr) pnr = pnr.split("/")[0]; return fetch("https://script.google.com/macros/s/AKfycbxZ08tC4z_P815a44QCUYxZTAvRnYay3W6k3XENWH5-X0T07l4fFiqdJJS1zrd0uOv64g/exec?pnr=" + encodeURIComponent(pnr)).then(function (r) { if (!r.ok) throw Error("HTTP " + r.status); return r.json(); }); }
+            window.doCheck = function () { var p = $pnr.val().trim(); $err.hide(); $pnr.removeClass("error success"); if (!valid(p)) { $pnr.addClass("error"); $err.show(); $pnr.focus(); return; } $pnr.addClass("success"); $btn.prop("disabled", true); resetAll(); $("#keypad").addClass("hidden"); var regUrl = "https://medlem.fifs.se/registrera/" + p + "/SCH"; $("#card1").addClass("visible"); $("#card1 .cc-icon").html("<i class=\"fas fa-spinner fa-spin\"></i>"); $("#card1 .cc-body h4").text(t("c1t")); $("#card1 .cc-body .cc-sub").text(t("checking")).css("color", "var(--muted)"); $("#card1 .cc-pts").text(""); $("#card2").addClass("visible"); $("#card2 .cc-icon").html("<i class=\"fas fa-spinner fa-spin\"></i>"); $("#card2 .cc-body h4").text(t("c2t")); $("#card2 .cc-body .cc-sub").text(t("checking")).css("color", "var(--muted)"); $("#card2 .cc-pts").text(""); var fifsP = fetchProxyFifs(p).catch(function () { return { isMember: false, memberSince: "", memberSinceFormatted: "" }; }); var sheetP = fetchProxySheet(p).catch(function () { return { found: false, name: "", isFifsInSheet: false, isMonthlyDonor: false, monthlyAmount: 0 }; }); Promise.all([fifsP, sheetP]).then(function (r) { var f = r[0], s = r[1]; if (f.isMember) { var fps = calcFifsPoints(f.memberSince); setCardSuccess("card1", t("memberYes"), t("since") + " <b>" + f.memberSinceFormatted + "</b>", fps); } else { setCardFail("card1", t("notFound"), t("notFound"), regUrl); } if (s.found && s.isMonthlyDonor) { var mps = calcMonthlyPoints(s.monthlyAmount); setCardSuccess("card2", t("monthlyMemberYes"), t("monthlyAmount").replace("{{amount}}", s.monthlyAmount), mps); } else { setCardFail("card2", t("monthlyNotFound"), t("monthlyNotFound"), "/donations/"); } var pts = calcTotal(f.memberSince, s.isMonthlyDonor, s.monthlyAmount); updatePtsDisplay(pts.total); revealCards(); }); };
+            function fetchProxyFifs(pnr) { return fetch("https://script.google.com/macros/s/AKfycbxZ08tC4z_P815a44QCUYxZTAvRnYay3W6k3XENWH5-X0T07l4fFiqdJJS1zrd0uOv64g/exec?pnr=" + encodeURIComponent(pnr)).then(function (r) { if (!r.ok) throw Error("HTTP " + r.status); return r.json(); }); }
+            function fetchProxySheet(pnr) { return fetch("https://script.google.com/macros/s/AKfycbzRlibFil1ukVgnxlWCALnEuY28K2JwxDncftIy7CetjwHwkoee3xj7xsbKnRTI1y9s/exec?pnr=" + encodeURIComponent(pnr)).then(function (r) { if (!r.ok) throw Error("HTTP " + r.status); return r.json(); }); }
         })();
     </script>
 </body>
