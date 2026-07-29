@@ -90,10 +90,6 @@
         }
 
         .thanks-topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 18px;
             margin-bottom: 28px;
         }
 
@@ -129,37 +125,6 @@
         .thanks-brand-copy span {
             color: var(--text-soft);
             font-size: 0.95rem;
-        }
-
-        .thanks-language-switcher {
-            display: inline-flex;
-            gap: 8px;
-            padding: 6px;
-            border-radius: 999px;
-            background: rgba(21, 84, 111, 0.06);
-            border: 1px solid rgba(21, 84, 111, 0.08);
-        }
-
-        .lang-chip {
-            border: none;
-            border-radius: 999px;
-            padding: 10px 14px;
-            background: transparent;
-            color: var(--mosque-teal);
-            font-weight: 800;
-            cursor: pointer;
-            transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .lang-chip:hover,
-        .lang-chip:focus {
-            transform: translateY(-1px);
-        }
-
-        .lang-chip.is-active {
-            background: linear-gradient(135deg, var(--mosque-teal) 0%, var(--mosque-green) 100%);
-            color: #ffffff;
-            box-shadow: 0 12px 24px rgba(21, 84, 111, 0.16);
         }
 
         .thanks-kicker {
@@ -221,6 +186,16 @@
             animation: statusBlink 1.8s ease-in-out infinite;
         }
 
+        .thanks-timer {
+            margin-top: 12px;
+            font-size: 0.88rem;
+            color: var(--text-soft);
+        }
+
+        .thanks-timer b {
+            color: var(--mosque-teal);
+        }
+
         .thanks-actions {
             display: flex;
             flex-wrap: wrap;
@@ -254,16 +229,6 @@
 
         .thanks-action:hover {
             transform: translateY(-2px);
-        }
-
-        html[dir="rtl"] body {
-            text-align: right;
-        }
-
-        html[dir="rtl"] .thanks-topbar,
-        html[dir="rtl"] .thanks-brand,
-        html[dir="rtl"] .thanks-actions {
-            flex-direction: row-reverse;
         }
 
         @keyframes floatOrb {
@@ -305,15 +270,6 @@
                 border-radius: 26px;
             }
 
-            .thanks-topbar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            html[dir="rtl"] .thanks-topbar {
-                align-items: flex-end;
-            }
-
             .thanks-brand {
                 align-items: flex-start;
             }
@@ -328,17 +284,7 @@
                 height: 58px;
             }
 
-            .thanks-language-switcher {
-                width: 100%;
-                justify-content: space-between;
-            }
-
-            .lang-chip {
-                flex: 1 1 0;
-            }
-
-            .thanks-actions,
-            html[dir="rtl"] .thanks-actions {
+            .thanks-actions {
                 flex-direction: column;
             }
         }
@@ -361,128 +307,96 @@
                         <span>Helsingborg</span>
                     </div>
                 </div>
-
-                <div class="thanks-language-switcher" aria-label="Language switcher">
-                    <button type="button" class="lang-chip" data-lang="sv" onclick="setLang('sv')">SV</button>
-                    <button type="button" class="lang-chip" data-lang="en" onclick="setLang('en')">EN</button>
-                    <button type="button" class="lang-chip" data-lang="ar" onclick="setLang('ar')">AR</button>
-                </div>
             </div>
 
-            <span class="thanks-kicker" data-i18n="donationRedirect.kicker">Jazakum Allahu khayran</span>
-            <h1 class="thanks-title" data-i18n="donationRedirect.title">Thank you for your donation</h1>
-            <p class="thanks-description" data-i18n="donationRedirect.description">Your gift helps sustain prayer, education, and community care at Al-Salam Center Mosque in Helsingborg.</p>
+            <span class="thanks-kicker">Jazakum Allahu khayran</span>
+            <h1 class="thanks-title">Thank you for your donation</h1>
+            <p class="thanks-description">Your gift helps sustain prayer, education, and community care at Al-Salam Center Mosque in Helsingborg.</p>
 
-            <div class="thanks-blessing" data-i18n="donationRedirect.blessing">May Allah accept your charity and multiply its reward.</div>
+            <div class="thanks-blessing">May Allah accept your charity and multiply its reward.</div>
 
             <div class="thanks-status" id="status">Processing your donation...</div>
+            <div class="thanks-timer" id="timer" style="display:none;">Redirecting to membership portal in <b id="timerCount">60</b> seconds</div>
 
             <div class="thanks-actions">
-                <a href="/" class="thanks-action thanks-action-primary" data-i18n="donationRedirect.home">Return to homepage</a>
-                <a href="/donations" class="thanks-action thanks-action-secondary" data-i18n="donationRedirect.donate-again">Back to donations</a>
+                <a href="/membership-check" class="thanks-action thanks-action-primary">Go to membership portal</a>
+                <a href="/donations" class="thanks-action thanks-action-secondary">Back to donations</a>
             </div>
         </section>
     </main>
 
-    <script type="module" src="/langugaes/js/i18n.js" defer></script>
     <script>
         const params = new URLSearchParams(window.location.search);
         const sessionId = params.get("session_id");
+        const source = params.get("src") || "one-time";
         const statusEl = document.getElementById("status");
+        const timerEl = document.getElementById("timer");
+        const timerCount = document.getElementById("timerCount");
 
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwz_fAOfZ_vuI7RlEzMt0i-jJtL8q-hOcAjRZrXND6otuV49mdIshBQ32oQjAIlRukL/exec";
-        const fallbackStatusText = {
-            "donationRedirect.status-processing": "Processing your donation...",
-            "donationRedirect.status-missing": "Missing payment reference.",
-            "donationRedirect.status-success": "Your donation has been successfully recorded. Thank you!",
-            "donationRedirect.status-fallback": "Donation received. Thank you for your support.",
-            "donationRedirect.page-title": "Thank You - Al Salam Center Mosque"
-        };
+        const SHEET_APP_URL = "https://script.google.com/macros/s/AKfycbzRlibFil1ukVgnxlWCALnEuY28K2JwxDncftIy7CetjwHwkoee3xj7xsbKnRTI1y9s/exec";
 
-        let activeStatusKey = "donationRedirect.status-processing";
+        let countdownSeconds = 60;
+        let countdownInterval = null;
 
-        function updateLanguageButtons(lang) {
-            document.querySelectorAll(".lang-chip").forEach((button) => {
-                button.classList.toggle("is-active", button.dataset.lang === lang);
-            });
-        }
-
-        function translateValue(key) {
-            if (typeof window.getTranslation === "function") {
-                return window.getTranslation(key, fallbackStatusText[key] || "");
-            }
-            return fallbackStatusText[key] || "";
-        }
-
-        function updateStatusText() {
-            statusEl.textContent = translateValue(activeStatusKey);
-            document.title = translateValue("donationRedirect.page-title") || document.title;
-        }
-
-        function setLang(lang) {
-            updateLanguageButtons(lang);
-            if (typeof window.loadLanguage === "function") {
-                window.loadLanguage(lang);
-            }
+        function startCountdown() {
+            timerEl.style.display = "block";
+            countdownInterval = setInterval(() => {
+                countdownSeconds--;
+                timerCount.textContent = countdownSeconds;
+                if (countdownSeconds <= 0) {
+                    clearInterval(countdownInterval);
+                    window.location.href = "/membership-check";
+                }
+            }, 1000);
         }
 
         async function sendDonationRecord() {
             if (!sessionId) {
-                activeStatusKey = "donationRedirect.status-missing";
-                updateStatusText();
+                statusEl.textContent = "Missing payment reference.";
+                startCountdown();
                 return;
             }
 
-            activeStatusKey = "donationRedirect.status-processing";
-            updateStatusText();
+            statusEl.textContent = "Processing your donation...";
 
-            // Send action explicitly alongside session_id
-            const payloadBody = {
-                action: "record-donation",
+            const isMonthly = source === "monthly";
+            const url = isMonthly ? SHEET_APP_URL : WEB_APP_URL;
+            const payload = {
+                action: isMonthly ? "record-monthly" : "record-donation",
                 session_id: sessionId
             };
 
             try {
-                const response = await fetch(WEB_APP_URL, {
+                const response = await fetch(url, {
                     method: "POST",
                     redirect: "follow",
-                    headers: {
-                        "Content-Type": "text/plain;charset=utf-8"
-                    },
-                    body: JSON.stringify(payloadBody)
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify(payload)
                 });
 
-                // Clear any legacy local storage fallback safety
                 localStorage.removeItem('pendingCardDonationIntent');
 
                 let data = {};
                 try {
                     data = await response.json();
-                } catch (parseError) {
+                } catch (e) {
                     data = {};
                 }
 
-                activeStatusKey = data.status === "ok"
-                    ? "donationRedirect.status-success"
-                    : "donationRedirect.status-fallback";
+                statusEl.textContent = data.status === "ok"
+                    ? "Your donation has been successfully recorded. Thank you!"
+                    : "Donation received. Thank you for your support.";
             } catch (error) {
                 console.error("Fetch Error:", error);
-                activeStatusKey = "donationRedirect.status-fallback";
+                statusEl.textContent = "Donation received. Thank you for your support.";
             }
 
-            updateStatusText();
+            startCountdown();
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-            const savedLang = localStorage.getItem("lang") || "sv";
-            updateLanguageButtons(savedLang);
-            updateStatusText();
             sendDonationRecord();
-        });
-
-        window.addEventListener("languageChanged", (event) => {
-            updateLanguageButtons(event.detail.lang);
-            updateStatusText();
         });
     </script>
 </body>

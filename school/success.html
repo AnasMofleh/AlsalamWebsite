@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="sv">
+
+<head>
+    <base href="/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="school.success.title">Registrering slutförd — Al Salam Center</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+
+    <style>
+        :root {
+            --green: #1a8a1f;
+            --green-lt: #e8f5e9;
+            --muted: #6b7280;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: "Open Sans", sans-serif;
+            background: #f5f7f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 24px;
+            padding: 48px 40px;
+            max-width: 520px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 8px 32px rgba(0,0,0,.08);
+        }
+
+        .check-icon {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: var(--green-lt);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 2.2rem;
+            color: var(--green);
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .card p {
+            font-size: 1rem;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            transition: all .2s;
+            font-family: inherit;
+            width: 100%;
+            max-width: 360px;
+        }
+        .btn-whatsapp {
+            background: #25D366;
+            color: #fff;
+        }
+        .btn-whatsapp:hover { background: #1da851; transform: translateY(-1px); }
+        .btn-whatsapp img { width: 22px; height: 22px; }
+
+        .btn-home {
+            background: var(--green);
+            color: #fff;
+        }
+        .btn-home:hover { background: #157519; transform: translateY(-1px); }
+
+        .btn-outline {
+            background: #fff;
+            color: var(--green);
+            border: 2px solid var(--green);
+        }
+        .btn-outline:hover { background: var(--green-lt); }
+
+        #loading {
+            font-size: 1rem;
+            color: var(--muted);
+            margin-bottom: 16px;
+        }
+        #loading .dots::after {
+            content: '';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+        @keyframes dots {
+            0%   { content: ''; }
+            25%  { content: '.'; }
+            50%  { content: '..'; }
+            75%  { content: '...'; }
+            100% { content: ''; }
+        }
+
+        @media (max-width: 500px) {
+            .card { padding: 32px 20px; }
+            .check-icon { width: 64px; height: 64px; font-size: 1.7rem; }
+            .card h2 { font-size: 1.25rem; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div id="loading">
+            <span data-i18n="school.success.processing">Bearbetar din registrering</span>
+            <span class="dots"></span>
+        </div>
+
+        <div id="content" style="display:none;">
+            <div class="check-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            <h2 data-i18n="school.success.heading">Tack för din registrering!</h2>
+            <p data-i18n="school.success.message">
+                Din registrering är nu bekräftad. Gå med i WhatsApp-gruppen för att hålla dig uppdaterad med skolans information och viktiga meddelanden.
+            </p>
+            <div class="btn-group">
+                <a href="https://chat.whatsapp.com/LwL2lt6kxuWBlSrfYULRrl" target="_blank" rel="noopener" class="btn btn-whatsapp">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+                    <span data-i18n="school.success.whatsapp">Gå med i Alsalam Whatsapp</span>
+                </a>
+                <a href="/" class="btn btn-home">
+                    <i class="fas fa-home"></i>
+                    <span data-i18n="school.success.home">Tillbaka till startsidan</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const loadingEl = document.getElementById("loading");
+            const contentEl = document.getElementById("content");
+
+            const t = (key, fallback) =>
+                typeof window.getTranslation === "function" ? window.getTranslation(key, fallback) : fallback || key;
+
+            async function init() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const sessionId = urlParams.get("session_id");
+                const isProd = window.location.hostname === "alsalamcenter.se";
+
+                if (sessionId) {
+                    try {
+                        const res = await fetch(
+                            "https://script.google.com/macros/s/AKfycbxIWhMCHmcxbtHl1WLU3XFqaslc_Fxn_sRSUuLrN4x7-Up84vx_cIujORbRCupbSxmbcg/exec",
+                            {
+                                method: "POST",
+                                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                                body: new URLSearchParams({
+                                    action: "updatePayments",
+                                    session_id: sessionId,
+                                    env: isProd ? "prod" : "test"
+                                })
+                            }
+                        );
+                        const data = await res.json();
+                        console.log("Payment update:", data);
+                    } catch (err) {
+                        console.error("Payment update failed:", err);
+                        // Continue showing success — don't block the user
+                    }
+                }
+
+                // Show success content
+                loadingEl.style.display = "none";
+                contentEl.style.display = "block";
+            }
+
+            init();
+        })();
+    </script>
+
+    <!-- i18n (loaded async but we still want translations if available) -->
+    <script type="module" src="/langugaes/js/i18n.js" defer></script>
+</body>
+</html>
