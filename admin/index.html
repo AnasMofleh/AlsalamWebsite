@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="sv">
+
+<head>
+    <base href="/">
+    <meta charset="utf-8">
+    <title>Admin - Kvitton - Al-Salam Moské</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="noindex, nofollow" name="robots">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Pacifico&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --admin-primary: #15546F;
+            --admin-primary-light: #1a6b8a;
+            --admin-success: #198754;
+            --admin-bg: #f5f7fa;
+        }
+
+        .admin-body {
+            background: var(--admin-bg);
+            min-height: 100vh;
+        }
+
+        /* ── Login Screen ─────────────────────────── */
+        .admin-login-wrapper {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .admin-login-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 48px 36px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .admin-login-card .login-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: #e8f0f4;
+            color: var(--admin-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 20px;
+        }
+
+        .admin-login-card h2 {
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 8px;
+        }
+
+        .admin-login-card p {
+            color: #6b7280;
+            margin-bottom: 28px;
+            font-size: 0.95rem;
+        }
+
+        .admin-login-card .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .admin-login-card input {
+            width: 100%;
+            height: 54px;
+            padding: 0 52px 0 18px;
+            border: 2px solid #dee2e6;
+            border-radius: 14px;
+            font-size: 1.05rem;
+            font-family: inherit;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background: #fafbfc;
+        }
+
+        .admin-login-card input:focus {
+            outline: none;
+            border-color: var(--admin-primary);
+            box-shadow: 0 0 0 4px rgba(21,84,111,0.08);
+        }
+
+        .admin-login-card input.error {
+            border-color: #dc3545;
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        .admin-login-card .toggle-pw {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 8px;
+        }
+
+        .admin-login-card .toggle-pw:hover {
+            color: var(--admin-primary);
+        }
+
+        .admin-login-btn {
+            width: 100%;
+            height: 54px;
+            border: none;
+            border-radius: 14px;
+            background: var(--admin-primary);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.15s;
+        }
+
+        .admin-login-btn:hover {
+            background: var(--admin-primary-light);
+            transform: translateY(-1px);
+        }
+
+        .admin-login-error {
+            color: #dc3545;
+            font-size: 0.88rem;
+            margin-top: 12px;
+            display: none;
+        }
+
+        /* ── Dashboard (post-login) ──────────────── */
+        .admin-dashboard {
+            display: none;
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 30px 20px 60px;
+        }
+
+        .admin-dashboard-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+        }
+
+        .admin-dashboard-header h2 {
+            font-weight: 700;
+            color: #222;
+            margin: 0;
+            font-size: 1.4rem;
+        }
+
+        .admin-logout-btn {
+            background: none;
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
+            padding: 8px 16px;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .admin-logout-btn:hover {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+
+        /* ── Upload Zone ─────────────────────────── */
+        .admin-upload-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 28px 24px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+            margin-bottom: 24px;
+        }
+
+        .admin-upload-card h5 {
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 18px;
+            font-size: 1rem;
+        }
+
+        .admin-upload-zone {
+            position: relative;
+            border: 2px dashed #dee2e6;
+            border-radius: 16px;
+            padding: 32px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s, background 0.3s;
+            background: #fafbfc;
+            margin-bottom: 16px;
+        }
+
+        .admin-upload-zone:hover,
+        .admin-upload-zone.dragover {
+            border-color: var(--admin-primary);
+            background: #f0f5f8;
+        }
+
+        .admin-upload-zone.has-file {
+            border-color: var(--admin-success);
+            border-style: solid;
+            background: #f0fdf4;
+        }
+
+        .admin-upload-zone .upload-input {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .admin-upload-prompt i {
+            display: block;
+            font-size: 2.2rem;
+            color: #9ca3af;
+            margin-bottom: 10px;
+        }
+
+        .admin-upload-prompt span {
+            color: #6b7280;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .admin-upload-prompt small {
+            display: block;
+            color: #9ca3af;
+            margin-top: 4px;
+            font-size: 0.8rem;
+        }
+
+        .admin-upload-preview {
+            display: none;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
+        }
+
+        .admin-upload-zone.has-file .admin-upload-prompt {
+            display: none;
+        }
+
+        .admin-upload-zone.has-file .admin-upload-preview {
+            display: flex;
+        }
+
+        .admin-upload-thumb {
+            width: 52px;
+            height: 52px;
+            object-fit: cover;
+            border-radius: 10px;
+            flex-shrink: 0;
+            background: #e5e7eb;
+        }
+
+        .admin-upload-name {
+            flex: 1;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--admin-success);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-align: left;
+        }
+
+        .admin-upload-size {
+            font-size: 0.78rem;
+            color: #6b7280;
+            font-weight: 400;
+        }
+
+        .admin-upload-remove {
+            flex-shrink: 0;
+            background: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            font-size: 16px;
+            line-height: 28px;
+            cursor: pointer;
+            z-index: 3;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: all;
+        }
+
+        .admin-upload-remove:hover {
+            background: #b02a37;
+        }
+
+        .admin-camera-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .admin-camera-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
+            background: #fff;
+            color: #555;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .admin-camera-btn:hover {
+            border-color: var(--admin-primary);
+            color: var(--admin-primary);
+        }
+
+        .admin-camera-btn i {
+            font-size: 1.1rem;
+        }
+
+        #camera-capture-input {
+            display: none;
+        }
+
+        /* ── Date Picker ──────────────────────────── */
+        .admin-date-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+            margin-bottom: 24px;
+        }
+
+        .admin-date-card h5 {
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+
+        .admin-date-card input[type="date"] {
+            width: 100%;
+            height: 54px;
+            padding: 0 18px;
+            border: 2px solid #dee2e6;
+            border-radius: 14px;
+            font-size: 1.05rem;
+            font-family: inherit;
+            background: #fafbfc;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .admin-date-card input[type="date"]:focus {
+            outline: none;
+            border-color: var(--admin-primary);
+            box-shadow: 0 0 0 4px rgba(21,84,111,0.08);
+        }
+
+        /* ── Category Selection ──────────────────── */
+        .admin-category-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .admin-category-card {
+            background: #fff;
+            border: 2px solid #dee2e6;
+            border-radius: 16px;
+            padding: 24px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+            position: relative;
+        }
+
+        .admin-category-card:hover {
+            border-color: #b0c4cd;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        }
+
+        .admin-category-card.selected {
+            border-color: var(--admin-primary);
+            background: #f0f6f9;
+            box-shadow: 0 0 0 4px rgba(21,84,111,0.12);
+        }
+
+        .admin-category-card.selected::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 10px;
+            right: 14px;
+            color: var(--admin-primary);
+            font-size: 1rem;
+        }
+
+        .admin-category-card .cat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 1.6rem;
+            transition: background 0.25s, color 0.25s;
+        }
+
+        .admin-category-card .cat-label {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #333;
+        }
+
+        /* Category colors */
+        .cat-moskeer .cat-icon   { background: #e8f0f4; color: #15546F; }
+        .cat-transport .cat-icon { background: #fff3e0; color: #e67e22; }
+        .cat-mat .cat-icon       { background: #e8f5e9; color: #2e7d32; }
+        .cat-annat .cat-icon     { background: #f3e5f5; color: #7b1fa2; }
+
+        .admin-category-card.selected.cat-moskeer   { border-color: #15546F; background: #e8f0f4; }
+        .admin-category-card.selected.cat-transport { border-color: #e67e22; background: #fff3e0; }
+        .admin-category-card.selected.cat-mat       { border-color: #2e7d32; background: #e8f5e9; }
+        .admin-category-card.selected.cat-annat     { border-color: #7b1fa2; background: #f3e5f5; }
+
+        /* ── Upload Button ───────────────────────── */
+        .admin-submit-btn {
+            width: 100%;
+            height: 58px;
+            border: none;
+            border-radius: 16px;
+            background: var(--admin-primary);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .admin-submit-btn:hover:not(:disabled) {
+            background: var(--admin-primary-light);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(21,84,111,0.25);
+        }
+
+        .admin-submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ── Feedback ────────────────────────────── */
+        .admin-feedback {
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-top: 18px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 0.93rem;
+        }
+
+        .admin-feedback.success {
+            display: flex;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+        }
+
+        .admin-feedback.error {
+            display: flex;
+            background: #fff5f5;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+
+        .admin-feedback i {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        /* ── Progress bar ────────────────────────── */
+        .admin-progress-wrap {
+            margin-top: 16px;
+            display: none;
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+        }
+
+        .admin-progress-wrap.active {
+            display: block;
+        }
+
+        .admin-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--admin-primary);
+            border-radius: 10px;
+            animation: progress-indeterminate 1.8s ease-in-out infinite;
+        }
+
+        @keyframes progress-indeterminate {
+            0% { width: 0%; margin-left: 0; }
+            50% { width: 70%; margin-left: 15%; }
+            100% { width: 0%; margin-left: 100%; }
+        }
+
+        /* ── Recent Uploads ──────────────────────── */
+        .admin-recent {
+            background: #fff;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+            margin-top: 10px;
+        }
+
+        .admin-recent h5 {
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+
+        .admin-recent-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.88rem;
+        }
+
+        .admin-recent-item:last-child {
+            border-bottom: none;
+        }
+
+        .admin-recent-item .rec-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .admin-recent-item .rec-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .admin-recent-item .rec-name {
+            font-weight: 600;
+            color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .admin-recent-item .rec-meta {
+            font-size: 0.78rem;
+            color: #9ca3af;
+        }
+
+        .admin-recent-empty {
+            text-align: center;
+            color: #9ca3af;
+            padding: 20px 0;
+            font-size: 0.9rem;
+        }
+
+        /* ── Responsive ──────────────────────────── */
+        @media (max-width: 480px) {
+            .admin-category-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .admin-category-card {
+                padding: 18px 10px;
+            }
+
+            .admin-category-card .cat-icon {
+                width: 48px;
+                height: 48px;
+                font-size: 1.3rem;
+            }
+
+            .admin-category-card .cat-label {
+                font-size: 0.85rem;
+            }
+
+            .admin-dashboard {
+                padding: 20px 12px 40px;
+            }
+
+            .admin-login-card {
+                padding: 32px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body class="admin-body">
+    <!-- Header Start -->
+    <div id="header-placeholder"></div>
+    <!-- Header End -->
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- LOGIN SCREEN                                -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div id="admin-login-screen" class="admin-login-wrapper">
+        <div class="admin-login-card wow fadeInUp" data-wow-delay="0.1s">
+            <div class="login-icon">
+                <i class="fas fa-lock"></i>
+            </div>
+            <h2>Admin — Kvitton</h2>
+            <p>Ange lösenord för att hantera kvittouppladdningar</p>
+
+            <div class="input-group">
+                <input type="password" id="admin-password" placeholder="Lösenord" autocomplete="off">
+                <button type="button" class="toggle-pw" id="toggle-pw-btn" title="Visa/dölj lösenord">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </div>
+
+            <button class="admin-login-btn" id="login-btn" onclick="handleLogin()">
+                <i class="fas fa-sign-in-alt me-2"></i> Logga in
+            </button>
+
+            <div class="admin-login-error" id="login-error">
+                <i class="fas fa-exclamation-circle me-1"></i> Fel lösenord. Försök igen.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- DASHBOARD (hidden until login)              -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div id="admin-dashboard" class="admin-dashboard">
+        <div class="admin-dashboard-header">
+            <h2><i class="fas fa-receipt me-2"></i> Ladda upp kvitto</h2>
+            <button class="admin-logout-btn" onclick="handleLogout()">
+                <i class="fas fa-sign-out-alt me-1"></i> Logga ut
+            </button>
+        </div>
+
+        <!-- Upload Zone -->
+        <div class="admin-upload-card">
+            <h5><i class="fas fa-cloud-upload-alt me-2"></i> Välj fil</h5>
+
+            <div class="admin-upload-zone" id="admin-upload-zone">
+                <input type="file" class="upload-input" id="file-input"
+                    accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                <div class="admin-upload-prompt">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span>Tryck eller dra fil hit</span>
+                    <small>PDF, Word, Excel, bilder — max 25 MB</small>
+                </div>
+                <div class="admin-upload-preview">
+                    <img class="admin-upload-thumb" src="" alt="">
+                    <div>
+                        <div class="admin-upload-name"></div>
+                        <div class="admin-upload-size"></div>
+                    </div>
+                    <button type="button" class="admin-upload-remove" title="Ta bort">&times;</button>
+                </div>
+            </div>
+
+            <div class="admin-camera-row">
+                <button type="button" class="admin-camera-btn" onclick="openCamera()">
+                    <i class="fas fa-camera"></i> Ta foto
+                </button>
+                <button type="button" class="admin-camera-btn" onclick="document.getElementById('file-input').click()">
+                    <i class="fas fa-folder-open"></i> Bläddra
+                </button>
+            </div>
+
+            <input type="file" id="camera-capture-input" accept="image/*" capture="environment">
+        </div>
+
+        <!-- Date Picker -->
+        <div class="admin-date-card">
+            <h5><i class="fas fa-calendar-alt me-2"></i> Kvittots datum</h5>
+            <input type="date" id="receipt-date">
+        </div>
+
+        <!-- Category Selection -->
+        <h5 style="font-weight:700;color:#222;margin-bottom:12px;font-size:1rem;">
+            <i class="fas fa-tag me-2"></i> Välj kategori
+        </h5>
+        <div class="admin-category-grid" id="category-grid">
+            <div class="admin-category-card cat-moskeer" data-category="moskeer" onclick="selectCategory(this)">
+                <div class="cat-icon"><i class="fas fa-mosque"></i></div>
+                <div class="cat-label">Moskeer</div>
+            </div>
+            <div class="admin-category-card cat-transport" data-category="transport" onclick="selectCategory(this)">
+                <div class="cat-icon"><i class="fas fa-car"></i></div>
+                <div class="cat-label">Transport</div>
+            </div>
+            <div class="admin-category-card cat-mat" data-category="mat" onclick="selectCategory(this)">
+                <div class="cat-icon"><i class="fas fa-utensils"></i></div>
+                <div class="cat-label">Mat</div>
+            </div>
+            <div class="admin-category-card cat-annat" data-category="annat" onclick="selectCategory(this)">
+                <div class="cat-icon"><i class="fas fa-ellipsis-h"></i></div>
+                <div class="cat-label">Annat</div>
+            </div>
+        </div>
+
+        <!-- Upload Button -->
+        <button class="admin-submit-btn" id="upload-btn" onclick="handleUpload()" disabled>
+            <i class="fas fa-upload"></i> Ladda upp kvitto
+        </button>
+
+        <!-- Progress -->
+        <div class="admin-progress-wrap" id="upload-progress">
+            <div class="admin-progress-bar"></div>
+        </div>
+
+        <!-- Feedback -->
+        <div class="admin-feedback" id="upload-feedback"></div>
+
+        <!-- Recent Uploads -->
+        <div class="admin-recent" id="recent-uploads" style="display:none;">
+            <h5><i class="fas fa-history me-2"></i> Senaste uppladdningar</h5>
+            <div id="recent-list">
+                <div class="admin-recent-empty">Inga uppladdningar ännu</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Start -->
+    <div id="contact-us-placeholder"></div>
+    <!-- Footer End -->
+
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+
+    <!-- Load Header and Footer -->
+    <script>
+        $(function () {
+            $("#header-placeholder").load("/header.html", function() {
+                if (window.reapplyTranslations) {
+                    setTimeout(() => window.reapplyTranslations(), 50);
+                }
+            });
+            $("#contact-us-placeholder").load("/contact-us.html", function() {
+                if (window.reapplyTranslations) {
+                    setTimeout(() => window.reapplyTranslations(), 50);
+                }
+            });
+        });
+    </script>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- ADMIN LOGIC                                 -->
+    <!-- ═══════════════════════════════════════════ -->
+    <script>
+    (function() {
+        'use strict';
+
+        // ── Config ──────────────────────────────────
+        var SESSION_KEY = 'alsalam_admin_auth';
+        // ⚠️ Replace this URL after deploying the Google Apps Script (admin/api/Code.gs)
+        var GAS_URL = 'https://script.google.com/macros/s/AKfycbwjSkxeJNx8akQSNlnkEuOm-Rd8j2KbhFJsnfjb2AQ1USq3EhlHkAJ4ASXix-qdouom/exec';
+        var RECENT_STORAGE_KEY = 'alsalam_receipt_uploads';
+
+        // ── State ───────────────────────────────────
+        var selectedFile = null;
+        var selectedCategory = null;
+
+        // ── DOM refs ────────────────────────────────
+        var $loginScreen = document.getElementById('admin-login-screen');
+        var $dashboard = document.getElementById('admin-dashboard');
+        var $password = document.getElementById('admin-password');
+        var $loginError = document.getElementById('login-error');
+        var $uploadZone = document.getElementById('admin-upload-zone');
+        var $fileInput = document.getElementById('file-input');
+        var $cameraInput = document.getElementById('camera-capture-input');
+        var $dateInput = document.getElementById('receipt-date');
+        var $uploadBtn = document.getElementById('upload-btn');
+        var $progress = document.getElementById('upload-progress');
+        var $feedback = document.getElementById('upload-feedback');
+        var $recentList = document.getElementById('recent-list');
+        var $recentBox = document.getElementById('recent-uploads');
+
+        // ── Init ────────────────────────────────────
+        function init() {
+            // Default date = today
+            var today = new Date();
+            $dateInput.value = today.getFullYear() + '-' +
+                String(today.getMonth() + 1).padStart(2, '0') + '-' +
+                String(today.getDate()).padStart(2, '0');
+
+            // Restore session
+            if (sessionStorage.getItem(SESSION_KEY) === '1') {
+                showDashboard();
+            }
+
+            // Toggle password visibility
+            document.getElementById('toggle-pw-btn').addEventListener('click', function() {
+                var isPassword = $password.type === 'password';
+                $password.type = isPassword ? 'text' : 'password';
+                this.innerHTML = isPassword ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+            });
+
+            // Enter on password field
+            $password.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') handleLogin();
+            });
+
+            setupUploadZone();
+
+            // Camera input change
+            $cameraInput.addEventListener('change', function() {
+                if (this.files.length) {
+                    handleFile(this.files[0]);
+                }
+            });
+        }
+
+        // ── Login / Logout ──────────────────────────
+        window.handleLogin = function() {
+            var pw = $password.value.trim();
+            if (!pw) return;
+
+            var $loginBtn = document.getElementById('login-btn');
+            var origHTML = $loginBtn.innerHTML;
+            $loginBtn.disabled = true;
+            $loginBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Loggar in...';
+            $loginError.style.display = 'none';
+
+            var params = new URLSearchParams();
+            params.append('action', 'verify-password');
+            params.append('password', pw);
+
+            fetch(GAS_URL, {
+                method: 'POST',
+                body: params
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(result) {
+                $loginBtn.disabled = false;
+                $loginBtn.innerHTML = origHTML;
+
+                if (result.success && result.authenticated) {
+                    sessionStorage.setItem(SESSION_KEY, '1');
+                    $loginError.style.display = 'none';
+                    showDashboard();
+                } else {
+                    $loginError.style.display = 'block';
+                    $password.classList.add('error');
+                    setTimeout(function() { $password.classList.remove('error'); }, 400);
+                    $password.value = '';
+                    $password.focus();
+                }
+            })
+            .catch(function(err) {
+                $loginBtn.disabled = false;
+                $loginBtn.innerHTML = origHTML;
+                $loginError.style.display = 'block';
+                $loginError.innerHTML = '<i class="fas fa-exclamation-circle me-1"></i> Anslutningsfel. Försök igen.';
+                console.error(err);
+            });
+        };
+
+        window.handleLogout = function() {
+            sessionStorage.removeItem(SESSION_KEY);
+            $dashboard.style.display = 'none';
+            $loginScreen.style.display = 'flex';
+            $password.value = '';
+            $password.focus();
+            resetForm();
+        };
+
+        function showDashboard() {
+            $loginScreen.style.display = 'none';
+            $dashboard.style.display = 'block';
+            loadRecentUploads();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ── Upload Zone ─────────────────────────────
+        function setupUploadZone() {
+            $uploadZone.addEventListener('click', function(e) {
+                if (e.target.classList.contains('admin-upload-remove')) return;
+                $fileInput.click();
+            });
+
+            $uploadZone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                $uploadZone.classList.add('dragover');
+            });
+            $uploadZone.addEventListener('dragleave', function() {
+                $uploadZone.classList.remove('dragover');
+            });
+            $uploadZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                $uploadZone.classList.remove('dragover');
+                if (e.dataTransfer.files.length) {
+                    handleFile(e.dataTransfer.files[0]);
+                }
+            });
+
+            $fileInput.addEventListener('change', function() {
+                if (this.files.length) {
+                    handleFile(this.files[0]);
+                }
+            });
+
+            $uploadZone.querySelector('.admin-upload-remove').addEventListener('click', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                clearFile();
+            });
+        }
+
+        function handleFile(file) {
+            var maxSize = 25 * 1024 * 1024;
+            if (file.size > maxSize) {
+                showFeedback('error', 'Filen är för stor. Max 25 MB tillåts.');
+                return;
+            }
+
+            var allowedTypes = [
+                'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp',
+                'application/pdf',
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/vnd.ms-excel',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            ];
+            var ext = file.name.split('.').pop().toLowerCase();
+            var allowedExts = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'pdf', 'doc', 'docx', 'xls', 'xlsx'];
+
+            if (allowedTypes.indexOf(file.type) === -1 && allowedExts.indexOf(ext) === -1) {
+                showFeedback('error', 'Ogiltig filtyp. Tillåtna: PDF, Word, Excel, bilder.');
+                return;
+            }
+
+            var reader = new FileReader();
+            reader.onload = function() {
+                selectedFile = {
+                    base64: reader.result,
+                    mime: file.type || 'application/octet-stream',
+                    name: file.name,
+                    size: file.size
+                };
+
+                var thumb = $uploadZone.querySelector('.admin-upload-thumb');
+                if (file.type.startsWith('image/')) {
+                    thumb.src = reader.result;
+                } else {
+                    var iconMap = {
+                        'pdf': 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 52 52"><rect fill="%23fce4ec" width="52" height="52" rx="10"/><text x="26" y="32" text-anchor="middle" font-size="16" font-weight="bold" fill="%23c62828">PDF</text></svg>'),
+                        'doc': 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 52 52"><rect fill="%23e3f2fd" width="52" height="52" rx="10"/><text x="26" y="32" text-anchor="middle" font-size="14" font-weight="bold" fill="%231565c0">DOC</text></svg>'),
+                        'docx': 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 52 52"><rect fill="%23e3f2fd" width="52" height="52" rx="10"/><text x="26" y="32" text-anchor="middle" font-size="14" font-weight="bold" fill="%231565c0">DOC</text></svg>'),
+                        'xls': 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 52 52"><rect fill="%23e8f5e9" width="52" height="52" rx="10"/><text x="26" y="32" text-anchor="middle" font-size="14" font-weight="bold" fill="%232e7d32">XLS</text></svg>'),
+                        'xlsx': 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 52 52"><rect fill="%23e8f5e9" width="52" height="52" rx="10"/><text x="26" y="32" text-anchor="middle" font-size="14" font-weight="bold" fill="%232e7d32">XLS</text></svg>')
+                    };
+                    thumb.src = iconMap[ext] || iconMap['pdf'];
+                }
+
+                $uploadZone.querySelector('.admin-upload-name').textContent = file.name;
+                $uploadZone.querySelector('.admin-upload-size').textContent = formatSize(file.size);
+                $uploadZone.classList.add('has-file');
+                clearFeedback();
+                updateUploadButton();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearFile() {
+            selectedFile = null;
+            $fileInput.value = '';
+            $cameraInput.value = '';
+            $uploadZone.classList.remove('has-file');
+            $uploadZone.querySelector('.admin-upload-thumb').src = '';
+            $uploadZone.querySelector('.admin-upload-name').textContent = '';
+            $uploadZone.querySelector('.admin-upload-size').textContent = '';
+            updateUploadButton();
+        }
+
+        function formatSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / 1048576).toFixed(1) + ' MB';
+        }
+
+        // ── Camera ───────────────────────────────────
+        window.openCamera = function() {
+            $cameraInput.click();
+        };
+
+        // ── Category Selection ──────────────────────
+        window.selectCategory = function(card) {
+            document.querySelectorAll('.admin-category-card').forEach(function(c) {
+                c.classList.remove('selected');
+            });
+            card.classList.add('selected');
+            selectedCategory = card.dataset.category;
+            clearFeedback();
+            updateUploadButton();
+        };
+
+        function updateUploadButton() {
+            $uploadBtn.disabled = !(selectedFile && selectedCategory);
+        }
+
+        // ── Upload ──────────────────────────────────
+        window.handleUpload = function() {
+            if (!selectedFile || !selectedCategory) {
+                showFeedback('error', 'Välj en fil och en kategori först.');
+                return;
+            }
+
+            var receiptDate = $dateInput.value;
+            if (!receiptDate) {
+                showFeedback('error', 'Välj ett datum för kvittot.');
+                return;
+            }
+
+            $uploadBtn.disabled = true;
+            $uploadBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Laddar upp...';
+            $progress.classList.add('active');
+            clearFeedback();
+
+            var year = receiptDate.split('-')[0];
+
+            var params = new URLSearchParams();
+            params.append('action', 'upload-receipt');
+            params.append('file', selectedFile.base64);
+            params.append('mime', selectedFile.mime);
+            params.append('filename', selectedFile.name);
+            params.append('year', year);
+            params.append('category', selectedCategory);
+            params.append('receiptDate', receiptDate);
+            params.append('folderId', '1M2tBkJvvyZ1zol4d9TZIjXMYezlpsi8a');
+
+            fetch(GAS_URL, {
+                method: 'POST',
+                body: params
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(result) {
+                $progress.classList.remove('active');
+                $uploadBtn.disabled = false;
+                $uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Ladda upp kvitto';
+
+                if (result.success) {
+                    showFeedback('success', 'Kvittot har laddats upp!');
+                    saveRecentUpload({
+                        name: selectedFile.name,
+                        category: selectedCategory,
+                        date: receiptDate,
+                        timestamp: new Date().toISOString()
+                    });
+                    clearFile();
+                    loadRecentUploads();
+                } else {
+                    showFeedback('error', 'Fel: ' + (result.error || 'Okänt fel'));
+                }
+            })
+            .catch(function(err) {
+                $progress.classList.remove('active');
+                $uploadBtn.disabled = false;
+                $uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Ladda upp kvitto';
+                showFeedback('error', 'Anslutningsfel. Kontrollera internet och försök igen.');
+                console.error(err);
+            });
+        };
+
+        // ── Feedback ────────────────────────────────
+        function showFeedback(type, message) {
+            $feedback.className = 'admin-feedback ' + type;
+            $feedback.innerHTML = '<i class="fas fa-' + (type === 'success' ? 'check-circle' : 'exclamation-circle') + '"></i> ' + message;
+            $feedback.style.display = 'flex';
+            if (type === 'success') {
+                setTimeout(function() {
+                    if ($feedback.className.indexOf('success') !== -1) {
+                        $feedback.style.display = 'none';
+                    }
+                }, 6000);
+            }
+        }
+
+        function clearFeedback() {
+            $feedback.style.display = 'none';
+            $feedback.className = 'admin-feedback';
+            $feedback.innerHTML = '';
+        }
+
+        // ── Recent Uploads ──────────────────────────
+        function saveRecentUpload(entry) {
+            var recent = [];
+            try {
+                recent = JSON.parse(localStorage.getItem(RECENT_STORAGE_KEY) || '[]');
+            } catch(e) {}
+            recent.unshift(entry);
+            if (recent.length > 20) recent = recent.slice(0, 20);
+            try {
+                localStorage.setItem(RECENT_STORAGE_KEY, JSON.stringify(recent));
+            } catch(e) {}
+        }
+
+        function loadRecentUploads() {
+            var recent = [];
+            try {
+                recent = JSON.parse(localStorage.getItem(RECENT_STORAGE_KEY) || '[]');
+            } catch(e) {}
+
+            if (recent.length === 0) {
+                $recentList.innerHTML = '<div class="admin-recent-empty">Inga uppladdningar ännu</div>';
+                return;
+            }
+
+            $recentBox.style.display = 'block';
+
+            var catIcons = {
+                'moskeer':   { icon: 'fa-mosque',   bg: '#e8f0f4', color: '#15546F' },
+                'transport': { icon: 'fa-car',      bg: '#fff3e0', color: '#e67e22' },
+                'mat':       { icon: 'fa-utensils', bg: '#e8f5e9', color: '#2e7d32' },
+                'annat':     { icon: 'fa-ellipsis-h', bg: '#f3e5f5', color: '#7b1fa2' }
+            };
+
+            var catLabels = {
+                'moskeer': 'Moskeer', 'transport': 'Transport', 'mat': 'Mat', 'annat': 'Annat'
+            };
+
+            var html = '';
+            recent.forEach(function(r) {
+                var ci = catIcons[r.category] || catIcons['annat'];
+                html += '<div class="admin-recent-item">' +
+                    '<div class="rec-icon" style="background:' + ci.bg + ';color:' + ci.color + ';">' +
+                        '<i class="fas ' + ci.icon + '"></i>' +
+                    '</div>' +
+                    '<div class="rec-info">' +
+                        '<div class="rec-name">' + escapeHTML(r.name) + '</div>' +
+                        '<div class="rec-meta">' + (catLabels[r.category] || r.category) + ' — ' + r.date + '</div>' +
+                    '</div>' +
+                '</div>';
+            });
+            $recentList.innerHTML = html;
+        }
+
+        function escapeHTML(str) {
+            var div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function resetForm() {
+            clearFile();
+            selectedCategory = null;
+            document.querySelectorAll('.admin-category-card').forEach(function(c) {
+                c.classList.remove('selected');
+            });
+            var today = new Date();
+            $dateInput.value = today.getFullYear() + '-' +
+                String(today.getMonth() + 1).padStart(2, '0') + '-' +
+                String(today.getDate()).padStart(2, '0');
+            clearFeedback();
+            updateUploadButton();
+        }
+
+        init();
+    })();
+    </script>
+
+    <!-- i18n module -->
+    <script type="module" src="/langugaes/js/i18n.js" defer></script>
+</body>
+
+</html>

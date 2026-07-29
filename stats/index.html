@@ -555,6 +555,49 @@
             padding-right: 6px;
         }
 
+        .today-stats-block {
+            background: var(--stats-pill-bg);
+            border: 1px solid var(--stats-pill-border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+        }
+
+        .today-stats-block h5 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #198754;
+        }
+
+        body.theme-dark .today-stats-block h5 {
+            color: #2ecc71;
+        }
+
+        .today-stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+            font-size: 0.95rem;
+        }
+
+        .today-stat-row .today-stat-label {
+            color: var(--stats-muted);
+            font-weight: 500;
+        }
+
+        .today-stat-row .today-stat-value {
+            font-weight: 700;
+            color: var(--stats-text);
+            white-space: nowrap;
+        }
+
+        .today-stat-highlight {
+            color: #0d6efd !important;
+            font-size: 1.05rem;
+        }
+
         .qr-switch {
             position: relative;
             display: inline-block;
@@ -698,6 +741,41 @@
             }
         }
 
+        /* ── Loading spinners ─────────────────────────── */
+        @keyframes stats-spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .stats-spinner {
+            display: inline-block;
+            width: 52px;
+            height: 52px;
+            border: 5px solid rgba(25, 111, 21, 0.12);
+            border-top-color: #196F15;
+            border-radius: 50%;
+            animation: stats-spin 0.75s linear infinite;
+            vertical-align: middle;
+        }
+
+        .stats-spinner-sm {
+            width: 18px;
+            height: 18px;
+            border-width: 2.5px;
+            border-top-color: #6c757d;
+            border-color: rgba(108, 117, 125, 0.15);
+            border-top-color: #6c757d;
+        }
+
+        body.theme-dark .stats-spinner {
+            border-color: rgba(46, 204, 113, 0.15);
+            border-top-color: #2ecc71;
+        }
+
+        body.theme-dark .stats-spinner-sm {
+            border-color: rgba(148, 163, 184, 0.2);
+            border-top-color: #94a3b8;
+        }
+
         /* ── RTL overrides for Arabic ─────────────────────────── */
         html[dir="rtl"] .theme-switch-corner {
             left: auto;
@@ -772,8 +850,8 @@
                     </div>
 
                     <div class="stats-total-block">
-                        <div id="totalAmount" class="stats-total">0</div>
-                        <p id="progressLabel" class="text-muted mb-0">0% av målet</p>
+                        <div id="totalAmount" class="stats-total"><span class="stats-spinner"></span></div>
+                        <p id="progressLabel" class="text-muted mb-0">Laddar...</p>
                     </div>
 
                     <div class="stats-progress mt-3" role="progressbar" aria-label="Insamlingsstatus"
@@ -793,8 +871,8 @@
                         </div>
                     </div>
                     <div class="stats-breakdown text-muted">
-                        <span class="stats-breakdown-item">Swish: <span id="totalSwish" dir="ltr">0 kr</span></span>
-                        <span class="stats-breakdown-item">Stripe: <span id="totalStripe" dir="ltr">0 kr</span></span>
+                        <span class="stats-breakdown-item">Swish: <span id="totalSwish" dir="ltr"><span class="stats-spinner stats-spinner-sm"></span></span></span>
+                        <span class="stats-breakdown-item">Stripe: <span id="totalStripe" dir="ltr"><span class="stats-spinner stats-spinner-sm"></span></span></span>
                     </div>
                 </div>
             </div>
@@ -815,6 +893,17 @@
                             <span class="qr-slider"></span>
                         </span>
                     </label>
+                    <div id="todayStatsBlock" class="today-stats-block">
+                        <h5 data-i18n="statsPage.todayStats">Idag</h5>
+                        <div class="today-stat-row">
+                            <span class="today-stat-label" data-i18n="statsPage.highestToday">Högst idag</span>
+                            <span id="todayHighest" class="today-stat-value today-stat-highlight" dir="ltr">—</span>
+                        </div>
+                        <div class="today-stat-row">
+                            <span class="today-stat-label" data-i18n="statsPage.totalToday">Totalt idag</span>
+                            <span id="todayTotal" class="today-stat-value" dir="ltr">—</span>
+                        </div>
+                    </div>
                     <div class="donation-title-row">
                         <h4 id="topDonationsTitle" class="mb-0" data-i18n="statsPage.latestDonations">Senaste 5 donationer</h4>
                     </div>
@@ -865,6 +954,8 @@
         const swishQrWrapEl = document.getElementById("swishQrWrap");
         const topDonationsTitleEl = document.getElementById("topDonationsTitle");
         const qrDonationsTitleEl = document.getElementById("qrDonationsTitle");
+        const todayHighestEl = document.getElementById("todayHighest");
+        const todayTotalEl = document.getElementById("todayTotal");
         const mobileQrQuery = window.matchMedia("(max-width: 768px)");
         const THEME_STORAGE_KEY = "alsalam-stats-theme";
         const LAYOUT_STORAGE_KEY = "alsalam-stats-main-width";
@@ -1038,6 +1129,11 @@
 
                 last5ListEl.appendChild(li);
             });
+        }
+
+        function renderTodayStats(highestToday, totalToday) {
+            todayHighestEl.textContent = highestToday > 0 ? formatSek(highestToday) : "—";
+            todayTotalEl.textContent = totalToday > 0 ? formatSek(totalToday) : "—";
         }
 
         function applySwishQrMode(last5) {
@@ -1457,6 +1553,8 @@
                 // null = this source failed this poll cycle
                 let swishTotal = null;
                 let swishLast5 = [];
+                let swishTodayTotal = 0;
+                let swishTodayHighest = 0;
                 let stripeTotal = null;
                 let stripeRecent = [];
 
@@ -1468,6 +1566,8 @@
                         const swishPayload = getPayload(swishJson);
                         swishTotal = parseAmount(swishPayload.totalAmount || 0);
                         swishLast5 = Array.isArray(swishPayload.last5) ? swishPayload.last5 : [];
+                        swishTodayTotal = parseAmount(swishPayload.todayTotal || 0);
+                        swishTodayHighest = parseAmount(swishPayload.todayHighest || 0);
                         lastKnownSwishTotal = swishTotal;
                         // Source-local label updates independently of combined total
                         totalSwishEl.textContent = formatSek(swishTotal);
@@ -1502,8 +1602,26 @@
                         .sort((a, b) => toSortableTimestamp(b) - toSortableTimestamp(a))
                         .slice(0, 5);
 
+                    // Compute today stats from Stripe recent payments (best-effort since
+                    // we only have recent payments, not all of today's card donations)
+                    const todayStr = new Date().toISOString().slice(0, 10);
+                    let stripeTodayTotal = 0;
+                    let stripeTodayHighest = 0;
+                    stripeRecent.forEach(function (p) {
+                        const pDate = (p.date || "").toString().trim();
+                        if (pDate === todayStr) {
+                            const amt = parseAmount(p.amount);
+                            stripeTodayTotal += amt;
+                            if (amt > stripeTodayHighest) stripeTodayHighest = amt;
+                        }
+                    });
+
+                    const combinedTodayTotal = swishTodayTotal + stripeTodayTotal;
+                    const combinedTodayHighest = Math.max(swishTodayHighest, stripeTodayHighest);
+
                     latestLast5Data = last5;
                     renderCombinedTotal(combinedTotal);
+                    renderTodayStats(combinedTodayHighest, combinedTodayTotal);
                     applySwishQrMode(latestLast5Data);
                     maybeTriggerCelebrations(combinedTotal, last5);
 

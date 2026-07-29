@@ -1,33 +1,178 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 
 <head>
     <base href="/">
     <meta charset="utf-8">
-    <title>Al-Salam Moské</title>
+    <title>Al-Salam Skola — Registrering</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <!-- Google Fonts -->
+    <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Pacifico&display=swap"
-        rel="stylesheet">
-
-    <!-- Font Awesome & Bootstrap Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- CSS -->
+
+    <!-- Site CSS -->
     <link href="lib/animate/animate.min.css" rel="stylesheet">
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 
     <style>
-        /* Membership Checker (Step 1) */
-        .tax-check-area {
-            margin-top: 20px;
+        :root {
+            --green: #1a8a1f;
+            --green-lt: #e8f5e9;
+            --red: #dc3545;
+            --red-lt: #fff5f5;
+            --muted: #6b7280;
+            --border: #dee2e6;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04);
+            --radius: 16px;
         }
+
+        /* ── Step indicator ── */
+        .formbold-steps { margin-bottom: 32px; }
+        .formbold-steps ul {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-wrap: wrap;
+        }
+        .formbold-steps li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            border-radius: 40px;
+            background: #f3f4f6;
+            color: var(--muted);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all .3s;
+            cursor: default;
+        }
+        .formbold-steps li span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: #d1d5db;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            transition: all .3s;
+        }
+        .formbold-steps li.active { background: var(--green); color: #fff; }
+        .formbold-steps li.active span { background: #fff; color: var(--green); }
+        .formbold-steps li.done { background: var(--green-lt); color: var(--green); }
+        .formbold-steps li.done span { background: var(--green); color: #fff; }
+
+        /* ── Step panels ── */
+        .formbold-form-step-1,
+        .formbold-form-step-2,
+        .formbold-form-step-3 { display: none; }
+        .formbold-form-step-1.active,
+        .formbold-form-step-2.active,
+        .formbold-form-step-3.active { display: block; }
+
+        .step-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #1a1a1a;
+        }
+        .step-sub {
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-bottom: 24px;
+        }
+
+        /* ── Form inputs ── */
+        .formbold-form-label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+            color: #374151;
+        }
+        .formbold-form-input {
+            width: 100%;
+            height: 48px;
+            padding: 0 14px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: #fff;
+            transition: border .25s, box-shadow .25s;
+            box-sizing: border-box;
+        }
+        .formbold-form-input:focus {
+            outline: none;
+            border-color: var(--green);
+            box-shadow: 0 0 0 4px rgba(26,138,31,.1);
+        }
+        .formbold-form-input.error { border-color: var(--red); }
+        .formbold-form-input.success { border-color: var(--green); }
+
+        .formbold-input-flex {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .formbold-input-flex > div { flex: 1; min-width: 180px; }
+        .formbold-input-flex > div.formbold-input-full-width { flex: 1 1 100%; min-width: 100%; }
+
+        /* ── Cards ── */
+        .info-card {
+            background: #fff;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            margin-bottom: 16px;
+        }
+        .info-card.highlight {
+            border-color: rgba(26,138,31,.25);
+            background: var(--green-lt);
+        }
+
+        /* ── Parent-type toggle ── */
+        .parent-type-toggle {
+            display: flex;
+            gap: 0;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 2px solid var(--border);
+            background: #f9fafb;
+            width: fit-content;
+            margin-bottom: 20px;
+        }
+        .parent-type-toggle label {
+            padding: 10px 28px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            color: var(--muted);
+            transition: all .2s;
+            margin: 0;
+            user-select: none;
+            white-space: nowrap;
+        }
+        .parent-type-toggle input { display: none; }
+        .parent-type-toggle input:checked + label {
+            background: var(--green);
+            color: #fff;
+        }
+
+        /* ── Membership checker ── */
+        .tax-check-area { margin-bottom: 8px; }
         .tax-check-input-row {
             display: flex;
             gap: 12px;
@@ -36,72 +181,62 @@
         .tax-check-input-row input {
             flex: 1;
             min-width: 200px;
-            height: 52px;
+            height: 54px;
             padding: 0 18px;
-            border: 2px solid #dee2e6;
+            border: 2px solid var(--border);
             border-radius: 14px;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 600;
             letter-spacing: 0.05em;
             background: #fff;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            transition: border-color .3s, box-shadow .3s;
             font-family: inherit;
         }
         .tax-check-input-row input:focus {
             outline: none;
-            border-color: #15546F;
-            box-shadow: 0 0 0 4px rgba(21,84,111,0.1);
+            border-color: var(--green);
+            box-shadow: 0 0 0 4px rgba(26,138,31,.1);
         }
-        .tax-check-input-row input.error {
-            border-color: #dc3545;
-        }
-        .tax-check-input-row input.success {
-            border-color: #28a745;
-        }
+        .tax-check-input-row input.error { border-color: var(--red); }
+        .tax-check-input-row input.success { border-color: var(--green); }
         .tax-check-btn {
             white-space: nowrap;
             display: flex !important;
             align-items: center;
             gap: 8px;
-            height: 52px;
+            height: 54px;
             padding: 0 28px !important;
         }
-        .tax-check-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+        .tax-check-btn:disabled { opacity: .5; cursor: not-allowed; }
         .tax-check-hint {
             font-size: 0.85rem;
-            color: #6b7280;
+            color: var(--muted);
             margin-top: 10px;
             min-height: 20px;
         }
-        .tax-check-hint .err {
-            color: #dc3545;
-            display: none;
-        }
+        .tax-check-hint .err { color: var(--red); display: none; }
+
         .tax-result-card {
             margin-top: 20px;
-            border-radius: 20px;
+            border-radius: 18px;
             padding: 18px 24px;
             border: 2px solid transparent;
             display: flex;
             align-items: center;
             gap: 16px;
             background: #fff;
-            box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04);
+            box-shadow: var(--shadow-sm);
         }
         .tax-result-card.success {
             border-color: rgba(26,138,31,.25);
-            background: #e8f5e9;
+            background: var(--green-lt);
         }
         .tax-result-card.fail {
             border-color: rgba(220,53,69,.2);
-            background: #fff5f5;
+            background: var(--red-lt);
         }
         .tax-result-icon {
-            width: 48px;
-            height: 48px;
+            width: 48px; height: 48px;
             border-radius: 50%;
             flex-shrink: 0;
             display: flex;
@@ -109,59 +244,212 @@
             justify-content: center;
             font-size: 1.25rem;
         }
-        .tax-result-card.success .tax-result-icon {
-            background: #1a8a1f;
-            color: #fff;
-        }
-        .tax-result-card.fail .tax-result-icon {
-            background: #dc3545;
-            color: #fff;
-        }
-        .tax-result-body {
-            flex: 1;
-            min-width: 0;
-        }
-        .tax-result-body h4 {
-            font-size: 1.05rem;
-            font-weight: 700;
-            margin: 0 0 2px;
-        }
-        .tax-result-body .tax-result-sub {
-            font-size: 0.85rem;
-            color: #6b7280;
-        }
-        .tax-result-body .tax-result-sub b {
-            color: #1a8a1f;
-        }
+        .tax-result-card.success .tax-result-icon { background: var(--green); color: #fff; }
+        .tax-result-card.fail .tax-result-icon    { background: var(--red); color: #fff; }
+        .tax-result-body { flex: 1; min-width: 0; }
+        .tax-result-body h4 { font-size: 1.05rem; font-weight: 700; margin: 0 0 2px; }
+        .tax-result-body .tax-result-sub { font-size: 0.85rem; color: var(--muted); }
+        .tax-result-body .tax-result-sub b { color: var(--green); }
         .tax-result-link {
             flex-shrink: 0;
             padding: 9px 22px;
             border-radius: 13px;
             font-weight: 700;
-            font-size: 0.88rem;
+            font-size: .88rem;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 7px;
-            transition: transform 0.15s, background 0.2s;
-            background: #dc3545;
+            transition: transform .15s, background .2s;
+            background: var(--red);
             color: #fff;
         }
-        .tax-result-link:hover {
-            transform: translateY(-1px);
-            background: #c82333;
-            color: #fff;
-        }
-        /* Step-1 verified hint */
+        .tax-result-link:hover { transform: translateY(-1px); background: #c82333; color: #fff; }
+
+        /* ── Verified hint ── */
         .step-1-next-hint {
             display: none;
             margin-top: 16px;
             font-size: 0.9rem;
-            color: #28a745;
+            color: var(--green);
             font-weight: 500;
         }
-        .step-1-next-hint.visible {
-            display: block;
+        .step-1-next-hint.visible { display: block; }
+
+        /* ── Child card ── */
+        .child-card {
+            background: #fff;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        .child-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .child-card-header .child-label {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--green);
+        }
+        .remove-child-btn {
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 4px 8px;
+            border-radius: 8px;
+            transition: all .15s;
+        }
+        .remove-child-btn:hover { color: var(--red); background: var(--red-lt); }
+
+        /* ── Buttons ── */
+        .donation-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 32px;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all .2s;
+            background: var(--green);
+            color: #fff;
+        }
+        .donation-btn:hover { background: #157519; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(26,138,31,.25); }
+
+        .formbold-add-button {
+            background: none;
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            color: var(--muted);
+            transition: all .2s;
+            font-family: inherit;
+            width: 100%;
+            text-align: center;
+        }
+        .formbold-add-button:hover { border-color: var(--green); color: var(--green); background: var(--green-lt); }
+
+        .formbold-form-btn-wrapper {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 32px;
+            flex-wrap: wrap;
+        }
+        .formbold-back-btn {
+            background: #f3f4f6;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            font-family: inherit;
+            color: #374151;
+            transition: all .2s;
+        }
+        .formbold-back-btn:hover { background: #e5e7eb; }
+
+        .formbold-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--green);
+            color: #fff;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all .2s;
+        }
+        .formbold-btn:hover { background: #157519; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(26,138,31,.25); }
+
+        /* ── Section divider ── */
+        .section-divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 24px 0;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 600px) {
+            /* Tighter page padding */
+            .formbold-main-wrapper { padding: 0 8px; }
+            .formbold-form-wrapper { padding: 16px 12px !important; }
+
+            /* Step indicator */
+            .formbold-steps ul { gap: 4px; }
+            .formbold-steps li { font-size: 0.72rem; padding: 6px 10px; gap: 4px; border-radius: 30px; }
+            .formbold-steps li span { width: 22px; height: 22px; font-size: 0.68rem; }
+
+            /* Step panels */
+            .step-title { font-size: 1rem; }
+            .step-sub { font-size: 0.82rem; margin-bottom: 16px; }
+
+            /* Input layout */
+            .formbold-input-flex { flex-direction: column; gap: 10px; margin-bottom: 10px; }
+            .formbold-input-flex > div { min-width: 100%; }
+            .formbold-form-input { height: 44px; font-size: 0.95rem; padding: 0 12px; }
+
+            /* Cards */
+            .info-card { padding: 14px 16px; border-radius: 14px; }
+            .child-card { padding: 12px 14px; border-radius: 14px; }
+
+            /* Membership check */
+            .tax-check-input-row { flex-direction: column; gap: 8px; }
+            .tax-check-input-row input { height: 48px; font-size: 1rem; min-width: 0; }
+            .tax-check-btn { width: 100%; justify-content: center; height: 48px; font-size: 0.9rem; }
+            .tax-result-card { flex-wrap: wrap; padding: 14px 16px; gap: 10px; }
+            .tax-result-link { width: 100%; justify-content: center; }
+
+            /* Parent type toggle */
+            .parent-type-toggle { width: 100%; }
+            .parent-type-toggle label { flex: 1; text-align: center; padding: 10px 12px; font-size: 0.85rem; }
+
+            /* Add buttons */
+            .formbold-add-button { padding: 10px 16px; font-size: 0.85rem; border-radius: 10px; }
+
+            /* Navigation buttons */
+            .formbold-form-btn-wrapper {
+                flex-direction: column-reverse;
+                gap: 8px;
+                margin-top: 24px;
+            }
+            .formbold-back-btn, .formbold-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+
+            /* School day radios */
+            .formbold-form-confirm > div {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            /* Section divider */
+            .section-divider { margin: 16px 0; }
+
+            /* GDPR text */
+            .mt-2.text-muted { font-size: 0.75rem; text-align: center; }
         }
     </style>
 </head>
@@ -170,47 +458,32 @@
     <div id="header-placeholder"></div>
     <div style="margin-top: 130px;"></div>
 
-    <div class="modal fade" id="requirementsModal" tabindex="-1" aria-labelledby="requirementsModalLabel"
-        aria-hidden="true">
+    <!-- ═══ Terms Modal ═══ -->
+    <div class="modal fade" id="requirementsModal" tabindex="-1" aria-labelledby="requirementsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content shadow-lg rounded-4 border-0">
                 <div class="modal-header bg-light border-bottom">
-                    <h5 class="modal-title fw-bold" id="requirementsModalLabel" data-i18n="school.popup-title">📘 Viktigt innan du fyller i formuläret
-                    </h5>
+                    <h5 class="modal-title fw-bold" id="requirementsModalLabel" data-i18n="school.popup-title">📘 Viktigt innan du fyller i formuläret</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Stäng"></button>
                 </div>
-
-                <!-- term and condition -->
-                <div class="modal-body" style="max-height: 70vh; overflow-y: auto; background-color: #fff;">
-                    <div class="formbold-terms px-2">
+                <div class="modal-body" style="max-height:70vh;overflow-y:auto;background:#fff;">
+                    <div class="px-2">
                         <h4 class="text-primary fw-bold mb-3" data-i18n="school.popup-terms-title">Skolans villkor</h4>
-                        <ol class="list-decimal ps-3 pe-2 lh-lg" style="color:#333; font-size: 1rem;">
-
+                        <ol class="list-decimal ps-3 pe-2 lh-lg" style="color:#333;font-size:1rem;">
                             <li class="mb-3" data-i18n="school.popup-term-1">Kursen börjar i början av september och pågår till mitten av juni. Därefter erbjuds sommarkurser för de elever som vill fortsätta.</li>
-
                             <li class="mb-3" data-i18n="school.popup-term-2">Undervisningen sker en gång i veckan. Vårdnadshavarna väljer antingen lördag eller söndag. På lördagar börjar undervisningen kl. 10:00. På söndagar börjar undervisningen kl. 11:00.</li>
-
                             <li class="mb-3" data-i18n="school.popup-term-3">Undervisningen är cirka två och en halv timme lång och består av: första timmen arabiska språket, en kvarts rast där eleven kan äta en lätt måltid, och andra timmen koranläsning.</li>
-
                             <li class="mb-3" data-i18n="school.popup-term-4">En av föräldrarna måste vara medlem i Alsalam moské genom trosamfundet FIFS.</li>
-
                             <li class="mb-3" data-i18n="school.popup-term-5">Kursavgiften är 160 kr per månad för varje elev och betalas via autogiro till moskéskolans konto. Avgiften betalas för 12 månader.</li>
-
                             <li class="mb-3" data-i18n="school.popup-term-6">Böcker och skolmaterial delas ut efter att elevens nivå har fastställts. Kostnaden är 350 kr och betalas en gång.</li>
-
                             <li class="mb-3" data-i18n="school.popup-term-7">Kommunikation: När elevernas nivåer har fastställts skapas WhatsApp-grupper för varje klass. Där lägger lärarna upp läxor, uppgifter och viktig information för att följa upp eleverna tillsammans med föräldrarna.</li>
-
                             <li class="mb-3" data-i18n="school.popup-term-8">Eleverna ska närvara regelbundet och inte vara frånvarande utan giltig anledning. Vid nödvändig frånvaro ska detta meddelas i förväg. Läxor och uppgifter ska göras och följas upp av vårdnadshavarna hemma.</li>
-
                             <li class="mb-3" data-i18n="school.popup-term-9">Eleverna ska bära kläder som är anpassade för moskén, bön och väderförhållanden.</li>
-
                             <li class="mb-3" data-i18n="school.popup-term-10">Ömsesidig respekt ska råda i alla avseenden: inga förolämpningar, inget våld och ingen farlig lek. Renlighet och ordning, både personlig och allmän, ska upprätthållas i moskén och på vägen dit.</li>
-
                             <li class="mb-3" data-i18n="school.popup-term-11">Eleverna bör inte ta med värdesaker. Om det ändå sker, är det på egen risk. Skolan ansvarar inte för borttappade eller förstörda föremål.</li>
                         </ol>
                     </div>
                 </div>
-
                 <div class="modal-footer bg-light">
                     <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal" data-i18n="school.popup-understand">Jag förstår</button>
                 </div>
@@ -218,43 +491,39 @@
         </div>
     </div>
 
-
+    <!-- ═══ Main Form ═══ -->
     <div class="container-fluid px-0">
         <div class="col-12 px-0">
             <h2 class="text-center" data-i18n="school.form.title">Registreringsformulär</h2>
+
             <div class="formbold-main-wrapper">
-                <!-- Author: FormBold Team -->
-                <!-- Learn More: https://formbold.com -->
                 <div class="formbold-form-wrapper">
                     <form id="schoolsform" method="POST"
-                        action="https://script.google.com/macros/s/AKfycbwWHS1yB_oEpYHk16T3OOkHetyeBcGh0RHSXk518U5_lbHee9Ne4W0djxm6HwI6t1V7Hw/exec">
+                        action="https://script.google.com/macros/s/AKfycbxIWhMCHmcxbtHl1WLU3XFqaslc_Fxn_sRSUuLrN4x7-Up84vx_cIujORbRCupbSxmbcg/exec">
+
+                        <!-- ── Step indicator ── -->
                         <div class="formbold-steps">
                             <ul>
                                 <li class="formbold-step-menu1 active" data-i18n="school.form.step-membership">
-                                    <span>1</span>
-                                    Medlemskap
+                                    <span>1</span> Medlemskap
                                 </li>
                                 <li class="formbold-step-menu2" data-i18n="school.form.step-parent">
-                                    <span>2</span>
-                                    Föräldrar
+                                    <span>2</span> Föräldrar
                                 </li>
                                 <li class="formbold-step-menu3" data-i18n="school.form.step-children-confirm">
-                                    <span>3</span>
-                                    Barn & Bekräfta
+                                    <span>3</span> Barn & Bekräfta
                                 </li>
                             </ul>
                         </div>
 
+                        <!-- ═══ STEP 1: Membership ═══ -->
                         <div class="formbold-form-step-1 active">
-                            <p data-i18n="school.form.membership-intro">Ange ditt personnummer för att verifiera FIFS-medlemskap. En av föräldrarna måste vara medlem.</p>
+                            <p class="step-sub" data-i18n="school.form.membership-intro">Ange ditt personnummer för att verifiera FIFS-medlemskap. En av föräldrarna måste vara medlem.</p>
 
                             <div class="tax-check-area">
                                 <div class="tax-check-input-row">
-                                    <input type="text" id="school-pnr"
-                                           placeholder="ÅÅÅÅMMDD-XXXX"
-                                           maxlength="13"
-                                           autocomplete="off"
-                                           data-i18n-placeholder="school.form.membership-placeholder">
+                                    <input type="text" id="school-pnr" placeholder="ÅÅÅÅMMDD-XXXX" maxlength="13" autocomplete="off"
+                                        data-i18n-placeholder="school.form.membership-placeholder">
                                     <button type="button" class="donation-btn tax-check-btn" id="school-check-btn">
                                         <i class="fas fa-search"></i>
                                         <span data-i18n="school.form.membership-check-btn">Kontrollera medlemskap</span>
@@ -272,233 +541,202 @@
                                         <h4 id="school-result-title"></h4>
                                         <span class="tax-result-sub" id="school-result-sub"></span>
                                     </div>
-                                    <a class="tax-result-link" id="school-result-link" href="#"
-                                       target="_blank" rel="noopener" style="display:none;">
+                                    <a class="tax-result-link" id="school-result-link" href="#" target="_blank" rel="noopener" style="display:none;">
                                         <i class="fas fa-external-link-alt"></i>
                                         <span data-i18n="school.form.membership-register">Registrera dig</span>
                                     </a>
                                 </div>
                             </div>
 
-                            <p class="step-1-next-hint" id="step-1-next-hint"
-                               data-i18n="school.form.membership-verified-hint">
-                               Medlemskap verifierat. Klicka på "Nästa steg" för att fortsätta.
+                            <p class="step-1-next-hint" id="step-1-next-hint" data-i18n="school.form.membership-verified-hint">
+                                Medlemskap verifierat. Klicka på "Nästa steg" för att fortsätta.
                             </p>
                         </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                        <!-- ═══ STEP 2: Parents ═══ -->
                         <div class="formbold-form-step-2">
-                            <p data-i18n="school.form.father-info">Pappans information:</p>
-                            <div class="formbold-input-flex">
-                                <div class="formbold-input-full-width">
-                                    <label for="Pappans Namn" class="formbold-form-label" data-i18n="school.form.full-name">För- och efternamn</label>
-                                    <input type="text" name="Pappans Namn" placeholder="Taha Ali" id="Pappans Namn"
-                                        class="formbold-form-input" required />
+                            <p class="step-sub" data-i18n="school.form.parent1-desc">Fyll i dina uppgifter som vårdnadshavare. Du kan också lägga till den andra förälderns uppgifter.</p>
+
+                            <!-- Parent type toggle -->
+                            <div class="parent-type-toggle" role="radiogroup" aria-label="Jag är">
+                                <input type="radio" name="parentType" id="parentTypeFather" value="father" checked>
+                                <label for="parentTypeFather" data-i18n="school.form.parent-father">👨 Pappa</label>
+                                <input type="radio" name="parentType" id="parentTypeMother" value="mother">
+                                <label for="parentTypeMother" data-i18n="school.form.parent-mother">👩 Mamma</label>
+                            </div>
+
+                            <!-- Parent 1 -->
+                            <div class="info-card highlight">
+                                <p class="step-title" data-i18n="school.form.parent1-title">Förälder 1</p>
+                                <div class="formbold-input-flex">
+                                    <div class="formbold-input-full-width">
+                                        <label for="p1name" class="formbold-form-label" data-i18n="school.form.full-name">För- och efternamn</label>
+                                        <input type="text" name="Förälder 1 Namn" id="p1name" placeholder="Taha Ali" class="formbold-form-input" required>
+                                    </div>
+                                </div>
+                                <div class="formbold-input-flex">
+                                    <div>
+                                        <label for="p1ssn" class="formbold-form-label" data-i18n="school.form.personal-number">Personnummer</label>
+                                        <input type="text" name="Förälder 1 Personnummer" id="p1ssn" placeholder="199901019999" class="formbold-form-input" required>
+                                    </div>
+                                    <div>
+                                        <label for="p1mobile" class="formbold-form-label" data-i18n="school.form.mobile">Mobilnummer</label>
+                                        <input type="text" name="Förälder 1 Mobilnummer" id="p1mobile" placeholder="0731234567" class="formbold-form-input" required
+                                            pattern="07\d{8}" title="Mobilnummer måste vara 10 siffror som börjar med 07"
+                                            data-i18n-title="school.form.validation.mobile-07">
+                                    </div>
+                                </div>
+                                <div class="formbold-input-flex">
+                                    <div class="formbold-input-full-width">
+                                        <label for="p1email" class="formbold-form-label" data-i18n="school.form.email">Mejladress</label>
+                                        <input type="email" name="Förälder 1 Email" id="p1email" placeholder="tahaali@gmail.com" class="formbold-form-input" required
+                                            title="Ange en giltig e-postadress" data-i18n-title="school.form.validation.email">
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="formbold-input-flex">
-                                <div>
-                                    <label for="Pappans Personnummer" class="formbold-form-label" data-i18n="school.form.personal-number">Personnummer</label>
-                                    <input type="text" name="Pappans Personnummer" id="Pappans Personnummer"
-                                        placeholder="199901019999" class="formbold-form-input" required />
-                                </div>
-                                <div>
-                                    <label for="Pappans Mobilnummer" class="formbold-form-label" data-i18n="school.form.mobile">Mobilnummer</label>
-                                    <input type="text" name="Pappans Mobilnummer" id="Pappans Mobilnummer"
-                                        placeholder="0731234567" class="formbold-form-input" required pattern="07\d{8}"
-                                        title="Mobilnummer måste vara 10 siffror som börjar med 07"
-                                        data-i18n-title="school.form.validation.mobile-07" />
-                                </div>
-                            </div>
-
-                            <div class="formbold-input-flex">
-                                <div class="formbold-input-full-width">
-                                    <label for="Pappans Email" class="formbold-form-label" data-i18n="school.form.email">Mejladress</label>
-                                    <input type="email" name="Pappans Email" placeholder="tahaali@gmail.com"
-                                        id="Pappans Email" class="formbold-form-input" required
-                                        title="Ange en giltig e-postadress"
-                                        data-i18n-title="school.form.validation.email" />
-                                </div>
-                            </div>
-
-                            <button type="button" onclick="toggleSecondParent(this)" class="formbold-add-button" data-i18n="school.form.add-mother">
-                                ➕ Lägg till Mammans information
+                            <!-- Add Parent 2 button -->
+                            <button type="button" id="addParent2Btn" class="formbold-add-button" data-i18n="school.form.add-parent2">
+                                ➕ Lägg till andra föräldern
                             </button>
 
-                            <!-- The second parent section (initially hidden) -->
-                            <div id="secondParentContainer" style="display: none; margin-top: 1rem;">
-                                <p data-i18n="school.form.mother-info">Mammans information 2:</p>
-                                <div class="formbold-input-flex">
-                                    <div>
-                                        <label for="Mammans Namn" class="formbold-form-label" data-i18n="school.form.first-name">Förnamn</label>
-                                        <input type="text" name="Mammans Namn" placeholder="Amina Musa"
-                                            id="Mammans Namn" class="formbold-form-input" />
+                            <!-- Parent 2 (hidden by default) -->
+                            <div id="parent2Container" style="display:none;">
+                                <hr class="section-divider">
+                                <div class="info-card">
+                                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                                        <p class="step-title" style="margin-bottom:0;" data-i18n="school.form.parent2-title">Förälder 2 (valfritt)</p>
+                                        <button type="button" id="removeParent2Btn" class="remove-child-btn" style="font-size:1rem;" title="Ta bort">✕</button>
                                     </div>
-                                    <div>
-                                        <label for="Mammans Personnummer"
-                                            class="formbold-form-label" data-i18n="school.form.personal-number">Personnummer</label>
-                                        <input type="text" name="Mammans Personnummer" id="Mammans Personnummer"
-                                            placeholder="199901019999" class="formbold-form-input">
+                                    <div class="formbold-input-flex">
+                                        <div class="formbold-input-full-width">
+                                            <label for="p2name" class="formbold-form-label" data-i18n="school.form.full-name">För- och efternamn</label>
+                                            <input type="text" name="Förälder 2 Namn" id="p2name" placeholder="Amina Musa" class="formbold-form-input">
+                                        </div>
                                     </div>
-                                </div>
-
-                                <div class="formbold-input-flex">
-                                    <div>
-                                        <label for="Mammans Email" class="formbold-form-label" data-i18n="school.form.email">Mejladress</label>
-                                        <input type="email" name="Mammans Email" placeholder="aminamusa@gmail.com"
-                                            id="Mammans Email" class="formbold-form-input" />
+                                    <div class="formbold-input-flex">
+                                        <div>
+                                            <label for="p2ssn" class="formbold-form-label" data-i18n="school.form.personal-number">Personnummer</label>
+                                            <input type="text" name="Förälder 2 Personnummer" id="p2ssn" placeholder="199901019999" class="formbold-form-input">
+                                        </div>
+                                        <div>
+                                            <label for="p2mobile" class="formbold-form-label" data-i18n="school.form.mobile">Mobilnummer</label>
+                                            <input type="text" name="Förälder 2 Mobilnummer" id="p2mobile" placeholder="0701234567" class="formbold-form-input">
+                                        </div>
                                     </div>
-                                    <div>
-                                        <label for="Mammans Mobilnummer" class="formbold-form-label" data-i18n="school.form.mobile">Mobilnummer</label>
-                                        <input type="text" name="Mammans Mobilnummer" placeholder="0701234567"
-                                            id="Mammans Mobilnummer" class="formbold-form-input" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="formbold-input-flex" style="margin-top: 1rem;">
-                                <div class="formbold-input-full-width">
-                                    <label for="Adress" class="formbold-form-label" data-i18n="school.form.address">Adress</label>
-                                    <input type="text" name="Adress" id="Adress" placeholder="Södergatan 65"
-                                        class="formbold-form-input" required />
-                                </div>
-                            </div>
-
-                            <div class="formbold-input-flex">
-                                <div>
-                                    <label for="Postnummer" class="formbold-form-label" data-i18n="school.form.postcode">Postnummer</label>
-                                    <input type="text" name="Postnummer" id="Postnummer" placeholder="25219"
-                                        class="formbold-form-input" required pattern="\d{5}"
-                                        title="Postnummer måste vara 5 siffror"
-                                        data-i18n-title="school.form.validation.postcode-5" />
-                                </div>
-                                <div>
-                                    <label for="Postort" class="formbold-form-label" data-i18n="school.form.city">Postort</label>
-                                    <input type="text" name="Postort" id="Postort" placeholder="Helsingborg"
-                                        class="formbold-form-input" required />
-                                </div>
-                            </div>
-                        </div>
-
-
-
-
-
-
-
-                        <div class="formbold-form-step-3">
-                            <!-- Container for all children -->
-                            <div id="childrenContainer">
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <p style="margin: 0;" data-i18n="school.form.child-1">Barn 1</p>
-                                </div>
-                                <div class="formbold-input-flex">
-                                    <div>
-                                        <label for="Barnet Förnamn 1" class="formbold-form-label" data-i18n="school.form.first-name">Förnamn</label>
-                                        <input type="text" name="Barnet Förnamn" id="Barnet Förnamn 1"
-                                            placeholder="Ahmad" class="formbold-form-input" required />
-                                    </div>
-                                    <div>
-                                        <label for="Barnet Efternamn" class="formbold-form-label" data-i18n="school.form.last-name">Efternamn</label>
-                                        <input type="text" name="Barnet Efternamn" id="Barnet Efternamn"
-                                            placeholder="Ali" class="formbold-form-input" required />
-                                    </div>
-                                </div>
-                                <div class="formbold-input-flex">
-                                    <div style="position: relative; width: 55%;">
-                                        <label for="Barnets Personnummer 1"
-                                            class="formbold-form-label" data-i18n="school.form.personal-number">Personnummer</label>
-                                        <div style="display: flex; align-items: center;">
-                                            <input type="text" name="Barnets Personnummer" id="Barnets Personnummer 1"
-                                                placeholder="YYYYMMDDXXXX" class="formbold-form-input" required
-                                                pattern="(19|20)?\d{10}" title="Personnummer måste vara 12 siffror"
-                                                data-i18n-title="school.form.validation.personal-12" />
+                                    <div class="formbold-input-flex">
+                                        <div class="formbold-input-full-width">
+                                            <label for="p2email" class="formbold-form-label" data-i18n="school.form.email">Mejladress</label>
+                                            <input type="email" name="Förälder 2 Email" id="p2email" placeholder="aminamusa@gmail.com" class="formbold-form-input">
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Add Child Button -->
-                            <button type="button" onclick="addChild()" class="formbold-add-button" data-i18n="school.form.add-child"
-                                style="margin-bottom: 1rem;">
+                            <hr class="section-divider">
+
+                            <!-- Address -->
+                            <p class="step-title" data-i18n="school.form.address-title">Adress</p>
+                            <div class="formbold-input-flex">
+                                <div class="formbold-input-full-width">
+                                    <label for="adress" class="formbold-form-label" data-i18n="school.form.address">Adress</label>
+                                    <input type="text" name="Adress" id="adress" placeholder="Södergatan 65" class="formbold-form-input" required>
+                                </div>
+                            </div>
+                            <div class="formbold-input-flex">
+                                <div>
+                                    <label for="postnummer" class="formbold-form-label" data-i18n="school.form.postcode">Postnummer</label>
+                                    <input type="text" name="Postnummer" id="postnummer" placeholder="25219" class="formbold-form-input" required
+                                        pattern="\d{5}" title="Postnummer måste vara 5 siffror" data-i18n-title="school.form.validation.postcode-5">
+                                </div>
+                                <div>
+                                    <label for="postort" class="formbold-form-label" data-i18n="school.form.city">Postort</label>
+                                    <input type="text" name="Postort" id="postort" placeholder="Helsingborg" class="formbold-form-input" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ═══ STEP 3: Children & Confirm ═══ -->
+                        <div class="formbold-form-step-3">
+                            <p class="step-sub" data-i18n="school.form.children-desc">Lägg till ett eller flera barn. Alla barn delar samma efternamn.</p>
+
+                            <!-- Family last name (shared) -->
+                            <div class="formbold-input-flex">
+                                <div class="formbold-input-full-width">
+                                    <label for="familyLastName" class="formbold-form-label" data-i18n="school.form.family-lastname">Familjens efternamn</label>
+                                    <input type="text" name="Barnet Efternamn" id="familyLastName" placeholder="Ali" class="formbold-form-input" required>
+                                </div>
+                            </div>
+
+                            <!-- Children container -->
+                            <div id="childrenContainer">
+                                <!-- Child 1 -->
+                                <div class="child-card" data-child="1">
+                                    <div class="child-card-header">
+                                        <span class="child-label" data-i18n="school.form.child-1">Barn 1</span>
+                                    </div>
+                                    <div class="formbold-input-flex">
+                                        <div style="flex:2;">
+                                            <label class="formbold-form-label" data-i18n="school.form.first-name">Förnamn</label>
+                                            <input type="text" name="Barnet Förnamn" placeholder="Ahmad" class="formbold-form-input" required>
+                                        </div>
+                                        <div style="flex:3;">
+                                            <label class="formbold-form-label" data-i18n="school.form.personal-number">Personnummer</label>
+                                            <input type="text" name="Barnets Personnummer" placeholder="YYYYMMDDXXXX" class="formbold-form-input" required
+                                                pattern="(19|20)?\d{10}" title="Personnummer måste vara 12 siffror"
+                                                data-i18n-title="school.form.validation.personal-12">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Add Child -->
+                            <button type="button" id="addChildBtn" class="formbold-add-button" data-i18n="school.form.add-child">
                                 ➕ Lägg till Barn
                             </button>
 
-                            <!-- Day Selection -->
+                            <hr class="section-divider">
+
+                            <!-- School day -->
                             <div class="formbold-form-confirm">
-                                <div class="container" style="display: flex; justify-content: space-around;">
-                                    <fieldset>
-                                        <legend data-i18n="school.form.school-day">Skoldag:</legend>
-                                        <div class="form-check">
-                                            <label for="skoldagLördag" class="form-check-label"><input type="radio"
-                                                    class="form-check-input" name="skoldag" id="skoldagLördag"
-                                                    value="Lördag" required><span data-i18n="school.form.saturday">Lördag</span></label>
-                                        </div>
-                                        <div class="form-check">
-                                            <label for="skoldagSöndag" class="form-check-label"> <input type="radio"
-                                                    class="form-check-input" name="skoldag" id="skoldagSöndag"
-                                                    value="Söndag"><span data-i18n="school.form.sunday">Söndag</span></label>
-                                        </div>
-                                    </fieldset>
+                                <p class="step-title" data-i18n="school.form.school-day">Skoldag:</p>
+                                <div style="display:flex;gap:24px;flex-wrap:wrap;">
+                                    <label style="display:flex;align-items:center;gap:8px;font-weight:600;cursor:pointer;">
+                                        <input type="radio" name="skoldag" value="Lördag" required style="accent-color:var(--green);width:18px;height:18px;">
+                                        <span data-i18n="school.form.saturday">Lördag</span>
+                                    </label>
+                                    <label style="display:flex;align-items:center;gap:8px;font-weight:600;cursor:pointer;">
+                                        <input type="radio" name="skoldag" value="Söndag" style="accent-color:var(--green);width:18px;height:18px;">
+                                        <span data-i18n="school.form.sunday">Söndag</span>
+                                    </label>
                                 </div>
                             </div>
                         </div>
 
-
-
-
-
+                        <!-- ── Navigation buttons ── -->
                         <div class="formbold-form-btn-wrapper">
-                                <button type="button" class="formbold-back-btn" data-i18n="school.form.back">
-                                Back
-                            </button>
-
-                                <button type="button" class="formbold-btn">
-                                <span class="formbold-next-label" data-i18n="school.form.next">Next Step</span>
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
+                            <button type="button" class="formbold-back-btn" data-i18n="school.form.back">Tillbaka</button>
+                            <button type="button" class="formbold-btn">
+                                <span class="formbold-next-label" data-i18n="school.form.next">Nästa steg</span>
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g clip-path="url(#clip0_1675_1807)">
-                                        <path
-                                            d="M10.7814 7.33312L7.20541 3.75712L8.14808 2.81445L13.3334 7.99979L8.14808 13.1851L7.20541 12.2425L10.7814 8.66645H2.66675V7.33312H10.7814Z"
-                                            fill="white" />
+                                        <path d="M10.7814 7.33312L7.20541 3.75712L8.14808 2.81445L13.3334 7.99979L8.14808 13.1851L7.20541 12.2425L10.7814 8.66645H2.66675V7.33312H10.7814Z" fill="white"/>
                                     </g>
-                                    <defs>
-                                        <clipPath id="clip0_1675_1807">
-                                            <rect width="16" height="16" fill="white" />
-                                        </clipPath>
-                                    </defs>
+                                    <defs><clipPath id="clip0_1675_1807"><rect width="16" height="16" fill="white"/></clipPath></defs>
                                 </svg>
                             </button>
                         </div>
                         <p class="mt-2 text-muted">
-                            <strong data-i18n="school.form.gdpr">* Din ansökan och din data hanteras i enlighet med GDPR. Dina personuppgifter
-                                kommer att raderas efter 4 år.</strong>
+                            <strong data-i18n="school.form.gdpr">* Din ansökan och din data hanteras i enlighet med GDPR. Dina personuppgifter kommer att raderas efter 4 år.</strong>
                         </p>
                     </form>
                 </div>
             </div>
-
-
         </div>
     </div>
-    <div id="loadingSpinner"
-        style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000;">
+
+    <!-- Loading spinner -->
+    <div id="loadingSpinner" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1000;">
         <div class="spinner-border text-primary" role="status">
             <span class="visually-hidden" data-i18n="school.form.loading">Laddar...</span>
         </div>
@@ -514,36 +752,29 @@
     <script src="lib/waypoints/waypoints.min.js"></script>
     <script src="lib/owlcarousel/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
-    <script src="lib\wow\wow.min.js"></script>
-
 
     <script>
         $(function () {
             $("#header-placeholder").load("/header.html", function() {
-                // Reapply translations after header loads
-                if (window.reapplyTranslations) {
-                    setTimeout(() => window.reapplyTranslations(), 50);
-                }
+                if (window.reapplyTranslations) setTimeout(() => window.reapplyTranslations(), 50);
             });
             $("#contact-us-placeholder").load("/contact-us.html", function() {
-                // Reapply translations after footer loads
-                if (window.reapplyTranslations) {
-                    setTimeout(() => window.reapplyTranslations(), 50);
-                }
+                if (window.reapplyTranslations) setTimeout(() => window.reapplyTranslations(), 50);
             });
         });
     </script>
+
     <script>
+        // Show terms modal on load
         $(document).ready(function () {
-            const modal = new bootstrap.Modal(document.getElementById('requirementsModal'), {
-                backdrop: 'static',
-                keyboard: false
-            });
-            modal.show();
+            new bootstrap.Modal(document.getElementById('requirementsModal'), {
+                backdrop: 'static', keyboard: false
+            }).show();
         });
     </script>
+
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
+        (function() {
             const steps = [...document.querySelectorAll(".formbold-form-step-1, .formbold-form-step-2, .formbold-form-step-3")];
             const menus = [...document.querySelectorAll(".formbold-step-menu1, .formbold-step-menu2, .formbold-step-menu3")];
             const form = document.getElementById("schoolsform");
@@ -552,50 +783,50 @@
             const btnBack = document.querySelector(".formbold-back-btn");
             const spinner = document.getElementById("loadingSpinner");
 
-            const t = (key, fallback = "") =>
-                typeof window.getTranslation === "function" ? window.getTranslation(key, fallback) : fallback;
+            const t = (key, fallback) =>
+                typeof window.getTranslation === "function" ? window.getTranslation(key, fallback) : fallback || key;
 
             let currentStep = 0;
             let verifiedPNR = null;
             let membershipVerified = false;
+            let childCount = 1;
 
+            /* ── Navigation ── */
             function showStep(index) {
                 steps.forEach((s, i) => s.classList.toggle("active", i === index));
-                menus.forEach((m, i) => m.classList.toggle("active", i === index));
+                menus.forEach((m, i) => {
+                    m.classList.toggle("active", i === index);
+                    if (i < index) m.classList.add("done");
+                    else m.classList.remove("done");
+                });
                 btnBack.style.display = index > 0 ? "inline-block" : "none";
                 if (btnNextLabel) {
                     btnNextLabel.textContent = index === steps.length - 1
-                        ? t("school.form.submit", "Submit")
-                        : t("school.form.next", "Next Step");
+                        ? t("school.form.submit", "Skicka")
+                        : t("school.form.next", "Nästa steg");
                 }
                 currentStep = index;
                 spinner.style.display = "none";
 
-                // Pre-fill father's PNR from verified membership check (step 2)
+                // Pre-fill parent 1 SSN from verified membership
                 if (index === 1 && verifiedPNR) {
-                    const fatherPnrInput = document.getElementById("Pappans Personnummer");
-                    if (fatherPnrInput && !fatherPnrInput.value) {
-                        fatherPnrInput.value = verifiedPNR;
-                    }
+                    const ssnInput = document.getElementById("p1ssn");
+                    if (ssnInput && !ssnInput.value) ssnInput.value = verifiedPNR;
                 }
             }
 
             btnNext.addEventListener("click", async (e) => {
                 e.preventDefault();
 
-                // Only validate inputs in the current step
-                const stepInputs = steps[currentStep].querySelectorAll("input, select, textarea");
-                for (let input of stepInputs) {
-                    if (!input.checkValidity()) {
-                        input.reportValidity();
-                        return; // Stop if invalid
-                    }
+                // Validate inputs in current step
+                const stepInputs = steps[currentStep].querySelectorAll("input[required], select[required], textarea[required]");
+                for (const input of stepInputs) {
+                    if (!input.checkValidity()) { input.reportValidity(); return; }
                 }
 
-                // Gate: step 1 requires verified membership
+                // Gate: step 0 needs verified membership
                 if (currentStep === 0 && !membershipVerified) {
-                    alert(t("school.form.membership-required",
-                        "Du måste verifiera ditt FIFS-medlemskap innan du går vidare."));
+                    alert(t("school.form.membership-required", "Du måste verifiera ditt FIFS-medlemskap innan du går vidare."));
                     return;
                 }
 
@@ -605,38 +836,41 @@
                     // Final submit
                     spinner.style.display = "block";
                     const data = new FormData(form);
+                    const email = data.get("Förälder 1 Email") || "";
+                    const pnr   = data.get("Förälder 1 Personnummer") || "";
+                    const isProd = window.location.hostname === "alsalamcenter.se";
 
-                    // ✅ Log all fields properly, including arrays
-                    //  const debug = {};
-                    //  for (const [key, value] of data.entries()) {
-                    //       if (debug[key]) {
-                    //            if (!Array.isArray(debug[key])) debug[key] = [debug[key]];
-                    //           debug[key].push(value);
-                    //      } else {
-                    //           debug[key] = value;
-                    //       }
-                    //   }
-                    //   console.log("Submitting data:", JSON.stringify(debug, null, 2));
-
+                    // POST to Apps Script
                     try {
-                        const res = await fetch(form.action, {
-                            method: "POST",
-                            body: data // ✅ sends as multipart/form-data, works perfectly with Google Apps Script
-                        });
-
+                        const res = await fetch(form.action, { method: "POST", body: data });
                         const json = await res.json();
-                        console.log("Response from script:", json);
+                        if (json.result === "error") {
+                            console.error("Registration error:", json.error);
+                            alert("Ett fel uppstod vid registreringen. Vänligen försök igen eller kontakta moskén.");
+                            spinner.style.display = "none";
+                            return;
+                        }
+                        console.log("Registration:", json);
                     } catch (err) {
-                        console.error("Error submitting form data:", err);
+                        console.error("Registration failed:", err);
+                        alert("Ett fel uppstod vid registreringen. Vänligen försök igen.");
+                        spinner.style.display = "none";
+                        return;
                     }
 
-                    const email = encodeURIComponent(data.get("Pappans Email") || "");
-                    const pnr = encodeURIComponent(data.get("Pappans Personnummer") || "");
-                    const isLocal = window.location.hostname === "localhost";
-
-                    window.location.href = isLocal
-                        ? `https://buy.stripe.com/test_cN27vE9VAeyoc9ieUW?prefilled_email=${email}&client_reference_id=${pnr}`
-                        : `https://donate.stripe.com/cNi9ATgA7doc1AT6sIfw400?prefilled_email=${email}&client_reference_id=${pnr}`;
+                    // Redirect to Stripe payment link based on number of children
+                    const childCount = data.getAll("Barnet Förnamn").length;
+                    const paymentLinks = {
+                        1: "https://buy.stripe.com/cNi9ATgA7doc1AT6sIfw400",
+                        2: "https://buy.stripe.com/fZucN5fw383S93l9EUfw408",
+                        3: "https://buy.stripe.com/6oUfZh0B9bg4gvNeZefw409",
+                        4: "https://buy.stripe.com/3cI4gzabJfwk4N5cR6fw40a"
+                    };
+                    const paymentLink = paymentLinks[Math.min(childCount, 4)];
+                    const testLink = "https://buy.stripe.com/test_cN27vE9VAeyoc9ieUW";
+                    window.location.href = (isProd ? paymentLink : testLink)
+                        + "?prefilled_email=" + encodeURIComponent(email)
+                        + "&client_reference_id=" + encodeURIComponent(pnr);
                 }
             });
 
@@ -645,183 +879,168 @@
                 if (currentStep > 0) showStep(currentStep - 1);
             });
 
-            // Toggle second parent
-            window.toggleSecondParent = (btn) => {
-                const container = document.getElementById("secondParentContainer");
-                const visible = container.style.display === "block";
-                container.style.display = visible ? "none" : "block";
-                btn.textContent = visible
-                    ? t("school.form.add-parent-2", "➕ Lägg till Förälder 2")
-                    : t("school.form.remove-parent", "− Ta bort Förälder");
-            };
+            /* ── Parent 2 toggle ── */
+            const addParent2Btn = document.getElementById("addParent2Btn");
+            const removeParent2Btn = document.getElementById("removeParent2Btn");
+            const parent2Container = document.getElementById("parent2Container");
 
-            // Add child logic
-            let childCount = 1;
-            window.addChild = () => {
+            addParent2Btn.addEventListener("click", () => {
+                parent2Container.style.display = "block";
+                addParent2Btn.style.display = "none";
+            });
+
+            removeParent2Btn.addEventListener("click", () => {
+                parent2Container.style.display = "none";
+                addParent2Btn.style.display = "block";
+                // Clear parent 2 fields
+                parent2Container.querySelectorAll("input").forEach(inp => { inp.value = ""; });
+            });
+
+            /* ── Add child ── */
+            document.getElementById("addChildBtn").addEventListener("click", () => {
                 childCount++;
                 const container = document.getElementById("childrenContainer");
-
-                const childDiv = document.createElement("div");
-                childDiv.className = "child-section mb-3";
-                childDiv.innerHTML = `
-                <div style="display:flex;justify-content:space-between;align-items:center;">
-                    <p>${t("school.form.child-label", "Barn")} ${childCount}</p>
-                </div>
-                <div class="formbold-input-flex">
-                    <div>
-                        <label class="formbold-form-label">${t("school.form.first-name", "Förnamn")}</label>
-                        <input type="text" name="Barnet Förnamn" class="formbold-form-input" required />
+                const card = document.createElement("div");
+                card.className = "child-card";
+                card.dataset.child = childCount;
+                card.innerHTML = `
+                    <div class="child-card-header">
+                        <span class="child-label">${t("school.form.child-label", "Barn")} ${childCount}</span>
+                        <button type="button" class="remove-child-btn" title="Ta bort">✕</button>
                     </div>
-                    <div style="width:35%;">
-                        <label class="formbold-form-label">${t("school.form.personal-number", "Personnummer")}</label>
-                        <input type="text" name="Barnets Personnummer" placeholder="YYYYMMDDXXXX"
-                            class="formbold-form-input" required pattern="(19|20)\\d{10}" 
-                            title="${t("school.form.validation.personal-12-19-20", "Personnummer måste vara 12 siffror som börjar med 19 eller 20")}"/>
+                    <div class="formbold-input-flex">
+                        <div style="flex:2;">
+                            <label class="formbold-form-label">${t("school.form.first-name", "Förnamn")}</label>
+                            <input type="text" name="Barnet Förnamn" class="formbold-form-input" required>
+                        </div>
+                        <div style="flex:3;">
+                            <label class="formbold-form-label">${t("school.form.personal-number", "Personnummer")}</label>
+                            <input type="text" name="Barnets Personnummer" placeholder="YYYYMMDDXXXX"
+                                class="formbold-form-input" required pattern="(19|20)?\\d{10}"
+                                title="${t("school.form.validation.personal-12-19-20", "Personnummer måste vara 12 siffror")}">
+                        </div>
                     </div>
-                        <div style="margin-top: 33px; width:10%;">
-                           <button type="button" class="remove-child-btn btn btn-outline-light" 
-                                style="font-size: 22px;border-radius: 50%;">
-                                ❌
-                            </button>
-                    </div>
-                </div>
-            `;
-
-                childDiv.querySelector(".remove-child-btn").addEventListener("click", () => {
-                    childDiv.remove();
+                `;
+                card.querySelector(".remove-child-btn").addEventListener("click", () => {
+                    card.remove();
                     childCount--;
+                    // Re-number remaining children
+                    document.querySelectorAll("#childrenContainer .child-card").forEach((c, i) => {
+                        c.querySelector(".child-label").textContent = t("school.form.child-label", "Barn") + " " + (i + 1);
+                    });
                 });
+                container.appendChild(card);
+            });
 
-                container.appendChild(childDiv);
-            };
-
-            // ---- Membership Checker (Step 1) ----
-
+            /* ── Membership check ── */
             function fetchProxy(pnr) {
                 return fetch(
-                    'https://script.google.com/macros/s/AKfycbxZ08tC4z_P815a44QCUYxZTAvRnYay3W6k3XENWH5-X0T07l4fFiqdJJS1zrd0uOv64g/exec?pnr=' +
+                    "https://script.google.com/macros/s/AKfycbxZ08tC4z_P815a44QCUYxZTAvRnYay3W6k3XENWH5-X0T07l4fFiqdJJS1zrd0uOv64g/exec?pnr=" +
                     encodeURIComponent(pnr)
-                ).then(function(r) {
-                    if (!r.ok) throw Error('HTTP ' + r.status);
-                    return r.json();
-                });
+                ).then(r => { if (!r.ok) throw Error("HTTP " + r.status); return r.json(); });
             }
 
             function checkMembership() {
-                const pnrInput = document.getElementById('school-pnr');
-                const errSpan = document.getElementById('school-pnr-err');
-                const checkBtn = document.getElementById('school-check-btn');
-                const resultCard = document.getElementById('school-result');
-                const resultIcon = document.getElementById('school-result-icon');
-                const resultTitle = document.getElementById('school-result-title');
-                const resultSub = document.getElementById('school-result-sub');
-                const resultLink = document.getElementById('school-result-link');
-                const nextHint = document.getElementById('step-1-next-hint');
+                const pnrInput = document.getElementById("school-pnr");
+                const errSpan = document.getElementById("school-pnr-err");
+                const checkBtn = document.getElementById("school-check-btn");
+                const resultCard = document.getElementById("school-result");
+                const resultIcon = document.getElementById("school-result-icon");
+                const resultTitle = document.getElementById("school-result-title");
+                const resultSub = document.getElementById("school-result-sub");
+                const resultLink = document.getElementById("school-result-link");
+                const nextHint = document.getElementById("step-1-next-hint");
 
                 const p = pnrInput.value.trim();
 
-                // Reset state
-                errSpan.style.display = 'none';
-                pnrInput.classList.remove('error', 'success');
+                errSpan.style.display = "none";
+                pnrInput.classList.remove("error", "success");
                 membershipVerified = false;
                 verifiedPNR = null;
-                nextHint.classList.remove('visible');
+                nextHint.classList.remove("visible");
 
-                // Validate format
                 if (!/^\d{8}-\d{4}$/.test(p)) {
-                    pnrInput.classList.add('error');
-                    errSpan.style.display = 'inline';
+                    pnrInput.classList.add("error");
+                    errSpan.style.display = "inline";
                     pnrInput.focus();
                     return;
                 }
 
-                pnrInput.classList.add('success');
+                pnrInput.classList.add("success");
                 checkBtn.disabled = true;
 
-                // Loading state
-                resultCard.style.display = 'flex';
-                resultCard.classList.remove('success', 'fail');
+                resultCard.style.display = "flex";
+                resultCard.classList.remove("success", "fail");
                 resultIcon.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-                resultTitle.textContent = t('school.form.membership-checking', 'Kontrollerar...');
-                resultSub.textContent = '';
-                resultLink.style.display = 'none';
+                resultTitle.textContent = t("school.form.membership-checking", "Kontrollerar...");
+                resultSub.textContent = "";
+                resultLink.style.display = "none";
 
-                const regUrl = 'https://medlem.fifs.se/registrera/' + p + '/SCH';
+                const regUrl = "https://medlem.fifs.se/registrera/" + p + "/SCH";
 
-                fetchProxy(p).then(function(r) {
+                fetchProxy(p).then(r => {
                     if (r.isMember) {
-                        resultCard.classList.add('success');
-                        resultCard.classList.remove('fail');
+                        resultCard.classList.add("success");
+                        resultCard.classList.remove("fail");
                         resultIcon.innerHTML = '<i class="fas fa-check"></i>';
-                        resultTitle.textContent = t('school.form.membership-yes', 'Medlem via FIFS');
-                        resultSub.innerHTML = t('school.form.membership-since', 'Medlem sedan') +
-                            ' <b>' + r.memberSinceFormatted + '</b>';
-                        resultLink.style.display = 'none';
+                        resultTitle.textContent = t("school.form.membership-yes", "Medlem via FIFS");
+                        resultSub.innerHTML = t("school.form.membership-since", "Medlem sedan") +
+                            " <b>" + r.memberSinceFormatted + "</b>";
+                        resultLink.style.display = "none";
                         membershipVerified = true;
                         verifiedPNR = p;
-                        nextHint.classList.add('visible');
+                        nextHint.classList.add("visible");
                     } else {
-                        resultCard.classList.add('fail');
-                        resultCard.classList.remove('success');
+                        resultCard.classList.add("fail");
+                        resultCard.classList.remove("success");
                         resultIcon.innerHTML = '<i class="fas fa-times"></i>';
-                        resultTitle.textContent = t('school.form.membership-not-found', 'Ej medlem');
-                        resultSub.textContent = t('school.form.membership-not-found', 'Ej medlem');
+                        resultTitle.textContent = t("school.form.membership-not-found", "Ej medlem");
+                        resultSub.textContent = t("school.form.membership-not-found", "Ej medlem");
                         resultLink.href = regUrl;
-                        resultLink.style.display = 'inline-flex';
+                        resultLink.style.display = "inline-flex";
                         membershipVerified = false;
                         verifiedPNR = null;
                     }
                     checkBtn.disabled = false;
-                }).catch(function() {
-                    resultCard.classList.add('fail');
-                    resultCard.classList.remove('success');
+                }).catch(() => {
+                    resultCard.classList.add("fail");
+                    resultCard.classList.remove("success");
                     resultIcon.innerHTML = '<i class="fas fa-times"></i>';
-                    resultTitle.textContent = t('school.form.membership-not-found', 'Ej medlem');
-                    resultSub.textContent = t('school.form.membership-not-found', 'Ej medlem');
+                    resultTitle.textContent = t("school.form.membership-not-found", "Ej medlem");
+                    resultSub.textContent = t("school.form.membership-not-found", "Ej medlem");
                     resultLink.href = regUrl;
-                    resultLink.style.display = 'inline-flex';
+                    resultLink.style.display = "inline-flex";
                     checkBtn.disabled = false;
                     membershipVerified = false;
                     verifiedPNR = null;
                 });
             }
 
-            // PNR input: auto-format
-            const pnrInput = document.getElementById('school-pnr');
+            // PNR auto-format + Enter key
+            const pnrInput = document.getElementById("school-pnr");
             if (pnrInput) {
-                pnrInput.addEventListener('input', function() {
-                    let v = this.value.replace(/[^0-9]/g, '');
-                    if (v.length > 8) v = v.slice(0, 8) + '-' + v.slice(8, 12);
+                pnrInput.addEventListener("input", function() {
+                    let v = this.value.replace(/[^0-9]/g, "");
+                    if (v.length > 8) v = v.slice(0, 8) + "-" + v.slice(8, 12);
                     this.value = v;
-                    this.classList.remove('error', 'success');
-                    document.getElementById('school-pnr-err').style.display = 'none';
+                    this.classList.remove("error", "success");
+                    document.getElementById("school-pnr-err").style.display = "none";
                 });
-
-                pnrInput.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        checkMembership();
-                    }
+                pnrInput.addEventListener("keydown", function(e) {
+                    if (e.key === "Enter") { e.preventDefault(); checkMembership(); }
                 });
             }
 
-            // Check button click
-            const checkBtn = document.getElementById('school-check-btn');
-            if (checkBtn) {
-                checkBtn.addEventListener('click', checkMembership);
-            }
+            document.getElementById("school-check-btn").addEventListener("click", checkMembership);
 
             // Init
             showStep(0);
 
-            window.addEventListener("languageChanged", () => {
-                showStep(currentStep);
-            });
-        });
+            window.addEventListener("languageChanged", () => { showStep(currentStep); });
+        })();
     </script>
 
-    <!-- i18n module (exposed as global `loadLanguage`) -->
+    <!-- i18n -->
     <script type="module" src="/langugaes/js/i18n.js" defer></script>
 </body>
-
 </html>

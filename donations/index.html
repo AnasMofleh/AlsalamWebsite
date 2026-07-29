@@ -215,7 +215,8 @@
                         <img src="img/sadaka.png" alt="Monthly donation icon" class="donation-img">
                     </div>
                     <stripe-buy-button buy-button-id="buy_btn_1S3O36G84lZUxh2hb3x1mP1b"
-                        publishable-key="pk_live_51QOjFxG84lZUxh2hwRThSaug3j7zlPSL9Ts5OXxkOMw5KxHnvxusRgNIME8PtWpsFEGI9x2tSEvisU0269pHsNnm00kHzyvueL">
+                        publishable-key="pk_live_51QOjFxG84lZUxh2hwRThSaug3j7zlPSL9Ts5OXxkOMw5KxHnvxusRgNIME8PtWpsFEGI9x2tSEvisU0269pHsNnm00kHzyvueL"
+                        success-url="https://alsalamcenter.se/donation_redirect/?session_id={CHECKOUT_SESSION_ID}">
                     </stripe-buy-button>
                 </div>
 
@@ -435,8 +436,14 @@
             });
         });
 
-        // Initial state: Show one-time donation options
-        document.querySelector('#one-time').click(); // Simulate click on "One-Time"
+        // Initial state: Show one-time donation options (or respect hash)
+        (function initTab() {
+            var hash = window.location.hash.replace('#', '');
+            var validTabs = ['one-time', 'monthly', 'yearly'];
+            var target = validTabs.indexOf(hash) !== -1 ? hash : 'one-time';
+            var btn = document.getElementById(target);
+            if (btn) btn.click();
+        })();
 
         const cardDonationModal = document.getElementById('card-donation-modal');
         const amountButtons = Array.from(document.querySelectorAll('.donation-amount-chip'));
@@ -586,7 +593,7 @@
 
             // Build dynamic return URLs for Stripe
             const origin = window.location.origin;
-            intent.successUrl = `${origin}/donation_redirect/?session_id={CHECKOUT_SESSION_ID}`;
+            intent.successUrl = `${origin}/donation_redirect/?session_id={CHECKOUT_SESSION_ID}&src=one-time`;
             intent.cancelUrl = `${origin}/donations/`;
 
             try {
@@ -676,6 +683,9 @@
     </script>
     <!-- i18n module (exposed as global `loadLanguage`) -->
     <script type="module" src="/langugaes/js/i18n.js" defer></script>
+
+    <!-- Stripe buy-button -->
+    <script async src="https://js.stripe.com/v3/buy-button.js"></script>
 
     <!-- Load Header and Footer -->
     <script>

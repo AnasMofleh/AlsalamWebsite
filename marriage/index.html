@@ -43,30 +43,28 @@
             <p class="lead" data-i18n="marriage.subtitle">Följ stegen nedan för att ansöka om äktenskapsceremoni</p>
         </div>
 
-        <!-- Step Progress Indicator -->
-        <div class="row justify-content-center mb-5">
-            <div class="col-lg-10">
-                <div class="d-flex align-items-center justify-content-between position-relative marriage-steps-bar">
-                    <div class="marriage-step active" data-step="1">
-                        <div class="marriage-step-circle">1</div>
-                        <span class="marriage-step-label" data-i18n="marriage.step0-label">Information</span>
-                    </div>
-                    <div class="marriage-step-line"></div>
-                    <div class="marriage-step" data-step="2">
-                        <div class="marriage-step-circle">2</div>
-                        <span class="marriage-step-label" data-i18n="marriage.step2-label">Boka tid</span>
-                    </div>
-                    <div class="marriage-step-line"></div>
-                    <div class="marriage-step" data-step="3">
-                        <div class="marriage-step-circle">3</div>
-                        <span class="marriage-step-label" data-i18n="marriage.step3-label">Fyll i formulär</span>
+        <!-- Step 1: Submit Request (Documents + Booking) -->
+        <div id="step-1" class="marriage-step-content">
+
+            <!-- Success State (shown after submission, at the top) -->
+            <div class="row justify-content-center" id="request-success" style="display:none;">
+                <div class="col-lg-8">
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-body p-5 text-center">
+                            <div class="mb-4">
+                                <i class="fas fa-check-circle fa-5x text-success"></i>
+                            </div>
+                            <h3 class="text-success mb-3" data-i18n="marriage.request-success-title">Förfrågan skickad!</h3>
+                            <p class="lead mb-0" data-i18n="marriage.request-success-text">En bekräftelse har skickats till er e-post. Moskén kommer att granska era dokument och återkommer om tiden är godkänd eller om mer information behövs. Därefter får ni en betalningslänk för att fylla i äktenskapskontraktet.</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Step 1: Information & Payment -->
-        <div id="step-1" class="marriage-step-content">
+            <!-- Info + Form wrapper (hidden on submit) -->
+            <div id="request-form-wrapper">
+
+            <!-- Info Section -->
             <div class="row justify-content-center">
                 <div class="col-lg-8">
                     <div class="card shadow-sm border-0 mb-4">
@@ -75,7 +73,7 @@
                                 <div class="mb-3">
                                     <i class="fas fa-info-circle fa-3x text-warning"></i>
                                 </div>
-                                <h3 data-i18n="marriage.info-title">Viktigt innan du fyller i formuläret</h3>
+                                <h3 data-i18n="marriage.info-title">Viktigt innan du skickar förfrågan</h3>
                             </div>
                             <p data-i18n="marriage.info-intro">
                                 Innan du fyller i ansökan om äktenskap måste båda parter läsa villkoren noggrant och förbereda
@@ -83,27 +81,20 @@
                                 Äkta paret måste fylla i den elektroniska ansökan och boka en tid i förväg för att komma till
                                 moskén, lämna in dokumenten och genomföra den religiösa vigseln.
                             </p>
-                            <p data-i18n="marriage.info-docs-intro">
-                                För mer information om de nödvändiga dokumenten och tidsbokningen, se listan nedan.
-                            </p>
-                            <h6 class="mt-3"><strong data-i18n="marriage.info-docs-heading">Dokument som krävs för att genomföra det religiösa
-                                    äktenskapskontraktet:</strong></h6>
+                            <h6 class="mt-3"><strong data-i18n="marriage.info-docs-heading">Dokument som krävs:</strong></h6>
                             <ul>
                                 <li data-i18n-html="marriage.info-doc1">
-                                    Familjebevis från Skatteverket för både brud och brudgum, för att
-                                    visa civilstånd. <strong>Observera:</strong> Dokumentet får inte vara äldre än en månad.
+                                    Utdrag om folkbokföringsuppgifter som visar civiltillstånd för både brud och brudgum.
+                                    <strong>Observera:</strong> Dokumentet får inte vara äldre än en månad.
                                 </li>
                                 <li data-i18n="marriage.info-doc2">
                                     Original svensk identitetshandling eller motsvarande, till exempel pass eller körkort.
                                 </li>
-                                <li data-i18n-html="marriage.info-doc3">
-                                    Betalning av avgiften på 1200 SEK (inklusive 25% moms).
-                                    <br>Avgiften betalas med kort i samband med att den elektroniska ansökan fylls i.
-                                </li>
-                                <li data-i18n="marriage.info-doc4">
-                                    Ifyllande av den elektroniska ansökan och bokning av tid i förväg.
+                                <li data-i18n-html="marriage.info-folk-link">
+                                    <a href="https://sso.skatteverket.se/fh1/fh_epersonbevis/hamtaPb.action?typAvPb=120_4773" target="_blank" rel="noopener">Ladda ner folkbokföringsbevis digitalt från Skatteverket</a> — logga in med BankID.
                                 </li>
                             </ul>
+                            <p class="mt-3"><i class="fas fa-credit-card me-2"></i><strong data-i18n="marriage.info-fee">Avgift: 1 200 SEK</strong> (inklusive 25% moms). Betalningslänk skickas efter att moskén bekräftat tiden.</p>
                             <p class="mt-3"><strong data-i18n="marriage.info-important-heading">Viktigt!</strong></p>
                             <p data-i18n="marriage.info-important-text">
                                 Det är nödvändigt att boka en tid i förväg för att lämna in dokumenten och genomföra den
@@ -114,56 +105,168 @@
                                 Observera att vigseln i moskén har <strong>endast religiös giltighet</strong> och ingen juridisk
                                 giltighet hos svenska myndigheter.
                             </p>
-
-                            <!-- Payment Section -->
-                            <hr class="my-4">
-                            <div class="text-center">
-                                <div class="mb-3">
-                                    <i class="fas fa-credit-card fa-2x text-primary"></i>
-                                </div>
-                                <p class="text-muted mb-3" data-i18n="marriage.step1-description">Avgiften för religiös äktenskapsceremoni är 1 200 SEK (inklusive 25% moms). Betalningen sker via Stripe.</p>
-                                <a id="marriage-payment-link" href="https://buy.stripe.com/5kQdR93Nl2Jy6Vd5oEfw407" target="_blank" rel="noopener" class="btn btn-primary btn-lg px-5 py-3 mb-3">
-                                    <i class="fas fa-lock me-2"></i>
-                                    <span data-i18n="marriage.pay-button">Betala 1 200 SEK</span>
-                                </a>
-                                <p class="text-muted small" data-i18n="marriage.step1-note">Du omdirigeras till en säker betalningssida. Återvänd hit efter betalning för att fortsätta.</p>
-                            </div>
-
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Step 2: Booking -->
-        <div id="step-2" class="marriage-step-content" style="display:none;">
+            <!-- Contact & Upload Form -->
             <div class="row justify-content-center">
                 <div class="col-lg-10">
                     <div class="card shadow-sm border-0 mb-4">
                         <div class="card-body p-4">
                             <div class="text-center mb-4">
                                 <div class="mb-3">
-                                    <i class="fas fa-calendar-alt fa-3x text-success"></i>
+                                    <i class="fas fa-file-upload fa-3x text-primary"></i>
                                 </div>
-                                <h3 data-i18n="marriage.step2-title">Boka en tid</h3>
-                                <p class="text-muted" data-i18n="marriage.step2-description">Välj en ledig tid i kalendern nedan för att boka er vigselceremoni.</p>
+                                <h3 data-i18n="marriage.request-title">Skicka förfrågan</h3>
+                                <p class="text-muted" data-i18n="marriage.request-description">Fyll i era uppgifter, ladda upp dokumenten och boka en tid. Moskén granskar och bekräftar sedan tiden.</p>
                             </div>
-                            <div class="form-container" style="max-height:80vh; overflow-y:auto; border-radius:10px;">
-                                <iframe src="https://calendar.app.google/xJKawfzhunAH9xWj6" style="border: 0; width: 100%; height: 800px;" frameborder="0" scrolling="yes" title="Boka tid för vigselcertifikat"></iframe>
-                                <div class="text-muted small mt-2" data-i18n-html="marriage.booking-fallback">Om bokningsformuläret inte visas, <a href="https://calendar.app.google/xJKawfzhunAH9xWj6" target="_blank" rel="noopener">klicka här för att boka tid i nytt fönster</a>.</div>
-                            </div>
+
+                            <form id="request-form" onsubmit="return false;">
+                                <!-- Contact -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold" data-i18n="marriage.field-email">E-post *</label>
+                                        <input type="email" class="form-control form-control-lg" id="req-email" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold" data-i18n="marriage.field-phone">Telefonnummer (för WhatsApp-bekräftelse) *</label>
+                                        <input type="tel" class="form-control form-control-lg" id="req-phone" placeholder="07XXXXXXXXX" required>
+                                        <small class="text-muted" data-i18n="marriage.field-phone-hint">Moskén kommer att kontakta er via WhatsApp för att bekräfta tiden.</small>
+                                    </div>
+                                </div>
+
+                                <!-- Husband Personnummer & Membership -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold" data-i18n="marriage.field-husband-pnr">Brudgummens personnummer *</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control form-control-lg" id="req-husband-pnr" placeholder="ÅÅÅÅMMDD-XXXX" maxlength="13" required>
+                                            <button type="button" class="btn btn-outline-primary" id="btn-check-membership" onclick="checkMembership()">
+                                                <i class="fas fa-check-circle me-1"></i> <span data-i18n="marriage.btn-check-membership">Kontrollera medlemskap</span>
+                                            </button>
+                                        </div>
+                                        <small class="text-muted" data-i18n="marriage.field-husband-pnr-hint">Ange brudgummens personnummer för att kontrollera medlemskap och hantera bokningen.</small>
+                                        <div id="membership-result" class="mt-2" style="display:none;"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Notes -->
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold" data-i18n="marriage.field-notes">Meddelande / Önskemål (valfritt)</label>
+                                    <textarea class="form-control" id="req-notes" rows="2" data-i18n-placeholder="marriage.field-notes-placeholder" placeholder="T.ex. önskemål om datum, tid eller övrig information..."></textarea>
+                                </div>
+
+                                <hr class="my-4">
+
+                                <!-- Document Upload -->
+                                <h5 class="mb-3 fw-bold" data-i18n="marriage.upload-heading">Ladda upp dokument</h5>
+                                <p class="text-muted small mb-3" data-i18n="marriage.upload-hint">Ladda upp bilder eller PDF-filer. Pass, körkort eller annan giltig ID-handling accepteras. Max 20 MB per fil. Alla fyra dokument måste laddas upp.</p>
+
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold" data-i18n="marriage.upload-wife-id">Brudens ID-kort *</label>
+                                        <div class="upload-zone" id="upload-zone-wife-id">
+                                            <input type="file" class="upload-input" accept="image/*,.pdf" data-doc="wifeIdDoc">
+                                            <div class="upload-prompt">
+                                                <i class="fas fa-cloud-upload-alt fa-2x mb-2"></i>
+                                                <span data-i18n="marriage.upload-drag">Dra och släpp eller klicka för att välja</span>
+                                            </div>
+                                            <div class="upload-preview" style="display:none;">
+                                                <img class="upload-thumb" src="" alt="">
+                                                <span class="upload-name"></span>
+                                                <button type="button" class="upload-remove" title="Ta bort">&times;</button>
+                                            </div>
+                                            <div class="upload-spinner" style="display:none;"><div class="spinner-border spinner-border-sm text-primary"></div></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold" data-i18n="marriage.upload-husband-id">Brudgummens ID-kort *</label>
+                                        <div class="upload-zone" id="upload-zone-husband-id">
+                                            <input type="file" class="upload-input" accept="image/*,.pdf" data-doc="husbandIdDoc">
+                                            <div class="upload-prompt">
+                                                <i class="fas fa-cloud-upload-alt fa-2x mb-2"></i>
+                                                <span data-i18n="marriage.upload-drag">Dra och släpp eller klicka för att välja</span>
+                                            </div>
+                                            <div class="upload-preview" style="display:none;">
+                                                <img class="upload-thumb" src="" alt="">
+                                                <span class="upload-name"></span>
+                                                <button type="button" class="upload-remove" title="Ta bort">&times;</button>
+                                            </div>
+                                            <div class="upload-spinner" style="display:none;"><div class="spinner-border spinner-border-sm text-primary"></div></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold" data-i18n="marriage.upload-wife-folk">Brudens folkbokföringsbevis *</label>
+                                        <div class="upload-zone" id="upload-zone-wife-folk">
+                                            <input type="file" class="upload-input" accept="image/*,.pdf" data-doc="wifeFolkDoc">
+                                            <div class="upload-prompt">
+                                                <i class="fas fa-cloud-upload-alt fa-2x mb-2"></i>
+                                                <span data-i18n="marriage.upload-drag">Dra och släpp eller klicka för att välja</span>
+                                            </div>
+                                            <div class="upload-preview" style="display:none;">
+                                                <img class="upload-thumb" src="" alt="">
+                                                <span class="upload-name"></span>
+                                                <button type="button" class="upload-remove" title="Ta bort">&times;</button>
+                                            </div>
+                                            <div class="upload-spinner" style="display:none;"><div class="spinner-border spinner-border-sm text-primary"></div></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold" data-i18n="marriage.upload-husband-folk">Brudgummens folkbokföringsbevis *</label>
+                                        <div class="upload-zone" id="upload-zone-husband-folk">
+                                            <input type="file" class="upload-input" accept="image/*,.pdf" data-doc="husbandFolkDoc">
+                                            <div class="upload-prompt">
+                                                <i class="fas fa-cloud-upload-alt fa-2x mb-2"></i>
+                                                <span data-i18n="marriage.upload-drag">Dra och släpp eller klicka för att välja</span>
+                                            </div>
+                                            <div class="upload-preview" style="display:none;">
+                                                <img class="upload-thumb" src="" alt="">
+                                                <span class="upload-name"></span>
+                                                <button type="button" class="upload-remove" title="Ta bort">&times;</button>
+                                            </div>
+                                            <div class="upload-spinner" style="display:none;"><div class="spinner-border spinner-border-sm text-primary"></div></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr class="my-4">
+
+                                <!-- Preferred Date & Time -->
+                                <h5 class="mb-3 fw-bold" data-i18n="marriage.booking-heading">Önskat datum och tid för ceremonin</h5>
+                                <p class="text-muted small mb-3" data-i18n="marriage.booking-request-note">Välj ert önskade datum och tid. Moskén kommer att bekräfta tiden efter att ha granskat er förfrågan.</p>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold" data-i18n="marriage.field-preferred-date">Önskat datum *</label>
+                                        <input type="date" class="form-control form-control-lg" id="req-preferred-date" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold" data-i18n="marriage.field-preferred-time">Önskad tid</label>
+                                        <input type="time" class="form-control form-control-lg" id="req-preferred-time">
+                                    </div>
+                                </div>
+
+                                <!-- Submit -->
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-success btn-lg px-5 py-3" id="btn-submit-request" onclick="submitRequest()">
+                                        <i class="fas fa-paper-plane me-2"></i>
+                                        <span data-i18n="marriage.submit-request">Skicka förfrågan</span>
+                                    </button>
+                                </div>
+
+                            </form>
                         </div>
-                    </div>
-                    <div class="text-center mt-3">
-                        <button class="btn btn-outline-secondary me-2" onclick="marriageGoToStep(1)"><i class="fas fa-arrow-left me-1"></i> <span data-i18n="marriage.prev-step">Tillbaka</span></button>
-                        <button class="btn btn-outline-secondary" onclick="marriageGoToStep(3)" data-i18n="marriage.next-step-booking">Jag har bokat — gå vidare</button>
                     </div>
                 </div>
             </div>
+
+            </div><!-- /request-form-wrapper -->
+
         </div>
 
-        <!-- Step 3: Contract Form (inline) -->
-        <div id="step-3" class="marriage-step-content" style="display:none;">
+        <!-- Step 2: Contract Form (inline) -->
+        <div id="step-2" class="marriage-step-content" style="display:none;">
             <div class="row justify-content-center">
                 <div class="col-lg-12">
                     <div class="card shadow-sm border-0 mb-4">
@@ -291,27 +394,52 @@
                                     </div>
 
                                     <div class="contract-toolbar-actions">
-                                        <button id="downloadButton" class="primary" type="button" onclick="downloadPDF()">Ladda ner PDF</button>
                                         <button id="previewButton" type="button" onclick="previewPDF()">Förhandsgranska PDF</button>
                                         <button id="sendButton" class="success" type="button" onclick="sendPDF()">Skicka</button>
                                     </div>
 
-                                    <!-- Confirm Send Modal -->
+                                    <!-- Confirm → Spinner → Success → Email (single multi-state modal) -->
                                     <div id="sendConfirmOverlay" class="send-confirm-overlay" style="display:none;">
                                         <div class="send-confirm-box">
-                                            <p id="sendConfirmBody">Är du säker på att all information stämmer och vill skicka in formuläret?</p>
-                                            <div class="send-confirm-buttons">
-                                                <button id="sendConfirmCancelBtn" type="button" class="send-confirm-cancel">Avbryt</button>
-                                                <button id="sendConfirmSendBtn" type="button" class="send-confirm-send">Skicka</button>
+                                            <!-- State: Confirm -->
+                                            <div id="confirm-state">
+                                                <p id="sendConfirmBody">Är du säker på att all information stämmer och vill skicka in formuläret?</p>
+                                                <div class="send-confirm-buttons">
+                                                    <button id="sendConfirmCancelBtn" type="button" class="send-confirm-cancel">Avbryt</button>
+                                                    <button id="sendConfirmSendBtn" type="button" class="send-confirm-send">Skicka</button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Loading Overlay -->
-                                    <div id="sendLoadingOverlay" class="send-loading-overlay" style="display:none;">
-                                        <div class="send-loading-box">
-                                            <div class="send-spinner"></div>
-                                            <p id="sendLoadingText">Skickar formuläret …</p>
+                                            <!-- State: Loading -->
+                                            <div id="confirm-loading-state" style="display:none;">
+                                                <div class="spinner-border" style="width:3rem;height:3rem;color:#1a8a1f;"></div>
+                                                <p class="mt-3 fw-bold" id="confirm-loading-text">Skickar formuläret …</p>
+                                            </div>
+                                            <!-- State: Success + Email prompt -->
+                                            <div id="confirm-success-state" style="display:none;">
+                                                <i class="fas fa-check-circle fa-3x" style="color:#1a8a1f;"></i>
+                                                <p class="mt-3 fw-bold" id="confirm-success-text"></p>
+                                                <div class="mt-3 text-start" id="email-copy-section">
+                                                    <p class="mb-2 small fw-bold text-center"><span data-i18n="marriage.contract-email-prompt">Vill du få en kopia av kontraktet skickat till din e-post?</span></p>
+                                                    <div class="input-group">
+                                                        <input type="email" class="form-control" id="email-copy-input" data-i18n-placeholder="marriage.contract-email-placeholder" placeholder="Din e-postadress">
+                                                        <button type="button" class="btn btn-success" id="btn-send-email-copy" onclick="sendEmailCopy()" style="background:#1a8a1f;border-color:#1a8a1f;">
+                                                            <i class="fas fa-paper-plane me-1"></i> <span data-i18n="marriage.contract-email-send">Skicka kopia</span>
+                                                        </button>
+                                                    </div>
+                                                    <div id="email-status-row" class="d-flex align-items-center gap-2 mt-2" style="display:none;">
+                                                        <span id="email-icon-spinner"><div class="spinner-border spinner-border-sm" style="color:#1a8a1f;"></div></span>
+                                                        <span id="email-icon-check" style="display:none;"><i class="fas fa-check-circle" style="color:#1a8a1f;"></i></span>
+                                                        <span id="email-icon-error" style="display:none;"><i class="fas fa-times-circle text-danger"></i></span>
+                                                        <small id="email-status-text"></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- State: Error -->
+                                            <div id="confirm-error-state" style="display:none;">
+                                                <i class="fas fa-times-circle fa-3x text-danger"></i>
+                                                <p class="mt-3 fw-bold" id="confirm-error-text"></p>
+                                                <button type="button" class="btn btn-outline-danger mt-2" id="confirm-error-close">Stäng</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -319,9 +447,6 @@
                             <!-- End Contract Form Content -->
 
                         </div>
-                    </div>
-                    <div class="text-center mt-3">
-                        <button class="btn btn-outline-secondary" onclick="marriageGoToStep(2)"><i class="fas fa-arrow-left me-1"></i> <span data-i18n="marriage.prev-step">Tillbaka</span></button>
                     </div>
                 </div>
             </div>
@@ -349,13 +474,11 @@
     <script>
         $(function () {
             $("#header-placeholder").load("/header.html", function() {
-                // Reapply translations after header loads
                 if (window.reapplyTranslations) {
                     setTimeout(() => window.reapplyTranslations(), 50);
                 }
             });
             $("#contact-us-placeholder").load("/contact-us.html", function() {
-                // Reapply translations after footer loads
                 if (window.reapplyTranslations) {
                     setTimeout(() => window.reapplyTranslations(), 50);
                 }
@@ -365,111 +488,386 @@
 
 
 
-    <!-- Marriage Step Navigation -->
+    <!-- Step Display Logic -->
     <script>
-        function marriageGoToStep(step) {
+        function showStep(step) {
             document.querySelectorAll('.marriage-step-content').forEach(el => el.style.display = 'none');
             const target = document.getElementById('step-' + step);
             if (target) target.style.display = 'block';
 
-            document.querySelectorAll('.marriage-step').forEach(el => {
-                const s = parseInt(el.dataset.step);
-                el.classList.toggle('active', s <= step);
-                el.classList.toggle('completed', s < step);
-            });
-
-            document.querySelectorAll('.marriage-step-line').forEach((line, i) => {
-                line.classList.toggle('active', (i + 1) < step);
-            });
-
-            // Initialize contract form signature pads when step 3 becomes visible
-            if (step === 3 && window.initContractForm) {
+            if (step === 2 && window.initContractForm) {
                 setTimeout(window.initContractForm, 50);
             }
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Auto-navigate if ?step=X is in the URL (e.g. Stripe redirect after payment)
         document.addEventListener('DOMContentLoaded', function() {
             const params = new URLSearchParams(window.location.search);
             const step = parseInt(params.get('step'));
-            if (step >= 1 && step <= 3) {
-                marriageGoToStep(step);
+            if (step === 2) {
+                showStep(2);
             }
         });
     </script>
 
-    <!-- Marriage Steps Inline Styles -->
+    <!-- Upload Zone Styles -->
     <style>
-        .marriage-steps-bar {
-            padding: 0 10px;
-        }
-        .marriage-step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 1;
-        }
-        .marriage-step-circle {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: #e9ecef;
-            color: #6c757d;
+        .upload-zone {
+            position: relative;
+            border: 2px dashed #dee2e6;
+            border-radius: 14px;
+            padding: 18px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s, background 0.3s;
+            min-height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            font-size: 1.2rem;
-            border: 3px solid #dee2e6;
-            transition: all 0.3s ease;
+            background: #fafbfc;
         }
-        .marriage-step.active .marriage-step-circle {
-            background: #0d6efd;
-            color: #fff;
+        .upload-zone:hover, .upload-zone.dragover {
             border-color: #0d6efd;
+            background: #f0f4ff;
         }
-        .marriage-step.completed .marriage-step-circle {
-            background: #198754;
-            color: #fff;
+        .upload-zone.has-file {
             border-color: #198754;
+            border-style: solid;
+            background: #f0fdf4;
+            padding: 12px 16px;
         }
-        .marriage-step-label {
-            margin-top: 8px;
+        .upload-zone.has-error {
+            border-color: #dc3545;
+            background: #fff5f5;
+        }
+        .upload-input {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 2;
+        }
+        .upload-prompt {
+            color: #6b7280;
+            pointer-events: none;
+        }
+        .upload-prompt i {
+            display: block;
+            color: #9ca3af;
+        }
+        .upload-zone.has-file .upload-prompt {
+            display: none;
+        }
+        .upload-preview {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            pointer-events: none;
+        }
+        .upload-zone.has-file .upload-preview {
+            display: flex;
+        }
+        .upload-thumb {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 8px;
+            flex-shrink: 0;
+            background: #e5e7eb;
+        }
+        .upload-name {
+            flex: 1;
             font-size: 0.85rem;
             font-weight: 600;
-            color: #6c757d;
-        }
-        .marriage-step.active .marriage-step-label {
-            color: #0d6efd;
-        }
-        .marriage-step.completed .marriage-step-label {
             color: #198754;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
-        .marriage-step-line {
-            flex: 1;
-            height: 4px;
-            background: #dee2e6;
-            border-radius: 2px;
-            margin: 0 8px;
-            margin-bottom: 28px;
-            transition: background 0.3s ease;
+        .upload-remove {
+            flex-shrink: 0;
+            background: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            font-size: 16px;
+            line-height: 24px;
+            cursor: pointer;
+            pointer-events: all;
+            z-index: 3;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .marriage-step-line.active {
-            background: #198754;
+        .upload-remove:hover {
+            background: #b02a37;
         }
-        @media (max-width: 576px) {
-            .marriage-step-circle {
-                width: 38px;
-                height: 38px;
-                font-size: 1rem;
-            }
-            .marriage-step-label {
-                font-size: 0.75rem;
-            }
+        .upload-spinner {
+            display: none;
+            pointer-events: none;
+        }
+        .upload-zone.loading .upload-prompt,
+        .upload-zone.loading .upload-preview {
+            display: none;
+        }
+        .upload-zone.loading .upload-spinner {
+            display: block;
+        }
+        #btn-submit-request:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
     </style>
+
+    <!-- Step 1 Upload + Submit JS -->
+    <script>
+    (function() {
+        // ── File upload handling ─────────────────────────────────
+        const uploadedFiles = {}; // { docKey: { base64, mime, name } }
+
+        function setupUploadZone(zone) {
+            const input = zone.querySelector('.upload-input');
+            const preview = zone.querySelector('.upload-preview');
+            const prompt = zone.querySelector('.upload-prompt');
+            const thumb = zone.querySelector('.upload-thumb');
+            const nameEl = zone.querySelector('.upload-name');
+            const removeBtn = zone.querySelector('.upload-remove');
+            const docKey = input.dataset.doc;
+
+            // Click on zone → trigger file input
+            zone.addEventListener('click', function(e) {
+                if (e.target === removeBtn) return;
+                input.click();
+            });
+
+            // Drag events
+            zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.classList.add('dragover'); });
+            zone.addEventListener('dragleave', function() { zone.classList.remove('dragover'); });
+            zone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                zone.classList.remove('dragover');
+                if (e.dataTransfer.files.length) {
+                    handleFile(input, e.dataTransfer.files[0], zone, docKey, thumb, nameEl);
+                }
+            });
+
+            // File selected
+            input.addEventListener('change', function() {
+                if (input.files.length) {
+                    handleFile(input, input.files[0], zone, docKey, thumb, nameEl);
+                }
+            });
+
+            // Remove button
+            removeBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                input.value = '';
+                zone.classList.remove('has-file', 'has-error');
+                delete uploadedFiles[docKey];
+                thumb.src = '';
+                nameEl.textContent = '';
+                updateSubmitButton();
+            });
+        }
+
+        function handleFile(input, file, zone, docKey, thumb, nameEl) {
+            zone.classList.remove('has-error');
+
+            // Validate size (10MB max)
+            const maxSize = 20 * 1024 * 1024;
+            if (file.size > maxSize) {
+                zone.classList.add('has-error');
+                nameEl.textContent = 'Filen är för stor (max 20 MB)';
+                nameEl.style.color = '#dc3545';
+                zone.querySelector('.upload-preview').style.display = 'flex';
+                zone.querySelector('.upload-prompt').style.display = 'none';
+                return;
+            }
+
+            // Read file as base64
+            zone.classList.add('loading');
+            const reader = new FileReader();
+            reader.onload = function() {
+                zone.classList.remove('loading');
+                zone.classList.add('has-file');
+
+                const dataUrl = reader.result;
+                uploadedFiles[docKey] = {
+                    base64: dataUrl,
+                    mime: file.type || 'application/octet-stream',
+                    name: file.name
+                };
+
+                // Show preview
+                if (file.type.startsWith('image/')) {
+                    thumb.src = dataUrl;
+                } else {
+                    thumb.src = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><rect fill="%23e5e7eb" width="48" height="48" rx="8"/><text x="24" y="28" text-anchor="middle" font-size="14" fill="%236b7280">PDF</text></svg>');
+                }
+                nameEl.textContent = file.name;
+                nameEl.style.color = '#198754';
+                updateSubmitButton();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updateSubmitButton() {
+            const btn = document.getElementById('btn-submit-request');
+            const allUploaded = ['wifeIdDoc', 'husbandIdDoc', 'wifeFolkDoc', 'husbandFolkDoc']
+                .every(function(k) { return !!uploadedFiles[k]; });
+            btn.disabled = false; // Always enabled, validation happens on submit
+        }
+
+        // PNR input formatting
+        var pnrInput = document.getElementById('req-husband-pnr');
+        pnrInput.addEventListener('input', function() {
+            var v = this.value.replace(/[^0-9]/g, '');
+            if (v.length > 8) v = v.slice(0, 8) + '-' + v.slice(8, 12);
+            this.value = v;
+            document.getElementById('membership-result').style.display = 'none';
+            document.getElementById('btn-check-membership').disabled = false;
+        });
+
+        // Membership check
+        var isHusbandMember = false;
+        window.checkMembership = function() {
+            var pnr = document.getElementById('req-husband-pnr').value.trim();
+            if (!/^\d{8}-\d{4}$/.test(pnr)) {
+                var resultEl = document.getElementById('membership-result');
+                resultEl.style.display = 'block';
+                resultEl.innerHTML = '<span class="text-danger"><i class="fas fa-exclamation-circle me-1"></i> ' + t1('invalid-pnr', 'Ogiltigt personnummer') + '</span>';
+                return;
+            }
+
+            var btn = document.getElementById('btn-check-membership');
+            var origHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> ' + t1('checking', 'Kontrollerar...');
+
+            var resultEl = document.getElementById('membership-result');
+            resultEl.style.display = 'block';
+            resultEl.innerHTML = '<span class="text-muted"><i class="fas fa-spinner fa-spin me-1"></i> ' + t1('checking', 'Kontrollerar...') + '</span>';
+
+            var regUrl = 'https://medlem.fifs.se/registrera/' + pnr.replace(/[^0-9]/g, '') + '/SCH';
+
+            var fifsP = fetch('https://script.google.com/macros/s/AKfycbxZ08tC4z_P815a44QCUYxZTAvRnYay3W6k3XENWH5-X0T07l4fFiqdJJS1zrd0uOv64g/exec?pnr=' + encodeURIComponent(pnr))
+                .then(function(r) { return r.json(); })
+                .catch(function() { return { isMember: false }; });
+
+            var sheetP = fetch('https://script.google.com/macros/s/AKfycbzRlibFil1ukVgnxlWCALnEuY28K2JwxDncftIy7CetjwHwkoee3xj7xsbKnRTI1y9s/exec?pnr=' + encodeURIComponent(pnr))
+                .then(function(r) { return r.json(); })
+                .catch(function() { return { isFifsInSheet: false }; });
+
+            Promise.all([fifsP, sheetP]).then(function(r) {
+                var f = r[0], s = r[1];
+                isHusbandMember = !!(f.isMember || (s && s.isFifsInSheet));
+
+                btn.disabled = false;
+                btn.innerHTML = origHTML;
+
+                if (isHusbandMember) {
+                    resultEl.innerHTML = '<div class="alert alert-success py-2 mb-0"><i class="fas fa-check-circle me-1"></i> <span data-i18n="marriage.membership-member">Du är medlem! Du får rabatt via mejl när tiden bekräftas.</span></div>';
+                } else {
+                    resultEl.innerHTML = '<div class="alert alert-warning py-2 mb-0"><i class="fas fa-info-circle me-1"></i> <span data-i18n="marriage.membership-not-member">Ej medlem — vill du bli medlem och få rabatt?</span> <a href="' + regUrl + '" target="_blank" rel="noopener" class="alert-link"><span data-i18n="marriage.membership-register-link">Registrera dig hos FIFS</span> <i class="fas fa-external-link-alt fa-xs"></i></a></div>';
+                }
+
+                if (window.reapplyTranslations) window.reapplyTranslations();
+            });
+        };
+
+        // Init all upload zones
+        document.querySelectorAll('.upload-zone').forEach(setupUploadZone);
+
+        // ── Step 1 translations helper ──────────────────────────
+        window.t1 = function(key, fallback) {
+            return window.getTranslation('marriage.step1.' + key, fallback);
+        };
+
+        // ── Submit request ───────────────────────────────────────
+        window.submitRequest = function() {
+            var email       = document.getElementById('req-email').value.trim();
+            var phone       = document.getElementById('req-phone').value.trim();
+            var husbandPnr  = document.getElementById('req-husband-pnr').value.trim();
+
+            // Basic validation
+            if (!email || !phone || !husbandPnr) {
+                alert(t1('fill-required', 'Vänligen fyll i alla obligatoriska fält (e-post, telefon, personnummer).'));
+                return;
+            }
+            if (!/^\d{8}-\d{4}$/.test(husbandPnr)) {
+                alert(t1('fill-pnr', 'Vänligen ange brudgummens personnummer (ÅÅÅÅMMDD-XXXX).'));
+                return;
+            }
+            if (!document.getElementById('req-preferred-date').value.trim()) {
+                alert(t1('fill-date', 'Vänligen välj ett önskat datum för ceremonin.'));
+                return;
+            }
+
+            var missingDocs = [];
+            ['wifeIdDoc', 'husbandIdDoc', 'wifeFolkDoc', 'husbandFolkDoc'].forEach(function(k) {
+                if (!uploadedFiles[k]) missingDocs.push(k);
+            });
+            if (missingDocs.length > 0) {
+                alert(t1('fill-docs', 'Vänligen ladda upp alla fyra dokumenten.'));
+                return;
+            }
+
+            var btn = document.getElementById('btn-submit-request');
+            var origHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> ' + t1('sending', 'Skickar...');
+
+            // Build form data — use personnummer as identifier
+            var params = new URLSearchParams();
+            params.append('action', 'submit-request');
+            params.append('email', email);
+            params.append('phone', phone);
+            params.append('notes', document.getElementById('req-notes').value.trim());
+            params.append('preferredDate', document.getElementById('req-preferred-date').value.trim());
+            params.append('preferredTime', document.getElementById('req-preferred-time').value.trim());
+            params.append('husbandPnr', husbandPnr);
+            params.append('isMember', isHusbandMember ? 'true' : 'false');
+            params.append('gasUrl', 'https://script.google.com/macros/s/AKfycbyBdihaThtMfp_qYi16SRr9gP9fd9X9a7yO-PNZLCxMVfukwN9Wja2AN_tPT1HuIqBP/exec');
+
+            // Append files
+            Object.keys(uploadedFiles).forEach(function(k) {
+                var f = uploadedFiles[k];
+                params.append(k, f.base64);
+                params.append(k + 'Mime', f.mime);
+            });
+
+            fetch('https://script.google.com/macros/s/AKfycbyBdihaThtMfp_qYi16SRr9gP9fd9X9a7yO-PNZLCxMVfukwN9Wja2AN_tPT1HuIqBP/exec', {
+                method: 'POST',
+                body: params
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(result) {
+                btn.disabled = false;
+                btn.innerHTML = origHTML;
+                if (result.success) {
+                    try { localStorage.setItem('marriage-email', email); } catch(e) {}
+                    try { localStorage.setItem('marriage-husband-pnr', husbandPnr); } catch(e) {}
+                    document.getElementById('request-form-wrapper').style.display = 'none';
+                    document.getElementById('request-success').style.display = 'flex';
+                    document.getElementById('request-success').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    alert(t1('error-server', 'Något gick fel: ') + (result.error || 'Okänt fel') + '\n' + t1('error-contact-mosque', 'Vänligen försök igen eller kontakta moskén direkt.'));
+                }
+            })
+            .catch(function(err) {
+                btn.disabled = false;
+                btn.innerHTML = origHTML;
+                alert(t1('error-connection', 'Något gick fel vid anslutningen. Vänligen kontrollera din internetanslutning och försök igen.'));
+            });
+        };
+    })();
+    </script>
 
     <!-- Contract Form Styles (scoped) -->
     <style>
@@ -520,22 +918,32 @@
         .contract-toolbar-actions button.success { background: #196f15; color: #fff; border-color: #196f15; }
 
         /* Send confirm modal */
+        /* Multi-state send modal */
         .send-confirm-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 10000; display: flex; align-items: center; justify-content: center; }
-        .send-confirm-box { background: #fff; border-radius: 14px; padding: 32px 28px; max-width: 440px; width: 92%; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.25); }
+        .send-confirm-box { background: #fff; border-radius: 14px; padding: 32px 28px; max-width: 460px; width: 92%; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.25); }
         .send-confirm-box p { font-size: 16px; margin: 0 0 24px 0; line-height: 1.55; color: #222; }
         .send-confirm-buttons { display: flex; gap: 12px; justify-content: center; }
         .send-confirm-buttons button { border: none; padding: 10px 28px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; }
         .send-confirm-cancel { background: #e0e0e0; color: #333; }
         .send-confirm-cancel:hover { background: #ccc; }
-        .send-confirm-send { background: #196f15; color: #fff; }
-        .send-confirm-send:hover { background: #145a11; }
+        .send-confirm-send { background: #1a8a1f; color: #fff; }
+        .send-confirm-send:hover { background: #157519; }
+
+        /* Spinner / success / error states inside the modal */
+        #confirm-loading-state p, #confirm-success-state p, #confirm-error-state p { margin: 12px 0 0 0; }
+        #confirm-success-state .fw-bold { color: #1a8a1f; }
 
         /* Loading overlay */
         .send-loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 10001; display: flex; align-items: center; justify-content: center; }
         .send-loading-box { text-align: center; color: #fff; }
         .send-spinner { width: 56px; height: 56px; border: 5px solid rgba(255,255,255,0.25); border-top-color: #fff; border-radius: 50%; animation: send-spin 0.8s linear infinite; margin: 0 auto 20px auto; }
         @keyframes send-spin { to { transform: rotate(360deg); } }
-        .send-loading-box p { font-size: 17px; margin: 0; }
+
+        /* Email copy prompt */
+        .email-copy-prompt { margin-top: 20px; }
+        .email-copy-box { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 14px; padding: 20px 24px; text-align: center; }
+        .email-copy-box h5 { margin: 0 0 8px 0; color: #333; font-size: 1.05rem; }
+
         @media (max-width: 900px) {
             .contract-grid, .contract-signature-grid, .contract-last-grid { grid-template-columns: 1fr; }
             .contract-cell:nth-child(2n), .contract-sig-cell:nth-child(2n), .contract-last-cell:nth-child(2n) { border-right: none; }
@@ -560,17 +968,17 @@
 
         const formTranslations = {
             sv: {
-                controls: { download: 'Ladda ner PDF', preview: 'Förhandsgranska PDF', send: 'Skicka', confirmBody: 'Är du säker på att all information stämmer och vill skicka in formuläret?', confirmCancel: 'Avbryt', confirmSendBtn: 'Skicka', loading: 'Skickar formuläret …', downloadDone: 'PDF nedladdad. Laddar upp svensk version …', uploadSuccess: 'Formuläret har skickats in. Vi kontaktar er om mer information behövs.', uploadFailed: 'Något gick fel. Försök igen eller kontakta moskén direkt.' },
+                controls: { download: 'Ladda ner PDF', preview: 'Förhandsgranska PDF', send: 'Skicka', confirmBody: 'Är du säker på att all information stämmer och vill skicka in formuläret?', confirmCancel: 'Avbryt', confirmSendBtn: 'Skicka', loading: 'Skickar formuläret …', downloadDone: 'PDF nedladdad. Laddar upp svensk version …', uploadSuccess: 'Formuläret har skickats in. Vi kontaktar er om mer information behövs.', uploadFailed: 'Något gick fel. Försök igen eller kontakta moskén direkt.', contractUploadSuccess: 'Formuläret har skickats in!' },
                 document: { title: 'Islamiskt äktenskapskontrakt', subtitle: 'Äktenskapskontrakt i enlighet med islamisk sedvana och med fastställd Mahr (hemgift) och villkor.', wifeLabel: 'Maka', husbandLabel: 'Make', personalIdLabel: 'Personnummer', birthPlaceLabel: 'Födelseort', maritalStatusLabel: 'Civilstånd', deferredDowryLabel: 'Uppskjuten hemgift', dowryLabel: 'Hemgift', terms: "Al salam Moské's imamkommitté har rätt att säga upp detta kontrakt om någon av makarna begär det.", wifeSignatureLabel: 'Underskrift maka', husbandSignatureLabel: 'Underskrift make', witness2Label: 'Vittne 2', witness1Label: 'Vittne 1', imamLabel: 'Imam', waliLabel: 'Wali', dateLabel: 'Datum', placeLabel: 'Plats', notice: 'Detta är ett religiöst äktenskapskontrakt som inte kan registreras hos Skatteverket.' },
                 maritalStatusOptions: { empty: '', single: 'Ogift', married: 'Gift', divorced: 'Skild', widowed: 'Änka/Änkling' }
             },
             en: {
-                controls: { download: 'Download PDF', preview: 'Preview PDF', send: 'Send', confirmBody: 'Are you sure all the information is correct and you want to submit the form?', confirmCancel: 'Cancel', confirmSendBtn: 'Send', loading: 'Submitting form …', downloadDone: 'PDF downloaded. Uploading Swedish version …', uploadSuccess: 'Form submitted. We will contact you if more information is needed.', uploadFailed: 'Something went wrong. Please try again or contact the mosque directly.' },
+                controls: { download: 'Download PDF', preview: 'Preview PDF', send: 'Send', confirmBody: 'Are you sure all the information is correct and you want to submit the form?', confirmCancel: 'Cancel', confirmSendBtn: 'Send', loading: 'Submitting form …', downloadDone: 'PDF downloaded. Uploading Swedish version …', uploadSuccess: 'Form submitted. We will contact you if more information is needed.', uploadFailed: 'Something went wrong. Please try again or contact the mosque directly.', contractUploadSuccess: 'Form submitted!' },
                 document: { title: 'Islamic marriage contract', subtitle: 'Marriage contract in accordance with Islamic custom and with stipulated dowry and terms.', wifeLabel: 'Wife', husbandLabel: 'Husband', personalIdLabel: 'Personal identity number', birthPlaceLabel: 'Place of birth', maritalStatusLabel: 'Marital status', deferredDowryLabel: 'Deferred dowry', dowryLabel: 'Dowry', terms: "Al salam Moské's imamkommitté har rätt att säga upp detta kontrakt om någon av makarna begär det.", wifeSignatureLabel: 'Wife signature', husbandSignatureLabel: 'Husband signature', witness2Label: 'Witness 2', witness1Label: 'Witness 1', imamLabel: 'Imam', waliLabel: 'Wali', dateLabel: 'Date', placeLabel: 'Place', notice: 'This is a religious marriage contract and it cannot be registered at the Swedish Tax Agency.' },
                 maritalStatusOptions: { empty: '', single: 'Single', married: 'Married', divorced: 'Divorced', widowed: 'Widowed' }
             },
             ar: {
-                controls: { download: 'تنزيل PDF', preview: 'معاينة PDF', send: 'إرسال', confirmBody: 'هل أنت متأكد من صحة جميع المعلومات وتريد إرسال النموذج؟', confirmCancel: 'إلغاء', confirmSendBtn: 'إرسال', loading: 'جاري إرسال النموذج …', downloadDone: 'تم تنزيل PDF. جاري رفع النسخة السويدية …', uploadSuccess: 'تم إرسال النموذج. سنتواصل معكم إذا لزمت معلومات إضافية.', uploadFailed: 'حدث خطأ ما. يرجى المحاولة مرة أخرى أو الاتصال بالمسجد مباشرة.' },
+                controls: { download: 'تنزيل PDF', preview: 'معاينة PDF', send: 'إرسال', confirmBody: 'هل أنت متأكد من صحة جميع المعلومات وتريد إرسال النموذج؟', confirmCancel: 'إلغاء', confirmSendBtn: 'إرسال', loading: 'جاري إرسال النموذج …', downloadDone: 'تم تنزيل PDF. جاري رفع النسخة السويدية …', uploadSuccess: 'تم إرسال النموذج. سنتواصل معكم إذا لزمت معلومات إضافية.', uploadFailed: 'حدث خطأ ما. يرجى المحاولة مرة أخرى أو الاتصال بالمسجد مباشرة.', contractUploadSuccess: 'تم إرسال النموذج!' },
                 document: { title: 'عقد زواج إسلامي', subtitle: 'أبرم الزوجان عقد زواجهما وفق الشريعة الإسلامية وحددا المهر والشروط.', wifeLabel: 'الزوجة', husbandLabel: 'الزوج', personalIdLabel: 'الرقم الشخصي', birthPlaceLabel: 'مكان الميلاد', maritalStatusLabel: 'الحالة الاجتماعية', deferredDowryLabel: 'المهر المؤجل', dowryLabel: 'المهر', terms: 'اللجنة الشرعية في مسجد السلام لها الحق بإنهاء هذا العقد إذا طلب ذلك أحد الزوجين.', wifeSignatureLabel: 'توقيع الزوجة', husbandSignatureLabel: 'توقيع الزوج', witness2Label: 'الشاهد الثاني', witness1Label: 'الشاهد الأول', imamLabel: 'الإمام', waliLabel: 'الولي', dateLabel: 'التاريخ', placeLabel: 'المكان', notice: 'هذا عقد زواج ديني غير قابل للتسجيل لدى دائرة الضرية (Skatteverket).' },
                 maritalStatusOptions: { empty: '', single: 'أعزب', married: 'متزوج', divorced: 'مطلق', widowed: 'أرمل' }
             }
@@ -772,7 +1180,7 @@
             canvas.addEventListener('pointercancel', stop);
         }
 
-        // Strip Arabic-script characters from input (blocks: 0600-06FF, 0750-077F, 08A0-08FF, FB50-FDFF, FE70-FEFF)
+        // Strip Arabic-script characters from input
         function stripArabicChars(str) {
             var result = '';
             for (var i = 0; i < str.length; i++) {
@@ -794,22 +1202,17 @@
             window.addEventListener('resize', () => { document.querySelectorAll('#marriage-form-container .signature-pad').forEach(c => resizeSignaturePad(c)); });
             renderFormLanguage(currentFormLanguage);
             restoreFormData();
-            // Auto-save on input/change for all form fields; block Arabic letters in text inputs
             var lastArabicAlert = 0;
             document.querySelectorAll('#marriage-form-container input, #marriage-form-container select').forEach(el => {
                 el.addEventListener('input', function() {
-                    // Only strip Arabic from text inputs, not date/select
                     if (el.tagName === 'INPUT' && el.type !== 'date') {
                         const cleaned = stripArabicChars(el.value);
                         if (cleaned !== el.value) {
-                            // Save cursor position before modifying
                             var pos = el.selectionStart;
                             var diff = el.value.length - cleaned.length;
                             el.value = cleaned;
-                            // Restore cursor position accounting for removed chars
                             var newPos = Math.max(0, pos - diff + (el.value.length - cleaned.length));
                             el.setSelectionRange(newPos, newPos);
-                            // Show alert in Arabic (debounced: max once every 2.5s)
                             var now = Date.now();
                             if (now - lastArabicAlert > 2500) {
                                 lastArabicAlert = now;
@@ -854,58 +1257,72 @@
             const msgs = formTranslations[currentFormLanguage].controls;
             if (!validateForm()) return;
 
-            // Show custom confirmation modal
-            const overlay = document.getElementById('sendConfirmOverlay');
-            const cancelBtn = document.getElementById('sendConfirmCancelBtn');
-            const sendBtn = document.getElementById('sendConfirmSendBtn');
+            var overlay = document.getElementById('sendConfirmOverlay');
+            var confirmState = document.getElementById('confirm-state');
+            var loadingState = document.getElementById('confirm-loading-state');
+            var successState = document.getElementById('confirm-success-state');
+            var errorState = document.getElementById('confirm-error-state');
+            var cancelBtn = document.getElementById('sendConfirmCancelBtn');
+            var sendBtn = document.getElementById('sendConfirmSendBtn');
+            var errorClose = document.getElementById('confirm-error-close');
+
+            // Reset to confirm state
+            confirmState.style.display = 'block';
+            loadingState.style.display = 'none';
+            successState.style.display = 'none';
+            errorState.style.display = 'none';
+            document.getElementById('email-status-row').style.display = 'none';
 
             document.getElementById('sendConfirmBody').textContent = msgs.confirmBody;
             cancelBtn.textContent = msgs.confirmCancel;
             sendBtn.textContent = msgs.confirmSendBtn;
             overlay.style.display = 'flex';
 
-            function hideConfirm() {
+            function hideOverlay() {
+                clearFormData();
+                resetFormFields();
                 overlay.style.display = 'none';
-                cancelBtn.removeEventListener('click', onCancel);
-                sendBtn.removeEventListener('click', onSend);
+                cleanup();
             }
 
-            function onCancel() { hideConfirm(); }
+            var cleanedUp = false;
+            function cleanup() {
+                if (cleanedUp) return;
+                cleanedUp = true;
+                cancelBtn.removeEventListener('click', onCancel);
+                sendBtn.removeEventListener('click', onSend);
+                errorClose.removeEventListener('click', hideOverlay);
+            }
+
+            function onCancel() { hideOverlay(); }
 
             async function onSend() {
-                hideConfirm();
-                // Show loading overlay
-                const loadOverlay = document.getElementById('sendLoadingOverlay');
-                document.getElementById('sendLoadingText').textContent = msgs.loading;
-                loadOverlay.style.display = 'flex';
+                // Transition: confirm → loading (same box)
+                confirmState.style.display = 'none';
+                document.getElementById('confirm-loading-text').textContent = msgs.loading;
+                loadingState.style.display = 'block';
+                cancelBtn.removeEventListener('click', onCancel);
+                sendBtn.removeEventListener('click', onSend);
 
-                const userLang = currentFormLanguage;
-                try {
-                    // 1) Download PDF in the user's current language
-                    await html2pdf().set(pdfOptions).from(document.getElementById('contract')).save();
-                } catch(e) {
-                    alert(msgs.uploadFailed);
-                    loadOverlay.style.display = 'none';
-                    return;
-                }
-
-                // 2) Switch to Swedish and generate PDF blob for upload
                 const prev = currentFormLanguage;
                 let blob;
                 try {
-                    renderFormLanguage('sv', { updateCurrent: false, updateControls: false });
-                    await new Promise(function(r) { requestAnimationFrame(function() { requestAnimationFrame(r); }); });
+                    if (prev !== 'sv') {
+                        renderFormLanguage('sv', { updateCurrent: false, updateControls: false });
+                        await new Promise(function(r) { requestAnimationFrame(function() { requestAnimationFrame(r); }); });
+                    }
                     blob = await html2pdf().set(pdfOptions).from(document.getElementById('contract')).toPdf().outputPdf('blob');
                 } catch(e) {
-                    alert(msgs.uploadFailed);
-                    loadOverlay.style.display = 'none';
-                    renderFormLanguage(prev, { updateCurrent: false, updateControls: false });
+                    loadingState.style.display = 'none';
+                    document.getElementById('confirm-error-text').textContent = msgs.uploadFailed;
+                    errorState.style.display = 'block';
+                    errorClose.addEventListener('click', hideOverlay);
+                    if (prev !== 'sv') renderFormLanguage(prev, { updateCurrent: false, updateControls: false });
                     return;
                 } finally {
-                    renderFormLanguage(prev, { updateCurrent: false, updateControls: false });
+                    if (prev !== 'sv') renderFormLanguage(prev, { updateCurrent: false, updateControls: false });
                 }
 
-                // 3) Upload Swedish PDF to Google Apps Script
                 try {
                     const reader = new FileReader();
                     const base64Promise = new Promise(function(resolve) {
@@ -916,32 +1333,114 @@
 
                     const getVal = function(id) { const el = document.getElementById(id); return el ? el.value : ''; };
 
+                    var husbandPnr = '';
+                    try { husbandPnr = localStorage.getItem('marriage-husband-pnr') || ''; } catch(e) {}
+                    if (!husbandPnr) husbandPnr = getVal('husbandPersonalIdInput');
+
                     const params = new URLSearchParams();
+                    params.append('action', 'submit-contract');
                     params.append('pdf', base64);
                     params.append('filename', 'islamic-marriage-contract.pdf');
                     params.append('wifeName', getVal('wifeNameInput'));
                     params.append('husbandName', getVal('husbandNameInput'));
+                    params.append('wifePnr', getVal('wifePersonalIdInput'));
+                    params.append('husbandPnr', husbandPnr);
                     params.append('date', getVal('dateInput'));
 
                     const res = await fetch(GAS_URL, { method: 'POST', body: params });
                     const result = await res.json();
                     if (!res.ok || !result.success) throw new Error(result.error || 'Upload failed');
 
-                    alert(msgs.uploadSuccess);
-                    loadOverlay.style.display = 'none';
-                    clearFormData();
-                    resetFormFields();
+                    // Transition: loading → success (same box)
+                    loadingState.style.display = 'none';
+                    document.getElementById('confirm-success-text').textContent = msgs.contractUploadSuccess || 'Formuläret har skickats in!';
+                    successState.style.display = 'block';
+
+                    // Save PNR so email copy can use it (form fields may be cleared later)
+                    window._lastSubmittedPnr = husbandPnr;
+
+                    // Pre-fill email from Step 1
+                    var savedEmail = '';
+                    try { savedEmail = localStorage.getItem('marriage-email') || ''; } catch(e) {}
+                    if (savedEmail) document.getElementById('email-copy-input').value = savedEmail;
+
                 } catch(e) {
-                    alert(msgs.uploadFailed);
-                    loadOverlay.style.display = 'none';
+                    loadingState.style.display = 'none';
+                    document.getElementById('confirm-error-text').textContent = msgs.uploadFailed;
+                    errorState.style.display = 'block';
+                    errorClose.addEventListener('click', hideOverlay);
                 }
             }
 
             cancelBtn.addEventListener('click', onCancel);
             sendBtn.addEventListener('click', onSend);
+            errorClose.addEventListener('click', hideOverlay);
         };
 
-        // Initialize signature pads when step 3 becomes visible
+        // Email copy of contract
+        window.sendEmailCopy = async function() {
+            var email = document.getElementById('email-copy-input').value.trim();
+            if (!email) {
+                alert(window.t1('fill-email', 'Vänligen ange din e-postadress.'));
+                return;
+            }
+
+            // Replace button with spinner
+            var btn = document.getElementById('btn-send-email-copy');
+            var origHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm" style="color:#fff;"></span> ' + window.t1('sending', 'Skickar...');
+
+            // Reset status row
+            var statusRow = document.getElementById('email-status-row');
+            var emailSpinner = document.getElementById('email-icon-spinner');
+            var emailCheck = document.getElementById('email-icon-check');
+            var emailErrorIcon = document.getElementById('email-icon-error');
+            var emailStatusText = document.getElementById('email-status-text');
+            emailSpinner.style.display = 'none';
+            emailCheck.style.display = 'none';
+            emailErrorIcon.style.display = 'none';
+            statusRow.style.display = 'none';
+
+            try {
+                // Regenerate PDF from cached form data
+                var blob = await html2pdf().set(pdfOptions).from(document.getElementById('contract')).toPdf().outputPdf('blob');
+
+                var reader = new FileReader();
+                var base64Promise = new Promise(function(resolve) {
+                    reader.onloadend = function() { resolve(reader.result.split(',')[1]); };
+                });
+                reader.readAsDataURL(blob);
+                var base64 = await base64Promise;
+
+                var params = new URLSearchParams();
+                params.append('action', 'email-contract');
+                params.append('email', email);
+                params.append('pdf', base64);
+
+                var res = await fetch(GAS_URL, { method: 'POST', body: params });
+                var result = await res.json();
+
+                btn.disabled = false;
+                btn.innerHTML = origHTML;
+                statusRow.style.display = 'flex';
+                if (result.success) {
+                    emailCheck.style.display = '';
+                    emailStatusText.textContent = window.t1('email-sent', 'Kopia har skickats till din e-post!');
+                } else {
+                    emailErrorIcon.style.display = '';
+                    emailStatusText.textContent = window.t1('error-server', 'Något gick fel: ') + (result.error || 'Okänt fel');
+                }
+            } catch(e) {
+                btn.disabled = false;
+                btn.innerHTML = origHTML;
+                statusRow.style.display = 'flex';
+                emailErrorIcon.style.display = '';
+                emailStatusText.textContent = window.t1('error-connection', 'Något gick fel vid anslutningen. Försök igen.');
+            }
+        };
+
+        // Initialize signature pads when step 2 becomes visible
         let formInitialized = false;
         window.initContractForm = function() {
             if (formInitialized) return;
@@ -957,10 +1456,10 @@
             }
         });
 
-        // Also init if page loads directly on step 3
+        // Also init if page loads directly on step 2 (contract form)
         document.addEventListener('DOMContentLoaded', function() {
-            const step3 = document.getElementById('step-3');
-            if (step3 && step3.style.display !== 'none') {
+            const step2 = document.getElementById('step-2');
+            if (step2 && step2.style.display !== 'none') {
                 window.initContractForm();
             }
         });

@@ -8,7 +8,7 @@ Main features
 
 - Homepage with shared header, footer, and sponsors section
 - Donations page with Swish and Stripe-based donation flows
-- School registration flow and school success page
+- School registration flow (with integrated success page)
 - Company sponsorship page
 - Marriage application page
 - Sponsors page
@@ -20,7 +20,7 @@ Project structure
 - index.html is the homepage
 - header.html is the shared site header
 - contact-us.html is the shared footer and contact section
-- company/, donations/, donation_redirect/, school/, school-success/, marriage/, sponsors/, and stats/ contain the route-based pages
+- company/, donations/, donation_redirect/, school/, marriage/, sponsors/, and stats/ contain the route-based pages
 - langugaes/ contains translation JSON files and the translation loader used by the site
 
 Translations

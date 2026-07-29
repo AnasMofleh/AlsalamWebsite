@@ -122,6 +122,25 @@
             box-shadow: 0 2px 12px rgba(26, 138, 31, .25);
         }
 
+        .lang-toggle {
+            display: none;
+            background: none;
+            border: none;
+            min-width: 42px;
+            height: 42px;
+            border-radius: 13px;
+            font-size: .9rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--text);
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-family: inherit;
+            flex-shrink: 0;
+            padding: 0 10px;
+        }
+
         .search-bar {
             display: flex;
             gap: 14px;
@@ -300,6 +319,8 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            display: block;
+            margin-top: 3px;
         }
 
         .chk-card .cc-body .cc-sub b {
@@ -353,9 +374,153 @@
         }
 
         @media(max-width:600px) {
+            body {
+                overflow: auto;
+                overflow-x: hidden;
+            }
+
+            .app {
+                height: auto;
+                min-height: 100dvh;
+                padding-bottom: 24px;
+            }
+
+            .cards-area {
+                overflow: visible;
+                flex: none;
+            }
+
             .results-row {
                 flex-direction: column;
                 gap: 10px;
+            }
+
+            .search-bar input {
+                height: 54px;
+                font-size: 1.1rem;
+                padding: 0 14px;
+            }
+
+            .btn-go {
+                height: 54px;
+                padding: 0;
+                width: 54px;
+                min-width: 54px;
+                font-size: 1.15rem;
+                border-radius: 18px;
+                flex-shrink: 0;
+            }
+
+            .btn-go span {
+                display: none;
+            }
+
+            .lang-toggle {
+                display: flex;
+                background: var(--card);
+                box-shadow: var(--shadow);
+            }
+
+            .lang-pills {
+                position: relative;
+                background: none;
+                box-shadow: none;
+                padding: 0;
+                gap: 0;
+            }
+
+            .lang-pills>button[data-lang] {
+                display: none;
+                position: absolute;
+                top: 100%;
+                right: 0;
+                margin-top: 6px;
+                background: var(--card);
+                box-shadow: var(--shadow);
+                border-radius: 13px;
+                padding: 10px 20px;
+                white-space: nowrap;
+                z-index: 10;
+                font-size: .85rem;
+            }
+
+            .lang-pills>button[data-lang].active {
+                background: var(--green);
+                color: #fff;
+                box-shadow: 0 2px 12px rgba(26, 138, 31, .25);
+            }
+
+            [dir="rtl"] .lang-pills>button[data-lang] {
+                right: auto;
+                left: 0;
+            }
+
+            .lang-pills.open>button[data-lang] {
+                display: block;
+            }
+
+            .lang-pills.open>button[data-lang="sv"] {
+                top: calc(100% + 6px);
+            }
+
+            .lang-pills.open>button[data-lang="en"] {
+                top: calc(100% + 48px);
+            }
+
+            .lang-pills.open>button[data-lang="ar"] {
+                top: calc(100% + 90px);
+            }
+
+            .topbar-logo {
+                width: 56px;
+                height: 56px;
+            }
+
+            .topbar-brand h1 {
+                font-size: 1.25rem;
+            }
+
+            .chk-card.visible {
+                height: auto;
+                min-height: 78px;
+                padding: 12px 16px;
+                gap: 8px;
+            }
+
+            .chk-card .cc-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .chk-card .cc-body h4 {
+                font-size: .92rem;
+            }
+
+            .chk-card .cc-body .cc-sub {
+                font-size: .75rem;
+            }
+
+            .chk-card .cc-pts {
+                font-size: .78rem;
+            }
+
+            .chk-card .cc-btn {
+                font-size: .68rem;
+                padding: 6px 10px;
+            }
+
+            .pts-circle {
+                width: 140px;
+                height: 140px;
+            }
+
+            .pts-circle .circle-num {
+                font-size: 2.6rem;
+            }
+
+            .timer-wrap {
+                margin-top: 8px;
             }
         }
 
@@ -821,6 +986,7 @@
                 <h1>Medlems<span>portal</span></h1>
             </div>
             <div class="lang-pills" id="langBtns">
+                <button type="button" class="lang-toggle" id="langToggle" aria-label="Change language"><i class="fas fa-globe"></i> <span id="langToggleLabel">SV</span></button>
                 <button data-lang="sv" class="active">SV</button>
                 <button data-lang="en">EN</button>
                 <button data-lang="ar">AR</button>
@@ -861,13 +1027,6 @@
                 <div class="cc-icon"><i class="fas fa-calendar-check"></i></div>
                 <div class="cc-body">
                     <h4 data-tr="c2t">Månadsgivare</h4><span class="cc-sub" data-tr="c2s">Via autogiro</span>
-                </div>
-                <div class="cc-pts"></div>
-            </div>
-            <div class="chk-card locked" id="card3">
-                <div class="cc-icon"><i class="fas fa-hand-holding-heart"></i></div>
-                <div class="cc-body">
-                    <h4 data-tr="c3t">Donator</h4><span class="cc-sub" data-tr="soon">Kommer snart</span>
                 </div>
                 <div class="cc-pts"></div>
             </div>
@@ -914,19 +1073,22 @@
     <script>
         (function () {
             "use strict";
-            var TR = { sv: { ph: "ÅÅÅÅMMDD-XXXX", go: "Kontrollera", hint: "Ange ditt svenska personnummer", err: " — Ogiltigt personnummer", soon: "Kommer snart", totalPts: "Totala Poäng", c1t: "FIFS Medlemskap", c1s: "Via skattsedel", c2t: "Månadsgivare", c3t: "Donator", c4t: "Skolregistrering", memberYes: "Medlem via FIFS", since: "Medlem sedan", pts: "poäng", notFound: "Ej medlem", registerNow: "Registrera dig", checking: "Kontrollerar...", l1: "🌱 Ny Medlem", l2: "🌿 Aktiv Medlem", l3: "🌳 Engagerad", l4: "⭐ Stöttepelare", l5: "👑 Guldmedlem", l1s: "Ny", l2s: "Aktiv", l3s: "Engagerad", l4s: "Stöttare", l5s: "Guld", c2s: "Via autogiro", monthlyMemberYes: "Månadsgivare aktiv", monthlyNotFound: "Ingen aktiv autogiro", monthlyAmount: "Månadsbelopp: {{amount}} kr/mån", becomeMonthly: "Bli månadsgivare", nextLvl: "{{pts}} poäng kvar till {{lvl}}", maxLvl: "Högsta nivån 🎉" }, en: { ph: "YYYYMMDD-XXXX", go: "Check", hint: "Enter Swedish personal number", err: " — Invalid number", soon: "Coming soon", totalPts: "Total Points", c1t: "FIFS Membership", c1s: "Via tax return", c2t: "Monthly Giver", c3t: "Donor", c4t: "School Registration", memberYes: "FIFS Member", since: "Member since", pts: "pts", notFound: "Not a member", registerNow: "Register now", checking: "Checking...", l1: "🌱 New Member", l2: "🌿 Active", l3: "🌳 Engaged", l4: "⭐ Pillar", l5: "👑 Gold", l1s: "New", l2s: "Active", l3s: "Engaged", l4s: "Pillar", l5s: "Gold", c2s: "Via direct debit", monthlyMemberYes: "Monthly donor active", monthlyNotFound: "No active autogiro", monthlyAmount: "Monthly: {{amount}} SEK/mo", becomeMonthly: "Become a monthly donor", nextLvl: "{{pts}} pts to {{lvl}}", maxLvl: "Max level 🎉" }, ar: { ph: "YYYYMMDD-XXXX", go: "تحقق", hint: "أدخل رقمك الشخصي السويدي", err: " — رقم غير صالح", soon: "قريباً", totalPts: "مجموع النقاط", c1t: "عضوية FIFS", c1s: "عبر الإقرار الضريبي", c2t: "متبرع شهري", c3t: "متبرع", c4t: "التسجيل في المدرسة", memberYes: "عضو FIFS", since: "عضو منذ", pts: "نقطة", notFound: "ليس عضواً", registerNow: "سجل الآن", checking: "...جار التحقق", l1: "🌱 عضو جديد", l2: "🌿 نشط", l3: "🌳 متفاعل", l4: "⭐ داعم", l5: "👑 ذهبي", l1s: "جديد", l2s: "نشط", l3s: "متفاعل", l4s: "داعم", l5s: "ذهبي", c2s: "عبر الخصم المباشر", monthlyMemberYes: "متبرع شهري نشط", monthlyNotFound: "لا يوجد خصم مباشر نشط", monthlyAmount: "المبلغ الشهري: {{amount}} كر/شهر", becomeMonthly: "كن متبرعاً شهرياً", nextLvl: "{{pts}} نقطة إلى {{lvl}}", maxLvl: "أعلى مستوى 🎉" } };
+            var TR = { sv: { ph: "ÅÅÅÅMMDD-XXXX", go: "Kontrollera", hint: "Ange ditt svenska personnummer", err: " — Ogiltigt personnummer", soon: "Kommer snart", totalPts: "Totala Poäng", c1t: "FIFS Medlemskap", c1s: "Via skattsedel", c2t: "Månadsgivare", c4t: "Skolregistrering", memberYes: "Medlem via FIFS", since: "Medlem sedan", pts: "poäng", notFound: "Ej medlem", registerNow: "Registrera dig", checking: "Kontrollerar...", l1: "🌱 Ny Medlem", l2: "🌿 Aktiv Medlem", l3: "🌳 Engagerad", l4: "⭐ Stöttepelare", l5: "👑 Guldmedlem", l1s: "Ny", l2s: "Aktiv", l3s: "Engagerad", l4s: "Stöttare", l5s: "Guld", c2s: "Via autogiro", c4s: "Via skolregistrering", monthlyMemberYes: "Månadsgivare aktiv", monthlyNotFound: "Ingen aktiv autogiro", monthlyAmount: "Månadsbelopp: {{amount}} kr/mån", becomeMonthly: "Bli månadsgivare", increaseMonthly: "Öka Sadaqa", nextLvl: "{{pts}} poäng kvar till {{lvl}}", maxLvl: "Högsta nivån 🎉", schoolMemberYes: "Skolvårdnadshavare", schoolChildren: "Barn: {{count}} st", schoolNotFound: "Ej skolvårdnadshavare", schoolRegister: "Registrera till skolan" }, en: { ph: "YYYYMMDD-XXXX", go: "Check", hint: "Enter Swedish personal number", err: " — Invalid number", soon: "Coming soon", totalPts: "Total Points", c1t: "FIFS Membership", c1s: "Via tax return", c2t: "Monthly Giver", c4t: "School Registration", memberYes: "FIFS Member", since: "Member since", pts: "pts", notFound: "Not a member", registerNow: "Register now", checking: "Checking...", l1: "🌱 New Member", l2: "🌿 Active", l3: "🌳 Engaged", l4: "⭐ Pillar", l5: "👑 Gold", l1s: "New", l2s: "Active", l3s: "Engaged", l4s: "Pillar", l5s: "Gold", c2s: "Via direct debit", c4s: "Via school registration", monthlyMemberYes: "Monthly donor active", monthlyNotFound: "No active autogiro", monthlyAmount: "Monthly: {{amount}} SEK/mo", becomeMonthly: "Become a monthly donor", increaseMonthly: "Increase Sadaqa", nextLvl: "{{pts}} pts to {{lvl}}", maxLvl: "Max level 🎉", schoolMemberYes: "School Parent", schoolChildren: "Children: {{count}}", schoolNotFound: "Not a school parent", schoolRegister: "Register for school" }, ar: { ph: "YYYYMMDD-XXXX", go: "تحقق", hint: "أدخل رقمك الشخصي السويدي", err: " — رقم غير صالح", soon: "قريباً", totalPts: "مجموع النقاط", c1t: "عضوية FIFS", c1s: "عبر الإقرار الضريبي", c2t: "متبرع شهري", c4t: "التسجيل في المدرسة", memberYes: "عضو FIFS", since: "عضو منذ", pts: "نقطة", notFound: "ليس عضواً", registerNow: "سجل الآن", checking: "...جار التحقق", l1: "🌱 عضو جديد", l2: "🌿 نشط", l3: "🌳 متفاعل", l4: "⭐ داعم", l5: "👑 ذهبي", l1s: "جديد", l2s: "نشط", l3s: "متفاعل", l4s: "داعم", l5s: "ذهبي", c2s: "عبر الخصم المباشر", c4s: "عبر التسجيل في المدرسة", monthlyMemberYes: "متبرع شهري نشط", monthlyNotFound: "لا يوجد خصم مباشر نشط", monthlyAmount: "المبلغ الشهري: {{amount}} كر/شهر", becomeMonthly: "كن متبرعاً شهرياً", increaseMonthly: "زيادة الصدقة", nextLvl: "{{pts}} نقطة إلى {{lvl}}", maxLvl: "أعلى مستوى 🎉", schoolMemberYes: "ولي أمر في المدرسة", schoolChildren: "الأطفال: {{count}}", schoolNotFound: "ليس ولي أمر في المدرسة", schoolRegister: "سجل في المدرسة" } };
             var LVLS = [{ key: "l1", css: "l1", min: 0, max: 199 }, { key: "l2", css: "l2", min: 200, max: 699 }, { key: "l3", css: "l3", min: 700, max: 1499 }, { key: "l4", css: "l4", min: 1500, max: 2999 }, { key: "l5", css: "l5", min: 3000, max: 99999 }];
-            var BASE_FIFS = 100, PER_DAY = 1, BASE_MONTHLY = 100, PER_SEK = 1, lang = "sv", timer = null;
+            var BASE_FIFS = 100, PER_DAY = 1, BASE_MONTHLY = 100, PER_SEK = 1, BASE_SCHOOL = 500, PER_CHILD = 100, lang = "sv", timer = null;
             function t(k) { return (TR[lang] && TR[lang][k]) || k; }
             function applyTr() { document.querySelectorAll("[data-tr]").forEach(function (e) { var v = t(e.getAttribute("data-tr")); if (v) e.textContent = v; }); document.querySelectorAll("[data-tr-placeholder]").forEach(function (e) { var v = t(e.getAttribute("data-tr-placeholder")); if (v) e.placeholder = v; }); document.documentElement.lang = lang; document.documentElement.dir = lang === "ar" ? "rtl" : "ltr"; }
-            function setLang(l) { lang = l; localStorage.setItem("klang", l); document.querySelectorAll("#langBtns button").forEach(function (b) { b.classList.toggle("active", b.getAttribute("data-lang") === l); }); applyTr(); buildPyramid(); }
-            document.querySelectorAll("#langBtns button").forEach(function (b) { b.addEventListener("click", function () { setLang(this.getAttribute("data-lang")); }); });
+            function setLang(l) { lang = l; localStorage.setItem("klang", l); document.querySelectorAll("#langBtns button[data-lang]").forEach(function (b) { b.classList.toggle("active", b.getAttribute("data-lang") === l); }); var lbl = document.getElementById("langToggleLabel"); if (lbl) lbl.textContent = l.toUpperCase(); applyTr(); buildPyramid(); document.getElementById("langBtns").classList.remove("open"); }
+            document.querySelectorAll("#langBtns button[data-lang]").forEach(function (b) { b.addEventListener("click", function (e) { e.stopPropagation(); setLang(this.getAttribute("data-lang")); }); });
+            document.getElementById("langToggle").addEventListener("click", function (e) { e.stopPropagation(); document.getElementById("langBtns").classList.toggle("open"); });
+            document.addEventListener("click", function () { document.getElementById("langBtns").classList.remove("open"); });
             setLang(localStorage.getItem("klang") || "sv");
             function buildPyramid() { var s = ""; for (var i = LVLS.length - 1; i >= 0; i--) { var lvl = LVLS[i]; s += "<div class=\"pyr-level " + lvl.key + "w\" data-lvl=\"" + lvl.key + "\"><span class=\"pyr-name\">" + t(lvl.key + "s") + "</span><span class=\"pyr-pts\">" + lvl.min + "+</span></div>"; } $("#pyramid").html(s); }
             buildPyramid();
             function calcFifsPoints(memberSince) { if (!memberSince) return 0; var s = new Date(memberSince), n = new Date(); var days = Math.round((n - s) / 86400000); if (days < 0) days = 0; return BASE_FIFS + days * PER_DAY; }
             function calcMonthlyPoints(monthlyAmount) { if (!monthlyAmount || monthlyAmount <= 0) return 0; return BASE_MONTHLY + monthlyAmount * PER_SEK; }
-            function calcTotal(fifsMemberSince, isMonthlyDonor, monthlyAmount) { var fifsPts = calcFifsPoints(fifsMemberSince); var monthlyPts = isMonthlyDonor ? calcMonthlyPoints(monthlyAmount) : 0; return { total: fifsPts + monthlyPts, fifs: fifsPts, monthly: monthlyPts }; }
+            function calcSchoolPoints(childrenCount) { if (!childrenCount || childrenCount <= 0) return 0; return BASE_SCHOOL + childrenCount * PER_CHILD; }
+            function calcTotal(fifsMemberSince, isMonthlyDonor, monthlyAmount, schoolChildrenCount) { var fifsPts = calcFifsPoints(fifsMemberSince); var monthlyPts = isMonthlyDonor ? calcMonthlyPoints(monthlyAmount) : 0; var schoolPts = calcSchoolPoints(schoolChildrenCount); return { total: fifsPts + monthlyPts + schoolPts, fifs: fifsPts, monthly: monthlyPts, school: schoolPts }; }
             function getLvl(pts) { for (var i = LVLS.length - 1; i >= 0; i--) { if (pts >= LVLS[i].min) return LVLS[i]; } return LVLS[0]; }
             function updatePtsDisplay(total) { var RING = 2 * Math.PI * 48; var lvl = getLvl(total); var nextIdx = -1; for (var i = 0; i < LVLS.length; i++) { if (LVLS[i].key === lvl.key) { nextIdx = i + 1; break; } } $("#ptsNum").text(total); var progress = nextIdx < LVLS.length ? (total - lvl.min) / (LVLS[nextIdx].min - lvl.min) : 1; $(".ring-fg").attr("stroke-dasharray", RING + " " + RING).attr("stroke-dashoffset", RING * (1 - Math.min(1, Math.max(0, progress)))); updatePyramid(total, lvl, nextIdx); }
             function updatePyramid(total, lvl, nextIdx) { var curIdx = nextIdx - 1; $("#pyramid .pyr-level").each(function () { var s = $(this), k = s.data("lvl"); s.removeClass("done current"); var idx = -1; for (var i = 0; i < LVLS.length; i++) { if (LVLS[i].key === k) { idx = i; break; } } if (idx < curIdx) s.addClass("done"); if (idx === curIdx) s.addClass("current"); }); if (nextIdx < LVLS.length) { var next = LVLS[nextIdx]; $("#pyramidInfo").html(t("nextLvl").replace("{{pts}}", "<b>" + (next.min - total) + "</b>").replace("{{lvl}}", "<b>" + t(next.key) + "</b>")); } else { $("#pyramidInfo").text(t("maxLvl")); } var $cur = $("#pyramid .pyr-level.current"); if ($cur.length) { var wo = $("#pyramidWrap").offset(), co = $cur.offset(); var relTop = co.top - wo.top + $cur.outerHeight() / 2 - 12; $("#pyrArrow").css("top", relTop + "px").addClass("show"); } else { $("#pyrArrow").removeClass("show"); } }
@@ -935,17 +1097,18 @@
             $pnr.on("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); doCheck(); } });
             function valid(p) { return /^\d{8}-\d{4}$/.test(p); }
             function startTimer() { clearTimeout(timer); $("#timerWrap").addClass("show"); $("#timerFill").css({ width: "100%", transition: "none" }); void $("#timerFill")[0].offsetHeight; $("#timerFill").css({ width: "0%", transition: "width 90s linear" }); timer = setTimeout(resetAll, 90000); }
-            function resetAll() { clearTimeout(timer); $("#timerWrap").removeClass("show"); $("#ptsFooter").removeClass("show"); $("#pyramidWrap").removeClass("show"); $("#pyramidInfo").text(""); $("#pyramid .pyr-level").removeClass("done current"); $("#pyrArrow").removeClass("show"); $("#ptsNum").text("0"); $(".ring-fg").attr("stroke-dasharray", "301.6 301.6").attr("stroke-dashoffset", "301.6"); $("#keypad").removeClass("hidden");["card1", "card2", "card3", "card4"].forEach(function (id) { $("#" + id).removeClass("visible success fail locked"); if (id !== "card1" && id !== "card2") $("#" + id).addClass("locked"); $("#" + id + " .cc-icon").html(id === "card1" ? "<i class=\"fas fa-id-card\"></i>" : id === "card2" ? "<i class=\"fas fa-calendar-check\"></i>" : id === "card3" ? "<i class=\"fas fa-hand-holding-heart\"></i>" : "<i class=\"fas fa-school\"></i>"); $("#" + id + " .cc-body h4").text(t(id === "card1" ? "c1t" : id === "card2" ? "c2t" : id === "card3" ? "c3t" : "c4t")); $("#" + id + " .cc-body .cc-sub").text(id === "card1" ? t("c1s") : id === "card2" ? t("c2s") : t("soon")).css("color", ""); $("#" + id + " .cc-pts").text(""); $("#" + id + " .cc-btn").remove(); }); $pnr.val("").removeClass("error success"); $err.hide(); $btn.prop("disabled", false); $("#confetti").removeClass("active").empty(); }
+            function resetAll() { clearTimeout(timer); $("#timerWrap").removeClass("show"); $("#ptsFooter").removeClass("show"); $("#pyramidWrap").removeClass("show"); $("#pyramidInfo").text(""); $("#pyramid .pyr-level").removeClass("done current"); $("#pyrArrow").removeClass("show"); $("#ptsNum").text("0"); $(".ring-fg").attr("stroke-dasharray", "301.6 301.6").attr("stroke-dashoffset", "301.6"); $("#keypad").removeClass("hidden");["card1", "card2", "card4"].forEach(function (id) { $("#" + id).removeClass("visible success fail locked"); $("#" + id + " .cc-icon").html(id === "card1" ? "<i class=\"fas fa-id-card\"></i>" : id === "card2" ? "<i class=\"fas fa-calendar-check\"></i>" : "<i class=\"fas fa-school\"></i>"); $("#" + id + " .cc-body h4").text(t(id === "card1" ? "c1t" : id === "card2" ? "c2t" : "c4t")); $("#" + id + " .cc-body .cc-sub").text(id === "card1" ? t("c1s") : id === "card2" ? t("c2s") : t("c4s")).css("color", ""); $("#" + id + " .cc-pts").text(""); $("#" + id + " .cc-btn").remove(); }); $pnr.val("").removeClass("error success"); $err.hide(); $btn.prop("disabled", false); $("#confetti").removeClass("active").empty(); }
             function fireConfetti() { var c = $("#confetti"), cols = ["#1a8a1f", "#e8b331", "#15546F", "#f0c94a", "#4ade80", "#ffd93d", "#ff6b6b"]; c.addClass("active"); for (var i = 0; i < 60; i++) { var fromLeft = i % 2 === 0; var p = $("<div class=\"confetti-piece\"></div>"); var angle = -30 + Math.random() * 60; var dist = 200 + Math.random() * 400; var dx = (fromLeft ? 1 : -1) * Math.cos(angle * Math.PI / 180) * dist; var dy = -Math.sin(angle * Math.PI / 180) * dist - (Math.random() * 100); p.css({ left: fromLeft ? "0" : "auto", right: fromLeft ? "auto" : "0", bottom: "0", background: cols[Math.floor(Math.random() * cols.length)], width: (8 + Math.random() * 10) + "px", height: (8 + Math.random() * 10) + "px", borderRadius: Math.random() > .5 ? "50%" : "2px", animationDuration: (2.2 + Math.random() * 2.5) + "s", animationDelay: Math.random() * .8 + "s", "--dx": dx + "px", "--dy": dy + "px", "--rot": (Math.random() * 720 - 360) + "deg" }); c.append(p); } setTimeout(function () { c.removeClass("active").empty(); }, 4000); }
-            function revealCards() { var d = 0; setTimeout(function () { $("#card1").addClass("visible"); }, d); d += 100; setTimeout(function () { $("#card2").addClass("visible"); }, d); d += 350; setTimeout(function () { $("#card3").addClass("visible"); }, d); d += 350; setTimeout(function () { $("#card4").addClass("visible"); }, d); d += 350; setTimeout(function () { $("#ptsFooter").addClass("show"); $("#pyramidWrap").addClass("show"); fireConfetti(); startTimer(); }, d); }
+            function revealCards() { var d = 0; setTimeout(function () { $("#card1").addClass("visible"); }, d); d += 100; setTimeout(function () { $("#card2").addClass("visible"); }, d); d += 350; setTimeout(function () { $("#card4").addClass("visible"); }, d); d += 350; setTimeout(function () { $("#ptsFooter").addClass("show"); $("#pyramidWrap").addClass("show"); fireConfetti(); startTimer(); }, d); }
             function setCardSuccess(id, title, sub, pts) { $("#" + id).addClass("success").removeClass("locked"); $("#" + id + " .cc-icon").html("<i class=\"fas fa-check\"></i>"); $("#" + id + " .cc-body h4").text(title); $("#" + id + " .cc-body .cc-sub").html(sub); $("#" + id + " .cc-pts").text("+" + pts + " " + t("pts")); }
             function setCardFail(id, title, sub, regUrl) { $("#" + id).addClass("fail").removeClass("locked"); $("#" + id + " .cc-icon").html("<i class=\"fas fa-times\"></i>"); $("#" + id + " .cc-body h4").text(title); $("#" + id + " .cc-body .cc-sub").html(sub); $("#" + id + " .cc-pts").text(""); $("#" + id + " .cc-btn").remove(); $("#" + id).append("<a href=\"" + regUrl + "\" target=\"_blank\" rel=\"noopener\" class=\"cc-btn red\"><i class=\"fas fa-external-link-alt\"></i> " + t("registerNow") + "</a>"); }
             function kpType(d) { var v = $pnr.val().replace(/[^0-9]/g, ""); if (v.length >= 12) return; v += d; if (v.length > 8) v = v.slice(0, 8) + "-" + v.slice(8); $pnr.val(v); $pnr.removeClass("error success"); $err.hide(); }
             function kpBack() { var v = $pnr.val().replace(/[^0-9]/g, ""); v = v.slice(0, -1); if (v.length > 8) v = v.slice(0, 8) + "-" + v.slice(8); $pnr.val(v); $pnr.removeClass("error success"); $err.hide(); }
             window.kpType = kpType; window.kpBack = kpBack;
-            window.doCheck = function () { var p = $pnr.val().trim(); $err.hide(); $pnr.removeClass("error success"); if (!valid(p)) { $pnr.addClass("error"); $err.show(); $pnr.focus(); return; } $pnr.addClass("success"); $btn.prop("disabled", true); resetAll(); $("#keypad").addClass("hidden"); var regUrl = "https://medlem.fifs.se/registrera/" + p + "/SCH"; $("#card1").addClass("visible"); $("#card1 .cc-icon").html("<i class=\"fas fa-spinner fa-spin\"></i>"); $("#card1 .cc-body h4").text(t("c1t")); $("#card1 .cc-body .cc-sub").text(t("checking")).css("color", "var(--muted)"); $("#card1 .cc-pts").text(""); $("#card2").addClass("visible"); $("#card2 .cc-icon").html("<i class=\"fas fa-spinner fa-spin\"></i>"); $("#card2 .cc-body h4").text(t("c2t")); $("#card2 .cc-body .cc-sub").text(t("checking")).css("color", "var(--muted)"); $("#card2 .cc-pts").text(""); var fifsP = fetchProxyFifs(p).catch(function () { return { isMember: false, memberSince: "", memberSinceFormatted: "" }; }); var sheetP = fetchProxySheet(p).catch(function () { return { found: false, name: "", isFifsInSheet: false, isMonthlyDonor: false, monthlyAmount: 0 }; }); Promise.all([fifsP, sheetP]).then(function (r) { var f = r[0], s = r[1]; if (f.isMember) { var fps = calcFifsPoints(f.memberSince); setCardSuccess("card1", t("memberYes"), t("since") + " <b>" + f.memberSinceFormatted + "</b>", fps); } else { setCardFail("card1", t("notFound"), t("notFound"), regUrl); } if (s.found && s.isMonthlyDonor) { var mps = calcMonthlyPoints(s.monthlyAmount); setCardSuccess("card2", t("monthlyMemberYes"), t("monthlyAmount").replace("{{amount}}", s.monthlyAmount), mps); } else { setCardFail("card2", t("monthlyNotFound"), t("monthlyNotFound"), "/donations/"); } var pts = calcTotal(f.memberSince, s.isMonthlyDonor, s.monthlyAmount); updatePtsDisplay(pts.total); revealCards(); }); };
+            window.doCheck = function () { var p = $pnr.val().trim(); $err.hide(); $pnr.removeClass("error success"); if (!valid(p)) { $pnr.addClass("error"); $err.show(); $pnr.focus(); return; } $pnr.addClass("success"); $btn.prop("disabled", true); resetAll(); $("#keypad").addClass("hidden"); var regUrl = "https://medlem.fifs.se/registrera/" + p + "/SCH"; var fifsResult, sheetResult, schoolResult; $("#card1").addClass("visible"); $("#card1 .cc-icon").html("<i class=\"fas fa-spinner fa-spin\"></i>"); $("#card1 .cc-body h4").text(t("c1t")); $("#card1 .cc-body .cc-sub").text(t("checking")).css("color", "var(--muted)"); $("#card1 .cc-pts").text(""); fetchProxyFifs(p).catch(function () { return { isMember: false, memberSince: "", memberSinceFormatted: "" }; }).then(function (f) { fifsResult = f; if (f.isMember) { var fps = calcFifsPoints(f.memberSince); setCardSuccess("card1", t("memberYes"), t("since") + " <b>" + f.memberSinceFormatted + "</b>", fps); } else { setCardFail("card1", t("notFound"), t("notFound"), regUrl); } $("#card2").addClass("visible"); $("#card2 .cc-icon").html("<i class=\"fas fa-spinner fa-spin\"></i>"); $("#card2 .cc-body h4").text(t("c2t")); $("#card2 .cc-body .cc-sub").text(t("checking")).css("color", "var(--muted)"); $("#card2 .cc-pts").text(""); return fetchProxySheet(p).catch(function () { return { found: false, name: "", isFifsInSheet: false, isMonthlyDonor: false, monthlyAmount: 0 }; }); }).then(function (s) { sheetResult = s; if (s.found && s.isMonthlyDonor) { var mps = calcMonthlyPoints(s.monthlyAmount); setCardSuccess("card2", t("monthlyMemberYes"), t("monthlyAmount").replace("{{amount}}", s.monthlyAmount), mps); $("#card2").append("<a href=\"https://buy.stripe.com/8x2eVd83Bac0cfxg3ifw402?client_reference_id=" + encodeURIComponent(p) + "\" target=\"_blank\" rel=\"noopener\" class=\"cc-btn go\" style=\"font-size:.72rem;padding:5px 12px;\"><i class=\"fas fa-arrow-up\"></i> " + t("increaseMonthly") + "</a>"); } else { setCardFail("card2", t("monthlyNotFound"), t("monthlyNotFound"), "/donations/#monthly"); } $("#card4").addClass("visible"); $("#card4 .cc-icon").html("<i class=\"fas fa-spinner fa-spin\"></i>"); $("#card4 .cc-body h4").text(t("c4t")); $("#card4 .cc-body .cc-sub").text(t("checking")).css("color", "var(--muted)"); $("#card4 .cc-pts").text(""); return fetchSchoolCheck(p).catch(function () { return { found: false, childrenCount: 0, children: [] }; }); }).then(function (sc) { schoolResult = sc; if (sc.found && sc.childrenCount > 0) { var scps = calcSchoolPoints(sc.childrenCount); setCardSuccess("card4", t("schoolMemberYes"), t("schoolChildren").replace("{{count}}", sc.childrenCount), scps); } else { setCardFail("card4", t("schoolNotFound"), t("schoolNotFound"), "../school/"); } var pts = calcTotal(fifsResult.memberSince, sheetResult.isMonthlyDonor, sheetResult.monthlyAmount, schoolResult.childrenCount); updatePtsDisplay(pts.total); setTimeout(function () { $("#ptsFooter").addClass("show"); $("#pyramidWrap").addClass("show"); fireConfetti(); startTimer(); }, 250); }); };
             function fetchProxyFifs(pnr) { return fetch("https://script.google.com/macros/s/AKfycbxZ08tC4z_P815a44QCUYxZTAvRnYay3W6k3XENWH5-X0T07l4fFiqdJJS1zrd0uOv64g/exec?pnr=" + encodeURIComponent(pnr)).then(function (r) { if (!r.ok) throw Error("HTTP " + r.status); return r.json(); }); }
             function fetchProxySheet(pnr) { return fetch("https://script.google.com/macros/s/AKfycbzRlibFil1ukVgnxlWCALnEuY28K2JwxDncftIy7CetjwHwkoee3xj7xsbKnRTI1y9s/exec?pnr=" + encodeURIComponent(pnr)).then(function (r) { if (!r.ok) throw Error("HTTP " + r.status); return r.json(); }); }
+            function fetchSchoolCheck(pnr) { return fetch("https://script.google.com/macros/s/AKfycbxIWhMCHmcxbtHl1WLU3XFqaslc_Fxn_sRSUuLrN4x7-Up84vx_cIujORbRCupbSxmbcg/exec?pnr=" + encodeURIComponent(pnr)).then(function (r) { if (!r.ok) throw Error("HTTP " + r.status); return r.json(); }); }
         })();
     </script>
 </body>
