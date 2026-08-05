@@ -91,7 +91,7 @@
                                     Original svensk identitetshandling eller motsvarande, till exempel pass eller körkort.
                                 </li>
                                 <li data-i18n-html="marriage.info-folk-link">
-                                    <a href="https://sso.skatteverket.se/fh1/fh_epersonbevis/hamtaPb.action?typAvPb=120_4773" target="_blank" rel="noopener">Ladda ner folkbokföringsbevis digitalt från Skatteverket</a> — logga in med BankID.
+                                    <a href="https://sso.skatteverket.se/fh1/fh_epersonbevis/visaPersoner.action" target="_blank" rel="noopener">Ladda ner folkbokföringsbevis digitalt från Skatteverket</a> — logga in med BankID.
                                 </li>
                             </ul>
                             <p class="mt-3"><i class="fas fa-credit-card me-2"></i><strong data-i18n="marriage.info-fee">Avgift: 1 200 SEK</strong> (inklusive 25% moms). Betalningslänk skickas efter att moskén bekräftat tiden.</p>
@@ -310,11 +310,11 @@
                                             </div>
                                             <div class="contract-cell">
                                                 <div id="wifePersonalIdLabel" class="contract-label">Personnummer</div>
-                                                <input id="wifePersonalIdInput" class="contract-input" value="" />
+                                                <input id="wifePersonalIdInput" class="contract-input" value="" maxlength="13" />
                                             </div>
                                             <div class="contract-cell">
                                                 <div id="husbandPersonalIdLabel" class="contract-label">Personnummer</div>
-                                                <input id="husbandPersonalIdInput" class="contract-input" value="" />
+                                                <input id="husbandPersonalIdInput" class="contract-input" value="" maxlength="13" />
                                             </div>
                                             <div class="contract-cell">
                                                 <div id="wifeBirthPlaceLabel" class="contract-label">Födelseort</div>
@@ -334,11 +334,11 @@
                                             </div>
                                             <div class="contract-cell">
                                                 <div id="deferredDowryLabel" class="contract-label">Uppskjuten hemgift</div>
-                                                <input id="deferredDowryInput" class="contract-input" value="" />
+                                                <input id="deferredDowryInput" class="contract-input" type="number" value="" />
                                             </div>
                                             <div class="contract-cell">
                                                 <div id="dowryLabel" class="contract-label">Hemgift</div>
-                                                <input id="dowryInput" class="contract-input" value="" />
+                                                <input id="dowryInput" class="contract-input" type="number" value="" />
                                             </div>
                                         </div>
 
@@ -387,6 +387,13 @@
                                         <div class="contract-notice">
                                             <div id="contractNotice">Detta är ett religiöst äktenskapskontrakt som inte kan registreras hos Skatteverket.</div>
                                         </div>
+                                    </div>
+
+                                    <div id="user-step2-actions" style="display:none;text-align:center;margin-top:20px;">
+                                        <button type="button" class="btn btn-success btn-lg px-5 py-3" id="btn-submit-step2" onclick="submitStep2User()">
+                                            <i class="fas fa-paper-plane me-2"></i> Skicka formulär
+                                        </button>
+                                        <div id="user-step2-status" style="margin-top:16px;display:none;padding:12px;border-radius:8px;text-align:center;"></div>
                                     </div>
 
                                     <div id="previewBox" class="contract-preview-box">
@@ -495,8 +502,24 @@
             const target = document.getElementById('step-' + step);
             if (target) target.style.display = 'block';
 
-            if (step === 2 && window.initContractForm) {
-                setTimeout(window.initContractForm, 50);
+            if (step === 2) {
+                const params = new URLSearchParams(window.location.search);
+                const mode = params.get('mode');
+
+                if (mode === 'imam') {
+                    target.classList.remove('step2-user-mode');
+                    document.getElementById('user-step2-actions').style.display = 'none';
+                } else {
+                    target.classList.add('step2-user-mode');
+                    document.getElementById('user-step2-actions').style.display = 'block';
+                }
+
+                // Store mode for the contract form JS to read
+                window._marriageMode = mode === 'imam' ? 'imam' : 'user';
+
+                if (window.initContractForm) {
+                    setTimeout(window.initContractForm, 50);
+                }
             }
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -724,14 +747,23 @@
             btn.disabled = false; // Always enabled, validation happens on submit
         }
 
-        // PNR input formatting
+        // PNR input formatting + auto membership check
         var pnrInput = document.getElementById('req-husband-pnr');
+        var pnrDebounceTimer = null;
         pnrInput.addEventListener('input', function() {
             var v = this.value.replace(/[^0-9]/g, '');
             if (v.length > 8) v = v.slice(0, 8) + '-' + v.slice(8, 12);
             this.value = v;
             document.getElementById('membership-result').style.display = 'none';
             document.getElementById('btn-check-membership').disabled = false;
+
+            // Auto-check membership when valid PNR format is entered (debounced 600ms)
+            clearTimeout(pnrDebounceTimer);
+            if (/^\d{8}-\d{4}$/.test(this.value)) {
+                pnrDebounceTimer = setTimeout(function() {
+                    checkMembership();
+                }, 600);
+            }
         });
 
         // Membership check
@@ -774,7 +806,7 @@
                 if (isHusbandMember) {
                     resultEl.innerHTML = '<div class="alert alert-success py-2 mb-0"><i class="fas fa-check-circle me-1"></i> <span data-i18n="marriage.membership-member">Du är medlem! Du får rabatt via mejl när tiden bekräftas.</span></div>';
                 } else {
-                    resultEl.innerHTML = '<div class="alert alert-warning py-2 mb-0"><i class="fas fa-info-circle me-1"></i> <span data-i18n="marriage.membership-not-member">Ej medlem — vill du bli medlem och få rabatt?</span> <a href="' + regUrl + '" target="_blank" rel="noopener" class="alert-link"><span data-i18n="marriage.membership-register-link">Registrera dig hos FIFS</span> <i class="fas fa-external-link-alt fa-xs"></i></a></div>';
+                    resultEl.innerHTML = '<div class="alert alert-warning py-2 mb-0"><i class="fas fa-info-circle me-1"></i> <span data-i18n="marriage.membership-not-member">Du är inte medlem. Vill du bli medlem och få 200 kr rabatt?</span> <a href="' + regUrl + '" target="_blank" rel="noopener" class="alert-link"><span data-i18n="marriage.membership-register-link">Registrera dig hos FIFS</span> <i class="fas fa-external-link-alt fa-xs"></i></a></div>';
                 }
 
                 if (window.reapplyTranslations) window.reapplyTranslations();
@@ -846,13 +878,28 @@
                 method: 'POST',
                 body: params
             })
-            .then(function(r) { return r.json(); })
+            .then(function(r) {
+                // GAS may return HTML (from redirect) instead of JSON.
+                // Read as text first and try to parse — if it's not JSON,
+                // treat HTTP 2xx as success since the server already processed it.
+                return r.text().then(function(text) {
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        console.error('GAS svarade inte med JSON:', text.substring(0, 500));
+                        if (r.ok) return { success: true, _fallback: true };
+                        throw new Error('Serverfel: ' + text.substring(0, 200));
+                    }
+                });
+            })
             .then(function(result) {
                 btn.disabled = false;
                 btn.innerHTML = origHTML;
                 if (result.success) {
                     try { localStorage.setItem('marriage-email', email); } catch(e) {}
                     try { localStorage.setItem('marriage-husband-pnr', husbandPnr); } catch(e) {}
+                    try { localStorage.setItem('marriage-phone', phone); } catch(e) {}
+                    try { localStorage.setItem('marriage-is-member', isHusbandMember ? 'true' : 'false'); } catch(e) {}
                     document.getElementById('request-form-wrapper').style.display = 'none';
                     document.getElementById('request-success').style.display = 'flex';
                     document.getElementById('request-success').scrollIntoView({ behavior: 'smooth' });
@@ -863,6 +910,7 @@
             .catch(function(err) {
                 btn.disabled = false;
                 btn.innerHTML = origHTML;
+                console.error('Submit error:', err);
                 alert(t1('error-connection', 'Något gick fel vid anslutningen. Vänligen kontrollera din internetanslutning och försök igen.'));
             });
         };
@@ -948,6 +996,12 @@
             .contract-grid, .contract-signature-grid, .contract-last-grid { grid-template-columns: 1fr; }
             .contract-cell:nth-child(2n), .contract-sig-cell:nth-child(2n), .contract-last-cell:nth-child(2n) { border-right: none; }
         }
+        /* Step 2 user mode: hide signatures, PDF buttons, confirm overlay */
+        .step2-user-mode .contract-signature-grid { display: none !important; }
+        .step2-user-mode .contract-toolbar-actions { display: none !important; }
+        .step2-user-mode .contract-preview-box { display: none !important; }
+        .step2-user-mode .send-confirm-overlay { display: none !important; }
+
         @media print {
             .contract-toolbar, .contract-toolbar-actions, .contract-preview-box { display: none !important; }
             .contract-sheet { box-shadow: none; border: none; margin: 0; width: 210mm; min-height: 297mm; padding: 18mm 10mm 10mm 10mm; }
@@ -1073,11 +1127,14 @@
                 }
             });
 
-            document.querySelectorAll('#marriage-form-container .signature-pad').forEach(function(c, i) {
-                if (c.dataset.hasDrawing !== 'true') {
-                    emptySignatures.push(i);
-                }
-            });
+            // Only validate signatures in imam mode
+            if (window._marriageMode !== 'user') {
+                document.querySelectorAll('#marriage-form-container .signature-pad').forEach(function(c, i) {
+                    if (c.dataset.hasDrawing !== 'true') {
+                        emptySignatures.push(i);
+                    }
+                });
+            }
 
             if (emptyFields.length > 0 || emptySignatures.length > 0) {
                 let msg = '';
@@ -1197,11 +1254,154 @@
             return result;
         }
 
+        // Pre-fill all text fields from URL query params (used in imam mode)
+        function prefillFromUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            const fieldParamMap = {
+                'wifeName': 'wifeNameInput',
+                'husbandName': 'husbandNameInput',
+                'wifePersonalId': 'wifePersonalIdInput',
+                'husbandPersonalId': 'husbandPersonalIdInput',
+                'wifeBirthPlace': 'wifeBirthPlaceInput',
+                'husbandBirthPlace': 'husbandBirthPlaceInput',
+                'wifeMaritalStatus': 'wifeMaritalStatusInput',
+                'husbandMaritalStatus': 'husbandMaritalStatusInput',
+                'deferredDowry': 'deferredDowryInput',
+                'dowry': 'dowryInput',
+                'date': 'dateInput',
+                'place': 'placeInput'
+            };
+            Object.keys(fieldParamMap).forEach(function(param) {
+                var value = params.get(param);
+                if (value !== null && value !== '') {
+                    var el = document.getElementById(fieldParamMap[param]);
+                    if (el) el.value = decodeURIComponent(value);
+                }
+            });
+        }
+
+        // Submit step 2 simplified form (user mode) to Google Sheet
+        window.submitStep2User = function() {
+            var getVal = function(id) {
+                var el = document.getElementById(id);
+                return el ? el.value.trim() : '';
+            };
+
+            // Validate all fields filled
+            var emptyFields = [];
+            FIELD_IDS.forEach(function(id) {
+                if (!getVal(id)) emptyFields.push(id);
+            });
+            if (emptyFields.length > 0) {
+                var names = emptyFields.map(function(id) {
+                    return FIELD_LABELS[id] ? (FIELD_LABELS[id][currentFormLanguage] || FIELD_LABELS[id]['sv']) : id;
+                });
+                alert('Vänligen fyll i alla fält. Följande fält är tomma:\n' + names.join(', '));
+                var firstEmpty = document.getElementById(emptyFields[0]);
+                if (firstEmpty) firstEmpty.focus();
+                return;
+            }
+
+            // Validate SSN format
+            var wifePnr = getVal('wifePersonalIdInput');
+            var husbandPnr = getVal('husbandPersonalIdInput');
+            if (!/^\d{8}-\d{4}$/.test(wifePnr)) {
+                alert('Makans personnummer maste vara i formatet AAAAMMDD-XXXX.');
+                document.getElementById('wifePersonalIdInput').focus();
+                return;
+            }
+            if (!/^\d{8}-\d{4}$/.test(husbandPnr)) {
+                alert('Makens personnummer maste vara i formatet AAAAMMDD-XXXX.');
+                document.getElementById('husbandPersonalIdInput').focus();
+                return;
+            }
+
+            // Disable button and show loading
+            var btn = document.getElementById('btn-submit-step2');
+            var origHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Skickar...';
+
+            var statusEl = document.getElementById('user-step2-status');
+            statusEl.style.display = 'none';
+
+            // Build params
+            var params = new URLSearchParams();
+            params.append('action', 'submit-step2');
+            FIELD_IDS.forEach(function(id) {
+                // Strip 'Input' suffix from HTML element IDs to match GAS param names
+                var paramName = id.replace(/Input$/, '');
+                params.append(paramName, getVal(id));
+            });
+            try {
+                params.append('email', localStorage.getItem('marriage-email') || '');
+                params.append('phone', localStorage.getItem('marriage-phone') || '');
+                params.append('husbandPnr', localStorage.getItem('marriage-husband-pnr') || '');
+                params.append('isMember', localStorage.getItem('marriage-is-member') || 'false');
+            } catch(e) {}
+
+            fetch(GAS_URL, { method: 'POST', body: params })
+                .then(function(r) {
+                    return r.text().then(function(text) {
+                        try { return JSON.parse(text); }
+                        catch(e) { if (r.ok) return { success: true }; throw new Error(text.substring(0, 200)); }
+                    });
+                })
+                .then(function(result) {
+                    btn.disabled = false;
+                    btn.innerHTML = origHTML;
+                    if (result.success) {
+                        statusEl.style.display = 'block';
+                        statusEl.className = '';
+                        statusEl.style.cssText = 'margin-top:16px;padding:16px;border-radius:8px;text-align:center;background:#d4edda;color:#155724;border:1px solid #c3e6cb;';
+                        statusEl.innerHTML = '<strong>Formularet har skickats in!</strong><br><br>Allt ar klart fran er sida. Mosken tar hand om resten — imamen forbereder kontraktet och ni skriver under pa plats under ceremonin.<br><br>Vid fragor kontakta info@alsalamcenter.se.';
+                        btn.style.display = 'none';
+                    } else {
+                        statusEl.style.display = 'block';
+                        statusEl.style.cssText = 'margin-top:16px;padding:12px;border-radius:8px;text-align:center;background:#f8d7da;color:#721c24;border:1px solid #f5c6cb;';
+                        statusEl.textContent = 'Nagot gick fel: ' + (result.error || 'Okant fel') + '. Forsok igen.';
+                    }
+                })
+                .catch(function(err) {
+                    btn.disabled = false;
+                    btn.innerHTML = origHTML;
+                    console.error('submitStep2 error:', err);
+                    statusEl.style.display = 'block';
+                    statusEl.style.cssText = 'margin-top:16px;padding:12px;border-radius:8px;text-align:center;background:#f8d7da;color:#721c24;border:1px solid #f5c6cb;';
+                    statusEl.textContent = 'Anslutningsfel: ' + (err.message || err.toString()) + '. Kontrollera din internetanslutning och forsok igen.';
+                });
+        };
+
         function initForm() {
             document.querySelectorAll('#marriage-form-container .signature-pad').forEach(c => setupSignaturePad(c));
             window.addEventListener('resize', () => { document.querySelectorAll('#marriage-form-container .signature-pad').forEach(c => resizeSignaturePad(c)); });
             renderFormLanguage(currentFormLanguage);
             restoreFormData();
+
+            // Pre-fill husband PNR from localStorage (step 1) if field is empty
+            try {
+                var savedPnr = localStorage.getItem('marriage-husband-pnr');
+                if (savedPnr && !document.getElementById('husbandPersonalIdInput').value) {
+                    document.getElementById('husbandPersonalIdInput').value = savedPnr;
+                }
+            } catch(e) {}
+
+            // In imam mode, pre-fill all fields from URL params (overrides draft)
+            if (window._marriageMode === 'imam') {
+                prefillFromUrlParams();
+            }
+
+            // SSN auto-dash formatting for personal ID fields
+            ['wifePersonalIdInput', 'husbandPersonalIdInput'].forEach(function(inputId) {
+                var el = document.getElementById(inputId);
+                if (!el) return;
+                el.addEventListener('input', function() {
+                    var v = this.value.replace(/[^0-9]/g, '');
+                    if (v.length > 8) v = v.slice(0, 8) + '-' + v.slice(8, 12);
+                    this.value = v;
+                });
+            });
+
             var lastArabicAlert = 0;
             document.querySelectorAll('#marriage-form-container input, #marriage-form-container select').forEach(el => {
                 el.addEventListener('input', function() {
