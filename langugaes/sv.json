@@ -10,6 +10,7 @@
     "company": "FÖRETAG",
     "contact": "KONTAKTA OSS",
     "stats": "STATISTIK",
+    "tv": "TV",
     "more": "MER",
     "membership": "MEDLEMSKAP",
     "membership": "MEDLEMSKAP"
@@ -279,6 +280,7 @@
     "membership-member": "Du är medlem! Du får rabatt via mejl när tiden bekräftas.",
     "membership-not-member": "Ej medlem — vill du bli medlem och få rabatt?",
     "membership-register-link": "Registrera dig hos FIFS",
+    "membership-error": "Kunde inte kontrollera medlemskap. Försök igen.",
     "contract-upload-success": "Formuläret har skickats in!",
     "contract-email-prompt": "Vill du få en kopia av kontraktet skickat till din e-post?",
     "contract-email-placeholder": "Din e-postadress",
@@ -353,5 +355,21 @@
     "fetchError": "Kunde inte hämta data just nu.",
     "ofGoal": "% av målet",
     "left": "kvar"
+  },
+  "tvPage": {
+    "settings": "Inställningar",
+    "darkMode": "Mörkt läge",
+    "enableSlides": "Aktivera slides",
+    "displayTime": "Visningstid",
+    "seconds": "Sekunder",
+    "slideFrequency": "Hur ofta",
+    "latestDonations": "Senaste donationer",
+    "slidesError": "Kunde inte ladda bilder.",
+    "retry": "Försök igen",
+    "interval5": "5 sekunder",
+    "interval10": "10 sekunder",
+    "interval15": "15 sekunder",
+    "interval30": "30 sekunder",
+    "interval60": "1 minut"
   }
 }

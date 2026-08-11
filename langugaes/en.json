@@ -10,6 +10,7 @@
     "company": "COMPANY",
     "contact": "CONTACT US",
     "stats": "STATISTICS",
+    "tv": "TV",
     "more": "MORE",
     "membership": "MEMBERSHIP",
     "membership": "MEMBERSHIP"
@@ -280,6 +281,7 @@
     "membership-member": "You are a member! You will receive a discount via email when the time is confirmed.",
     "membership-not-member": "Not a member — want to become a member and get a discount?",
     "membership-register-link": "Register with FIFS",
+    "membership-error": "Could not check membership. Please try again.",
     "contract-upload-success": "Form submitted successfully!",
     "contract-email-prompt": "Would you like a copy of the contract sent to your email?",
     "contract-email-placeholder": "Your email address",
@@ -354,5 +356,21 @@
     "fetchError": "Could not fetch data right now.",
     "ofGoal": "% of goal",
     "left": "left"
+  },
+  "tvPage": {
+    "settings": "Settings",
+    "darkMode": "Dark mode",
+    "enableSlides": "Enable slides",
+    "displayTime": "Display time",
+    "seconds": "Seconds",
+    "slideFrequency": "Frequency",
+    "latestDonations": "Latest donations",
+    "slidesError": "Could not load slides.",
+    "retry": "Retry",
+    "interval5": "5 seconds",
+    "interval10": "10 seconds",
+    "interval15": "15 seconds",
+    "interval30": "30 seconds",
+    "interval60": "1 minute"
   }
 }

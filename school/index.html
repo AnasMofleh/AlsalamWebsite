@@ -172,49 +172,15 @@
         }
 
         /* ── Membership checker ── */
-        .tax-check-area { margin-bottom: 8px; }
-        .tax-check-input-row {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .tax-check-input-row input {
-            flex: 1;
-            min-width: 200px;
-            height: 54px;
-            padding: 0 18px;
-            border: 2px solid var(--border);
-            border-radius: 14px;
-            font-size: 1.15rem;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            background: #fff;
-            transition: border-color .3s, box-shadow .3s;
-            font-family: inherit;
-        }
-        .tax-check-input-row input:focus {
-            outline: none;
-            border-color: var(--green);
-            box-shadow: 0 0 0 4px rgba(26,138,31,.1);
-        }
-        .tax-check-input-row input.error { border-color: var(--red); }
-        .tax-check-input-row input.success { border-color: var(--green); }
-        .tax-check-btn {
-            white-space: nowrap;
-            display: flex !important;
-            align-items: center;
-            gap: 8px;
-            height: 54px;
-            padding: 0 28px !important;
-        }
-        .tax-check-btn:disabled { opacity: .5; cursor: not-allowed; }
         .tax-check-hint {
             font-size: 0.85rem;
             color: var(--muted);
-            margin-top: 10px;
+            margin-top: 6px;
             min-height: 20px;
         }
         .tax-check-hint .err { color: var(--red); display: none; }
+
+        #school-check-btn:disabled { opacity: .5; cursor: not-allowed; }
 
         .tax-result-card {
             margin-top: 20px;
@@ -412,10 +378,8 @@
             .info-card { padding: 14px 16px; border-radius: 14px; }
             .child-card { padding: 12px 14px; border-radius: 14px; }
 
-            /* Membership check */
-            .tax-check-input-row { flex-direction: column; gap: 8px; }
-            .tax-check-input-row input { height: 48px; font-size: 1rem; min-width: 0; }
-            .tax-check-btn { width: 100%; justify-content: center; height: 48px; font-size: 0.9rem; }
+            /* Buttons */
+            .donation-btn { width: 100%; justify-content: center; height: 48px; font-size: 0.9rem; }
             .tax-result-card { flex-wrap: wrap; padding: 14px 16px; gap: 10px; }
             .tax-result-link { width: 100%; justify-content: center; }
 
@@ -520,32 +484,37 @@
                         <div class="formbold-form-step-1 active">
                             <p class="step-sub" data-i18n="school.form.membership-intro">Ange ditt personnummer för att verifiera FIFS-medlemskap. En av föräldrarna måste vara medlem.</p>
 
-                            <div class="tax-check-area">
-                                <div class="tax-check-input-row">
+                            <div class="formbold-input-flex">
+                                <div>
+                                    <label for="school-pnr" class="formbold-form-label" data-i18n="school.form.personal-number">Personnummer</label>
                                     <input type="text" id="school-pnr" placeholder="ÅÅÅÅMMDD-XXXX" maxlength="13" autocomplete="off"
+                                        class="formbold-form-input"
                                         data-i18n-placeholder="school.form.membership-placeholder">
-                                    <button type="button" class="donation-btn tax-check-btn" id="school-check-btn">
-                                        <i class="fas fa-search"></i>
-                                        <span data-i18n="school.form.membership-check-btn">Kontrollera medlemskap</span>
-                                    </button>
                                 </div>
-                                <div class="tax-check-hint">
-                                    <span data-i18n="school.form.membership-hint">Ange ditt svenska personnummer för att verifiera FIFS-medlemskap</span>
-                                    <span class="err" id="school-pnr-err" data-i18n="school.form.membership-err"> — Ogiltigt personnummer</span>
+                            </div>
+
+                            <button type="button" class="donation-btn" id="school-check-btn" style="margin-bottom:8px;">
+                                <i class="fas fa-search"></i>
+                                <span data-i18n="school.form.membership-check-btn">Kontrollera medlemskap</span>
+                            </button>
+
+                            <div class="tax-check-hint">
+                                <span data-i18n="school.form.membership-hint">Ange ditt svenska personnummer för att verifiera FIFS-medlemskap</span>
+                                <span class="err" id="school-pnr-err" data-i18n="school.form.membership-err"> — Ogiltigt personnummer</span>
+                            </div>
+
+                            <div class="tax-result-card" id="school-result" style="display:none;">
+                                <div class="tax-result-icon" id="school-result-icon">
+                                    <i class="fas fa-spinner fa-spin"></i>
                                 </div>
-                                <div class="tax-result-card" id="school-result" style="display:none;">
-                                    <div class="tax-result-icon" id="school-result-icon">
-                                        <i class="fas fa-spinner fa-spin"></i>
-                                    </div>
-                                    <div class="tax-result-body">
-                                        <h4 id="school-result-title"></h4>
-                                        <span class="tax-result-sub" id="school-result-sub"></span>
-                                    </div>
-                                    <a class="tax-result-link" id="school-result-link" href="#" target="_blank" rel="noopener" style="display:none;">
-                                        <i class="fas fa-external-link-alt"></i>
-                                        <span data-i18n="school.form.membership-register">Registrera dig</span>
-                                    </a>
+                                <div class="tax-result-body">
+                                    <h4 id="school-result-title"></h4>
+                                    <span class="tax-result-sub" id="school-result-sub"></span>
                                 </div>
+                                <a class="tax-result-link" id="school-result-link" href="#" target="_blank" rel="noopener" style="display:none;">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    <span data-i18n="school.form.membership-register">Registrera dig</span>
+                                </a>
                             </div>
 
                             <p class="step-1-next-hint" id="step-1-next-hint" data-i18n="school.form.membership-verified-hint">

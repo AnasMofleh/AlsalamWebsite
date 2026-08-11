@@ -10,6 +10,7 @@
     "company": "الشركة",
     "contact": "اتصل بنا",
     "stats": "الإحصائيات",
+    "tv": "TV",
     "more": "المزيد",
     "membership": "العضوية",
     "membership": "العضوية"
@@ -280,6 +281,7 @@
     "membership-member": "أنت عضو! ستتلقى رمز الخصم عبر البريد الإلكتروني عند تأكيد الموعد.",
     "membership-not-member": "لست عضوًا — هل تريد أن تصبح عضوًا وتحصل على خصم؟",
     "membership-register-link": "سجل في FIFS",
+    "membership-error": "تعذر التحقق من العضوية. يرجى المحاولة مرة أخرى.",
     "contract-upload-success": "تم إرسال النموذج بنجاح!",
     "contract-email-prompt": "هل تريد الحصول على نسخة من العقد عبر بريدك الإلكتروني؟",
     "contract-email-placeholder": "بريدك الإلكتروني",
@@ -354,5 +356,21 @@
     "fetchError": "تعذر جلب البيانات حاليًا.",
     "ofGoal": "% من الهدف",
     "left": "متبقي"
+  },
+  "tvPage": {
+    "settings": "الإعدادات",
+    "darkMode": "الوضع الداكن",
+    "enableSlides": "تفعيل الشرائح",
+    "displayTime": "مدة العرض",
+    "seconds": "ثانية",
+    "slideFrequency": "التكرار",
+    "latestDonations": "آخر التبرعات",
+    "slidesError": "تعذر تحميل الشرائح.",
+    "retry": "إعادة المحاولة",
+    "interval5": "5 ثوانٍ",
+    "interval10": "10 ثوانٍ",
+    "interval15": "15 ثانية",
+    "interval30": "30 ثانية",
+    "interval60": "دقيقة واحدة"
   }
 }

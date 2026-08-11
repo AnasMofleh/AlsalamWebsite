@@ -818,6 +818,124 @@
                 left: 10px;
             }
         }
+
+        /* ═══════════════════════════════════════════════════════════════
+           TV MODE — toggle switches, menu, slides curtain
+           ═══════════════════════════════════════════════════════════════ */
+        .theme-switch {
+            position: relative; display: inline-block; width: 52px; height: 28px;
+        }
+        .theme-switch input { opacity: 0; width: 0; height: 0; }
+        .theme-slider {
+            position: absolute; inset: 0; cursor: pointer;
+            background-color: #d1d5db; border-radius: 999px; transition: .2s;
+        }
+        .theme-slider:before {
+            position: absolute; content: ""; width: 22px; height: 22px;
+            left: 3px; top: 3px; border-radius: 50%; background: #fff; transition: .2s;
+        }
+        .theme-switch input:checked+.theme-slider { background-color: #0d6efd; }
+        .theme-switch input:checked+.theme-slider:before { transform: translateX(24px); }
+
+        .qr-switch {
+            position: relative; display: inline-block; width: 48px; height: 26px;
+        }
+        .qr-switch input { opacity: 0; width: 0; height: 0; }
+        .qr-slider {
+            position: absolute; inset: 0; cursor: pointer;
+            background-color: #d1d5db; border-radius: 999px; transition: .2s;
+        }
+        .qr-slider:before {
+            position: absolute; content: ""; width: 20px; height: 20px;
+            left: 3px; top: 3px; border-radius: 50%; background: #fff; transition: .2s;
+        }
+        .qr-switch input:checked+.qr-slider { background-color: #0d6efd; }
+        .qr-switch input:checked+.qr-slider:before { transform: translateX(22px); }
+
+        .tv-menu-corner {
+            position: fixed; top: 16px; inset-inline-end: 16px; z-index: 1000;
+        }
+        .tv-menu-btn {
+            width: 44px; height: 44px; border-radius: 999px;
+            border: 1px solid #d1d5db; background: var(--stats-card-bg); color: var(--stats-text);
+            display: inline-flex; align-items: center; justify-content: center; font-size: 1.2rem;
+            box-shadow: 0 6px 18px rgba(0,0,0,.18); cursor: pointer; transition: transform 0.2s;
+        }
+        .tv-menu-btn:hover { transform: scale(1.05); }
+        .tv-menu {
+            border-radius: 14px; border: 1px solid var(--stats-pill-border);
+            box-shadow: 0 12px 32px rgba(0,0,0,.22); min-width: 260px; padding: 8px 0; font-size: 0.95rem;
+        }
+        .tv-menu .dropdown-header {
+            font-weight: 700; color: var(--stats-text); font-size: 0.82rem;
+            text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 14px;
+        }
+        .tv-menu-row {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 14px; padding: 10px 14px;
+        }
+        .tv-menu-label { font-weight: 600; color: var(--stats-text); font-size: 0.95rem; }
+        .tv-stepper { display: inline-flex; align-items: center; gap: 6px; }
+        .tv-stepper-btn {
+            width: 30px; height: 30px; border-radius: 999px;
+            border: 1px solid var(--stats-pill-border); background: var(--stats-card-bg);
+            color: var(--stats-text); font-size: 1.1rem; font-weight: 700;
+            cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+            line-height: 1; transition: background 0.15s;
+        }
+        .tv-stepper-btn:hover { background: var(--stats-pill-bg); }
+        .tv-stepper-val {
+            display: inline-flex; align-items: center; justify-content: center;
+            min-width: 36px; height: 30px; font-weight: 700; font-size: 1rem;
+            color: var(--stats-text); background: var(--stats-pill-bg); border-radius: 8px; padding: 0 6px;
+        }
+        body.theme-dark .tv-menu { background: var(--stats-card-bg); border-color: var(--stats-pill-border); }
+        body.theme-dark .tv-menu-btn { border-color: #64748b; background: #1f2937; color: #e2e8f0; }
+        .tv-menu .theme-switch, .tv-menu .qr-switch { transform: scale(.85); }
+
+        .tv-slide-curtain {
+            position: fixed; inset: 0; z-index: 950; pointer-events: none;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .tv-slide-panel {
+            position: absolute; inset: 0; background: #0b0f1a;
+            display: flex; align-items: center; justify-content: center;
+            transform: translateX(-100%);
+            transition: transform 0.65s cubic-bezier(0.4,0,0.2,1);
+        }
+        .tv-slide-panel.slide-in { transform: translateX(0); }
+        .tv-slide-panel.slide-hold { transform: translateX(0); transition: none; }
+        .tv-slide-panel.slide-out { transform: translateX(-100%); transition: transform 0.65s cubic-bezier(0.4,0,0.2,1); }
+        .tv-slide-panel img {
+            max-width: 92%; max-height: 92%; object-fit: contain;
+            pointer-events: none; user-select: none; opacity: 0; transition: opacity 0.3s ease;
+        }
+        .tv-slide-panel img.loaded { opacity: 1; }
+        .tv-slide-panel .slide-spinner { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+        .tv-slide-panel .slide-error {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+            color: #94a3b8; text-align: center; font-size: 1rem;
+        }
+        html[dir="rtl"] .tv-slide-panel { transform: translateX(100%); }
+        html[dir="rtl"] .tv-slide-panel.slide-in,
+        html[dir="rtl"] .tv-slide-panel.slide-hold { transform: translateX(0); }
+        html[dir="rtl"] .tv-slide-panel.slide-out { transform: translateX(100%); }
+
+        /* Font scaling (applied last so it beats all @media rules) */
+        .stats-total { font-size: calc(clamp(4rem, 11.5vw, 10rem) * var(--tv-scale, 1)) !important; }
+        @media (max-width: 768px) {
+            .stats-total { font-size: calc(clamp(2.9rem, 12.5vw, 4.5rem) * var(--tv-scale, 1)) !important; }
+        }
+        .donation-side-col .stats-card p,
+        .donation-side-col .stats-card small,
+        .donation-side-col .stats-card .meta,
+        .donation-side-col .stats-card .donation-amount,
+        .donation-side-col .stats-card .today-stat-row,
+        .donation-side-col .stats-card .today-stat-label,
+        .donation-side-col .stats-card .today-stat-value { font-size: calc(1.08rem * var(--tv-side-scale, 1)) !important; }
+        .donation-side-col .stats-card .donation-message { font-size: calc(1.02rem * var(--tv-side-scale, 1)) !important; }
+        .donation-side-col .stats-card h4 { font-size: calc(clamp(1.6rem, 3.2vw, 2.2rem) * var(--tv-side-scale, 1)) !important; }
+        .donation-side-col .stats-card h5 { font-size: calc(1.05rem * var(--tv-side-scale, 1)) !important; }
     </style>
 </head>
 
@@ -923,6 +1041,94 @@
         </div>
     </div>
 
+    <!-- TV Slides Curtain (shown only when slides are active) -->
+    <div class="tv-slide-curtain" id="tvSlideCurtain" style="display:none;">
+        <div class="tv-slide-panel" id="tvSlidePanel">
+            <img id="tvSlideImage" alt="" draggable="false">
+            <span class="stats-spinner slide-spinner" id="tvSlideSpinner"></span>
+            <div class="slide-error d-none" id="tvSlideError">
+                <i class="fas fa-exclamation-triangle mb-2 d-block"></i>
+                <span data-i18n="tvPage.slidesError">Kunde inte ladda bilder.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Menu (always visible; slides items shown only in TV mode) -->
+    <div class="tv-menu-corner" id="tvMenuCorner">
+        <div class="dropdown">
+            <button id="tvMenuBtn" class="btn tv-menu-btn" type="button" data-bs-toggle="dropdown"
+                data-bs-auto-close="outside" aria-expanded="false" aria-label="Inställningar">
+                <i class="fas fa-cog"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end tv-menu" aria-labelledby="tvMenuBtn">
+                <h6 class="dropdown-header" data-i18n="tvPage.settings">Inställningar</h6>
+                <div class="tv-menu-row">
+                    <span class="tv-menu-label" data-i18n="tvPage.darkMode">Mörkt läge</span>
+                    <label class="theme-switch">
+                        <input id="tvThemeToggleSwitch" type="checkbox" aria-label="Dark mode">
+                        <span class="theme-slider"></span>
+                    </label>
+                </div>
+                <div class="dropdown-divider"></div>
+                <div class="tv-menu-row">
+                    <span class="tv-menu-label" data-i18n="statsPage.showQr">Visa QR</span>
+                    <label class="qr-switch">
+                        <input id="tvSwishQrToggle" type="checkbox" aria-label="Visa Swish QR">
+                        <span class="qr-slider"></span>
+                    </label>
+                </div>
+                <div id="tvSlidesMenuItems">
+                <div class="dropdown-divider"></div>
+                <div class="tv-menu-row">
+                    <span class="tv-menu-label" data-i18n="tvPage.enableSlides">Aktivera slides</span>
+                    <label class="theme-switch">
+                        <input id="tvSlidesEnabledToggle" type="checkbox" aria-label="Enable slides" checked>
+                        <span class="theme-slider"></span>
+                    </label>
+                </div>
+                <div class="dropdown-divider"></div>
+                <h6 class="dropdown-header" data-i18n="tvPage.displayTime">Visningstid</h6>
+                <div class="tv-menu-row">
+                    <span class="tv-menu-label" data-i18n="tvPage.seconds">Sekunder</span>
+                    <div class="tv-stepper">
+                        <button class="tv-stepper-btn" id="tvDisplayMinus" aria-label="Minska">−</button>
+                        <span class="tv-stepper-val" id="tvDisplayVal">5</span>
+                        <button class="tv-stepper-btn" id="tvDisplayPlus" aria-label="Öka">+</button>
+                    </div>
+                </div>
+                <div class="dropdown-divider"></div>
+                <h6 class="dropdown-header" data-i18n="tvPage.slideFrequency">Hur ofta</h6>
+                <div class="tv-menu-row">
+                    <span class="tv-menu-label" data-i18n="tvPage.seconds">Sekunder</span>
+                    <div class="tv-stepper">
+                        <button class="tv-stepper-btn" id="tvGapMinus" aria-label="Minska">−</button>
+                        <span class="tv-stepper-val" id="tvGapVal">5</span>
+                        <button class="tv-stepper-btn" id="tvGapPlus" aria-label="Öka">+</button>
+                    </div>
+                </div>
+                </div>
+                <div class="dropdown-divider"></div>
+                <h6 class="dropdown-header">Textstorlek</h6>
+                <div class="tv-menu-row">
+                    <span class="tv-menu-label">Total</span>
+                    <div class="tv-stepper">
+                        <button class="tv-stepper-btn" id="tvTotalMinus" aria-label="Minska">−</button>
+                        <span class="tv-stepper-val" id="tvTotalVal">100%</span>
+                        <button class="tv-stepper-btn" id="tvTotalPlus" aria-label="Öka">+</button>
+                    </div>
+                </div>
+                <div class="tv-menu-row">
+                    <span class="tv-menu-label">Panel</span>
+                    <div class="tv-stepper">
+                        <button class="tv-stepper-btn" id="tvSideMinus" aria-label="Minska">−</button>
+                        <span class="tv-stepper-val" id="tvSideVal">100%</span>
+                        <button class="tv-stepper-btn" id="tvSidePlus" aria-label="Öka">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="contact-us-placeholder"></div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -939,6 +1145,7 @@
         const CARD_API_URL = "https://script.google.com/macros/s/AKfycby4xd1YkqdDe-xvshIuMpj53wCLM9kUClwb84Qtx5amrPd6xrUjKjJxiYSdEppweq4/exec";
         const GOAL_AMOUNT = 10000000;
         const POLL_INTERVAL_MS = 5000;
+        const isTvMode = new URLSearchParams(location.search).has('tv');
 
         const totalAmountEl = document.getElementById("totalAmount");
         const progressLabelEl = document.getElementById("progressLabel");
@@ -1639,6 +1846,230 @@
                 console.error("Failed to refresh stats", error);
                 lastUpdatedEl.textContent = "Kunde inte hämta data just nu.";
             }
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // SHARED — gear menu + sync theme/QR between menu & page
+        // ═══════════════════════════════════════════════════════════════
+        (function () {
+            var tvMenuThemeEl = document.getElementById("tvThemeToggleSwitch");
+            var tvMenuQrEl = document.getElementById("tvSwishQrToggle");
+
+            // Hide old corner controls (replaced by gear menu)
+            var cornerSwitch = document.querySelector(".theme-switch-corner .theme-switch");
+            if (cornerSwitch) cornerSwitch.style.display = "none";
+            var qrWrap = document.getElementById("swishQrToggleWrap");
+            if (qrWrap) qrWrap.style.display = "none";
+
+            // ── Theme sync between menu switch and page ────────────
+            function syncTheme() {
+                var isDark = document.body.classList.contains("theme-dark");
+                tvMenuThemeEl.checked = isDark;
+                themeToggleSwitchEl.checked = isDark;
+            }
+            tvMenuThemeEl.addEventListener("change", function () {
+                setTheme(tvMenuThemeEl.checked ? "dark" : "light");
+                syncTheme();
+            });
+            themeToggleSwitchEl.addEventListener("change", syncTheme);
+
+            // ── QR sync between menu switch and page ───────────────
+            tvMenuQrEl.addEventListener("change", function () {
+                showSwishQr = tvMenuQrEl.checked;
+                applySwishQrMode(latestLast5Data);
+            });
+            swishQrToggleEl.addEventListener("change", function () {
+                tvMenuQrEl.checked = swishQrToggleEl.checked;
+            });
+
+            // ── Font size steppers (total + side panel) ───────────
+            var TOTAL_KEY = "alsalam-total-scale";
+            var SIDE_KEY = "alsalam-side-scale";
+            var SCALE_MIN = 50, SCALE_MAX = 300, SCALE_STEP = 10, SCALE_DEFAULT = 100;
+
+            function readScale(key) {
+                var v = Number(localStorage.getItem(key));
+                return (v >= SCALE_MIN && v <= SCALE_MAX) ? v : SCALE_DEFAULT;
+            }
+            function applyScales() {
+                var ts = readScale(TOTAL_KEY) / 100;
+                var ss = readScale(SIDE_KEY) / 100;
+                document.querySelector(".stats-total").style.setProperty("--tv-scale", String(ts));
+                document.querySelector(".donation-side-col .stats-card").style.setProperty("--tv-side-scale", String(ss));
+                document.getElementById("tvTotalVal").textContent = String(readScale(TOTAL_KEY)) + "%";
+                document.getElementById("tvSideVal").textContent = String(readScale(SIDE_KEY)) + "%";
+            }
+            function setScale(key, delta) {
+                var cur = readScale(key);
+                var next = Math.min(Math.max(cur + delta, SCALE_MIN), SCALE_MAX);
+                localStorage.setItem(key, String(next));
+                applyScales();
+            }
+            document.getElementById("tvTotalMinus").addEventListener("click", function () { setScale(TOTAL_KEY, -SCALE_STEP); });
+            document.getElementById("tvTotalPlus").addEventListener("click", function () { setScale(TOTAL_KEY, SCALE_STEP); });
+            document.getElementById("tvSideMinus").addEventListener("click", function () { setScale(SIDE_KEY, -SCALE_STEP); });
+            document.getElementById("tvSidePlus").addEventListener("click", function () { setScale(SIDE_KEY, SCALE_STEP); });
+
+            applyScales();
+
+            // ── Init sync ──────────────────────────────────────────
+            syncTheme();
+        })();
+
+        // ═══════════════════════════════════════════════════════════════
+        // TV MODE — slides (only when ?tv is in the URL)
+        // ═══════════════════════════════════════════════════════════════
+        if (isTvMode) {
+            var TV_SLIDES_API_URL = "https://script.google.com/macros/s/AKfycby8B94nAOsDYBXqlpOp4UYqIDl3YlyQQZBfkxfGb91gwzHokIT0AtECQ7CC3qratjQx/exec";
+            var SLIDES_REFRESH_MS = 30 * 60 * 1000;
+            var TV_DISPLAY_KEY = "alsalam-tv-display-sec";
+            var TV_GAP_KEY = "alsalam-tv-gap-sec";
+            var TV_SLIDES_ENABLED_KEY = "alsalam-tv-slides-enabled";
+            var TV_DISPLAY_MIN = 1, TV_DISPLAY_MAX = 120;
+            var TV_GAP_MIN = 1, TV_GAP_MAX = 300;
+            var TV_DEFAULT_DISPLAY_SEC = 5;
+            var TV_DEFAULT_GAP_SEC = 5;
+
+            var tvSlideCurtainEl = document.getElementById("tvSlideCurtain");
+            var tvSlidePanelEl = document.getElementById("tvSlidePanel");
+            var tvSlideImageEl = document.getElementById("tvSlideImage");
+            var tvSlideSpinnerEl = document.getElementById("tvSlideSpinner");
+            var tvSlideErrorEl = document.getElementById("tvSlideError");
+            var tvSlidesEnabledToggleEl = document.getElementById("tvSlidesEnabledToggle");
+            var tvDisplayValEl = document.getElementById("tvDisplayVal");
+            var tvGapValEl = document.getElementById("tvGapVal");
+
+            var tvSlides = [];
+            var tvCurrentIndex = 0;
+            var tvSlideTimer = null;
+            var tvSlidesEnabled = (function () {
+                var s = localStorage.getItem(TV_SLIDES_ENABLED_KEY);
+                return s === null ? true : s === "true";
+            })();
+            var tvCurrentDisplaySec = (function () {
+                var s = Number(localStorage.getItem(TV_DISPLAY_KEY));
+                return (s >= TV_DISPLAY_MIN && s <= TV_DISPLAY_MAX) ? s : TV_DEFAULT_DISPLAY_SEC;
+            })();
+            var tvCurrentGapSec = (function () {
+                var s = Number(localStorage.getItem(TV_GAP_KEY));
+                return (s >= TV_GAP_MIN && s <= TV_GAP_MAX) ? s : TV_DEFAULT_GAP_SEC;
+            })();
+
+            function tvSetDisplay(sec) {
+                sec = Math.min(Math.max(sec, TV_DISPLAY_MIN), TV_DISPLAY_MAX);
+                tvCurrentDisplaySec = sec;
+                localStorage.setItem(TV_DISPLAY_KEY, String(sec));
+                tvDisplayValEl.textContent = String(sec);
+                tvRestartCycle();
+            }
+            function tvSetGap(sec) {
+                sec = Math.min(Math.max(sec, TV_GAP_MIN), TV_GAP_MAX);
+                tvCurrentGapSec = sec;
+                localStorage.setItem(TV_GAP_KEY, String(sec));
+                tvGapValEl.textContent = String(sec);
+                tvRestartCycle();
+            }
+            function tvSetEnabled(enabled) {
+                tvSlidesEnabled = enabled;
+                localStorage.setItem(TV_SLIDES_ENABLED_KEY, String(enabled));
+                tvSlidesEnabledToggleEl.checked = enabled;
+                if (enabled) { tvStartCycle(); }
+                else {
+                    if (tvSlideTimer) clearTimeout(tvSlideTimer);
+                    tvSlideTimer = null;
+                    tvSlideCurtainEl.style.display = "none";
+                    tvSlidePanelEl.className = "tv-slide-panel";
+                }
+            }
+            function tvRestartCycle() {
+                if (tvSlideTimer) clearTimeout(tvSlideTimer);
+                tvSlideTimer = null;
+                tvSlidePanelEl.className = "tv-slide-panel";
+                if (tvSlidesEnabled && tvSlides.length > 0) {
+                    tvSlideTimer = setTimeout(function () { tvRunAnimation(); }, 400);
+                }
+            }
+            function tvStartCycle() {
+                if (!tvSlidesEnabled || tvSlides.length === 0) return;
+                tvRunAnimation();
+            }
+            function tvShowSlide(index) {
+                if (!tvSlides.length) return;
+                tvCurrentIndex = ((index % tvSlides.length) + tvSlides.length) % tvSlides.length;
+                var slide = tvSlides[tvCurrentIndex];
+                tvSlideImageEl.classList.remove("loaded");
+                tvSlideSpinnerEl.style.display = "";
+                tvSlideImageEl.src = slide.contentUrl;
+                tvSlideImageEl.onload = function () { tvSlideImageEl.classList.add("loaded"); tvSlideSpinnerEl.style.display = "none"; };
+                tvSlideImageEl.onerror = function () { tvSlideImageEl.classList.remove("loaded"); tvSlideSpinnerEl.style.display = "none"; };
+            }
+            function tvRunAnimation() {
+                if (!tvSlidesEnabled || tvSlides.length === 0) return;
+                if (tvSlideTimer) clearTimeout(tvSlideTimer);
+                tvShowSlide(tvCurrentIndex);
+                tvSlidePanelEl.className = "tv-slide-panel slide-in";
+                tvSlideCurtainEl.style.display = "";
+                var slideIn = 650, slideOut = 650;
+                var hold = tvCurrentDisplaySec * 1000;
+                var gap = tvCurrentGapSec * 1000;
+                tvSlideTimer = setTimeout(function () {
+                    tvSlidePanelEl.className = "tv-slide-panel slide-out";
+                    tvSlideTimer = setTimeout(function () {
+                        tvCurrentIndex = (tvCurrentIndex + 1) % tvSlides.length;
+                        tvRunAnimation();
+                    }, slideOut + gap);
+                }, slideIn + hold);
+            }
+            async function tvRefreshSlides() {
+                if (tvSlides.length === 0) tvSlideSpinnerEl.style.display = "";
+                try {
+                    var resp = await fetch(TV_SLIDES_API_URL, { cache: "no-store" });
+                    if (!resp.ok) throw new Error("bad status");
+                    var json = await resp.json();
+                    if (!json.ok || !Array.isArray(json.data.slides)) throw new Error(json.error || "bad payload");
+                    var slides = json.data.slides.filter(function (s) { return !!s.contentUrl; });
+                    if (slides.length === 0) {
+                        tvSlidePanelEl.className = "tv-slide-panel slide-in";
+                        tvSlideCurtainEl.style.display = "";
+                        tvSlideErrorEl.classList.remove("d-none");
+                        tvSlideSpinnerEl.style.display = "none";
+                        return;
+                    }
+                    var firstLoad = tvSlides.length === 0;
+                    tvSlides = slides;
+                    tvSlideErrorEl.classList.add("d-none");
+                    if (firstLoad && tvSlidesEnabled) tvStartCycle();
+                } catch (err) {
+                    console.warn("Slides fetch failed", err);
+                    if (tvSlides.length === 0) {
+                        tvSlidePanelEl.className = "tv-slide-panel slide-in";
+                        tvSlideCurtainEl.style.display = "";
+                        tvSlideErrorEl.classList.remove("d-none");
+                        tvSlideSpinnerEl.style.display = "none";
+                    }
+                } finally {
+                    tvSlideSpinnerEl.style.display = "none";
+                }
+            }
+
+            // ── Stepper init ─────────────────────────────────────────
+            tvDisplayValEl.textContent = String(tvCurrentDisplaySec);
+            tvGapValEl.textContent = String(tvCurrentGapSec);
+            document.getElementById("tvDisplayMinus").addEventListener("click", function () { tvSetDisplay(tvCurrentDisplaySec - 1); });
+            document.getElementById("tvDisplayPlus").addEventListener("click", function () { tvSetDisplay(tvCurrentDisplaySec + 1); });
+            document.getElementById("tvGapMinus").addEventListener("click", function () { tvSetGap(tvCurrentGapSec - 1); });
+            document.getElementById("tvGapPlus").addEventListener("click", function () { tvSetGap(tvCurrentGapSec + 1); });
+            tvSlidesEnabledToggleEl.checked = tvSlidesEnabled;
+            tvSlidesEnabledToggleEl.addEventListener("change", function () { tvSetEnabled(tvSlidesEnabledToggleEl.checked); });
+
+            // ── Init slides ─────────────────────────────────────────
+            if (tvSlidesEnabled) { tvSlideCurtainEl.style.display = ""; }
+            tvRefreshSlides();
+            setInterval(tvRefreshSlides, SLIDES_REFRESH_MS);
+        } else {
+            // Hide slides-only menu items when not in TV mode
+            var slidesMenu = document.getElementById("tvSlidesMenuItems");
+            if (slidesMenu) slidesMenu.style.display = "none";
         }
 
         $(function () {
