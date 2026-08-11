@@ -141,12 +141,7 @@
                                 <div class="row g-3 mb-4">
                                     <div class="col-md-6">
                                         <label class="form-label fw-bold" data-i18n="marriage.field-husband-pnr">Brudgummens personnummer *</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control form-control-lg" id="req-husband-pnr" placeholder="ÅÅÅÅMMDD-XXXX" maxlength="13" required>
-                                            <button type="button" class="btn btn-outline-primary" id="btn-check-membership" onclick="checkMembership()">
-                                                <i class="fas fa-check-circle me-1"></i> <span data-i18n="marriage.btn-check-membership">Kontrollera medlemskap</span>
-                                            </button>
-                                        </div>
+                                        <input type="text" class="form-control form-control-lg" id="req-husband-pnr" placeholder="ÅÅÅÅMMDD-XXXX" maxlength="13" required>
                                         <small class="text-muted" data-i18n="marriage.field-husband-pnr-hint">Ange brudgummens personnummer för att kontrollera medlemskap och hantera bokningen.</small>
                                         <div id="membership-result" class="mt-2" style="display:none;"></div>
                                     </div>
@@ -645,6 +640,39 @@
             opacity: 0.6;
             cursor: not-allowed;
         }
+
+        /* Membership check text shown under personnummer field */
+        .membership-text {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            display: inline-flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .membership-text.hint {
+            color: #6b7280;
+        }
+        .membership-text.checking {
+            color: #6b7280;
+        }
+        .membership-text.member {
+            color: #198754;
+        }
+        .membership-text.not-member {
+            color: #856404;
+        }
+        .membership-text.error {
+            color: #dc3545;
+        }
+        .membership-link {
+            color: #664d03;
+            font-weight: 600;
+            text-decoration: underline;
+        }
+        .membership-link:hover {
+            color: #533b03;
+        }
     </style>
 
     <!-- Step 1 Upload + Submit JS -->
@@ -750,41 +778,46 @@
         // PNR input formatting + auto membership check
         var pnrInput = document.getElementById('req-husband-pnr');
         var pnrDebounceTimer = null;
+        var pnrCheckInProgress = false;
         pnrInput.addEventListener('input', function() {
             var v = this.value.replace(/[^0-9]/g, '');
             if (v.length > 8) v = v.slice(0, 8) + '-' + v.slice(8, 12);
             this.value = v;
-            document.getElementById('membership-result').style.display = 'none';
-            document.getElementById('btn-check-membership').disabled = false;
 
             // Auto-check membership when valid PNR format is entered (debounced 600ms)
             clearTimeout(pnrDebounceTimer);
+            var resultEl = document.getElementById('membership-result');
             if (/^\d{8}-\d{4}$/.test(this.value)) {
                 pnrDebounceTimer = setTimeout(function() {
                     checkMembership();
                 }, 600);
+            } else if (this.value.length > 0) {
+                // Show "incomplete" hint while typing
+                resultEl.style.display = 'block';
+                resultEl.innerHTML = '<span class="membership-text hint">' + t1('invalid-pnr', 'Ange fullständigt personnummer (ÅÅÅÅMMDD-XXXX)') + '</span>';
+            } else {
+                resultEl.style.display = 'none';
+                resultEl.innerHTML = '';
             }
         });
 
-        // Membership check
+        // Membership check (auto-triggered on valid PNR input)
         var isHusbandMember = false;
         window.checkMembership = function() {
             var pnr = document.getElementById('req-husband-pnr').value.trim();
+            var resultEl = document.getElementById('membership-result');
+
             if (!/^\d{8}-\d{4}$/.test(pnr)) {
-                var resultEl = document.getElementById('membership-result');
                 resultEl.style.display = 'block';
-                resultEl.innerHTML = '<span class="text-danger"><i class="fas fa-exclamation-circle me-1"></i> ' + t1('invalid-pnr', 'Ogiltigt personnummer') + '</span>';
+                resultEl.innerHTML = '<span class="membership-text error"><i class="fas fa-exclamation-circle me-1"></i> ' + t1('invalid-pnr', 'Ogiltigt personnummer') + '</span>';
                 return;
             }
 
-            var btn = document.getElementById('btn-check-membership');
-            var origHTML = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> ' + t1('checking', 'Kontrollerar...');
+            if (pnrCheckInProgress) return;
+            pnrCheckInProgress = true;
 
-            var resultEl = document.getElementById('membership-result');
             resultEl.style.display = 'block';
-            resultEl.innerHTML = '<span class="text-muted"><i class="fas fa-spinner fa-spin me-1"></i> ' + t1('checking', 'Kontrollerar...') + '</span>';
+            resultEl.innerHTML = '<span class="membership-text checking"><span class="spinner-border spinner-border-sm me-1" style="width:14px;height:14px;"></span> ' + t1('checking', 'Kontrollerar medlemskap...') + '</span>';
 
             var regUrl = 'https://medlem.fifs.se/registrera/' + pnr.replace(/[^0-9]/g, '') + '/SCH';
 
@@ -799,17 +832,18 @@
             Promise.all([fifsP, sheetP]).then(function(r) {
                 var f = r[0], s = r[1];
                 isHusbandMember = !!(f.isMember || (s && s.isFifsInSheet));
-
-                btn.disabled = false;
-                btn.innerHTML = origHTML;
+                pnrCheckInProgress = false;
 
                 if (isHusbandMember) {
-                    resultEl.innerHTML = '<div class="alert alert-success py-2 mb-0"><i class="fas fa-check-circle me-1"></i> <span data-i18n="marriage.membership-member">Du är medlem! Du får rabatt via mejl när tiden bekräftas.</span></div>';
+                    resultEl.innerHTML = '<span class="membership-text member" data-i18n="marriage.membership-member"><i class="fas fa-check-circle me-1"></i> Du är medlem! Du får rabatt via mejl när tiden bekräftas.</span>';
                 } else {
-                    resultEl.innerHTML = '<div class="alert alert-warning py-2 mb-0"><i class="fas fa-info-circle me-1"></i> <span data-i18n="marriage.membership-not-member">Du är inte medlem. Vill du bli medlem och få 200 kr rabatt?</span> <a href="' + regUrl + '" target="_blank" rel="noopener" class="alert-link"><span data-i18n="marriage.membership-register-link">Registrera dig hos FIFS</span> <i class="fas fa-external-link-alt fa-xs"></i></a></div>';
+                    resultEl.innerHTML = '<span class="membership-text not-member"><i class="fas fa-info-circle me-1"></i> <span data-i18n="marriage.membership-not-member">Du är inte medlem. Vill du bli medlem och få 200 kr rabatt?</span> <a href="' + regUrl + '" target="_blank" rel="noopener" class="membership-link"><span data-i18n="marriage.membership-register-link">Registrera dig hos FIFS</span> <i class="fas fa-external-link-alt fa-xs"></i></a></span>';
                 }
 
                 if (window.reapplyTranslations) window.reapplyTranslations();
+            }).catch(function() {
+                pnrCheckInProgress = false;
+                resultEl.innerHTML = '<span class="membership-text error" data-i18n="marriage.membership-error"><i class="fas fa-exclamation-circle me-1"></i> Kunde inte kontrollera medlemskap. Försök igen.</span>';
             });
         };
 
