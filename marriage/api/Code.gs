@@ -17,6 +17,16 @@
  *    - Execute as: Me
  *    - Who has access: Anyone
  * 4. Copy the deployment URL and paste it into marriage/index.html as GAS_URL
+ *
+ * To UPDATE the existing deployment after code changes (the URL stays the same,
+ * so the links already sent out in emails keep working):
+ *   1. Replace the whole Code.gs content with this file and Save.
+ *   2. Deploy → Manage deployments → ✎ (edit the web app deployment) →
+ *      Version: New version → Deploy. (Do NOT create a new deployment — that
+ *      would change the URL.)
+ *   3. Verify: open <url>?action=imam-contract&wifeName=Test&husbandName=Test and
+ *      check that the page source contains "imam-contract v2" and "setupSigPad".
+ *      If they are missing, the deployment still runs an old version of the code.
  */
 
 // ── Configuration ────────────────────────────────────────────────
@@ -161,7 +171,12 @@ function handleSubmitRequest(e) {
     '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Önskad tid:</td><td>' + timeDisplay + '</td></tr>',
     '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Önskemål:</td><td>' + notesDisplay + '</td></tr>',
     '</table>',
-    '<p style="margin-bottom:4px;"><a href="' + folderLink + '" style="color:#15546f;font-weight:600;">Öppna dokumentmapp</a></p>',
+    (phoneLink
+      ? '<p style="margin-bottom:8px;font-weight:700;">Kontakta paret via WhatsApp:</p>'
+        + '<a href="' + phoneLink + '" style="display:inline-block;background:#25D366;color:#fff;padding:12px 26px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;">&#x1F4F1; WhatsApp &#8212; ' + phoneDisplay + '</a>'
+        + '<p style="margin-top:8px;font-size:13px;color:#666;">Knappen öppnar en chatt direkt i WhatsApp.</p>'
+      : ''),
+    '<p style="margin-bottom:4px;margin-top:16px;"><a href="' + folderLink + '" style="color:#15546f;font-weight:600;">Öppna dokumentmapp</a></p>',
     '<hr style="border:none;border-top:1px solid #ddd;margin:20px 0;">',
     '<p style="margin-bottom:8px;font-weight:700;">Klicka på knappen nedan för att bekräfta tiden:</p>',
     '<a href="' + confirmUrl + '" style="display:inline-block;background:#15546f;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:16px;margin-bottom:16px;">Bekräfta tiden</a>',
@@ -605,6 +620,7 @@ function handleImamContract(e) {
     '<!DOCTYPE html>',
     '<html lang="sv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">',
     '<title>Äktenskapskontrakt - ', esc(wifeName), ' &amp; ', esc(husbandName), '</title>',
+    '<!-- imam-contract v2 — includes signature pads (verify this marker after redeploying) -->',
     '<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"><\/script>',
     '<style>',
     '*{box-sizing:border-box}',
@@ -705,7 +721,7 @@ function handleImamContract(e) {
     'function resize(){var ratio=devicePixelRatio||1,rect=canvas.getBoundingClientRect(),w=Math.max(Math.floor(rect.width),1),h=Math.max(Math.floor(rect.height),1),existing=canvas.dataset.hasDrawing==="true"?canvas.toDataURL():null;canvas.width=w*ratio;canvas.height=h*ratio;var ctx=canvas.getContext("2d");ctx.setTransform(1,0,0,1,0,0);ctx.scale(ratio,ratio);ctx.lineWidth=2;ctx.lineCap="round";ctx.lineJoin="round";ctx.strokeStyle="#111";ctx.fillStyle="#111";ctx.clearRect(0,0,w,h);if(existing){var img=new Image();img.onload=function(){ctx.drawImage(img,0,0,w,h)};img.src=existing}}',
     'resize();canvas.dataset.hasDrawing="false";',
     'function pt(e){var r=canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}',
-    'canvas.addEventListener("pointerdown",function(e){var p=pt(e);drawing=true;moved=false;lx=p.x;ly=p.y;canvas.setPointerCapture(e.pointerId)});',
+    'canvas.addEventListener("pointerdown",function(e){var p=pt(e);drawing=true;moved=false;lx=p.x;ly=p.y;try{canvas.setPointerCapture(e.pointerId)}catch(err){}});',
     'canvas.addEventListener("pointermove",function(e){if(!drawing)return;var p=pt(e),ctx=canvas.getContext("2d");ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(p.x,p.y);ctx.stroke();lx=p.x;ly=p.y;moved=true;canvas.dataset.hasDrawing="true"});',
     'var stop=function(){if(!drawing)return;if(!moved){var ctx=canvas.getContext("2d");ctx.beginPath();ctx.arc(lx,ly,1.2,0,Math.PI*2);ctx.fill();canvas.dataset.hasDrawing="true"}drawing=false};',
     'canvas.addEventListener("pointerup",stop);canvas.addEventListener("pointerleave",stop);canvas.addEventListener("pointercancel",stop);',

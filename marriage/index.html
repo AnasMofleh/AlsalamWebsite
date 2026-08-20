@@ -1263,7 +1263,7 @@
             resizeSignaturePad(canvas);
             function pt(e) { const r = canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
             canvas.dataset.hasDrawing = 'false';
-            canvas.addEventListener('pointerdown', e => { const p = pt(e); drawing = true; moved = false; lx = p.x; ly = p.y; canvas.setPointerCapture(e.pointerId); });
+            canvas.addEventListener('pointerdown', e => { const p = pt(e); drawing = true; moved = false; lx = p.x; ly = p.y; try { canvas.setPointerCapture(e.pointerId); } catch (err) {} });
             canvas.addEventListener('pointermove', e => { if (!drawing) return; const p = pt(e); const ctx = canvas.getContext('2d'); ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(p.x, p.y); ctx.stroke(); lx = p.x; ly = p.y; moved = true; canvas.dataset.hasDrawing = 'true'; });
             const stop = () => { if (!drawing) return; if (!moved) { const ctx = canvas.getContext('2d'); ctx.beginPath(); ctx.arc(lx, ly, 1.2, 0, Math.PI*2); ctx.fill(); canvas.dataset.hasDrawing = 'true'; } drawing = false; saveFormData(); };
             canvas.addEventListener('pointerup', stop);
