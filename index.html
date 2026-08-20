@@ -45,9 +45,80 @@
                 <img src="img/Al-Salam-Insida.jpg" alt="Al-Salam Insida">
             </div>
             <div class="col-12 col-md-5 hero-rightside">
-                <iframe src="https://time.my-masjid.com/timinginfoscreen/ee787ee0-549f-43f3-9fe4-9c8bc3c295f7"
-                    scrolling="no">
-                </iframe>
+                <!-- Bönetider widget: rendered by js/bonetider.js from the GAS proxy
+                     (location configurable via BT_CITY in js/bonetider.js) -->
+                <div id="bonetider-widget" class="bonetider-card" role="region" aria-live="polite">
+                    <div class="bonetider-watermark" aria-hidden="true"></div>
+                    <div class="bonetider-header">
+                        <div>
+                            <h5 class="bonetider-title">
+                                <span data-i18n="bonetider.title">Bönetider</span>
+                            </h5>
+                            <div class="bonetider-city">
+                                <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                                <span id="bt-city">Helsingborg</span>
+                            </div>
+                        </div>
+                        <div class="bonetider-clock" id="bt-clock">--:--:--</div>
+                    </div>
+                    <div class="bonetider-subhead">
+                        <div class="bonetider-dates">
+                            <span id="bt-gregorian"></span>
+                            <span class="bonetider-dates-sep" aria-hidden="true">·</span>
+                            <span class="bonetider-hijri" id="bt-hijri"></span>
+                        </div>
+                    </div>
+                    <div class="bonetider-divider" aria-hidden="true"></div>
+                    <div class="bonetider-next">
+                        <strong class="bonetider-next-name" id="bt-next-name">–</strong>
+                        <span class="bonetider-in" data-i18n="bonetider.in">om</span>
+                        <span class="bonetider-countdown" id="bt-countdown">--:--</span>
+                    </div>
+                    <table class="bonetider-table" id="bt-table">
+                        <thead>
+                            <tr>
+                                <th data-i18n="bonetider.prayer">Bön</th>
+                                <th class="bonetider-th-time" data-i18n="bonetider.time">Tid</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="bonetider-footer">
+                        <button type="button" class="bonetider-week-btn" data-bs-toggle="modal"
+                            data-bs-target="#bt-week-modal">
+                            <i class="fas fa-calendar-week" aria-hidden="true"></i>
+                            <span data-i18n="bonetider.week">Visa hela veckans bönetider</span>
+                        </button>
+                    </div>
+                    <div class="bonetider-loading d-none" id="bt-loading">
+                        <span class="spinner-border spinner-border-sm" role="status"></span>
+                        <span data-i18n="bonetider.loading">Laddar...</span>
+                    </div>
+                </div>
+                <!-- Fallback: old my-masjid iframe, shown only if the widget has no data -->
+                <div id="bonetider-fallback" class="d-none">
+                    <iframe src="https://time.my-masjid.com/timinginfoscreen/ee787ee0-549f-43f3-9fe4-9c8bc3c295f7"
+                        scrolling="no">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Week view modal for the Bönetider widget -->
+    <div class="modal fade" id="bt-week-modal" tabindex="-1" aria-labelledby="bt-week-modal-title"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content bonetider-modal">
+                <div class="modal-header bonetider-modal-header">
+                    <h5 class="modal-title bonetider-modal-title" id="bt-week-modal-title"
+                        data-i18n="bonetider.week-title">Veckans bönetider</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        data-i18n-aria-label="bonetider.close" aria-label="Stäng"></button>
+                </div>
+                <div class="modal-body bonetider-modal-body" id="bt-week-body">
+                    <div class="text-center py-3" data-i18n="bonetider.loading">Laddar...</div>
+                </div>
             </div>
         </div>
     </div>
@@ -233,7 +304,6 @@
                     </a>
                 </div>
 
-
                 <div class="col-lg-6 col-xl-4">
                     <a href="/marriage" class="text-decoration-none text-dark">
                         <div class="sermon-item wow fadeIn" data-wow-delay="0.3s">
@@ -269,6 +339,25 @@
                                     dagliga bönetider på vår webbplats samt i
                                     moskén.
                                     Tiderna uppdateras regelbundet enligt aktuell kalender för solens position.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-lg-6 col-xl-4">
+                    <a href="/skolbesok" class="text-decoration-none text-dark">
+                        <div class="sermon-item wow fadeIn" data-wow-delay="0.2s">
+                            <div class="overflow-hidden p-4 pb-0">
+                                <img src="img/skolbesok.png" class="img-fluid w-100" alt="">
+                            </div>
+                            <div class="p-4">
+                                <span class="d-inline-block h4 lh-sm mb-3" data-i18n="services.skolbesok">
+                                    Skolbesök
+                                </span>
+                                <p class="mb-0" data-i18n="services.skolbesok-description">Vi tar emot skolklasser
+                                    för guidade besök i moskén — en chans för eleverna att möta en levande gemenskap,
+                                    inte bara läsa om den i en bok.
+                                </p>
                             </div>
                         </div>
                     </a>
@@ -353,6 +442,9 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+
+    <!-- Bönetider widget (prayer times, countdown, fallback iframe) -->
+    <script src="js/bonetider.js"></script>
 
     <!-- i18n module (exposed as global `loadLanguage`) -->
     <script type="module" src="/langugaes/js/i18n.js" defer></script>

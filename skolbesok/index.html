@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="sv">
+
+<head>
+    <base href="/">
+    <meta charset="utf-8">
+    <title>Al-Salam Center — Skolbesök i moskén</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+
+    <!-- Site CSS -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <style>
+        .skolbesok-page {
+            --primary: #196F15;
+            --primary-dark: #12530f;
+            --primary-lt: #e8f5e9;
+            --muted: #6b7280;
+            --border: #dee2e6;
+            --radius: 16px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04);
+        }
+
+        /* ── Back link ── */
+        .skolbesok-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            transition: color .2s;
+        }
+        .skolbesok-back:hover { color: var(--primary-dark); text-decoration: underline; }
+
+        /* ── Page header ── */
+        .skolbesok-header-img {
+            max-width: 720px;
+            width: 100%;
+            border-radius: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* ── Section cards ── */
+        .skolbesok-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            padding: 28px 32px;
+            margin-bottom: 24px;
+        }
+        .skolbesok-card h2 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        .skolbesok-card h2 i {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-lt);
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        /* ── Included list ── */
+        .skolbesok-included {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .skolbesok-included li {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--border);
+            font-size: 1rem;
+            color: #333;
+            line-height: 1.6;
+        }
+        .skolbesok-included li:last-child { border-bottom: none; padding-bottom: 0; }
+        .skolbesok-included li:first-child { padding-top: 0; }
+        .skolbesok-included li i {
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+
+        /* ── For whom ── */
+        .skolbesok-forwhom {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            font-size: 1rem;
+            color: #333;
+            line-height: 1.7;
+        }
+        .skolbesok-forwhom i {
+            color: var(--primary);
+            font-size: 1rem;
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+
+        /* ── Practical info tiles ── */
+        .skolbesok-tile {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            padding: 22px 20px;
+            text-align: center;
+            height: 100%;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .skolbesok-tile:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(25,111,21,.12);
+        }
+        .skolbesok-tile i {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--primary-lt);
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+        }
+        .skolbesok-tile h3 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+        .skolbesok-tile p {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin: 0;
+        }
+
+        /* ── CTA ── */
+        .skolbesok-cta {
+            background: var(--primary-lt);
+            border: 1px solid rgba(25,111,21,.25);
+            border-radius: 20px;
+            padding: 36px 24px;
+        }
+        .skolbesok-cta h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+        .skolbesok-cta p {
+            color: var(--muted);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+        .skolbesok-cta-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--primary);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 14px 34px;
+            border-radius: 14px;
+            text-decoration: none;
+            transition: all .2s;
+        }
+        .skolbesok-cta-btn:hover {
+            background: var(--primary-dark);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(25,111,21,.25);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 600px) {
+            .skolbesok-card { padding: 20px 18px; border-radius: 14px; }
+            .skolbesok-card h2 { font-size: 1.15rem; gap: 10px; }
+            .skolbesok-card h2 i { width: 34px; height: 34px; font-size: 0.85rem; }
+            .skolbesok-cta { padding: 26px 16px; }
+            .skolbesok-cta-btn { width: 100%; padding: 13px 20px; }
+        }
+    </style>
+</head>
+
+<body class="skolbesok-page">
+    <div id="header-placeholder"></div>
+    <div style="margin-top: 130px;"></div>
+
+    <!-- ═══ Skolbesök ═══ -->
+    <div class="container py-4">
+
+        <a href="/#Services" class="skolbesok-back">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+            <span data-i18n="skolbesok.back">Tillbaka till alla tjänster</span>
+        </a>
+
+        <!-- Page header -->
+        <div class="text-center mx-auto mb-5" style="max-width: 800px;">
+            <img src="/img/skolbesok.png" class="skolbesok-header-img mb-4" alt="Skolbesök i moskén">
+            <h1 class="display-4 fw-bold mb-3" data-i18n="skolbesok.title">Skolbesök i moskén</h1>
+            <p class="lead mb-0" data-i18n="skolbesok.intro">Vi tar emot skolklasser för guidade besök i moskén — en
+                chans för eleverna att möta en levande gemenskap, inte bara läsa om den i en bok.</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <!-- Vad ingår -->
+                <div class="skolbesok-card wow fadeIn" data-wow-delay="0.1s">
+                    <h2>
+                        <i class="fas fa-check" aria-hidden="true"></i>
+                        <span data-i18n="skolbesok.included-title">Vad ingår</span>
+                    </h2>
+                    <ul class="skolbesok-included">
+                        <li>
+                            <i class="fas fa-check-circle" aria-hidden="true"></i>
+                            <span data-i18n="skolbesok.included-1">Rundtur i moskén — bönesalen, bibliotekshörnan, hur
+                                lokalerna används under en dag</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle" aria-hidden="true"></i>
+                            <span data-i18n="skolbesok.included-2">Kort introduktion till islam och muslimsk vardag i
+                                Lund — på en nivå som passar klassen</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle" aria-hidden="true"></i>
+                            <span data-i18n="skolbesok.included-3">20–30 minuters frågestund med en av våra imamer
+                                eller en erfaren volontär</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle" aria-hidden="true"></i>
+                            <span data-i18n="skolbesok.included-4">Möjlighet för eleverna att se eller delta i en bön
+                                (frivilligt)</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle" aria-hidden="true"></i>
+                            <span data-i18n="skolbesok.included-5">Material för läraren att förbereda klassen i förväg,
+                                om så önskas</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- För vem -->
+                <div class="skolbesok-card wow fadeIn" data-wow-delay="0.2s">
+                    <h2>
+                        <i class="fas fa-user-friends" aria-hidden="true"></i>
+                        <span data-i18n="skolbesok.forwhom-title">För vem</span>
+                    </h2>
+                    <div class="skolbesok-forwhom">
+                        <i class="fas fa-school" aria-hidden="true"></i>
+                        <span data-i18n="skolbesok.forwhom-text">Religionsundervisningen i grundskolans senare år och
+                            på gymnasiet, samt SFI- och vuxenutbildningsklasser. Vi tar emot klasser upp till 35
+                            elever — större grupper delar vi gärna upp.</span>
+                    </div>
+                </div>
+
+                <!-- Praktisk info -->
+                <div class="skolbesok-card wow fadeIn" data-wow-delay="0.3s">
+                    <h2>
+                        <i class="fas fa-info-circle" aria-hidden="true"></i>
+                        <span data-i18n="skolbesok.practical-title">Praktisk info</span>
+                    </h2>
+                    <div class="row g-3">
+                        <div class="col-12 col-sm-6">
+                            <div class="skolbesok-tile">
+                                <i class="far fa-clock" aria-hidden="true"></i>
+                                <h3 data-i18n="skolbesok.practical-duration-label">Längd</h3>
+                                <p data-i18n="skolbesok.practical-duration-value">ca 60–90 minuter</p>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="skolbesok-tile">
+                                <i class="fas fa-hand-holding-heart" aria-hidden="true"></i>
+                                <h3 data-i18n="skolbesok.practical-price-label">Pris</h3>
+                                <p data-i18n="skolbesok.practical-price-value">Kostnadsfritt</p>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="skolbesok-tile">
+                                <i class="far fa-calendar-check" aria-hidden="true"></i>
+                                <h3 data-i18n="skolbesok.practical-booking-label">Bokning</h3>
+                                <p data-i18n="skolbesok.practical-booking-value">Helst minst 2 veckor i förväg</p>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="skolbesok-tile">
+                                <i class="fas fa-language" aria-hidden="true"></i>
+                                <h3 data-i18n="skolbesok.practical-language-label">Språk</h3>
+                                <p data-i18n="skolbesok.practical-language-value">Svenska (engelska eller arabiska går
+                                    att ordna)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email CTA -->
+                <div class="skolbesok-cta text-center wow fadeIn" data-wow-delay="0.4s">
+                    <h2 data-i18n="skolbesok.cta-title">Boka ett skolbesök</h2>
+                    <p data-i18n="skolbesok.cta-text">Hör av dig så planerar vi besöket tillsammans med dig och din
+                        klass.</p>
+                    <a href="mailto:info@alsalamcenter.se" class="skolbesok-cta-btn">
+                        <i class="fas fa-envelope" aria-hidden="true"></i>
+                        <span data-i18n="skolbesok.cta-button">Skicka mejl till info@alsalamcenter.se</span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="contact-us-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+
+    <script>
+        $(function () {
+            $("#header-placeholder").load("/header.html", function() {
+                if (window.reapplyTranslations) setTimeout(() => window.reapplyTranslations(), 50);
+            });
+            $("#contact-us-placeholder").load("/contact-us.html", function() {
+                if (window.reapplyTranslations) setTimeout(() => window.reapplyTranslations(), 50);
+            });
+        });
+    </script>
+
+    <!-- i18n -->
+    <script type="module" src="/langugaes/js/i18n.js" defer></script>
+</body>
+</html>
