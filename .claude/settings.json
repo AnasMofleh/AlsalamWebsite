@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -)",
+      "Read(//c/Users/anas-/AppData/Local/Temp/**)"
+    ]
+  }
+}

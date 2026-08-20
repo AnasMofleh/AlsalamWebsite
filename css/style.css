@@ -533,6 +533,339 @@ html[dir="rtl"] .hero-row {
 
 /*** Hero Header End ***/
 
+/*** Bönetider Widget Start ***/
+
+.bonetider-card {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  border-radius: 20px;
+  outline: 1em solid var(--bg-white);
+  outline-offset: -0.8em;
+  overflow: hidden;
+  border: 1px solid rgba(25, 111, 21, 0.14);
+  background: linear-gradient(180deg, #ffffff 0%, #f5faf5 100%);
+  color: var(--text-dark);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Large soft crescent-and-star watermark (decorative) */
+.bonetider-watermark {
+  position: absolute;
+  inset-inline-end: 10px;
+  bottom: 8px;
+  width: 140px;
+  height: 140px;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M126 24 A72 72 0 1 0 126 176 A56 56 0 1 1 126 24 Z' fill='%23196F15'/%3E%3Cpath d='M150 58 l7 16 17 1 -13 11 4 17 -15 -9 -15 9 4 -17 -13 -11 17 -1 Z' fill='%23196F15'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: bottom right;
+}
+
+/* Mihrab (prayer niche) arch header in brighter logo colors */
+.bonetider-header {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem 1.45rem;
+  color: #ffffff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 120' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='0'%3E%3Cstop offset='0' stop-color='%232e9330'/%3E%3Cstop offset='1' stop-color='%231d7fa3'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0 120 L0 55 C0 10 34 0 72 0 L250 4 L428 0 C466 0 500 10 500 55 L500 120 Z' fill='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.bonetider-title {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.bonetider-clock {
+  font-size: 1.35rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 1px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: var(--radius);
+  padding: 0.25rem 0.6rem;
+  white-space: nowrap;
+}
+
+/* City sits under the title inside the arch header */
+.bonetider-city {
+  margin-top: 0.15rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.bonetider-city i {
+  margin-inline-end: 0.35rem;
+  color: #F1C152;
+}
+
+/* Dates on their own row between the arch and the divider */
+.bonetider-subhead {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+  padding: 0.5rem 1.5rem 0;
+}
+
+.bonetider-dates {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #196F15;
+}
+
+.bonetider-hijri {
+  font-weight: 400;
+  color: #6c757d;
+}
+
+/* Ornamental gold divider */
+.bonetider-divider {
+  position: relative;
+  height: 1px;
+  margin: 0.6rem 1.5rem 0.75rem;
+  background: linear-gradient(90deg, transparent 0%, rgba(201, 151, 0, 0.6) 30%, rgba(201, 151, 0, 0.6) 70%, transparent 100%);
+}
+
+/* Next prayer strip — the focal point of the widget, centered */
+.bonetider-next {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0 1.5rem 0.6rem;
+  padding: 0.65rem 0.9rem;
+  background: linear-gradient(90deg, rgba(241, 193, 82, 0.22), rgba(241, 193, 82, 0.1));
+  border: 1px solid rgba(201, 151, 0, 0.4);
+  border-inline-start: 4px solid #F1C152;
+  border-radius: var(--radius);
+  font-size: 0.98rem;
+}
+
+.bonetider-next-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #196F15;
+}
+
+.bonetider-in {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.bonetider-countdown {
+  font-weight: 800;
+  font-size: 1.15rem;
+  font-variant-numeric: tabular-nums;
+  color: #15546F;
+}
+
+.bonetider-countdown--soon {
+  color: #d9a021;
+}
+
+/* Prayer table: clear "Bön / Tid" header, name left, time right */
+.bonetider-table {
+  position: relative;
+  flex: 1;
+  margin: 0 1.5rem 0.5rem;
+  border-collapse: collapse;
+  color: var(--text-dark);
+}
+
+.bonetider-table th {
+  padding: 0.15rem 0.6rem 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #7a8a7a;
+  border-bottom: 2px solid rgba(25, 111, 21, 0.25);
+}
+
+.bonetider-th-time {
+  text-align: end;
+}
+
+.bonetider-table td {
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid rgba(25, 111, 21, 0.12);
+  font-size: 0.98rem;
+}
+
+.bonetider-table tr:last-child td {
+  border-bottom: none;
+}
+
+.bonetider-name i {
+  width: 1.5rem;
+  text-align: center;
+  margin-inline-end: 0.4rem;
+  color: #2e9330;
+}
+
+.bonetider-time {
+  text-align: end;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: #15546F;
+}
+
+/* Sunrise row — kept light, no explanation needed */
+.bonetider-row--info td {
+  opacity: 0.7;
+}
+
+.bonetider-row--info .bonetider-name {
+  font-weight: 400;
+}
+
+/* Highlighted next prayer */
+.bonetider-row--next td {
+  background: rgba(241, 193, 82, 0.22);
+}
+
+.bonetider-row--next .bonetider-name {
+  font-weight: 700;
+  color: #196F15;
+  border-inline-start: 3px solid #F1C152;
+  padding-inline-start: 0.35rem;
+}
+
+/* Footer + week button */
+.bonetider-footer {
+  position: relative;
+  padding: 0.4rem 1.5rem 1.1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.bonetider-week-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: linear-gradient(135deg, #2e9330, #1d7fa3);
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 3px 10px rgba(25, 111, 21, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bonetider-week-btn:hover,
+.bonetider-week-btn:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(25, 111, 21, 0.35);
+  color: #ffffff;
+}
+
+.bonetider-loading {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  color: #196F15;
+  background: linear-gradient(180deg, #ffffff 0%, #f5faf5 100%);
+}
+
+/* Week view modal (light, matching the card) */
+.bonetider-modal {
+  background: #ffffff;
+  color: var(--text-dark);
+  border: 1px solid rgba(25, 111, 21, 0.2);
+  border-radius: 20px;
+}
+
+.bonetider-modal-header {
+  border-bottom: 1px solid rgba(25, 111, 21, 0.15);
+  padding: 1rem 1.25rem;
+}
+
+.bonetider-modal-title {
+  color: #196F15;
+  font-weight: 700;
+}
+
+.bonetider-modal-body {
+  padding: 0.75rem 1.25rem 1.25rem;
+}
+
+.bonetider-week-day {
+  padding: 0.7rem 0.9rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(25, 111, 21, 0.12);
+}
+
+.bonetider-week-day:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.bonetider-week-day--today {
+  background: rgba(241, 193, 82, 0.18);
+  border: 1px solid rgba(201, 151, 0, 0.4);
+  border-radius: var(--radius);
+}
+
+.bonetider-week-day-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  color: #196F15;
+  margin-bottom: 0.35rem;
+  text-transform: capitalize;
+}
+
+.bonetider-week-day-date {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: #15546F;
+}
+
+.bonetider-week-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.95rem;
+  padding: 0.24rem 0;
+}
+
+.bonetider-week-row--info {
+  opacity: 0.7;
+}
+
+.bonetider-week-time {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: #15546F;
+}
+
+/*** Bönetider Widget End ***/
+
 #stats-preview {
   background: --bg-white;
 }
@@ -890,6 +1223,36 @@ html[dir="rtl"] .hero-row {
 
   .hero-rightside iframe {
     height: 700px;
+  }
+
+  /* Bönetider widget: mirror the iframe's mobile footprint (no scalex —
+     that transform exists only to crop the iframe content) */
+  .hero-rightside .bonetider-card {
+    width: 100%;
+    height: 700px;
+    border-radius: 20px;
+  }
+
+  .bonetider-title {
+    font-size: 1.1rem;
+  }
+
+  .bonetider-clock {
+    font-size: 1.1rem;
+  }
+
+  .bonetider-next {
+    font-size: 1.05rem;
+  }
+
+  .bonetider-countdown {
+    font-size: 1.05rem;
+  }
+
+  /* Larger, easy-to-read rows on mobile */
+  .bonetider-table td {
+    padding: 0.72rem 0.6rem;
+    font-size: 1.08rem;
   }
 
   .hero-leftside img {
