@@ -24,9 +24,16 @@
  *   2. Deploy → Manage deployments → ✎ (edit the web app deployment) →
  *      Version: New version → Deploy. (Do NOT create a new deployment — that
  *      would change the URL.)
- *   3. Verify: open <url>?action=imam-contract&wifeName=Test&husbandName=Test and
- *      check that the page source contains "imam-contract v2" and "setupSigPad".
+ *   3. Verify: open <url>?action=version — it must return "marriage Code.gs version 9".
+ *      Also open <url>?action=imam-contract&wifeName=Test&husbandName=Test and
+ *      check that the page source contains "imam-contract.js" and "imam-contract v2".
  *      If they are missing, the deployment still runs an old version of the code.
+ *      <url>?action=debug prints the running function's source length and the
+ *      generated page's head/tail — useful for pinpointing a stale deployment.
+ *      NOTE: the page's script lives in marriage/js/imam-contract.js (served by
+ *      the website). The GAS HtmlService sandbox corrupts INLINE scripts, so the
+ *      page only links the script externally. ContentService HTML is not usable
+ *      either — Google serves it as application/binary (won't render).
  */
 
 // ── Configuration ────────────────────────────────────────────────
@@ -38,6 +45,10 @@ function getMarriageSheetId() {
   return PropertiesService.getScriptProperties().getProperty('MARRIAGE_SHEET_ID') || '';
 }
 var ROOT_FOLDER_ID = '19k773mFMvLlQRswYWgKL2bghyNI4IZLe';
+
+// Bump this on every change to this file and verify after redeploying:
+// open <url>?action=version — it must return the new version number.
+var CODE_VERSION = '9';
 
 // ── Main entry points ──────────────────────────────────────────
 
@@ -71,6 +82,55 @@ function doGet(e) {
   }
   if (action === 'imam-contract') {
     return handleImamContract(e);
+  }
+  if (action === 'version') {
+    return ContentService.createTextOutput('marriage Code.gs version ' + CODE_VERSION)
+      .setMimeType(ContentService.MimeType.TEXT);
+  }
+  if (action === 'debug') {
+    // Reports which code is actually running in this deployment:
+    // function source length + head/tail of the generated imam page.
+    var dbgHtml = '';
+    try {
+      dbgHtml = handleImamContract({ parameter: {} }).getContent();
+    } catch (err) {
+      dbgHtml = 'ERROR: ' + err.toString();
+    }
+    var fnSrc = handleImamContract.toString();
+    var p = fnSrc.indexOf('pdfOptions');
+    return ContentService.createTextOutput(
+      'v=' + CODE_VERSION
+      + ' | fnLen=' + fnSrc.length
+      + ' | sigCount=' + (fnSrc.split('setupSigPad').length - 1)
+      + ' | htmlLen=' + dbgHtml.length
+      + ' | srcAround=' + fnSrc.substring(Math.max(0, p - 60), p + 400)
+      + ' | srcTail=' + fnSrc.substring(Math.max(0, fnSrc.length - 250))
+      + ' | htmlTail=' + dbgHtml.substring(Math.max(0, dbgHtml.length - 200))
+    ).setMimeType(ContentService.MimeType.TEXT);
+  }
+
+  if (action === 'testhtml') {
+    // Bisect which content makes the IFRAME sandbox mangle the HTML.
+    var cases = [
+      ['simple', '<b>a</b><i>end</i>'],
+      ['script-basic', '<script>var x=1;var y=2;</script><i>end</i>'],
+      ['script-comment', '<script>var x=1;// Signature pad setup\nvar y=2;</script><i>end</i>'],
+      ['script-fn', '<script>var x=1;function setupSigPad(c){var d=0;}</script><i>end</i>'],
+      ['script-onload', '<script>var x=1;img.onload=function(){};</script><i>end</i>'],
+      ['script-long', '<script>var x="' + new Array(6001).join('a') + '";</script><i>end</i>'],
+      ['script-catch', '<script>var x=1;try{f()}catch(e){}</script><i>end</i>']
+    ];
+    var lines = [];
+    cases.forEach(function(c) {
+      try {
+        var h = HtmlService.createHtmlOutput(c[1]).getContent();
+        lines.push(c[0] + ':len=' + h.length + ':content=' + h.replace(/\n/g, ' '));
+      } catch (err) {
+        lines.push(c[0] + ':ERROR:' + err.toString());
+      }
+    });
+    return ContentService.createTextOutput(lines.join('\n'))
+      .setMimeType(ContentService.MimeType.TEXT);
   }
 
   return ContentService.createTextOutput(JSON.stringify({ status: 'ok' }))
@@ -710,77 +770,19 @@ function handleImamContract(e) {
     '</div>',
     '</div>',
     '<style>@keyframes spin{to{transform:rotate(360deg)}}</style>',
-    '<script>',
-    'var GAS_URL="', gasUrl, '";',
-    'var FIELD_IDS=["wifeNameInput","husbandNameInput","wifePersonalIdInput","husbandPersonalIdInput","wifeBirthPlaceInput","husbandBirthPlaceInput","wifeMaritalStatusInput","husbandMaritalStatusInput","deferredDowryInput","dowryInput","dateInput","placeInput"];',
-    'var pdfOptions={margin:0,filename:"islamic-marriage-contract.pdf",image:{type:"jpeg",quality:0.98},html2canvas:{scale:2,useCORS:true,scrollY:0},jsPDF:{unit:"mm",format:"a4",orientation:"portrait"}};',
-    '',
-    '// Signature pad setup',
-    'function setupSigPad(canvas){',
-    'var drawing=false,moved=false,lx=0,ly=0;',
-    'function resize(){var ratio=devicePixelRatio||1,rect=canvas.getBoundingClientRect(),w=Math.max(Math.floor(rect.width),1),h=Math.max(Math.floor(rect.height),1),existing=canvas.dataset.hasDrawing==="true"?canvas.toDataURL():null;canvas.width=w*ratio;canvas.height=h*ratio;var ctx=canvas.getContext("2d");ctx.setTransform(1,0,0,1,0,0);ctx.scale(ratio,ratio);ctx.lineWidth=2;ctx.lineCap="round";ctx.lineJoin="round";ctx.strokeStyle="#111";ctx.fillStyle="#111";ctx.clearRect(0,0,w,h);if(existing){var img=new Image();img.onload=function(){ctx.drawImage(img,0,0,w,h)};img.src=existing}}',
-    'resize();canvas.dataset.hasDrawing="false";',
-    'function pt(e){var r=canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}',
-    'canvas.addEventListener("pointerdown",function(e){var p=pt(e);drawing=true;moved=false;lx=p.x;ly=p.y;try{canvas.setPointerCapture(e.pointerId)}catch(err){}});',
-    'canvas.addEventListener("pointermove",function(e){if(!drawing)return;var p=pt(e),ctx=canvas.getContext("2d");ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(p.x,p.y);ctx.stroke();lx=p.x;ly=p.y;moved=true;canvas.dataset.hasDrawing="true"});',
-    'var stop=function(){if(!drawing)return;if(!moved){var ctx=canvas.getContext("2d");ctx.beginPath();ctx.arc(lx,ly,1.2,0,Math.PI*2);ctx.fill();canvas.dataset.hasDrawing="true"}drawing=false};',
-    'canvas.addEventListener("pointerup",stop);canvas.addEventListener("pointerleave",stop);canvas.addEventListener("pointercancel",stop);',
-    'return resize;',
-    '}',
-    '',
-    'var sigResizers=[];',
-    'document.querySelectorAll(".signature-pad").forEach(function(c){sigResizers.push(setupSigPad(c));',
-    'var wrap=c.closest(".sig-canvas-wrap");if(!wrap)return;',
-    'var btn=wrap.querySelector(".sig-clear-btn");if(btn){btn.addEventListener("click",function(){var ctx=c.getContext("2d");ctx.clearRect(0,0,c.width,c.height);c.dataset.hasDrawing="false"})}',
-    '});',
-    'window.addEventListener("resize",function(){sigResizers.forEach(function(fn){fn()})});',
-    '',
-    '// PDF functions',
-    'function getFormValues(){var vals={};FIELD_IDS.forEach(function(id){var el=document.getElementById(id);vals[id]=el?el.value:""});return vals}',
-    'function validateForm(){var empty=[];FIELD_IDS.forEach(function(id){var el=document.getElementById(id);if(!el||!el.value.trim())empty.push(id)});var emptySig=[];document.querySelectorAll(".signature-pad").forEach(function(c,i){if(c.dataset.hasDrawing!=="true")emptySig.push(i)});if(empty.length>0||emptySig.length>0){var msg="";if(empty.length>0)msg+="Foljande falt ar tomma: "+empty.join(", ")+".";if(emptySig.length>0){if(msg)msg+="\\n\\n";msg+="Vänligen rita alla sex underskrifter."}alert(msg);if(empty.length>0){var fe=document.getElementById(empty[0]);if(fe)fe.focus()}return false}return true}',
-    '',
-    'window.downloadPDF=async function(){await html2pdf().set(pdfOptions).from(document.getElementById("contract")).save()};',
-    'window.previewPDF=async function(){var uri=await html2pdf().set(pdfOptions).from(document.getElementById("contract")).outputPdf("datauristring");document.getElementById("previewFrame").src=uri;var box=document.getElementById("previewBox");box.style.display="block";box.scrollIntoView({behavior:"smooth",block:"start"})};',
-    '',
-    'window.sendPDF=function(){',
-    'if(!validateForm())return;',
-    'var overlay=document.getElementById("sendConfirmOverlay");',
-    'var confirmSt=document.getElementById("confirm-state");',
-    'var loadingSt=document.getElementById("confirm-loading-state");',
-    'var successSt=document.getElementById("confirm-success-state");',
-    'var errorSt=document.getElementById("confirm-error-state");',
-    'confirmSt.style.display="block";loadingSt.style.display="none";successSt.style.display="none";errorSt.style.display="none";',
-    'overlay.style.display="flex";',
-    'var cleanedUp=false;',
-    'function hideOverlay(){overlay.style.display="none";cleanedUp=true;cancelBtn.removeEventListener("click",onCancel);sendBtn.removeEventListener("click",onSend);errorClose.removeEventListener("click",hideOverlay)}',
-    'function onCancel(){hideOverlay()}',
-    'var cancelBtn=document.getElementById("sendConfirmCancelBtn");',
-    'var sendBtn=document.getElementById("sendConfirmSendBtn");',
-    'var errorClose=document.getElementById("confirm-error-close");',
-    'async function onSend(){',
-    'confirmSt.style.display="none";loadingSt.style.display="block";',
-    'cancelBtn.removeEventListener("click",onCancel);sendBtn.removeEventListener("click",onSend);',
-    'try{var blob=await html2pdf().set(pdfOptions).from(document.getElementById("contract")).toPdf().outputPdf("blob");',
-    'var reader=new FileReader();var base64=await new Promise(function(r){reader.onloadend=function(){r(reader.result.split(",")[1])}});reader.readAsDataURL(blob);',
-    'var vals=getFormValues();',
-    'var params=new URLSearchParams();params.append("action","submit-contract");params.append("pdf",base64);params.append("filename","islamic-marriage-contract.pdf");',
-    'params.append("wifeName",vals.wifeNameInput);params.append("husbandName",vals.husbandNameInput);',
-    'params.append("wifePnr",vals.wifePersonalIdInput);params.append("husbandPnr",vals.husbandPersonalIdInput);',
-    'params.append("date",vals.dateInput);',
-    'var witness2=document.getElementById("witness2NameInput");if(witness2)params.append("witness2Name",witness2.value);',
-    'var witness1=document.getElementById("witness1NameInput");if(witness1)params.append("witness1Name",witness1.value);',
-    'var imamN=document.getElementById("imamNameInput");if(imamN)params.append("imamName",imamN.value);',
-    'var waliN=document.getElementById("waliNameInput");if(waliN)params.append("waliName",waliN.value);',
-    'var res=await fetch(GAS_URL,{method:"POST",body:params});var result=await res.json();',
-    'if(!res.ok||!result.success)throw new Error(result.error||"Upload failed");',
-    'loadingSt.style.display="none";successSt.style.display="block";',
-    '}catch(e){loadingSt.style.display="none";document.getElementById("confirm-error-text").textContent="Något gick fel: "+(e.message||"Okänt fel");errorSt.style.display="block";errorClose.addEventListener("click",hideOverlay)}',
-    '}',
-    'cancelBtn.addEventListener("click",onCancel);sendBtn.addEventListener("click",onSend);errorClose.addEventListener("click",hideOverlay);',
-    '};',
-    '<\/script>',
+    '<!-- Page script lives in https://alsalamcenter.se/marriage/js/imam-contract.js — the GAS HtmlService sandbox corrupts inline scripts -->',
+    '<script src="https://alsalamcenter.se/marriage/js/imam-contract.js?v=1"><\/script>',
     '</body></html>'
   ].join('');
+
+  if ((e.parameter.diag || '') === '1') {
+    return ContentService.createTextOutput(
+      'diag htmlLen=' + html.length
+      + ' | hasScript=' + (html.indexOf('imam-contract.js') >= 0)
+      + ' | hasV2=' + (html.indexOf('imam-contract v2') >= 0)
+      + ' | tail=' + html.substring(Math.max(0, html.length - 80))
+    ).setMimeType(ContentService.MimeType.TEXT);
+  }
 
   return HtmlService.createHtmlOutput(html)
     .setTitle('Äktenskapskontrakt')
