@@ -10,7 +10,6 @@
     "company": "FÖRETAG",
     "contact": "KONTAKTA OSS",
     "stats": "STATISTIK",
-    "tv": "TV",
     "more": "MER",
     "membership": "MEDLEMSKAP",
     "membership": "MEDLEMSKAP"
@@ -235,6 +234,8 @@
       "first-name": "Förnamn",
       "last-name": "Efternamn",
       "personal-number": "Personnummer",
+      "pnr-placeholder": "ÅÅÅÅMMDDXXXX",
+      "example-prefix": "t.ex.",
       "email": "Mejladress",
       "mobile": "Mobilnummer",
       "address": "Adress",
@@ -272,16 +273,13 @@
       "step-children-confirm": "Barn & Bekräfta",
       "membership-intro": "Ange ditt personnummer för att verifiera FIFS-medlemskap. En av föräldrarna måste vara medlem.",
       "membership-placeholder": "ÅÅÅÅMMDD-XXXX",
-      "membership-check-btn": "Kontrollera medlemskap",
-      "membership-hint": "Ange ditt svenska personnummer för att verifiera FIFS-medlemskap",
-      "membership-err": " — Ogiltigt personnummer",
+      "membership-pnr-label": "Förälderns personnummer",
+      "membership-err": "Ogiltigt personnummer",
       "membership-checking": "Kontrollerar...",
       "membership-yes": "Medlem via FIFS",
       "membership-since": "Medlem sedan",
       "membership-not-found": "Ej medlem",
-      "membership-register": "Registrera dig",
-      "membership-verified-hint": "Medlemskap verifierat. Klicka på \"Nästa steg\" för att fortsätta.",
-      "membership-required": "Du måste verifiera ditt FIFS-medlemskap innan du går vidare."
+      "membership-register": "Registrera dig"
     },
     "success": {
       "title": "Registrering slutförd — Al Salam Center",

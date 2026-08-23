@@ -97,7 +97,7 @@
         clearInterval(navInitInterval);
 
         // Initialize Bootstrap Dropdowns inside navbar
-        document.querySelectorAll('.navbar [data-bs-toggle="dropdown"]').forEach(function (el) {
+        document.querySelectorAll('.navbar [data-bs-toggle="dropdown"], .lang-fab [data-bs-toggle="dropdown"]').forEach(function (el) {
             if (!bootstrap.Dropdown.getInstance(el)) {
                 new bootstrap.Dropdown(el);
             }

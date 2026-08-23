@@ -1053,7 +1053,7 @@
         </div>
     </div>
 
-    <!-- Settings Menu (always visible; slides items shown only in TV mode) -->
+    <!-- Settings Menu (always visible; slides items shown for all visitors) -->
     <div class="tv-menu-corner" id="tvMenuCorner">
         <div class="dropdown">
             <button id="tvMenuBtn" class="btn tv-menu-btn" type="button" data-bs-toggle="dropdown"
@@ -1145,7 +1145,7 @@
         const CARD_API_URL = "https://script.google.com/macros/s/AKfycby4xd1YkqdDe-xvshIuMpj53wCLM9kUClwb84Qtx5amrPd6xrUjKjJxiYSdEppweq4/exec";
         const GOAL_AMOUNT = 10000000;
         const POLL_INTERVAL_MS = 5000;
-        const isTvMode = new URLSearchParams(location.search).has('tv');
+        const isTvMode = true; // TV mode is always active on the stats page (?tv=1 gate removed)
 
         const totalAmountEl = document.getElementById("totalAmount");
         const progressLabelEl = document.getElementById("progressLabel");
@@ -1917,7 +1917,7 @@
         })();
 
         // ═══════════════════════════════════════════════════════════════
-        // TV MODE — slides (only when ?tv is in the URL)
+        // TV MODE — slides (always active on the stats page)
         // ═══════════════════════════════════════════════════════════════
         if (isTvMode) {
             var TV_SLIDES_API_URL = "https://script.google.com/macros/s/AKfycby8B94nAOsDYBXqlpOp4UYqIDl3YlyQQZBfkxfGb91gwzHokIT0AtECQ7CC3qratjQx/exec";
@@ -1927,8 +1927,8 @@
             var TV_SLIDES_ENABLED_KEY = "alsalam-tv-slides-enabled";
             var TV_DISPLAY_MIN = 1, TV_DISPLAY_MAX = 120;
             var TV_GAP_MIN = 1, TV_GAP_MAX = 300;
-            var TV_DEFAULT_DISPLAY_SEC = 5;
-            var TV_DEFAULT_GAP_SEC = 5;
+            var TV_DEFAULT_DISPLAY_SEC = 8;
+            var TV_DEFAULT_GAP_SEC = 48;
 
             var tvSlideCurtainEl = document.getElementById("tvSlideCurtain");
             var tvSlidePanelEl = document.getElementById("tvSlidePanel");
@@ -1944,7 +1944,8 @@
             var tvSlideTimer = null;
             var tvSlidesEnabled = (function () {
                 var s = localStorage.getItem(TV_SLIDES_ENABLED_KEY);
-                return s === null ? true : s === "true";
+                // Default: off on mobile (<=768px), on elsewhere; stored preference wins
+                return s === null ? !mobileQrQuery.matches : s === "true";
             })();
             var tvCurrentDisplaySec = (function () {
                 var s = Number(localStorage.getItem(TV_DISPLAY_KEY));
@@ -2066,10 +2067,6 @@
             if (tvSlidesEnabled) { tvSlideCurtainEl.style.display = ""; }
             tvRefreshSlides();
             setInterval(tvRefreshSlides, SLIDES_REFRESH_MS);
-        } else {
-            // Hide slides-only menu items when not in TV mode
-            var slidesMenu = document.getElementById("tvSlidesMenuItems");
-            if (slidesMenu) slidesMenu.style.display = "none";
         }
 
         $(function () {

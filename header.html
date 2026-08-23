@@ -15,21 +15,6 @@
                             <img src="/img/Al-Salam-Center-Logo.png" alt="Mosque Logo" class="img-fluid"
                             style="max-height: 60px" />
                     </a>
-
-                    <!-- Language selector (desktop only) -->
-
-                    <div class="nav-item dropdown ms-3 d-none d-lg-block">
-                        <a class="nav-link dropdown-toggle d-flex align-items-center header-lang-toggle" href="#" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-globe me-2"></i>
-                            <span id="current-lang">Svenska</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#" onclick="setLang('sv'); return false;">Svenska</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="setLang('en'); return false;">English</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="setLang('ar'); return false;">العربية</a></li>
-                        </ul>
-                    </div>
                 </div>
 
                 <button id="donate-button-mobile" onclick="window.location.href='/donations'">
@@ -68,10 +53,6 @@
                                     <i class="fas fa-chart-line"></i>
                                     <span data-i18n="nav.stats">STATS</span>
                                 </a>
-                                <a class="dropdown-item" href="/tv">
-                                    <i class="fas fa-tv"></i>
-                                    <span data-i18n="nav.tv">TV</span>
-                                </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="/admin">
                                     <i class="fas fa-lock"></i>
@@ -90,7 +71,6 @@
                         <a href="/" class="nav-item nav-link" data-i18n="nav.home">Home</a>
                         <a href="/#Services" class="nav-item nav-link" data-i18n="nav.tjänster">Tjänster</a>
                         <a href="/donations" class="nav-item nav-link" data-i18n="nav.donationer">Donationer</a>
-                        <a href="/company" class="nav-item nav-link" data-i18n="nav.company">Företag</a>
                         <a href="/membership-check" class="nav-item nav-link">
                             <span data-i18n="nav.membership">Medlemskap</span>
                             <i class="fas fa-id-card"></i>
@@ -99,31 +79,12 @@
                             <span data-i18n="nav.stats">STATS</span>
                             <i class="fas fa-chart-line"></i>
                         </a>
-                        <a href="/tv" class="nav-item nav-link">
-                            <span data-i18n="nav.tv">TV</span>
-                            <i class="fas fa-tv"></i>
-                        </a>
                         <a href="/admin" class="nav-item nav-link">
                             <i class="fas fa-lock"></i>
                             <span>Admin</span>
                         </a>
 
                         <a href="#contact-us" class="nav-item nav-link me-lg-5" data-i18n="nav.contact">Kontakt</a>
-
-                        <!-- Language selector (mobile only) - centered -->
-                        <div class="nav-item dropdown d-flex justify-content-center w-100"
-                            style="margin-top: 10px; border-top: 1px solid #ddd; padding-top: 10px;">
-                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-globe me-2"></i>
-                                <span id="current-lang-mobile">Svenska</span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#" onclick="setLangAndClose('sv'); return false;">Svenska</a></li>
-                                <li><a class="dropdown-item" href="#" onclick="setLangAndClose('en'); return false;">English</a></li>
-                                <li><a class="dropdown-item" href="#" onclick="setLangAndClose('ar'); return false;">العربية</a></li>
-                            </ul>
-                        </div>
 
                     </div>
 
@@ -161,30 +122,40 @@
 <!-- Add margin to prevent content from hiding behind navbar -->
 <div style="margin-top: 64px"></div>
 
+<!-- Floating language switcher (all screens) -->
+<div class="dropdown dropup lang-fab">
+    <a class="lang-fab-toggle" href="#" role="button" data-bs-toggle="dropdown"
+       aria-expanded="false" aria-label="Change language">
+        <i class="fas fa-globe" aria-hidden="true"></i>
+        <span id="current-lang-fab">Svenska</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end">
+        <li><a class="dropdown-item" href="#" onclick="setLang('sv'); return false;">Svenska</a></li>
+        <li><a class="dropdown-item" href="#" onclick="setLang('en'); return false;">English</a></li>
+        <li><a class="dropdown-item" href="#" onclick="setLang('ar'); return false;">العربية</a></li>
+    </ul>
+</div>
+
 <script>
     function setLang(lang) {
         loadLanguage(lang);
         setLangLabel(lang);
     }
 
-    function setLangAndClose(lang) {
-        setLang(lang);
-        const nav = document.querySelector('.navbar-collapse');
-        if (nav?.classList.contains('show')) {
-            bootstrap.Collapse.getInstance(nav)?.hide();
-        }
-    }
-
     function setLangLabel(lang) {
         const map = { sv: "Svenska", en: "English", ar: "العربية" };
-        const desktop = document.getElementById("current-lang");
-        const mobile = document.getElementById("current-lang-mobile");
+        const label = document.getElementById("current-lang-fab");
 
-        if (map[lang]) {
-            if (desktop) desktop.textContent = map[lang];
-            if (mobile) mobile.textContent = map[lang];
+        if (map[lang] && label) {
+            label.textContent = map[lang];
         }
     }
+
+    // Sync the floating switcher label with the persisted language on load
+    (function initLangFabLabel() {
+        const saved = localStorage.getItem("lang");
+        if (saved) setLangLabel(saved);
+    })();
 
     (function highlightCurrentPage() {
         const currentPath = window.location.pathname.replace(/\/+$/, '') || '/';

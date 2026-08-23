@@ -113,6 +113,14 @@
             transition: border .25s, box-shadow .25s;
             box-sizing: border-box;
         }
+        /* Placeholders are examples, not values — keep them clearly lighter than typed text */
+        .formbold-form-input::placeholder {
+            color: #aab1bd;
+            font-style: italic;
+            font-weight: 400;
+            opacity: 1; /* Firefox dims placeholders on its own */
+        }
+        .formbold-form-input:focus::placeholder { color: #c6ccd6; }
         .formbold-form-input:focus {
             outline: none;
             border-color: var(--green);
@@ -180,8 +188,6 @@
         }
         .tax-check-hint .err { color: var(--red); display: none; }
 
-        #school-check-btn:disabled { opacity: .5; cursor: not-allowed; }
-
         .tax-result-card {
             margin-top: 20px;
             border-radius: 18px;
@@ -232,16 +238,6 @@
         }
         .tax-result-link:hover { transform: translateY(-1px); background: #c82333; color: #fff; }
 
-        /* ── Verified hint ── */
-        .step-1-next-hint {
-            display: none;
-            margin-top: 16px;
-            font-size: 0.9rem;
-            color: var(--green);
-            font-weight: 500;
-        }
-        .step-1-next-hint.visible { display: block; }
-
         /* ── Child card ── */
         .child-card {
             background: #fff;
@@ -275,24 +271,6 @@
         .remove-child-btn:hover { color: var(--red); background: var(--red-lt); }
 
         /* ── Buttons ── */
-        .donation-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px 32px;
-            border: none;
-            border-radius: 14px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            font-family: inherit;
-            transition: all .2s;
-            background: var(--green);
-            color: #fff;
-        }
-        .donation-btn:hover { background: #157519; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(26,138,31,.25); }
-
         .formbold-add-button {
             background: none;
             border: 2px dashed var(--border);
@@ -346,6 +324,8 @@
             transition: all .2s;
         }
         .formbold-btn:hover { background: #157519; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(26,138,31,.25); }
+        .formbold-btn:disabled { opacity: .5; cursor: not-allowed; }
+        .formbold-btn:disabled:hover { background: var(--green); transform: none; box-shadow: none; }
 
         /* ── Section divider ── */
         .section-divider {
@@ -379,7 +359,6 @@
             .child-card { padding: 12px 14px; border-radius: 14px; }
 
             /* Buttons */
-            .donation-btn { width: 100%; justify-content: center; height: 48px; font-size: 0.9rem; }
             .tax-result-card { flex-wrap: wrap; padding: 14px 16px; gap: 10px; }
             .tax-result-link { width: 100%; justify-content: center; }
 
@@ -486,21 +465,15 @@
 
                             <div class="formbold-input-flex">
                                 <div>
-                                    <label for="school-pnr" class="formbold-form-label" data-i18n="school.form.personal-number">Personnummer</label>
-                                    <input type="text" id="school-pnr" placeholder="ÅÅÅÅMMDD-XXXX" maxlength="13" autocomplete="off"
+                                    <label for="school-pnr" class="formbold-form-label" data-i18n="school.form.membership-pnr-label">Förälderns personnummer</label>
+                                    <input type="text" id="school-pnr" placeholder="ÅÅÅÅMMDD-XXXX" inputmode="numeric" autocomplete="off"
                                         class="formbold-form-input"
                                         data-i18n-placeholder="school.form.membership-placeholder">
                                 </div>
                             </div>
 
-                            <button type="button" class="donation-btn" id="school-check-btn" style="margin-bottom:8px;">
-                                <i class="fas fa-search"></i>
-                                <span data-i18n="school.form.membership-check-btn">Kontrollera medlemskap</span>
-                            </button>
-
                             <div class="tax-check-hint">
-                                <span data-i18n="school.form.membership-hint">Ange ditt svenska personnummer för att verifiera FIFS-medlemskap</span>
-                                <span class="err" id="school-pnr-err" data-i18n="school.form.membership-err"> — Ogiltigt personnummer</span>
+                                <span class="err" id="school-pnr-err" data-i18n="school.form.membership-err">Ogiltigt personnummer</span>
                             </div>
 
                             <div class="tax-result-card" id="school-result" style="display:none;">
@@ -516,10 +489,6 @@
                                     <span data-i18n="school.form.membership-register">Registrera dig</span>
                                 </a>
                             </div>
-
-                            <p class="step-1-next-hint" id="step-1-next-hint" data-i18n="school.form.membership-verified-hint">
-                                Medlemskap verifierat. Klicka på "Nästa steg" för att fortsätta.
-                            </p>
                         </div>
 
                         <!-- ═══ STEP 2: Parents ═══ -->
@@ -540,17 +509,22 @@
                                 <div class="formbold-input-flex">
                                     <div class="formbold-input-full-width">
                                         <label for="p1name" class="formbold-form-label" data-i18n="school.form.full-name">För- och efternamn</label>
-                                        <input type="text" name="Förälder 1 Namn" id="p1name" placeholder="Taha Ali" class="formbold-form-input" required>
+                                        <input type="text" name="Förälder 1 Namn" id="p1name" placeholder="Taha Ali" data-example class="formbold-form-input" required>
                                     </div>
                                 </div>
                                 <div class="formbold-input-flex">
                                     <div>
                                         <label for="p1ssn" class="formbold-form-label" data-i18n="school.form.personal-number">Personnummer</label>
-                                        <input type="text" name="Förälder 1 Personnummer" id="p1ssn" placeholder="199901019999" class="formbold-form-input" required>
+                                        <input type="text" name="Förälder 1 Personnummer" id="p1ssn" placeholder="ÅÅÅÅMMDDXXXX" class="formbold-form-input" required
+                                            data-i18n-placeholder="school.form.pnr-placeholder" data-digits
+                                            inputmode="numeric" data-maxdigits="12" pattern="(19|20)\d{10}"
+                                            title="Personnummer måste vara 12 siffror och börja med 19 eller 20"
+                                            data-i18n-title="school.form.validation.personal-12-19-20">
                                     </div>
                                     <div>
                                         <label for="p1mobile" class="formbold-form-label" data-i18n="school.form.mobile">Mobilnummer</label>
-                                        <input type="text" name="Förälder 1 Mobilnummer" id="p1mobile" placeholder="0731234567" class="formbold-form-input" required
+                                        <input type="text" name="Förälder 1 Mobilnummer" id="p1mobile" placeholder="0731234567" data-example class="formbold-form-input" required
+                                            data-digits inputmode="numeric" data-maxdigits="10"
                                             pattern="07\d{8}" title="Mobilnummer måste vara 10 siffror som börjar med 07"
                                             data-i18n-title="school.form.validation.mobile-07">
                                     </div>
@@ -558,7 +532,7 @@
                                 <div class="formbold-input-flex">
                                     <div class="formbold-input-full-width">
                                         <label for="p1email" class="formbold-form-label" data-i18n="school.form.email">Mejladress</label>
-                                        <input type="email" name="Förälder 1 Email" id="p1email" placeholder="tahaali@gmail.com" class="formbold-form-input" required
+                                        <input type="email" name="Förälder 1 Email" id="p1email" placeholder="tahaali@gmail.com" data-example class="formbold-form-input" required
                                             title="Ange en giltig e-postadress" data-i18n-title="school.form.validation.email">
                                     </div>
                                 </div>
@@ -580,23 +554,30 @@
                                     <div class="formbold-input-flex">
                                         <div class="formbold-input-full-width">
                                             <label for="p2name" class="formbold-form-label" data-i18n="school.form.full-name">För- och efternamn</label>
-                                            <input type="text" name="Förälder 2 Namn" id="p2name" placeholder="Amina Musa" class="formbold-form-input">
+                                            <input type="text" name="Förälder 2 Namn" id="p2name" placeholder="Amina Musa" data-example class="formbold-form-input">
                                         </div>
                                     </div>
                                     <div class="formbold-input-flex">
                                         <div>
                                             <label for="p2ssn" class="formbold-form-label" data-i18n="school.form.personal-number">Personnummer</label>
-                                            <input type="text" name="Förälder 2 Personnummer" id="p2ssn" placeholder="199901019999" class="formbold-form-input">
+                                            <input type="text" name="Förälder 2 Personnummer" id="p2ssn" placeholder="ÅÅÅÅMMDDXXXX" class="formbold-form-input"
+                                                data-i18n-placeholder="school.form.pnr-placeholder" data-digits
+                                                inputmode="numeric" data-maxdigits="12" pattern="(19|20)\d{10}"
+                                                title="Personnummer måste vara 12 siffror och börja med 19 eller 20"
+                                                data-i18n-title="school.form.validation.personal-12-19-20">
                                         </div>
                                         <div>
                                             <label for="p2mobile" class="formbold-form-label" data-i18n="school.form.mobile">Mobilnummer</label>
-                                            <input type="text" name="Förälder 2 Mobilnummer" id="p2mobile" placeholder="0701234567" class="formbold-form-input">
+                                            <input type="text" name="Förälder 2 Mobilnummer" id="p2mobile" placeholder="0701234567" data-example class="formbold-form-input"
+                                                data-digits inputmode="numeric" data-maxdigits="10"
+                                                pattern="07\d{8}" title="Mobilnummer måste vara 10 siffror som börjar med 07"
+                                                data-i18n-title="school.form.validation.mobile-07">
                                         </div>
                                     </div>
                                     <div class="formbold-input-flex">
                                         <div class="formbold-input-full-width">
                                             <label for="p2email" class="formbold-form-label" data-i18n="school.form.email">Mejladress</label>
-                                            <input type="email" name="Förälder 2 Email" id="p2email" placeholder="aminamusa@gmail.com" class="formbold-form-input">
+                                            <input type="email" name="Förälder 2 Email" id="p2email" placeholder="aminamusa@gmail.com" data-example class="formbold-form-input">
                                         </div>
                                     </div>
                                 </div>
@@ -609,18 +590,19 @@
                             <div class="formbold-input-flex">
                                 <div class="formbold-input-full-width">
                                     <label for="adress" class="formbold-form-label" data-i18n="school.form.address">Adress</label>
-                                    <input type="text" name="Adress" id="adress" placeholder="Södergatan 65" class="formbold-form-input" required>
+                                    <input type="text" name="Adress" id="adress" placeholder="Södergatan 65" data-example class="formbold-form-input" required>
                                 </div>
                             </div>
                             <div class="formbold-input-flex">
                                 <div>
                                     <label for="postnummer" class="formbold-form-label" data-i18n="school.form.postcode">Postnummer</label>
-                                    <input type="text" name="Postnummer" id="postnummer" placeholder="25219" class="formbold-form-input" required
+                                    <input type="text" name="Postnummer" id="postnummer" placeholder="25219" data-example class="formbold-form-input" required
+                                        data-digits inputmode="numeric" data-maxdigits="5"
                                         pattern="\d{5}" title="Postnummer måste vara 5 siffror" data-i18n-title="school.form.validation.postcode-5">
                                 </div>
                                 <div>
                                     <label for="postort" class="formbold-form-label" data-i18n="school.form.city">Postort</label>
-                                    <input type="text" name="Postort" id="postort" placeholder="Helsingborg" class="formbold-form-input" required>
+                                    <input type="text" name="Postort" id="postort" placeholder="Helsingborg" data-example class="formbold-form-input" required>
                                 </div>
                             </div>
                         </div>
@@ -633,7 +615,7 @@
                             <div class="formbold-input-flex">
                                 <div class="formbold-input-full-width">
                                     <label for="familyLastName" class="formbold-form-label" data-i18n="school.form.family-lastname">Familjens efternamn</label>
-                                    <input type="text" name="Barnet Efternamn" id="familyLastName" placeholder="Ali" class="formbold-form-input" required>
+                                    <input type="text" name="Barnet Efternamn" id="familyLastName" placeholder="Ali" data-example class="formbold-form-input" required>
                                 </div>
                             </div>
 
@@ -647,13 +629,15 @@
                                     <div class="formbold-input-flex">
                                         <div style="flex:2;">
                                             <label class="formbold-form-label" data-i18n="school.form.first-name">Förnamn</label>
-                                            <input type="text" name="Barnet Förnamn" placeholder="Ahmad" class="formbold-form-input" required>
+                                            <input type="text" name="Barnet Förnamn" placeholder="Ahmad" data-example class="formbold-form-input" required>
                                         </div>
                                         <div style="flex:3;">
                                             <label class="formbold-form-label" data-i18n="school.form.personal-number">Personnummer</label>
-                                            <input type="text" name="Barnets Personnummer" placeholder="YYYYMMDDXXXX" class="formbold-form-input" required
-                                                pattern="(19|20)?\d{10}" title="Personnummer måste vara 12 siffror"
-                                                data-i18n-title="school.form.validation.personal-12">
+                                            <input type="text" name="Barnets Personnummer" placeholder="ÅÅÅÅMMDDXXXX" class="formbold-form-input" required
+                                                data-i18n-placeholder="school.form.pnr-placeholder" data-digits
+                                                inputmode="numeric" data-maxdigits="12" pattern="(19|20)\d{10}"
+                                                title="Personnummer måste vara 12 siffror och börja med 19 eller 20"
+                                                data-i18n-title="school.form.validation.personal-12-19-20">
                                         </div>
                                     </div>
                                 </div>
@@ -756,12 +740,73 @@
                 typeof window.getTranslation === "function" ? window.getTranslation(key, fallback) : fallback || key;
 
             let currentStep = 0;
-            let verifiedPNR = null;
+            let verifiedPNR = null;   // dashed, as the FIFS proxy expects it
             let membershipVerified = false;
             let childCount = 1;
 
+            /* ── Normalisation ──
+               Personnummer, mobil och postnummer sparas alltid som enbart siffror,
+               så att "19990101-9999", "199901019999" och "19990101 9999" blir samma värde. */
+            const digits = v => String(v == null ? "" : v).replace(/\D/g, "");
+
+            // Longest allowed value, in digits. Enforced here rather than with maxlength,
+            // which would truncate "070-123 45 67" before the separators are stripped.
+            const maxDigits = el => parseInt(el.dataset.maxdigits || "0", 10);
+
+            function clampDigits(el, value) {
+                const max = maxDigits(el);
+                const clean = digits(value);
+                return max ? clean.slice(0, max) : clean;
+            }
+
+            // Strip anything that isn't a digit while typing, keeping the caret in place.
+            function attachDigitsOnly(input) {
+                input.addEventListener("input", function() {
+                    const before = this.value;
+                    const clean = clampDigits(this, before);
+                    if (clean === before) return;
+                    const caret = this.selectionStart;
+                    const kept = Math.min(digits(before.slice(0, caret)).length, clean.length);
+                    this.value = clean;
+                    this.setSelectionRange(kept, kept);
+                });
+            }
+
+            // Trim every field and reduce the number fields to digits, so nothing reaches
+            // the sheet with stray whitespace or a dash.
+            function normalizeFormValues(root) {
+                (root || form).querySelectorAll("input").forEach(el => {
+                    if (el.type === "radio" || el.type === "checkbox" || !el.value) return;
+                    const clean = el.hasAttribute("data-digits") ? clampDigits(el, el.value) : el.value.trim();
+                    if (clean !== el.value) el.value = clean;   // avoid resetting the caret
+                });
+            }
+
+            // Placeholders read as real values to some users — label them as examples.
+            function applyExamplePlaceholders(root) {
+                const prefix = t("school.form.example-prefix", "t.ex.");
+                (root || form).querySelectorAll("input[data-example]").forEach(el => {
+                    if (el.dataset.exampleRaw === undefined) {
+                        el.dataset.exampleRaw = el.getAttribute("placeholder") || "";
+                    }
+                    el.setAttribute("placeholder", prefix + " " + el.dataset.exampleRaw);
+                });
+            }
+
             /* ── Navigation ── */
-            function showStep(index) {
+            // The steps have different heights, so a step change can otherwise leave you
+            // halfway down the next one. Offset by the fixed navbar so the step pills clear it.
+            function scrollToFormTop() {
+                const anchor = document.querySelector(".formbold-main-wrapper");
+                if (!anchor) return;
+                const nav = document.querySelector(".navbar.fixed-top");
+                const top = anchor.getBoundingClientRect().top + window.pageYOffset
+                    - (nav ? nav.offsetHeight : 0) - 16;
+                const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+                window.scrollTo({ top: Math.max(0, top), behavior: reduceMotion ? "auto" : "smooth" });
+            }
+
+            function showStep(index, scroll) {
                 steps.forEach((s, i) => s.classList.toggle("active", i === index));
                 menus.forEach((m, i) => {
                     m.classList.toggle("active", i === index);
@@ -777,33 +822,46 @@
                 currentStep = index;
                 spinner.style.display = "none";
 
-                // Pre-fill parent 1 SSN from verified membership
+                // Pre-fill parent 1 SSN from verified membership (digits only, like every other PNR field)
                 if (index === 1 && verifiedPNR) {
                     const ssnInput = document.getElementById("p1ssn");
-                    if (ssnInput && !ssnInput.value) ssnInput.value = verifiedPNR;
+                    if (ssnInput && !ssnInput.value) ssnInput.value = digits(verifiedPNR);
                 }
+
+                if (scroll) scrollToFormTop();
             }
 
             btnNext.addEventListener("click", async (e) => {
                 e.preventDefault();
 
-                // Validate inputs in current step
-                const stepInputs = steps[currentStep].querySelectorAll("input[required], select[required], textarea[required]");
+                // Autofill and paste can slip past the live formatting — clean the step first
+                normalizeFormValues(steps[currentStep]);
+
+                // Validate every field in the current step — optional fields (parent 2) still
+                // have to match their pattern once they're filled in. Empty optional fields pass.
+                const stepInputs = steps[currentStep].querySelectorAll("input, select, textarea");
                 for (const input of stepInputs) {
                     if (!input.checkValidity()) { input.reportValidity(); return; }
                 }
 
-                // Gate: step 0 needs verified membership
-                if (currentStep === 0 && !membershipVerified) {
-                    alert(t("school.form.membership-required", "Du måste verifiera ditt FIFS-medlemskap innan du går vidare."));
-                    return;
+                // Step 0: verify FIFS membership on demand, only advance for members
+                if (currentStep === 0) {
+                    const pnr = document.getElementById("school-pnr").value.trim();
+                    if (!membershipVerified || verifiedPNR !== pnr) {
+                        btnNext.disabled = true;
+                        let isMember;
+                        try { isMember = await verifyMembership(pnr); }
+                        finally { btnNext.disabled = false; }
+                        if (!isMember) return;
+                    }
                 }
 
                 if (currentStep < steps.length - 1) {
-                    showStep(currentStep + 1);
+                    showStep(currentStep + 1, true);
                 } else {
                     // Final submit
                     spinner.style.display = "block";
+                    normalizeFormValues();   // every step, not just the last one
                     const data = new FormData(form);
                     const email = data.get("Förälder 1 Email") || "";
                     const pnr   = data.get("Förälder 1 Personnummer") || "";
@@ -845,7 +903,7 @@
 
             btnBack.addEventListener("click", (e) => {
                 e.preventDefault();
-                if (currentStep > 0) showStep(currentStep - 1);
+                if (currentStep > 0) showStep(currentStep - 1, true);
             });
 
             /* ── Parent 2 toggle ── */
@@ -880,13 +938,17 @@
                     <div class="formbold-input-flex">
                         <div style="flex:2;">
                             <label class="formbold-form-label">${t("school.form.first-name", "Förnamn")}</label>
-                            <input type="text" name="Barnet Förnamn" class="formbold-form-input" required>
+                            <input type="text" name="Barnet Förnamn" placeholder="Ahmad" data-example class="formbold-form-input" required>
                         </div>
                         <div style="flex:3;">
                             <label class="formbold-form-label">${t("school.form.personal-number", "Personnummer")}</label>
-                            <input type="text" name="Barnets Personnummer" placeholder="YYYYMMDDXXXX"
-                                class="formbold-form-input" required pattern="(19|20)?\\d{10}"
-                                title="${t("school.form.validation.personal-12-19-20", "Personnummer måste vara 12 siffror")}">
+                            <input type="text" name="Barnets Personnummer"
+                                placeholder="${t("school.form.pnr-placeholder", "ÅÅÅÅMMDDXXXX")}"
+                                data-i18n-placeholder="school.form.pnr-placeholder" data-digits
+                                class="formbold-form-input" required
+                                inputmode="numeric" data-maxdigits="12" pattern="(19|20)\\d{10}"
+                                title="${t("school.form.validation.personal-12-19-20", "Personnummer måste vara 12 siffror och börja med 19 eller 20")}"
+                                data-i18n-title="school.form.validation.personal-12-19-20">
                         </div>
                     </div>
                 `;
@@ -899,6 +961,8 @@
                     });
                 });
                 container.appendChild(card);
+                card.querySelectorAll("input[data-digits]").forEach(attachDigitsOnly);
+                applyExamplePlaceholders(card);
             });
 
             /* ── Membership check ── */
@@ -909,34 +973,32 @@
                 ).then(r => { if (!r.ok) throw Error("HTTP " + r.status); return r.json(); });
             }
 
-            function checkMembership() {
+            // Verifies the PNR against FIFS, renders the result card,
+            // and resolves true only when the person is a member.
+            function verifyMembership(p) {
                 const pnrInput = document.getElementById("school-pnr");
                 const errSpan = document.getElementById("school-pnr-err");
-                const checkBtn = document.getElementById("school-check-btn");
                 const resultCard = document.getElementById("school-result");
                 const resultIcon = document.getElementById("school-result-icon");
                 const resultTitle = document.getElementById("school-result-title");
                 const resultSub = document.getElementById("school-result-sub");
                 const resultLink = document.getElementById("school-result-link");
-                const nextHint = document.getElementById("step-1-next-hint");
 
-                const p = pnrInput.value.trim();
+                const prevPNR = verifiedPNR;
 
                 errSpan.style.display = "none";
                 pnrInput.classList.remove("error", "success");
                 membershipVerified = false;
                 verifiedPNR = null;
-                nextHint.classList.remove("visible");
 
                 if (!/^\d{8}-\d{4}$/.test(p)) {
                     pnrInput.classList.add("error");
                     errSpan.style.display = "inline";
                     pnrInput.focus();
-                    return;
+                    return Promise.resolve(false);
                 }
 
                 pnrInput.classList.add("success");
-                checkBtn.disabled = true;
 
                 resultCard.style.display = "flex";
                 resultCard.classList.remove("success", "fail");
@@ -947,42 +1009,36 @@
 
                 const regUrl = "https://medlem.fifs.se/registrera/" + p + "/SCH";
 
-                fetchProxy(p).then(r => {
-                    if (r.isMember) {
-                        resultCard.classList.add("success");
-                        resultCard.classList.remove("fail");
-                        resultIcon.innerHTML = '<i class="fas fa-check"></i>';
-                        resultTitle.textContent = t("school.form.membership-yes", "Medlem via FIFS");
-                        resultSub.innerHTML = t("school.form.membership-since", "Medlem sedan") +
-                            " <b>" + r.memberSinceFormatted + "</b>";
-                        resultLink.style.display = "none";
-                        membershipVerified = true;
-                        verifiedPNR = p;
-                        nextHint.classList.add("visible");
-                    } else {
-                        resultCard.classList.add("fail");
-                        resultCard.classList.remove("success");
-                        resultIcon.innerHTML = '<i class="fas fa-times"></i>';
-                        resultTitle.textContent = t("school.form.membership-not-found", "Ej medlem");
-                        resultSub.textContent = t("school.form.membership-not-found", "Ej medlem");
-                        resultLink.href = regUrl;
-                        resultLink.style.display = "inline-flex";
-                        membershipVerified = false;
-                        verifiedPNR = null;
-                    }
-                    checkBtn.disabled = false;
-                }).catch(() => {
+                function showFail() {
                     resultCard.classList.add("fail");
                     resultCard.classList.remove("success");
                     resultIcon.innerHTML = '<i class="fas fa-times"></i>';
                     resultTitle.textContent = t("school.form.membership-not-found", "Ej medlem");
-                    resultSub.textContent = t("school.form.membership-not-found", "Ej medlem");
+                    resultSub.textContent = "";
                     resultLink.href = regUrl;
                     resultLink.style.display = "inline-flex";
-                    checkBtn.disabled = false;
-                    membershipVerified = false;
-                    verifiedPNR = null;
-                });
+                    return false;
+                }
+
+                return fetchProxy(p).then(r => {
+                    if (!r.isMember) return showFail();
+
+                    resultCard.classList.add("success");
+                    resultCard.classList.remove("fail");
+                    resultIcon.innerHTML = '<i class="fas fa-check"></i>';
+                    resultTitle.textContent = t("school.form.membership-yes", "Medlem via FIFS");
+                    resultSub.innerHTML = t("school.form.membership-since", "Medlem sedan") +
+                        " <b>" + r.memberSinceFormatted + "</b>";
+                    resultLink.style.display = "none";
+                    membershipVerified = true;
+                    verifiedPNR = p;
+
+                    // Keep the step 2 prefill in sync if the PNR was changed after a previous check
+                    const ssnInput = document.getElementById("p1ssn");
+                    if (ssnInput && prevPNR && ssnInput.value === digits(prevPNR)) ssnInput.value = digits(p);
+
+                    return true;
+                }).catch(showFail);
             }
 
             // PNR auto-format + Enter key
@@ -996,16 +1052,19 @@
                     document.getElementById("school-pnr-err").style.display = "none";
                 });
                 pnrInput.addEventListener("keydown", function(e) {
-                    if (e.key === "Enter") { e.preventDefault(); checkMembership(); }
+                    if (e.key === "Enter") { e.preventDefault(); btnNext.click(); }
                 });
             }
 
-            document.getElementById("school-check-btn").addEventListener("click", checkMembership);
-
             // Init
+            form.querySelectorAll("input[data-digits]").forEach(attachDigitsOnly);
+            applyExamplePlaceholders();
             showStep(0);
 
-            window.addEventListener("languageChanged", () => { showStep(currentStep); });
+            window.addEventListener("languageChanged", () => {
+                showStep(currentStep);
+                applyExamplePlaceholders();   // re-prefix after i18n rewrites placeholders
+            });
         })();
     </script>
 
