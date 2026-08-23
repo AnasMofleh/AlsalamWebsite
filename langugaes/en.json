@@ -10,7 +10,6 @@
     "company": "COMPANY",
     "contact": "CONTACT US",
     "stats": "STATISTICS",
-    "tv": "TV",
     "more": "MORE",
     "membership": "MEMBERSHIP",
     "membership": "MEMBERSHIP"
@@ -236,6 +235,8 @@
       "first-name": "First name",
       "last-name": "Last name",
       "personal-number": "Personal number",
+      "pnr-placeholder": "YYYYMMDDXXXX",
+      "example-prefix": "e.g.",
       "email": "Email address",
       "mobile": "Mobile number",
       "address": "Address",
@@ -273,16 +274,13 @@
       "step-children-confirm": "Children & Confirm",
       "membership-intro": "Enter your personal number to verify FIFS membership. One parent must be a member.",
       "membership-placeholder": "YYYYMMDD-XXXX",
-      "membership-check-btn": "Check Membership",
-      "membership-hint": "Enter your Swedish personal number to verify FIFS membership",
-      "membership-err": " — Invalid personal number",
+      "membership-pnr-label": "Parent's personal number",
+      "membership-err": "Invalid personal number",
       "membership-checking": "Checking...",
       "membership-yes": "FIFS Member",
       "membership-since": "Member since",
       "membership-not-found": "Not a member",
-      "membership-register": "Register now",
-      "membership-verified-hint": "Membership verified. Click \"Next Step\" to continue.",
-      "membership-required": "You must verify your FIFS membership before proceeding."
+      "membership-register": "Register now"
     },
     "success": {
       "title": "Registration Complete — Al Salam Center",

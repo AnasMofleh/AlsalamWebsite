@@ -10,7 +10,6 @@
     "company": "الشركة",
     "contact": "اتصل بنا",
     "stats": "الإحصائيات",
-    "tv": "TV",
     "more": "المزيد",
     "membership": "العضوية",
     "membership": "العضوية"
@@ -236,6 +235,8 @@
       "first-name": "الاسم الأول",
       "last-name": "اسم العائلة",
       "personal-number": "الرقم الشخصي",
+      "pnr-placeholder": "YYYYMMDDXXXX",
+      "example-prefix": "مثال:",
       "email": "البريد الإلكتروني",
       "mobile": "رقم الجوال",
       "address": "العنوان",
@@ -273,16 +274,13 @@
       "step-children-confirm": "الأطفال والتأكيد",
       "membership-intro": "أدخل رقمك الشخصي للتحقق من عضوية FIFS. يجب أن يكون أحد الوالدين عضوًا.",
       "membership-placeholder": "YYYYMMDD-XXXX",
-      "membership-check-btn": "تحقق من العضوية",
-      "membership-hint": "أدخل رقمك الشخصي السويدي للتحقق من عضوية FIFS",
-      "membership-err": " — رقم شخصي غير صالح",
+      "membership-pnr-label": "الرقم الشخصي للوالد",
+      "membership-err": "رقم شخصي غير صالح",
       "membership-checking": "...جار التحقق",
       "membership-yes": "عضو FIFS",
       "membership-since": "عضو منذ",
       "membership-not-found": "ليس عضوًا",
-      "membership-register": "سجل الآن",
-      "membership-verified-hint": "تم التحقق من العضوية. انقر على \"الخطوة التالية\" للمتابعة.",
-      "membership-required": "يجب عليك التحقق من عضوية FIFS قبل المتابعة."
+      "membership-register": "سجل الآن"
     },
     "success": {
       "title": "تم التسجيل — مركز السلام",
