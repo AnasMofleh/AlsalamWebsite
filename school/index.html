@@ -334,8 +334,35 @@
             margin: 24px 0;
         }
 
+        /* ── Language button in the popup header (mobile only) ── */
+        .popup-lang-dropdown { display: none; }  /* hidden on desktop */
+        .popup-lang-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            padding: 0;
+            border: none;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--buttons));
+            color: #ffffff;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 12px rgba(21, 84, 111, 0.3);
+            cursor: pointer;
+            transition: filter .2s ease, transform .2s ease;
+        }
+        .popup-lang-btn:hover, .popup-lang-btn:focus { color: #ffffff; filter: brightness(1.08); }
+        /* RTL: right-align menu text like the floating fab (style.css:521) */
+        html[dir="rtl"] .popup-lang-dropdown .dropdown-menu { text-align: right; }
+
         /* ── Responsive ── */
         @media (max-width: 600px) {
+            /* Show the language button in the popup header; hide the floating fab
+               while the popup is open (it's dead behind the backdrop anyway) */
+            .popup-lang-dropdown { display: block; }
+            body.modal-open .lang-fab { display: none; }
+
             /* Tighter page padding */
             .formbold-main-wrapper { padding: 0 8px; }
             .formbold-form-wrapper { padding: 16px 12px !important; }
@@ -407,7 +434,20 @@
             <div class="modal-content shadow-lg rounded-4 border-0">
                 <div class="modal-header bg-light border-bottom">
                     <h5 class="modal-title fw-bold" id="requirementsModalLabel" data-i18n="school.popup-title">📘 Viktigt innan du fyller i formuläret</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Stäng"></button>
+                    <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                        <!-- Language switcher (mobile only, lives in the popup header) -->
+                        <div class="dropdown popup-lang-dropdown">
+                            <button class="popup-lang-btn" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false" aria-label="Change language">
+                                <i class="fas fa-globe" aria-hidden="true"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#" onclick="setLang('sv'); return false;">Svenska</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="setLang('en'); return false;">English</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="setLang('ar'); return false;">العربية</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-body" style="max-height:70vh;overflow-y:auto;background:#fff;">
                     <div class="px-2">
