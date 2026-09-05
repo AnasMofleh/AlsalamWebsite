@@ -2,9 +2,13 @@
  * Google Apps Script — Marriage Request & Contract Upload
  *
  * Handles five actions:
- *   action=submit-request  — Initial request with 4 documents + form fields (POST)
+ *   action=submit-request  — Initial request with 4 documents + form fields (POST).
+ *                            Requires both husband & wife PNRs; both must be FIFS
+ *                            members (verified client-side before submission).
  *   action=confirm          — Shows editable form for imam to confirm time (GET)
- *   action=confirm-submit   — Imam submits the confirmed time (POST)
+ *   action=confirm-submit   — Imam submits the confirmed time (POST). Sends the
+ *                            acceptance email with a link to the contract form
+ *                            (?step=2 with both PNRs prefilled). No payment.
  *   action=submit-contract  — Final marriage contract PDF upload with versioning (POST)
  *   action=email-contract   — Email a copy of the contract to the couple (POST)
  *
@@ -24,7 +28,7 @@
  *   2. Deploy → Manage deployments → ✎ (edit the web app deployment) →
  *      Version: New version → Deploy. (Do NOT create a new deployment — that
  *      would change the URL.)
- *   3. Verify: open <url>?action=version — it must return "marriage Code.gs version 9".
+ *   3. Verify: open <url>?action=version — it must return "marriage Code.gs version 10".
  *      Also open <url>?action=imam-contract&wifeName=Test&husbandName=Test and
  *      check that the page source contains "imam-contract.js" and "imam-contract v2".
  *      If they are missing, the deployment still runs an old version of the code.
@@ -38,9 +42,6 @@
 
 // ── Configuration ────────────────────────────────────────────────
 
-function getMemberDiscountCode() {
-  return PropertiesService.getScriptProperties().getProperty('MEMBER_DISCOUNT_CODE') || '';
-}
 function getMarriageSheetId() {
   return PropertiesService.getScriptProperties().getProperty('MARRIAGE_SHEET_ID') || '';
 }
@@ -48,7 +49,7 @@ var ROOT_FOLDER_ID = '19k773mFMvLlQRswYWgKL2bghyNI4IZLe';
 
 // Bump this on every change to this file and verify after redeploying:
 // open <url>?action=version — it must return the new version number.
-var CODE_VERSION = '9';
+var CODE_VERSION = '10';
 
 // ── Main entry points ──────────────────────────────────────────
 
@@ -146,10 +147,14 @@ function handleSubmitRequest(e) {
   const preferredDate = (e.parameter.preferredDate || '').trim();
   const preferredTime = (e.parameter.preferredTime || '').trim();
   const husbandPnr    = (e.parameter.husbandPnr    || '').trim();
+  const wifePnr       = (e.parameter.wifePnr       || '').trim();
+  // Back-compat: old clients sent a single isMember flag
   const isMember      = (e.parameter.isMember      || '').trim();
+  const husbandMember = (e.parameter.husbandMember || isMember || '').trim();
+  const wifeMember    = (e.parameter.wifeMember    || isMember || '').trim();
 
-  if (!email || !phone || !husbandPnr) {
-    return jsonResponse({ success: false, error: 'Missing required fields: email, phone, husbandPnr' });
+  if (!email || !phone || !husbandPnr || !wifePnr) {
+    return jsonResponse({ success: false, error: 'Missing required fields: email, phone, husbandPnr, wifePnr' });
   }
 
   // Build folder structure: Marriage Requests / YYYY / MM / personnummer
@@ -197,15 +202,18 @@ function handleSubmitRequest(e) {
     + '&preferredDate=' + encodeURIComponent(preferredDate)
     + '&preferredTime=' + encodeURIComponent(preferredTime)
     + '&personnummer=' + encodeURIComponent(husbandPnr)
-    + '&isMember=' + encodeURIComponent(isMember);
+    + '&wifePnr=' + encodeURIComponent(wifePnr)
+    + '&husbandMember=' + encodeURIComponent(husbandMember)
+    + '&wifeMember=' + encodeURIComponent(wifeMember);
   const gasUrl = (e.parameter.gasUrl || '').trim();
   const confirmUrl = gasUrl + '?' + confirmParams;
 
   // ── HTML Email to mosque ──────────────────────
-  const mosqueSubject = 'Ny vigselförfrågan - ' + husbandPnr;
+  const mosqueSubject = 'Ny vigselförfrågan - ' + husbandPnr + ' & ' + wifePnr;
   const contractLink = 'https://alsalamcenter.se/marriage/?step=2';
   const folderLink = coupleFolder.getUrl();
-  const isMemberText = isMember === 'true' ? 'Ja' : 'Nej';
+  const husbandMemberText = husbandMember === 'true' ? 'Ja' : 'Nej';
+  const wifeMemberText = wifeMember === 'true' ? 'Ja' : 'Nej';
   const dateDisplay = preferredDate || '---';
   const timeDisplay = preferredTime || 'Valfri tid';
   const notesDisplay = notes || '---';
@@ -223,10 +231,12 @@ function handleSubmitRequest(e) {
     '<html><body style="font-family:Arial,Helvetica,sans-serif;max-width:620px;margin:0;padding:16px;color:#222;">',
     '<h2 style="color:#15546f;margin-top:0;">Ny vigselförfrågan</h2>',
     '<table cellpadding="6" cellspacing="0" style="border-collapse:collapse;width:100%;margin-bottom:16px;">',
-    '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Personnummer:</td><td>' + husbandPnr + '</td></tr>',
+    '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Brudgummens personnummer:</td><td>' + husbandPnr + '</td></tr>',
+    '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Brudens personnummer:</td><td>' + wifePnr + '</td></tr>',
     '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">E-post:</td><td><a href="' + emailLink + '" style="color:#15546f;">' + email + '</a></td></tr>',
     '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Telefon:</td><td>' + (phoneLink ? '<a href="' + phoneLink + '" style="color:#15546f;">' + phoneDisplay + '</a>' : phoneDisplay) + '</td></tr>',
-    '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Medlem:</td><td>' + isMemberText + '</td></tr>',
+    '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Brudgummen medlem:</td><td>' + husbandMemberText + '</td></tr>',
+    '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Bruden medlem:</td><td>' + wifeMemberText + '</td></tr>',
     '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Önskat datum:</td><td>' + dateDisplay + '</td></tr>',
     '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Önskad tid:</td><td>' + timeDisplay + '</td></tr>',
     '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Önskemål:</td><td>' + notesDisplay + '</td></tr>',
@@ -260,15 +270,15 @@ function handleSubmitRequest(e) {
   const userBody = [
     'Salam alaykom!',
     '',
-    'Vi har mottagit er förfrågan om vigsel (personnummer: ' + husbandPnr + ').',
+    'Vi har mottagit er förfrågan om vigsel (personnummer: ' + husbandPnr + ' och ' + wifePnr + ').',
     '',
     'Nästa steg:',
     '',
     '1. Moskén granskar er bokningsförfrågan och era dokument. Efter granskning får ni ett bekräftelsemejl med den bokade tiden (' + dateStr + ') eller en ny tid som passar moskén bättre. Kontrollera er inkorg och även skräpposten.',
     '',
-    '2. När ni får bekräftelsemejlet kommer ni få en länk för att fylla i resterande information kring vigseln och betala avgiften. Avgiften är 1 200 kr för icke-medlemmar.',
+    '2. När moskén har bekräftat tiden får ni ett mejl med den bokade tiden och en länk för att fylla i äktenskapskontraktet.',
     '',
-    '3. När ni fyller i resterande information som behövs för äktenskapsformuläret och betalar avgiften är ni redo för ceremonin.',
+    '3. När ni har fyllt i äktenskapsformuläret är allt klart från er sida inför ceremonin.',
     '',
     'Detta är ett automatiskt mejl. Vänligen svara inte på det. Vid frågor, kontakta oss på info@alsalamcenter.se.',
     '',
@@ -290,7 +300,11 @@ function handleConfirm(e) {
   const preferredDate = (e.parameter.preferredDate || '').trim();
   const preferredTime = (e.parameter.preferredTime || '12:00').trim();
   const personnummer  = (e.parameter.personnummer  || '').trim();
+  // Optional params — old in-flight links without them must keep working
+  const wifePnr       = (e.parameter.wifePnr       || '').trim();
   const isMember      = (e.parameter.isMember      || '').trim();
+  const husbandMember = (e.parameter.husbandMember || isMember || '').trim();
+  const wifeMember    = (e.parameter.wifeMember    || '').trim();
   const gasUrl        = ScriptApp.getService().getUrl();
 
   if (!email || !preferredDate || !personnummer) {
@@ -327,14 +341,16 @@ function handleConfirm(e) {
     '<div class="card">',
     '<h2>Bekräfta vigseltid</h2>',
     '<table>',
-    '<tr><td>Personnummer:</td><td>' + personnummer + '</td></tr>',
+    '<tr><td>Brudgummens personnummer:</td><td>' + personnummer + '</td></tr>',
+    (wifePnr ? '<tr><td>Brudens personnummer:</td><td>' + wifePnr + '</td></tr>' : ''),
     '<tr><td>E-post:</td><td>' + email + '</td></tr>',
-    '<tr><td>Medlem:</td><td>' + (isMember === 'true' ? 'Ja' : 'Nej') + '</td></tr>',
+    '<tr><td>Brudgummen medlem:</td><td>' + (husbandMember === 'true' ? 'Ja' : 'Nej') + '</td></tr>',
+    (wifePnr ? '<tr><td>Bruden medlem:</td><td>' + (wifeMember === 'true' ? 'Ja' : 'Nej') + '</td></tr>' : ''),
     '</table>',
     '<p style="font-size:14px;color:#666;">Justera datum och tid vid behov, klicka sedan på Bekräfta.</p>',
     '<div class="row"><label for="dateInput">Datum</label><input type="date" id="dateInput" value="' + preferredDate + '"></div>',
     '<div class="row"><label for="timeInput">Tid</label><input type="time" id="timeInput" value="' + preferredTime + '"></div>',
-    '<button class="btn" onclick="submitConfirm()">Bekräfta och skicka betalningslänk</button>',
+    '<button class="btn" onclick="submitConfirm()">Bekräfta och skicka formulärlänk</button>',
     '<div id="status"></div>',
     '</div>',
     '<script>',
@@ -349,25 +365,27 @@ function handleConfirm(e) {
     'params.append("preferredDate",d);',
     'params.append("preferredTime",t);',
     'params.append("personnummer","' + personnummer + '");',
-    'params.append("isMember","' + isMember + '");',
+    'params.append("wifePnr","' + wifePnr + '");',
+    'params.append("husbandMember","' + husbandMember + '");',
+    'params.append("wifeMember","' + wifeMember + '");',
     'fetch("' + gasUrl + '",{method:"POST",body:params})',
     '.then(function(r){return r.text().then(function(txt){try{return JSON.parse(txt);}catch(e){if(r.ok)return{success:true};throw new Error(txt.substring(0,200));}});})',
     '.then(function(r){',
     'st.style.display="block";',
     'if(r.success){',
     'st.className="success";',
-    'st.innerHTML="Tiden har bekräftats!<br>E-post med betalningslänk har skickats till <strong>' + email + '</strong>.";',
+    'st.innerHTML="Tiden har bekräftats!<br>E-post med formulärlänk har skickats till <strong>' + email + '</strong>.";',
     'btn.style.display="none";',
     '}else{',
     'st.className="error";',
     'st.textContent="Något gick fel: "+(r.error||"Okänt fel");',
-    'btn.disabled=false;btn.textContent="Bekräfta och skicka betalningslänk";',
+    'btn.disabled=false;btn.textContent="Bekräfta och skicka formulärlänk";',
     '}',
     '})',
     '.catch(function(err){',
     'st.style.display="block";st.className="error";',
     'st.textContent="Anslutningsfel. Försök igen.";',
-    'btn.disabled=false;btn.textContent="Bekräfta och skicka betalningslänk";',
+    'btn.disabled=false;btn.textContent="Bekräfta och skicka formulärlänk";',
     '});',
     '}',
     '</script>',
@@ -386,7 +404,11 @@ function handleConfirmSubmit(e) {
   const preferredDate = (e.parameter.preferredDate || '').trim();
   const preferredTime = (e.parameter.preferredTime || '12:00').trim();
   const personnummer  = (e.parameter.personnummer  || '').trim();
+  // Optional params — old in-flight links without them must keep working
+  const wifePnr       = (e.parameter.wifePnr       || '').trim();
   const isMember      = (e.parameter.isMember      || '').trim();
+  const husbandMember = (e.parameter.husbandMember || isMember || '').trim();
+  const wifeMember    = (e.parameter.wifeMember    || '').trim();
 
   if (!email || !preferredDate || !personnummer) {
     return jsonResponse({ success: false, error: 'Saknad information (email, datum, personnummer).' });
@@ -405,11 +427,15 @@ function handleConfirmSubmit(e) {
   try {
     const cal = CalendarApp.getDefaultCalendar();
     const event = cal.createEvent(
-      'Vigsel: ' + personnummer,
+      'Vigsel: ' + personnummer + (wifePnr ? ' & ' + wifePnr : ''),
       startTime,
       endTime,
       {
-        description: 'Personnummer: ' + personnummer + '\nEmail: ' + email + '\nDatum: ' + preferredDate + '\nTid: ' + preferredTime
+        description: 'Personnummer (brudgum): ' + personnummer
+          + (wifePnr ? '\nPersonnummer (brud): ' + wifePnr : '')
+          + '\nEmail: ' + email + '\nDatum: ' + preferredDate + '\nTid: ' + preferredTime
+          + '\nBrudgummen medlem: ' + (husbandMember === 'true' ? 'Ja' : 'Nej')
+          + (wifePnr ? '\nBruden medlem: ' + (wifeMember === 'true' ? 'Ja' : 'Nej') : '')
       }
     );
     var eventId = event.getId().replace('@google.com', '');
@@ -418,51 +444,38 @@ function handleConfirmSubmit(e) {
     calendarError = ex.toString();
   }
 
-  // Build Stripe URL with prefilled params
-  const pnrClean = personnummer.replace(/[^0-9]/g, '');
-  var stripeUrl = 'https://buy.stripe.com/5kQdR93Nl2Jy6Vd5oEfw407';
-  if (email || pnrClean) {
-    var stripeParams = [];
-    if (email) stripeParams.push('prefilled_email=' + encodeURIComponent(email));
-    if (pnrClean) stripeParams.push('client_reference_id=' + encodeURIComponent(pnrClean));
-    stripeUrl += '?' + stripeParams.join('&');
-  }
+  // ── HTML acceptance email to user (contract link, both PNRs prefilled) ──
+  const acceptSubject = 'Vigseltid bekräftad - Al-Salam Center';
+  const step2Url = 'https://alsalamcenter.se/marriage/?step=2'
+    + '&husbandPnr=' + encodeURIComponent(personnummer)
+    + (wifePnr ? '&wifePnr=' + encodeURIComponent(wifePnr) : '');
 
-  // ── HTML Payment email to user ─────────────────
-  const paymentSubject = 'Vigseltid bekräftad - Al-Salam Center';
-  const step2Link = 'https://alsalamcenter.se/marriage/?step=2';
+  var wifePnrRow = wifePnr
+    ? '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Brudens personnummer:</td><td>' + wifePnr + '</td></tr>'
+    : '';
 
-  var memberNoteHtml = '';
-  if (isMember === 'true') {
-    var discountCode = getMemberDiscountCode();
-    memberNoteHtml = [
-      '<div style="background:#e8f5e9;border:1px solid #a5d6a7;border-radius:8px;padding:16px;margin:16px 0;">',
-      '<p style="margin:0;font-weight:700;color:#2e7d32;">Eftersom du ar medlem i FIFS far du rabatt!</p>',
-      (discountCode ? '<p style="margin:8px 0 0 0;">Anvand rabattkoden: <strong>' + discountCode + '</strong></p>' : ''),
-      '<p style="margin:8px 0 0 0;">Klicka pa "Lagg till kampanjkod" i kassan for att tillampa rabatten.</p>',
-      '</div>'
-    ].join('');
-  }
-
-  const paymentHtml = [
+  const acceptHtml = [
     '<html><body style="font-family:Arial,Helvetica,sans-serif;max-width:620px;margin:0;padding:16px;color:#222;">',
-    '<h2 style="color:#15546f;margin-top:0;">Vigseltid bekraftad</h2>',
+    '<h2 style="color:#15546f;margin-top:0;">Vigseltid bekräftad</h2>',
     '<p>Salam alaykom,</p>',
-    '<p>Er tid for vigselceremonin har blivit bekraftad: <strong>' + preferredDate + ' kl. ' + preferredTime + '</strong>.</p>',
+    '<p>Er tid för vigselceremonin har blivit bekräftad: <strong>' + preferredDate + ' kl. ' + preferredTime + '</strong>.</p>',
+    '<table cellpadding="6" cellspacing="0" style="border-collapse:collapse;width:100%;margin-bottom:16px;">',
+    '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Brudgummens personnummer:</td><td>' + personnummer + '</td></tr>',
+    wifePnrRow,
+    '</table>',
     '<hr style="border:none;border-top:1px solid #ddd;margin:20px 0;">',
-    '<p style="margin-bottom:8px;font-weight:700;">Nasta steg ar att betala avgiften:</p>',
-    '<a href="' + stripeUrl + '" style="display:inline-block;background:#15546f;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:16px;margin-bottom:16px;">Betala nu</a>',
-    '<p style="font-size:13px;color:#666;">Avgiften ar 1 200 kr for icke-medlemmar.</p>',
-    memberNoteHtml,
+    '<p style="margin-bottom:8px;font-weight:700;">Nästa steg är att fylla i äktenskapskontraktet:</p>',
+    '<a href="' + step2Url + '" style="display:inline-block;background:#15546f;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:16px;margin-bottom:16px;">Fyll i äktenskapskontraktet</a>',
+    '<p style="font-size:13px;color:#666;">Länken öppnar formuläret med båda personnumren förifyllda. Den fungerar på vilken enhet som helst.</p>',
     '<hr style="border:none;border-top:1px solid #ddd;margin:20px 0;">',
     '<p style="margin-top:20px;font-size:13px;color:#666;">Detta är ett automatiskt mejl. Vänligen svara inte på det. Vid frågor, kontakta oss på info@alsalamcenter.se.</p>',
-    '<p style="margin-top:16px;">Ma Allah valsigna er,<br><strong>Alsalam Center i Helsingborg</strong></p>',
+    '<p style="margin-top:16px;">Må Allah välsigna er,<br><strong>Alsalam Center i Helsingborg</strong></p>',
     '</body></html>'
   ].join('');
 
 
-  GmailApp.sendEmail(email, paymentSubject, '', {
-    htmlBody: paymentHtml,
+  GmailApp.sendEmail(email, acceptSubject, '', {
+    htmlBody: acceptHtml,
     name: 'Al-Salam Center'
   });
 
@@ -547,11 +560,12 @@ function handleSubmitStep2(e) {
   const imamUrl = gasUrl + '?' + imamParams;
 
   // Send HTML email to imam
-  const imamSubject = 'Äktenskapsformulär ifyllt - ' + husbandPnr;
+  const imamSubject = 'Äktenskapsformulär ifyllt - ' + (husbandPnr || husbandPersonalId);
   const imamHtml = [
     '<html><body style="font-family:Arial,Helvetica,sans-serif;max-width:620px;margin:0;padding:16px;color:#222;">',
     '<h2 style="color:#15546f;margin-top:0;">Äktenskapsformulär ifyllt</h2>',
-    '<p>Paret har fyllt i äktenskapsformuläret digitalt.</p>',
+    '<p>Paret har fyllt i äktenskapsformuläret digitalt. Allt är nu klart från parets sida.</p>',
+    '<p>Imamen förbereder kontraktet och underskrifter sker på plats under ceremonin.</p>',
     '<table cellpadding="6" cellspacing="0" style="border-collapse:collapse;width:100%;margin-bottom:16px;">',
     '<tr><td style="font-weight:700;white-space:nowrap;padding-right:12px;">Maka:</td><td>' + wifeName + ' (' + wifePersonalId + ')</td></tr>',
     '<tr><td style="font-weight:700;white-space:nowrap;padding-right:12px;">Make:</td><td>' + husbandName + ' (' + husbandPersonalId + ')</td></tr>',
