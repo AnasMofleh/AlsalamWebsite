@@ -271,7 +271,7 @@
       },
       "step-membership": "Medlemskap",
       "step-children-confirm": "Barn & Bekräfta",
-      "membership-intro": "Ange ditt personnummer för att verifiera FIFS-medlemskap. En av föräldrarna måste vara medlem.",
+      "membership-intro": "Ange ditt personnummer. Är ni inte FIFS-medlemmar, registrera er via länken nedan. Medlemskapet kontrolleras manuellt.",
       "membership-placeholder": "ÅÅÅÅMMDD-XXXX",
       "membership-pnr-label": "Förälderns personnummer",
       "membership-err": "Ogiltigt personnummer",
@@ -279,7 +279,9 @@
       "membership-yes": "Medlem via FIFS",
       "membership-since": "Medlem sedan",
       "membership-not-found": "Ej medlem",
-      "membership-register": "Registrera dig"
+      "membership-register": "Registrera dig",
+      "membership-manual-title": "FIFS-medlemskap",
+      "membership-manual-hint": "Medlemskapet kontrolleras manuellt. Är ni inte medlemmar, registrera er via FIFS."
     },
     "success": {
       "title": "Registrering slutförd — Al Salam Center",
