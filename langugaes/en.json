@@ -272,7 +272,7 @@
       },
       "step-membership": "Membership",
       "step-children-confirm": "Children & Confirm",
-      "membership-intro": "Enter your personal number. If you are not FIFS members, register via the link below. Membership is checked manually.",
+      "membership-intro": "Enter your personal number to verify FIFS membership. One parent must be a member.",
       "membership-placeholder": "YYYYMMDD-XXXX",
       "membership-pnr-label": "Parent's personal number",
       "membership-err": "Invalid personal number",
@@ -280,9 +280,7 @@
       "membership-yes": "FIFS Member",
       "membership-since": "Member since",
       "membership-not-found": "Not a member",
-      "membership-register": "Register now",
-      "membership-manual-title": "FIFS membership",
-      "membership-manual-hint": "Membership is checked manually. If you are not members, register via FIFS."
+      "membership-register": "Register now"
     },
     "success": {
       "title": "Registration Complete — Al Salam Center",

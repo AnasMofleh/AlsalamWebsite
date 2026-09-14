@@ -272,7 +272,7 @@
       },
       "step-membership": "العضوية",
       "step-children-confirm": "الأطفال والتأكيد",
-      "membership-intro": "أدخل رقمك الشخصي. إذا لم تكونوا أعضاء في FIFS، سجلوا عبر الرابط أدناه. يتم التحقق من العضوية يدويًا.",
+      "membership-intro": "أدخل رقمك الشخصي للتحقق من عضوية FIFS. يجب أن يكون أحد الوالدين عضوًا.",
       "membership-placeholder": "YYYYMMDD-XXXX",
       "membership-pnr-label": "الرقم الشخصي للوالد",
       "membership-err": "رقم شخصي غير صالح",
@@ -280,9 +280,7 @@
       "membership-yes": "عضو FIFS",
       "membership-since": "عضو منذ",
       "membership-not-found": "ليس عضوًا",
-      "membership-register": "سجل الآن",
-      "membership-manual-title": "عضوية FIFS",
-      "membership-manual-hint": "يتم التحقق من العضوية يدويًا. إذا لم تكونوا أعضاء، سجلوا عبر FIFS."
+      "membership-register": "سجل الآن"
     },
     "success": {
       "title": "تم التسجيل — مركز السلام",

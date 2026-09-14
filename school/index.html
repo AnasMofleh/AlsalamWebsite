@@ -884,9 +884,17 @@
                     if (!input.checkValidity()) { input.reportValidity(); return; }
                 }
 
-                // TEMPORARY: FIFS membership check disabled (FIFS-side change broke the proxy check).
-                // Next always advances; membership is verified manually. Re-enable the
-                // verifyMembership() gate here when switching to the FIFS API check.
+                // Step 0: verify FIFS membership on demand, only advance for members
+                if (currentStep === 0) {
+                    const pnr = document.getElementById("school-pnr").value.trim();
+                    if (!membershipVerified || verifiedPNR !== pnr) {
+                        btnNext.disabled = true;
+                        let isMember;
+                        try { isMember = await verifyMembership(pnr); }
+                        finally { btnNext.disabled = false; }
+                        if (!isMember) return;
+                    }
+                }
 
                 if (currentStep < steps.length - 1) {
                     showStep(currentStep + 1, true);
@@ -998,28 +1006,6 @@
             });
 
             /* ── Membership check ── */
-
-            // TEMPORARY: the FIFS check is disabled, so step 1 just shows the FIFS
-            // registration link instead. Remove this and re-enable verifyMembership()
-            // when switching to the FIFS API check.
-            function showRegistrationLink(pnr) {
-                const resultCard = document.getElementById("school-result");
-                const resultIcon = document.getElementById("school-result-icon");
-                const resultTitle = document.getElementById("school-result-title");
-                const resultSub = document.getElementById("school-result-sub");
-                const resultLink = document.getElementById("school-result-link");
-
-                resultCard.style.display = "flex";
-                resultCard.classList.remove("success", "fail");
-                resultIcon.innerHTML = '<i class="fas fa-external-link-alt"></i>';
-                resultTitle.textContent = t("school.form.membership-manual-title", "FIFS-medlemskap");
-                resultSub.textContent = t("school.form.membership-manual-hint", "Medlemskap kontrolleras manuellt. Är ni inte medlemmar, registrera er via FIFS.");
-                resultLink.href = /^\d{8}-\d{4}$/.test(pnr)
-                    ? "https://medlem.fifs.se/registrera/" + pnr + "/SCH"
-                    : "https://medlem.fifs.se/registrera/";
-                resultLink.style.display = "inline-flex";
-            }
-
             function fetchProxy(pnr) {
                 return fetch(
                     "https://script.google.com/macros/s/AKfycbxZ08tC4z_P815a44QCUYxZTAvRnYay3W6k3XENWH5-X0T07l4fFiqdJJS1zrd0uOv64g/exec?pnr=" +
@@ -1104,7 +1090,6 @@
                     this.value = v;
                     this.classList.remove("error", "success");
                     document.getElementById("school-pnr-err").style.display = "none";
-                    showRegistrationLink(v);
                 });
                 pnrInput.addEventListener("keydown", function(e) {
                     if (e.key === "Enter") { e.preventDefault(); btnNext.click(); }
@@ -1115,12 +1100,10 @@
             form.querySelectorAll("input[data-digits]").forEach(attachDigitsOnly);
             applyExamplePlaceholders();
             showStep(0);
-            showRegistrationLink("");
 
             window.addEventListener("languageChanged", () => {
                 showStep(currentStep);
                 applyExamplePlaceholders();   // re-prefix after i18n rewrites placeholders
-                showRegistrationLink(document.getElementById("school-pnr").value);
             });
         })();
     </script>
