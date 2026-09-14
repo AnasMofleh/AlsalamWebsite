@@ -10,7 +10,20 @@
  *
  * Usage: /exec?pnr=YYYYMMDD-XXXX
  * Returns: { isMember: boolean, memberSince: string, memberSinceFormatted: string }
+ *
+ * FIFS API (https://medlem.fifs.se/api/docs):
+ *   POST https://medlem.fifs.se/api/validate-member
+ *   Header: X-API-Key: <token>
+ *   Body:   { personnummer: "YYYYMMDD-XXXX" }
+ *   Response: { status, active, myorganization, memberSince? }
+ *
+ * API key: set the Script Property FIFS_API_KEY (Project Settings > Script
+ * properties) or paste it into FALLBACK_API_KEY below. It stays server-side
+ * and never reaches the browser.
  */
+
+var FIFS_API_URL = 'https://medlem.fifs.se/api/validate-member';
+var FALLBACK_API_KEY = '';
 
 function doGet(e) {
   var pnr = e.parameter.pnr;
@@ -21,40 +34,53 @@ function doGet(e) {
     return jsonResponse({ error: 'Invalid PNR', isMember: false, memberSince: '', memberSinceFormatted: '' });
   }
 
-  var url = 'https://medlem.fifs.se/registrera/' + encodeURIComponent(pnr) + '/SCH';
+  // Short cache (2 min) — absorbs double-clicks and softens the FIFS rate limits
+  var cache = CacheService.getScriptCache();
+  var cacheKey = 'fifs_pnr_' + pnr.replace(/[^0-9]/g, '');
+  var cached = cache.get(cacheKey);
+  if (cached !== null) {
+    return jsonResponse(JSON.parse(cached));
+  }
+
+  var apiKey = PropertiesService.getScriptProperties().getProperty('FIFS_API_KEY') || FALLBACK_API_KEY;
+  if (!apiKey) {
+    Logger.log('FIFS proxy: API key missing — set Script Property FIFS_API_KEY');
+    return jsonResponse({ error: 'FIFS API key not configured', isMember: false, memberSince: '', memberSinceFormatted: '' });
+  }
 
   try {
-    var response = UrlFetchApp.fetch(url, { muteHttpExceptions: true });
-    var html = response.getContentText();
+    var response = UrlFetchApp.fetch(FIFS_API_URL, {
+      method: 'post',
+      contentType: 'application/json',
+      headers: { 'X-API-Key': apiKey },
+      payload: JSON.stringify({ personnummer: pnr }),
+      muteHttpExceptions: true
+    });
 
-    var parsed = parseMembershipHtml(html);
+    var code = response.getResponseCode();
+    if (code !== 200) {
+      Logger.log('FIFS API error ' + code + ' for ' + pnr);
+      return jsonResponse({ error: 'FIFS API error ' + code, isMember: false, memberSince: '', memberSinceFormatted: '' });
+    }
+
+    var parsed = mapApiResult(JSON.parse(response.getContentText()));
+    cache.put(cacheKey, JSON.stringify(parsed), 120);
     return jsonResponse(parsed);
 
   } catch (err) {
+    Logger.log('FIFS proxy error: ' + err);
     return jsonResponse({ error: err.toString(), isMember: false, memberSince: '', memberSinceFormatted: '' });
   }
 }
 
-function parseMembershipHtml(html) {
-  var isMember = /Du är redan medlem/i.test(html) || /är redan medlem/i.test(html);
+function mapApiResult(r) {
+  var isMember = r.active === true;
   var memberSince = '';
   var memberSinceFormatted = '';
 
-  if (isMember) {
-    var dm = html.match(/sedan\s*(\d{4})-(\d{2})-(\d{2})/i);
-    if (!dm) dm = html.match(/medlem.*?(\d{4})-(\d{2})-(\d{2})/is);
-    if (!dm) dm = html.match(/(\d{4})-(\d{2})-(\d{2})/);
-
-    if (dm) {
-      memberSince = dm[1] + '-' + dm[2] + '-' + dm[3];
-      var months = [
-        'januari', 'februari', 'mars', 'april', 'maj', 'juni',
-        'juli', 'augusti', 'september', 'oktober', 'november', 'december'
-      ];
-      var mi = parseInt(dm[2], 10) - 1;
-      var d = parseInt(dm[3], 10);
-      memberSinceFormatted = (mi >= 0 && mi < 12) ? d + ' ' + months[mi] + ' ' + dm[1] : memberSince;
-    }
+  if (isMember && r.memberSince) {
+    memberSince = r.memberSince.slice(0, 10); // ISO → YYYY-MM-DD
+    memberSinceFormatted = formatMemberSince(memberSince);
   }
 
   return {
@@ -62,6 +88,18 @@ function parseMembershipHtml(html) {
     memberSince: memberSince,
     memberSinceFormatted: memberSinceFormatted
   };
+}
+
+function formatMemberSince(ymd) {
+  var months = [
+    'januari', 'februari', 'mars', 'april', 'maj', 'juni',
+    'juli', 'augusti', 'september', 'oktober', 'november', 'december'
+  ];
+  var parts = ymd.split('-');
+  if (parts.length !== 3) return ymd;
+  var mi = parseInt(parts[1], 10) - 1;
+  var d = parseInt(parts[2], 10);
+  return (mi >= 0 && mi < 12) ? d + ' ' + months[mi] + ' ' + parts[0] : ymd;
 }
 
 function jsonResponse(obj) {
