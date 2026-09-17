@@ -557,7 +557,7 @@
                                         <label for="p1ssn" class="formbold-form-label" data-i18n="school.form.personal-number">Personnummer</label>
                                         <input type="text" name="Förälder 1 Personnummer" id="p1ssn" placeholder="ÅÅÅÅMMDDXXXX" class="formbold-form-input" required
                                             data-i18n-placeholder="school.form.pnr-placeholder" data-digits
-                                            inputmode="numeric" data-maxdigits="12" pattern="(19|20)\d{10}"
+                                            inputmode="numeric" data-maxdigits="12" pattern="(19|20)\d{10}|0{10,12}"
                                             title="Personnummer måste vara 12 siffror och börja med 19 eller 20"
                                             data-i18n-title="school.form.validation.personal-12-19-20">
                                     </div>
@@ -602,7 +602,7 @@
                                             <label for="p2ssn" class="formbold-form-label" data-i18n="school.form.personal-number">Personnummer</label>
                                             <input type="text" name="Förälder 2 Personnummer" id="p2ssn" placeholder="ÅÅÅÅMMDDXXXX" class="formbold-form-input"
                                                 data-i18n-placeholder="school.form.pnr-placeholder" data-digits
-                                                inputmode="numeric" data-maxdigits="12" pattern="(19|20)\d{10}"
+                                                inputmode="numeric" data-maxdigits="12" pattern="(19|20)\d{10}|0{10,12}"
                                                 title="Personnummer måste vara 12 siffror och börja med 19 eller 20"
                                                 data-i18n-title="school.form.validation.personal-12-19-20">
                                         </div>
@@ -675,7 +675,7 @@
                                             <label class="formbold-form-label" data-i18n="school.form.personal-number">Personnummer</label>
                                             <input type="text" name="Barnets Personnummer" placeholder="ÅÅÅÅMMDDXXXX" class="formbold-form-input" required
                                                 data-i18n-placeholder="school.form.pnr-placeholder" data-digits
-                                                inputmode="numeric" data-maxdigits="12" pattern="(19|20)\d{10}"
+                                                inputmode="numeric" data-maxdigits="12" pattern="(19|20)\d{10}|0{10,12}"
                                                 title="Personnummer måste vara 12 siffror och börja med 19 eller 20"
                                                 data-i18n-title="school.form.validation.personal-12-19-20">
                                         </div>
@@ -788,6 +788,13 @@
                Personnummer, mobil och postnummer sparas alltid som enbart siffror,
                så att "19990101-9999", "199901019999" och "19990101 9999" blir samma värde. */
             const digits = v => String(v == null ? "" : v).replace(/\D/g, "");
+
+            // An all-zero "personal number" (10-12 zeros, with or without a dash, e.g.
+            // 00000000000 or 00000000-0000) is a test/bypass PNR: skip the FIFS lookup.
+            function isBypassPnr(raw) {
+                const d = digits(raw);
+                return d.length >= 10 && /^0+$/.test(d);
+            }
 
             // Longest allowed value, in digits. Enforced here rather than with maxlength,
             // which would truncate "070-123 45 67" before the separators are stripped.
@@ -986,7 +993,7 @@
                                 placeholder="${t("school.form.pnr-placeholder", "ÅÅÅÅMMDDXXXX")}"
                                 data-i18n-placeholder="school.form.pnr-placeholder" data-digits
                                 class="formbold-form-input" required
-                                inputmode="numeric" data-maxdigits="12" pattern="(19|20)\\d{10}"
+                                inputmode="numeric" data-maxdigits="12" pattern="(19|20)\\d{10}|0{10,12}"
                                 title="${t("school.form.validation.personal-12-19-20", "Personnummer måste vara 12 siffror och börja med 19 eller 20")}"
                                 data-i18n-title="school.form.validation.personal-12-19-20">
                         </div>
@@ -1030,6 +1037,27 @@
                 pnrInput.classList.remove("error", "success");
                 membershipVerified = false;
                 verifiedPNR = null;
+
+                // All-zero test PNR: bypass the FIFS check entirely
+                if (isBypassPnr(p)) {
+                    pnrInput.classList.add("success");
+                    resultCard.style.display = "flex";
+                    resultCard.classList.add("success");
+                    resultCard.classList.remove("fail");
+                    resultIcon.innerHTML = '<i class="fas fa-check"></i>';
+                    resultTitle.textContent = t("school.form.membership-bypassed",
+                        "Medlemskapskontrollen hoppades över (testpersonnummer)");
+                    resultSub.textContent = "";
+                    resultLink.style.display = "none";
+                    membershipVerified = true;
+                    verifiedPNR = p;
+
+                    // Keep the step 2 prefill in sync if the PNR was changed after a previous check
+                    const ssnInput = document.getElementById("p1ssn");
+                    if (ssnInput && prevPNR && ssnInput.value === digits(prevPNR)) ssnInput.value = digits(p);
+
+                    return Promise.resolve(true);
+                }
 
                 if (!/^\d{8}-\d{4}$/.test(p)) {
                     pnrInput.classList.add("error");

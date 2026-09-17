@@ -280,7 +280,8 @@
       "membership-yes": "عضو FIFS",
       "membership-since": "عضو منذ",
       "membership-not-found": "ليس عضوًا",
-      "membership-register": "سجل الآن"
+      "membership-register": "سجل الآن",
+      "membership-bypassed": "تم تجاوز فحص العضوية (رقم شخصي تجريبي)"
     },
     "success": {
       "title": "تم التسجيل — مركز السلام",
@@ -384,6 +385,7 @@
     "step1": {
       "checking": "...جار التحقق",
       "invalid-pnr": "رقم شخصي غير صالح.",
+      "membership-bypass": "تم تجاوز فحص العضوية (رقم شخصي تجريبي).",
       "fill-required": "يرجى ملء جميع الحقول المطلوبة (البريد الإلكتروني، الهاتف).",
       "fill-pnr": "يرجى إدخال الرقم الشخصي للعريس (YYYYMMDD-XXXX).",
       "fill-pnr-wife": "يرجى إدخال الرقم الشخصي للعروس (YYYYMMDD-XXXX).",

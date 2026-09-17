@@ -966,6 +966,13 @@
 
         function pnrDigits(raw) { return (raw || '').replace(/[^0-9]/g, ''); }
 
+        // An all-zero "personal number" (10-12 zeros, with or without a dash, e.g.
+        // 00000000000 or 00000000-0000) is a test/bypass PNR: skip the FIFS lookup.
+        window.isBypassPnr = function(raw) {
+            var d = String(raw == null ? '' : raw).replace(/[^0-9]/g, '');
+            return d.length >= 10 && /^0+$/.test(d);
+        };
+
         // PNR input formatting + debounced auto-check
         function setupPnrInput(role) {
             var inputId = 'mem-' + role + '-pnr';
@@ -977,6 +984,20 @@
                 var v = this.value.replace(/[^0-9]/g, '');
                 if (v.length > 8) v = v.slice(0, 8) + '-' + v.slice(8, 12);
                 this.value = v;
+
+                // All-zero test PNR (e.g. 00000000000): bypass the FIFS check immediately
+                if (window.isBypassPnr(this.value)) {
+                    clearTimeout(membershipTimers[role]);
+                    membershipState[role].pnr = this.value;
+                    membershipState[role].member = true;
+                    membershipState[role].verified = true;
+                    membershipState[role].checking = false;
+                    document.getElementById(resultId).innerHTML =
+                        '<span class="membership-text member" data-i18n="marriage.step1.membership-bypass"><i class="fas fa-check-circle me-1"></i> Medlemskapskontrollen hoppades över (testpersonnummer).</span>';
+                    if (window.reapplyTranslations) window.reapplyTranslations();
+                    updateGateState();
+                    return;
+                }
 
                 // Editing a verified PNR re-locks the gate until re-checked
                 if (membershipState[role].verified && this.value !== membershipState[role].pnr) {
@@ -1011,13 +1032,27 @@
             var resultEl = document.getElementById('mem-' + role + '-result');
             var pnr = inputEl.value.trim();
 
+            // All-zero test PNR: bypass the FIFS check
+            if (window.isBypassPnr(pnr)) {
+                clearTimeout(membershipTimers[role]);
+                st.checking = false;
+                st.verified = true;
+                st.member = true;
+                st.pnr = pnr;
+                resultEl.innerHTML =
+                    '<span class="membership-text member" data-i18n="marriage.step1.membership-bypass"><i class="fas fa-check-circle me-1"></i> Medlemskapskontrollen hoppades över (testpersonnummer).</span>';
+                if (window.reapplyTranslations) window.reapplyTranslations();
+                updateGateState();
+                return;
+            }
+
             if (!/^\d{8}-\d{4}$/.test(pnr)) {
                 resultEl.innerHTML = '<span class="membership-text error"><i class="fas fa-exclamation-circle me-1"></i> ' + t1('invalid-pnr', 'Ogiltigt personnummer') + '</span>';
                 return;
             }
 
             // Same-PNR guard (wife must not use the husband's number)
-            if (role === 'wife') {
+            if (role === 'wife' && !window.isBypassPnr(pnr)) {
                 var husbandDigits = pnrDigits(document.getElementById('mem-husband-pnr').value);
                 if (husbandDigits.length === 12 && pnrDigits(pnr) === husbandDigits) {
                     st.verified = false; st.member = false;
@@ -1044,6 +1079,7 @@
                 .catch(function() { return { ok: false }; });
 
             Promise.all([fifsP, sheetP]).then(function(r) {
+                if (inputEl.value.trim() !== pnr) return;   // PNR changed while checking
                 var f = r[0], s = r[1];
                 var isMember = (f.ok && f.data.isMember) || (s.ok && s.data.isFifsInSheet);
                 st.checking = false;
@@ -1085,6 +1121,7 @@
                 if (window.reapplyTranslations) window.reapplyTranslations();
                 updateGateState();
             }).catch(function() {
+                if (inputEl.value.trim() !== pnr) return;   // PNR changed while checking
                 st.checking = false;
                 st.verified = false;
                 st.member = false;
@@ -1149,15 +1186,16 @@
                 alert(t1('fill-required', 'Vänligen fyll i alla obligatoriska fält (e-post, telefon).'));
                 return;
             }
-            if (!/^\d{8}-\d{4}$/.test(husbandPnr)) {
+            if (!/^\d{8}-\d{4}$/.test(husbandPnr) && !window.isBypassPnr(husbandPnr)) {
                 alert(t1('fill-pnr', 'Vänligen ange brudgummens personnummer (ÅÅÅÅMMDD-XXXX).'));
                 return;
             }
-            if (!/^\d{8}-\d{4}$/.test(wifePnr)) {
+            if (!/^\d{8}-\d{4}$/.test(wifePnr) && !window.isBypassPnr(wifePnr)) {
                 alert(t1('fill-pnr-wife', 'Vänligen ange brudens personnummer (ÅÅÅÅMMDD-XXXX).'));
                 return;
             }
-            if (wifePnr.replace(/[^0-9]/g, '') === husbandPnr.replace(/[^0-9]/g, '')) {
+            if (!window.isBypassPnr(wifePnr) && !window.isBypassPnr(husbandPnr) &&
+                wifePnr.replace(/[^0-9]/g, '') === husbandPnr.replace(/[^0-9]/g, '')) {
                 alert(window.getTranslation('marriage.membership-same-pnr', 'Brudens personnummer är samma som brudgummens. Kontrollera att båda numren stämmer.'));
                 return;
             }
@@ -1646,12 +1684,12 @@
             // Validate SSN format
             var wifePnr = getVal('wifePersonalIdInput');
             var husbandPnr = getVal('husbandPersonalIdInput');
-            if (!/^\d{8}-\d{4}$/.test(wifePnr)) {
+            if (!/^\d{8}-\d{4}$/.test(wifePnr) && !window.isBypassPnr(wifePnr)) {
                 alert('Makans personnummer maste vara i formatet AAAAMMDD-XXXX.');
                 document.getElementById('wifePersonalIdInput').focus();
                 return;
             }
-            if (!/^\d{8}-\d{4}$/.test(husbandPnr)) {
+            if (!/^\d{8}-\d{4}$/.test(husbandPnr) && !window.isBypassPnr(husbandPnr)) {
                 alert('Makens personnummer maste vara i formatet AAAAMMDD-XXXX.');
                 document.getElementById('husbandPersonalIdInput').focus();
                 return;

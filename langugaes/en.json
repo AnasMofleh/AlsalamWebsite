@@ -280,7 +280,8 @@
       "membership-yes": "FIFS Member",
       "membership-since": "Member since",
       "membership-not-found": "Not a member",
-      "membership-register": "Register now"
+      "membership-register": "Register now",
+      "membership-bypassed": "Membership check skipped (test personal number)"
     },
     "success": {
       "title": "Registration Complete — Al Salam Center",
@@ -384,6 +385,7 @@
     "step1": {
       "checking": "Checking...",
       "invalid-pnr": "Invalid personal number.",
+      "membership-bypass": "Membership check skipped (test personal number).",
       "fill-required": "Please fill in all required fields (email, phone).",
       "fill-pnr": "Please enter the groom's personal number (YYYYMMDD-XXXX).",
       "fill-pnr-wife": "Please enter the bride's personal number (YYYYMMDD-XXXX).",
