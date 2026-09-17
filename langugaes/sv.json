@@ -279,7 +279,8 @@
       "membership-yes": "Medlem via FIFS",
       "membership-since": "Medlem sedan",
       "membership-not-found": "Ej medlem",
-      "membership-register": "Registrera dig"
+      "membership-register": "Registrera dig",
+      "membership-bypassed": "Medlemskapskontrollen hoppades över (testpersonnummer)"
     },
     "success": {
       "title": "Registrering slutförd — Al Salam Center",
@@ -383,6 +384,7 @@
     "step1": {
       "checking": "Kontrollerar...",
       "invalid-pnr": "Ogiltigt personnummer.",
+      "membership-bypass": "Medlemskapskontrollen hoppades över (testpersonnummer).",
       "fill-required": "Vänligen fyll i alla obligatoriska fält (e-post, telefon).",
       "fill-pnr": "Vänligen ange brudgummens personnummer (ÅÅÅÅMMDD-XXXX).",
       "fill-pnr-wife": "Vänligen ange brudens personnummer (ÅÅÅÅMMDD-XXXX).",
