@@ -212,6 +212,12 @@ function processRegistration(sheet, headers, params) {
     const idx = existing.findIndex(r => String(r[ssnCol]).replace(/[^0-9]/g, '') === ssn.replace(/[^0-9]/g, ''));
 
     if (idx !== -1) {
+      // Preserve admin-managed columns that the form does not know about
+      // (set by the school-admin kanban: class assignment and books flag).
+      const klassCol = headers.indexOf('klass');
+      const booksCol = headers.indexOf('Böcker');
+      if (klassCol !== -1) newRow[klassCol] = existing[idx][klassCol];
+      if (booksCol !== -1) newRow[booksCol] = existing[idx][booksCol];
       sheet.getRange(idx + 2, 1, 1, headers.length).setValues([newRow]);
       updated++;
     } else {
