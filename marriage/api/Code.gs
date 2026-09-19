@@ -49,7 +49,7 @@ var ROOT_FOLDER_ID = '19k773mFMvLlQRswYWgKL2bghyNI4IZLe';
 
 // Bump this on every change to this file and verify after redeploying:
 // open <url>?action=version — it must return the new version number.
-var CODE_VERSION = '10';
+var CODE_VERSION = '11';
 
 // ── Main entry points ──────────────────────────────────────────
 
@@ -152,6 +152,8 @@ function handleSubmitRequest(e) {
   const isMember      = (e.parameter.isMember      || '').trim();
   const husbandMember = (e.parameter.husbandMember || isMember || '').trim();
   const wifeMember    = (e.parameter.wifeMember    || isMember || '').trim();
+  // New clients send the chosen path: 'paid' (Stripe fee) or 'member' (FIFS member)
+  const path          = (e.parameter.path          || '').trim();
 
   if (!email || !phone || !husbandPnr || !wifePnr) {
     return jsonResponse({ success: false, error: 'Missing required fields: email, phone, husbandPnr, wifePnr' });
@@ -203,6 +205,7 @@ function handleSubmitRequest(e) {
     + '&preferredTime=' + encodeURIComponent(preferredTime)
     + '&personnummer=' + encodeURIComponent(husbandPnr)
     + '&wifePnr=' + encodeURIComponent(wifePnr)
+    + '&path=' + encodeURIComponent(path)
     + '&husbandMember=' + encodeURIComponent(husbandMember)
     + '&wifeMember=' + encodeURIComponent(wifeMember);
   const gasUrl = (e.parameter.gasUrl || '').trim();
@@ -212,6 +215,9 @@ function handleSubmitRequest(e) {
   const mosqueSubject = 'Ny vigselförfrågan - ' + husbandPnr + ' & ' + wifePnr;
   const contractLink = 'https://alsalamcenter.se/marriage/?step=2';
   const folderLink = coupleFolder.getUrl();
+  const pathText = path === 'paid' ? 'Betald via Stripe — 1 200 SEK'
+                 : path === 'member' ? 'Medlem i moskén — ingen avgift nu'
+                 : '';
   const husbandMemberText = husbandMember === 'true' ? 'Ja' : 'Nej';
   const wifeMemberText = wifeMember === 'true' ? 'Ja' : 'Nej';
   const dateDisplay = preferredDate || '---';
@@ -235,8 +241,10 @@ function handleSubmitRequest(e) {
     '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Brudens personnummer:</td><td>' + wifePnr + '</td></tr>',
     '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">E-post:</td><td><a href="' + emailLink + '" style="color:#15546f;">' + email + '</a></td></tr>',
     '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Telefon:</td><td>' + (phoneLink ? '<a href="' + phoneLink + '" style="color:#15546f;">' + phoneDisplay + '</a>' : phoneDisplay) + '</td></tr>',
-    '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Brudgummen medlem:</td><td>' + husbandMemberText + '</td></tr>',
-    '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Bruden medlem:</td><td>' + wifeMemberText + '</td></tr>',
+    (pathText
+      ? '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Betalningsval:</td><td>' + pathText + '</td></tr>'
+      : '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Brudgummen medlem:</td><td>' + husbandMemberText + '</td></tr>'
+        + '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Bruden medlem:</td><td>' + wifeMemberText + '</td></tr>'),
     '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Önskat datum:</td><td>' + dateDisplay + '</td></tr>',
     '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Önskad tid:</td><td>' + timeDisplay + '</td></tr>',
     '<tr><td style="font-weight:700;white-space:nowrap;vertical-align:top;padding-right:12px;">Önskemål:</td><td>' + notesDisplay + '</td></tr>',
@@ -305,6 +313,7 @@ function handleConfirm(e) {
   const isMember      = (e.parameter.isMember      || '').trim();
   const husbandMember = (e.parameter.husbandMember || isMember || '').trim();
   const wifeMember    = (e.parameter.wifeMember    || '').trim();
+  const path          = (e.parameter.path          || '').trim();
   const gasUrl        = ScriptApp.getService().getUrl();
 
   if (!email || !preferredDate || !personnummer) {
@@ -315,6 +324,14 @@ function handleConfirm(e) {
       '</body></html>'
     );
   }
+
+  var pathText = path === 'paid' ? 'Betald via Stripe — 1 200 SEK'
+               : path === 'member' ? 'Medlem i moskén — ingen avgift nu'
+               : '';
+  var memberRows = pathText
+    ? '<tr><td>Betalningsval:</td><td>' + pathText + '</td></tr>'
+    : '<tr><td>Brudgummen medlem:</td><td>' + (husbandMember === 'true' ? 'Ja' : 'Nej') + '</td></tr>'
+      + (wifePnr ? '<tr><td>Bruden medlem:</td><td>' + (wifeMember === 'true' ? 'Ja' : 'Nej') + '</td></tr>' : '');
 
   // Show an editable form so the imam can adjust date/time before confirming
   var html = [
@@ -344,8 +361,7 @@ function handleConfirm(e) {
     '<tr><td>Brudgummens personnummer:</td><td>' + personnummer + '</td></tr>',
     (wifePnr ? '<tr><td>Brudens personnummer:</td><td>' + wifePnr + '</td></tr>' : ''),
     '<tr><td>E-post:</td><td>' + email + '</td></tr>',
-    '<tr><td>Brudgummen medlem:</td><td>' + (husbandMember === 'true' ? 'Ja' : 'Nej') + '</td></tr>',
-    (wifePnr ? '<tr><td>Bruden medlem:</td><td>' + (wifeMember === 'true' ? 'Ja' : 'Nej') + '</td></tr>' : ''),
+    memberRows,
     '</table>',
     '<p style="font-size:14px;color:#666;">Justera datum och tid vid behov, klicka sedan på Bekräfta.</p>',
     '<div class="row"><label for="dateInput">Datum</label><input type="date" id="dateInput" value="' + preferredDate + '"></div>',
@@ -368,6 +384,7 @@ function handleConfirm(e) {
     'params.append("wifePnr","' + wifePnr + '");',
     'params.append("husbandMember","' + husbandMember + '");',
     'params.append("wifeMember","' + wifeMember + '");',
+    'params.append("path","' + path + '");',
     'fetch("' + gasUrl + '",{method:"POST",body:params})',
     '.then(function(r){return r.text().then(function(txt){try{return JSON.parse(txt);}catch(e){if(r.ok)return{success:true};throw new Error(txt.substring(0,200));}});})',
     '.then(function(r){',
@@ -409,10 +426,19 @@ function handleConfirmSubmit(e) {
   const isMember      = (e.parameter.isMember      || '').trim();
   const husbandMember = (e.parameter.husbandMember || isMember || '').trim();
   const wifeMember    = (e.parameter.wifeMember    || '').trim();
+  const path          = (e.parameter.path          || '').trim();
 
   if (!email || !preferredDate || !personnummer) {
     return jsonResponse({ success: false, error: 'Saknad information (email, datum, personnummer).' });
   }
+
+  const pathLine = path === 'paid' ? 'Betald via Stripe — 1 200 SEK'
+                 : path === 'member' ? 'Medlem i moskén — ingen avgift nu'
+                 : '';
+  const memberLines = pathLine
+    ? '\nBetalningsval: ' + pathLine
+    : '\nBrudgummen medlem: ' + (husbandMember === 'true' ? 'Ja' : 'Nej')
+      + (wifePnr ? '\nBruden medlem: ' + (wifeMember === 'true' ? 'Ja' : 'Nej') : '');
 
   // Parse date + time and create calendar event (2 hours)
   const startTime = new Date(preferredDate + 'T' + preferredTime + ':00');
@@ -434,8 +460,7 @@ function handleConfirmSubmit(e) {
         description: 'Personnummer (brudgum): ' + personnummer
           + (wifePnr ? '\nPersonnummer (brud): ' + wifePnr : '')
           + '\nEmail: ' + email + '\nDatum: ' + preferredDate + '\nTid: ' + preferredTime
-          + '\nBrudgummen medlem: ' + (husbandMember === 'true' ? 'Ja' : 'Nej')
-          + (wifePnr ? '\nBruden medlem: ' + (wifeMember === 'true' ? 'Ja' : 'Nej') : '')
+          + memberLines
       }
     );
     var eventId = event.getId().replace('@google.com', '');

@@ -60,67 +60,54 @@
                 </div>
             </div>
 
-            <!-- Info + Form wrapper (hidden on submit) -->
-            <div id="request-form-wrapper">
-
-            <!-- ── Step indicator ── -->
-            <div class="marriage-wizard-steps">
-                <ul>
-                    <li class="marriage-wizard-menu1 active" data-i18n="marriage.wizard-step-membership">
-                        <span>1</span> Medlemskap
-                    </li>
-                    <li class="marriage-wizard-menu2" data-i18n="marriage.wizard-step-request">
-                        <span>2</span> Tidförfrågan
-                    </li>
-                </ul>
-            </div>
-
-            <!-- ═══ STEP 1: Membership gate (both must be FIFS members) ═══ -->
-            <div class="marriage-wizard-step-1 active">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
+            <!-- Choice State (pay now vs pay later, shown after validation, before submitting) -->
+            <div class="row justify-content-center" id="request-choice" style="display:none;">
+                <div class="col-lg-10">
                     <div class="card shadow-sm border-0 mb-4">
-                        <div class="card-body p-5">
-                            <div class="text-center mb-4">
-                                <div class="mb-3">
-                                    <i class="fas fa-id-card fa-3x text-success"></i>
+                        <div class="card-body p-4 p-md-5">
+                            <div class="row g-3">
+                                <!-- Option A: Pay now -->
+                                <div class="col-md-6">
+                                    <div class="card h-100 border-0 shadow-sm choice-card">
+                                        <div class="card-body text-center p-4 d-flex flex-column">
+                                            <div class="mb-2">
+                                                <i class="fas fa-credit-card fa-2x text-primary"></i>
+                                            </div>
+                                            <h5 class="mb-3" data-i18n="marriage.choice-pay-title">Betala nu</h5>
+                                            <button type="button" class="btn btn-primary btn-lg w-100" id="btn-choice-pay" data-i18n="marriage.pay-button">Betala 1 200 SEK</button>
+                                            <small class="text-muted mt-3" data-i18n="marriage.choice-pay-description">Avgiften är 1 200 SEK (inklusive 25% moms). Efter betalningen kommer ni direkt till äktenskapskontraktet.</small>
+                                        </div>
+                                    </div>
                                 </div>
-                                <h3 data-i18n="marriage.membership-step-title">Steg 1: Kontrollera FIFS-medlemskap</h3>
-                                <p class="text-muted" data-i18n="marriage.membership-step-description">Både brudgummen och bruden måste vara medlemmar i moskén via FIFS innan förfrågan kan skickas. Ange personnummer nedan för att kontrollera medlemskapet.</p>
+                                <!-- Option B: Pay later (become member) -->
+                                <div class="col-md-6">
+                                    <div class="card h-100 border-0 shadow-sm choice-card">
+                                        <div class="card-body text-center p-4 d-flex flex-column">
+                                            <div class="mb-2">
+                                                <i class="fas fa-users fa-2x text-success"></i>
+                                            </div>
+                                            <h5 class="mb-3" data-i18n="marriage.choice-member-title">Betala senare</h5>
+                                            <a id="btn-choice-fifs-register" href="#" target="_blank" rel="noopener" class="btn btn-outline-success btn-lg w-100">
+                                                <i class="fas fa-external-link-alt me-1"></i><span data-i18n="marriage.membership-register-link">Registrera dig hos FIFS</span>
+                                            </a>
+                                            <small class="text-muted mt-3" data-i18n="marriage.choice-member-description">Bli medlem i moskén via FIFS så behöver ni inte betala någon avgift nu.</small>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-
-                            <!-- Husband -->
-                            <div class="mb-4">
-                                <label class="form-label fw-bold" data-i18n="marriage.field-husband-pnr">Brudgummens personnummer *</label>
-                                <input type="text" class="form-control form-control-lg" id="mem-husband-pnr" placeholder="ÅÅÅÅMMDD-XXXX" maxlength="13" autocomplete="off">
-                                <div id="mem-husband-result" class="mt-2"></div>
-                            </div>
-
-                            <!-- Wife -->
-                            <div class="mb-4">
-                                <label class="form-label fw-bold" data-i18n="marriage.field-wife-pnr">Brudens personnummer *</label>
-                                <input type="text" class="form-control form-control-lg" id="mem-wife-pnr" placeholder="ÅÅÅÅMMDD-XXXX" maxlength="13" autocomplete="off">
-                                <div id="mem-wife-result" class="mt-2"></div>
-                            </div>
-
-                            <div id="membership-gate-note" class="alert alert-info mb-0" role="alert" data-i18n="marriage.membership-gate-note">
-                                Förfrågan kan skickas först när både brudgummen och bruden är verifierade medlemmar i FIFS.
-                            </div>
-
-                            <div class="text-end mt-4">
-                                <button type="button" class="marriage-wizard-next" id="btn-marriage-next-1" disabled>
-                                    <span data-i18n="marriage.wizard-next">Nästa steg</span>
-                                    <i class="fas fa-arrow-right"></i>
-                                </button>
+                            <div class="text-center mt-4">
+                                <button type="button" class="btn btn-link text-muted" id="btn-choice-back" data-i18n="marriage.wizard-back">Tillbaka</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            </div><!-- /marriage-wizard-step-1 -->
 
-            <!-- ═══ STEP 2: Time request (info + form) ═══ -->
-            <div class="marriage-wizard-step-2" id="request-form-body">
+            <!-- Info + Form wrapper (hidden on submit) -->
+            <div id="request-form-wrapper">
+
+            <!-- Time request (info + form) -->
+            <div id="request-form-body">
 
             <!-- Info Section -->
             <div class="row justify-content-center">
@@ -191,6 +178,18 @@
                                         <label class="form-label fw-bold" data-i18n="marriage.field-phone">Telefonnummer (för WhatsApp-bekräftelse) *</label>
                                         <input type="tel" class="form-control form-control-lg" id="req-phone" placeholder="07XXXXXXXXX" required>
                                         <small class="text-muted" data-i18n="marriage.field-phone-hint">Moskén kommer att kontakta er via WhatsApp för att bekräfta tiden.</small>
+                                    </div>
+                                </div>
+
+                                <!-- Personal numbers -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold" data-i18n="marriage.field-husband-pnr">Brudgummens personnummer *</label>
+                                        <input type="text" class="form-control form-control-lg" id="mem-husband-pnr" placeholder="ÅÅÅÅMMDD-XXXX" maxlength="13" autocomplete="off">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold" data-i18n="marriage.field-wife-pnr">Brudens personnummer *</label>
+                                        <input type="text" class="form-control form-control-lg" id="mem-wife-pnr" placeholder="ÅÅÅÅMMDD-XXXX" maxlength="13" autocomplete="off">
                                     </div>
                                 </div>
 
@@ -291,9 +290,8 @@
 
                             </form>
 
-                            <!-- Step 2 navigation -->
+                            <!-- Navigation -->
                             <div class="marriage-wizard-btn-wrapper">
-                                <button type="button" class="marriage-wizard-back" id="btn-marriage-back" data-i18n="marriage.wizard-back">Tillbaka</button>
                                 <button type="button" class="marriage-wizard-next" id="btn-marriage-next" data-i18n="marriage.submit-request">Skicka förfrågan</button>
                             </div>
                         </div>
@@ -716,58 +714,10 @@
             color: #533b03;
         }
 
-        /* ── Step wizard (school-style step indicator + panels) ── */
-        .marriage-wizard-steps { margin-bottom: 32px; }
-        .marriage-wizard-steps ul {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            flex-wrap: nowrap;
-        }
-        .marriage-wizard-steps li {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex: 1;
-            gap: 8px;
-            padding: 10px 22px;
-            border-radius: 40px;
-            background: #f3f4f6;
-            color: #6b7280;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all .3s;
-            cursor: default;
-            white-space: nowrap;
-        }
-        @media (max-width: 576px) {
-            .marriage-wizard-steps ul { gap: 6px; }
-            .marriage-wizard-steps li { padding: 10px 10px; font-size: 0.8rem; gap: 6px; }
-        }
-        .marriage-wizard-steps li span {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 28px; height: 28px;
-            border-radius: 50%;
-            background: #d1d5db;
-            color: #fff;
-            font-size: 0.8rem;
-            font-weight: 700;
-            transition: all .3s;
-        }
-        .marriage-wizard-steps li.active { background: #1a8a1f; color: #fff; }
-        .marriage-wizard-steps li.active span { background: #fff; color: #1a8a1f; }
-        .marriage-wizard-steps li.done { background: #e8f5e9; color: #1a8a1f; }
-        .marriage-wizard-steps li.done span { background: #1a8a1f; color: #fff; }
-
-        .marriage-wizard-step-1,
-        .marriage-wizard-step-2 { display: none; }
-        .marriage-wizard-step-1.active,
-        .marriage-wizard-step-2.active { display: block; }
+        /* ── Pay vs. become-member choice cards ── */
+        .choice-card { transition: box-shadow .2s, transform .2s; }
+        .choice-card:hover { box-shadow: 0 .5rem 1rem rgba(0,0,0,.12) !important; transform: translateY(-2px); }
+        .choice-card .card-body { min-height: 240px; }
 
         .marriage-wizard-btn-wrapper {
             display: flex;
@@ -857,7 +807,6 @@
                 delete uploadedFiles[docKey];
                 thumb.src = '';
                 nameEl.textContent = '';
-                updateSubmitButton();
             });
         }
 
@@ -897,71 +846,14 @@
                 }
                 nameEl.textContent = file.name;
                 nameEl.style.color = '#198754';
-                updateSubmitButton();
             };
             reader.readAsDataURL(file);
         }
 
-        function updateSubmitButton() {
-            // Button state is governed by the membership gate; validation happens on submit.
-            updateGateState();
-        }
-
-        // ── Membership gate: both husband & wife must be verified FIFS members ──
-        var membershipState = {
-            husband: { pnr: '', member: false, verified: false, checking: false },
-            wife:    { pnr: '', member: false, verified: false, checking: false }
-        };
-        var membershipTimers = {};
-
-        var FIFS_PROXY_URL = 'https://script.google.com/macros/s/AKfycbxZ08tC4z_P815a44QCUYxZTAvRnYay3W6k3XENWH5-X0T07l4fFiqdJJS1zrd0uOv64g/exec';
-        var SHEET_PROXY_URL = 'https://script.google.com/macros/s/AKfycbzRlibFil1ukVgnxlWCALnEuY28K2JwxDncftIy7CetjwHwkoee3xj7xsbKnRTI1y9s/exec';
-
-        // Enables the Step-1 "Nästa steg" button (turns green) only when both are verified members
-        function updateGateState() {
-            var unlocked = membershipState.husband.verified && membershipState.husband.member &&
-                           membershipState.wife.verified && membershipState.wife.member;
-            var nextBtn = document.getElementById('btn-marriage-next-1');
-            var note = document.getElementById('membership-gate-note');
-            if (nextBtn) nextBtn.disabled = !unlocked;
-            if (note) note.style.display = unlocked ? 'none' : 'block';
-        }
-
-        // ── Step wizard (progress indicator + panels) ──
-        function wizardShowStep(index, scroll) {
-            var panels = document.querySelectorAll('.marriage-wizard-step-1, .marriage-wizard-step-2');
-            panels.forEach(function(el, i) { el.classList.toggle('active', i === index); });
-            ['marriage-wizard-menu1', 'marriage-wizard-menu2'].forEach(function(cls, i) {
-                var m = document.querySelector('.' + cls);
-                if (!m) return;
-                m.classList.toggle('active', i === index);
-                if (i < index) m.classList.add('done'); else m.classList.remove('done');
-            });
-            if (scroll) {
-                var anchor = document.querySelector('.marriage-wizard-steps');
-                if (anchor) {
-                    window.scrollTo({ top: anchor.getBoundingClientRect().top + window.pageYOffset - 100, behavior: 'smooth' });
-                }
-            }
-        }
-
-        // Step 1: "Nästa steg" (enabled by updateGateState when both are members)
-        var btnNext1 = document.getElementById('btn-marriage-next-1');
-        if (btnNext1) {
-            btnNext1.addEventListener('click', function() {
-                if (btnNext1.disabled) return;
-                wizardShowStep(1, true);
-            });
-        }
-        // Step 2: "Skicka förfrågan"
+        // "Skicka förfrågan"
         var btnSubmit2 = document.getElementById('btn-marriage-next');
         if (btnSubmit2) {
             btnSubmit2.addEventListener('click', function() { submitRequest(); });
-        }
-        // Step 2: "Tillbaka"
-        var btnBack = document.getElementById('btn-marriage-back');
-        if (btnBack) {
-            btnBack.addEventListener('click', function() { wizardShowStep(0, true); });
         }
 
         function pnrDigits(raw) { return (raw || '').replace(/[^0-9]/g, ''); }
@@ -973,194 +865,37 @@
             return d.length >= 10 && /^0+$/.test(d);
         };
 
-        // PNR input formatting + debounced auto-check
+        // PNR input dash auto-formatting (ÅÅÅÅMMDD-XXXX)
         function setupPnrInput(role) {
-            var inputId = 'mem-' + role + '-pnr';
-            var resultId = 'mem-' + role + '-result';
-            var el = document.getElementById(inputId);
+            var el = document.getElementById('mem-' + role + '-pnr');
             if (!el) return;
-
             el.addEventListener('input', function() {
                 var v = this.value.replace(/[^0-9]/g, '');
                 if (v.length > 8) v = v.slice(0, 8) + '-' + v.slice(8, 12);
                 this.value = v;
-
-                // All-zero test PNR (e.g. 00000000000): bypass the FIFS check immediately
-                if (window.isBypassPnr(this.value)) {
-                    clearTimeout(membershipTimers[role]);
-                    membershipState[role].pnr = this.value;
-                    membershipState[role].member = true;
-                    membershipState[role].verified = true;
-                    membershipState[role].checking = false;
-                    document.getElementById(resultId).innerHTML =
-                        '<span class="membership-text member" data-i18n="marriage.step1.membership-bypass"><i class="fas fa-check-circle me-1"></i> Medlemskapskontrollen hoppades över (testpersonnummer).</span>';
-                    if (window.reapplyTranslations) window.reapplyTranslations();
-                    updateGateState();
-                    return;
-                }
-
-                // Editing a verified PNR re-locks the gate until re-checked
-                if (membershipState[role].verified && this.value !== membershipState[role].pnr) {
-                    membershipState[role].verified = false;
-                    membershipState[role].member = false;
-                    document.getElementById(resultId).innerHTML = '';
-                    updateGateState();
-                }
-
-                clearTimeout(membershipTimers[role]);
-                var resultEl = document.getElementById(resultId);
-                if (/^\d{8}-\d{4}$/.test(this.value)) {
-                    membershipTimers[role] = setTimeout(function() { checkMembershipFor(role); }, 600);
-                } else if (this.value.length > 0) {
-                    // Show "incomplete" hint while typing
-                    resultEl.innerHTML = '<span class="membership-text hint">' + t1('invalid-pnr', 'Ange fullständigt personnummer (ÅÅÅÅMMDD-XXXX)') + '</span>';
-                } else {
-                    resultEl.innerHTML = '';
-                }
             });
         }
 
-        function renderRecheckButton(role) {
-            return '<button type="button" class="btn btn-sm btn-outline-primary ms-2" onclick="window.checkMembershipFor(\'' + role + '\')"><i class="fas fa-sync-alt me-1"></i><span data-i18n="marriage.membership-recheck">Kontrollera igen</span></button>';
+        // FIFS registration portal URL for a personal number
+        function buildFifsRegUrl(pnr) {
+            return 'https://medlem.fifs.se/registrera/' + pnr.replace(/[^0-9]/g, '') + '/SCH';
         }
 
-        // Membership check for one person ('husband' | 'wife')
-        window.checkMembershipFor = function(role) {
-            var st = membershipState[role];
-            if (!st) return;
-            var inputEl = document.getElementById('mem-' + role + '-pnr');
-            var resultEl = document.getElementById('mem-' + role + '-result');
-            var pnr = inputEl.value.trim();
-
-            // All-zero test PNR: bypass the FIFS check
-            if (window.isBypassPnr(pnr)) {
-                clearTimeout(membershipTimers[role]);
-                st.checking = false;
-                st.verified = true;
-                st.member = true;
-                st.pnr = pnr;
-                resultEl.innerHTML =
-                    '<span class="membership-text member" data-i18n="marriage.step1.membership-bypass"><i class="fas fa-check-circle me-1"></i> Medlemskapskontrollen hoppades över (testpersonnummer).</span>';
-                if (window.reapplyTranslations) window.reapplyTranslations();
-                updateGateState();
-                return;
+        // ── Pay vs. pay-later choice (shown after the form validates) ──
+        window.showRequestChoice = function() {
+            var husbandPnr = document.getElementById('mem-husband-pnr').value.trim();
+            var fifsLink = document.getElementById('btn-choice-fifs-register');
+            if (fifsLink && /^\d{8}-\d{4}$/.test(husbandPnr)) {
+                fifsLink.href = buildFifsRegUrl(husbandPnr);
             }
-
-            if (!/^\d{8}-\d{4}$/.test(pnr)) {
-                resultEl.innerHTML = '<span class="membership-text error"><i class="fas fa-exclamation-circle me-1"></i> ' + t1('invalid-pnr', 'Ogiltigt personnummer') + '</span>';
-                return;
-            }
-
-            // Same-PNR guard (wife must not use the husband's number)
-            if (role === 'wife' && !window.isBypassPnr(pnr)) {
-                var husbandDigits = pnrDigits(document.getElementById('mem-husband-pnr').value);
-                if (husbandDigits.length === 12 && pnrDigits(pnr) === husbandDigits) {
-                    st.verified = false; st.member = false;
-                    resultEl.innerHTML = '<span class="membership-text error" data-i18n="marriage.membership-same-pnr"><i class="fas fa-exclamation-circle me-1"></i> Brudens personnummer är samma som brudgummens. Kontrollera att båda numren stämmer.</span>';
-                    if (window.reapplyTranslations) window.reapplyTranslations();
-                    updateGateState();
-                    return;
-                }
-            }
-
-            if (st.checking) return;
-            st.checking = true;
-
-            resultEl.innerHTML = '<span class="membership-text checking"><span class="spinner-border spinner-border-sm me-1" style="width:14px;height:14px;"></span> ' + t1('checking', 'Kontrollerar medlemskap...') + '</span>';
-
-            var regUrl = 'https://medlem.fifs.se/registrera/' + pnr.replace(/[^0-9]/g, '') + '/SCH';
-
-            var fifsP = fetch(FIFS_PROXY_URL + '?pnr=' + encodeURIComponent(pnr))
-                .then(function(r) { return r.json().then(function(j) { return { ok: true, data: j }; }); })
-                .catch(function() { return { ok: false }; });
-
-            var sheetP = fetch(SHEET_PROXY_URL + '?pnr=' + encodeURIComponent(pnr))
-                .then(function(r) { return r.json().then(function(j) { return { ok: true, data: j }; }); })
-                .catch(function() { return { ok: false }; });
-
-            Promise.all([fifsP, sheetP]).then(function(r) {
-                if (inputEl.value.trim() !== pnr) return;   // PNR changed while checking
-                var f = r[0], s = r[1];
-                var isMember = (f.ok && f.data.isMember) || (s.ok && s.data.isFifsInSheet);
-                st.checking = false;
-
-                // Both sources failed → error state (never a false "not member")
-                if (!f.ok && !s.ok) {
-                    st.verified = false;
-                    st.member = false;
-                    resultEl.innerHTML = '<span class="membership-text error" data-i18n="marriage.membership-error"><i class="fas fa-exclamation-circle me-1"></i> Kunde inte kontrollera medlemskap. Försök igen.</span>' + renderRecheckButton(role);
-                    if (window.reapplyTranslations) window.reapplyTranslations();
-                    updateGateState();
-                    return;
-                }
-
-                st.verified = true;
-                st.member = isMember;
-                st.pnr = pnr;
-
-                if (isMember) {
-                    resultEl.innerHTML = '<span class="membership-text member" data-i18n="marriage.membership-member-' + role + '"><i class="fas fa-check-circle me-1"></i> ' + (role === 'husband' ? 'Brudgummen är medlem i FIFS.' : 'Bruden är medlem i FIFS.') + '</span>';
-                } else {
-                    var extra = '';
-                    if (role === 'wife') {
-                        extra = '<div class="mt-2"><span class="text-muted small" data-i18n="marriage.membership-copy-link-hint">Skicka länken till bruden så att hon kan registrera sig.</span></div>' +
-                                '<button type="button" class="btn btn-sm btn-outline-success mt-2" id="btn-copy-wife-link" onclick="window.copyLinkToWife()"><i class="fas fa-copy me-1"></i><span data-i18n="marriage.membership-copy-link">Kopiera registreringslänk</span></button> ' +
-                                '<span id="wife-copy-feedback" class="small"></span>';
-                    }
-                    // Husband registers himself via the direct link; the wife's link
-                    // is only sent to her via the copy button below.
-                    var registerLinkHtml = role === 'husband'
-                        ? ' <a href="' + regUrl + '" target="_blank" rel="noopener" class="membership-link"><span data-i18n="marriage.membership-register-link">Registrera dig hos FIFS</span> <i class="fas fa-external-link-alt fa-xs"></i></a>'
-                        : '';
-                    resultEl.innerHTML =
-                        '<span class="membership-text not-member"><i class="fas fa-info-circle me-1"></i> <span data-i18n="marriage.membership-not-member-' + role + '">' + (role === 'husband' ? 'Brudgummen är inte medlem i FIFS. Han måste registrera sig som medlem innan ni kan skicka förfrågan.' : 'Bruden är inte medlem i FIFS. Hon måste registrera sig som medlem innan ni kan skicka förfrågan.') + '</span></span>' +
-                        registerLinkHtml +
-                        renderRecheckButton(role) + extra;
-                }
-
-                if (window.reapplyTranslations) window.reapplyTranslations();
-                updateGateState();
-            }).catch(function() {
-                if (inputEl.value.trim() !== pnr) return;   // PNR changed while checking
-                st.checking = false;
-                st.verified = false;
-                st.member = false;
-                resultEl.innerHTML = '<span class="membership-text error" data-i18n="marriage.membership-error"><i class="fas fa-exclamation-circle me-1"></i> Kunde inte kontrollera medlemskap. Försök igen.</span>' + renderRecheckButton(role);
-                if (window.reapplyTranslations) window.reapplyTranslations();
-                updateGateState();
-            });
+            document.getElementById('request-form-wrapper').style.display = 'none';
+            document.getElementById('request-choice').style.display = 'flex';
+            document.getElementById('request-choice').scrollIntoView({ behavior: 'smooth' });
         };
 
-        // Copy the wife's personalized FIFS registration link to the clipboard
-        window.copyLinkToWife = function() {
-            var pnr = document.getElementById('mem-wife-pnr').value.trim();
-            if (!/^\d{8}-\d{4}$/.test(pnr)) return;
-            var url = 'https://medlem.fifs.se/registrera/' + pnr.replace(/[^0-9]/g, '') + '/SCH';
-            var feedback = document.getElementById('wife-copy-feedback');
-            var done = function() {
-                if (feedback) feedback.innerHTML = '<span class="text-success" data-i18n="marriage.membership-copy-link-done">Länken är kopierad! Klistra in den i ett meddelande till bruden.</span>';
-                if (window.reapplyTranslations) window.reapplyTranslations();
-            };
-            var fail = function() {
-                if (feedback) feedback.innerHTML = '<span class="text-danger" data-i18n="marriage.membership-copy-link-error">Kunde inte kopiera automatiskt. Kopiera länken manuellt.</span>';
-                if (window.reapplyTranslations) window.reapplyTranslations();
-            };
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(url).then(done, fail);
-            } else {
-                // Fallback for non-secure contexts (local http testing)
-                try {
-                    var ta = document.createElement('textarea');
-                    ta.value = url;
-                    ta.style.position = 'fixed';
-                    ta.style.opacity = '0';
-                    document.body.appendChild(ta);
-                    ta.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(ta);
-                    done();
-                } catch (e) { fail(); }
-            }
+        window.hideRequestChoice = function() {
+            document.getElementById('request-choice').style.display = 'none';
+            document.getElementById('request-form-wrapper').style.display = 'block';
         };
 
         setupPnrInput('husband');
@@ -1175,6 +910,7 @@
         };
 
         // ── Submit request ───────────────────────────────────────
+        // Validates the form, then shows the pay-vs-member choice screen.
         window.submitRequest = function() {
             var email       = document.getElementById('req-email').value.trim();
             var phone       = document.getElementById('req-phone').value.trim();
@@ -1199,12 +935,6 @@
                 alert(window.getTranslation('marriage.membership-same-pnr', 'Brudens personnummer är samma som brudgummens. Kontrollera att båda numren stämmer.'));
                 return;
             }
-            // Membership gate: both must be verified FIFS members
-            if (!(membershipState.husband.verified && membershipState.husband.member) ||
-                !(membershipState.wife.verified && membershipState.wife.member)) {
-                alert(t1('fill-membership', 'Både brudgummen och bruden måste vara verifierade medlemmar i FIFS innan ni skickar förfrågan.'));
-                return;
-            }
             if (!document.getElementById('req-preferred-date').value.trim()) {
                 alert(t1('fill-date', 'Vänligen välj ett önskat datum för ceremonin.'));
                 return;
@@ -1219,7 +949,18 @@
                 return;
             }
 
-            var btn = document.getElementById('btn-marriage-next');
+            window.showRequestChoice();
+        };
+
+        // Sends the request with the chosen path: 'paid' (Stripe) or 'member' (FIFS)
+        window.sendRequest = function(path) {
+            var email       = document.getElementById('req-email').value.trim();
+            var phone       = document.getElementById('req-phone').value.trim();
+            var husbandPnr  = document.getElementById('mem-husband-pnr').value.trim();
+            var wifePnr     = document.getElementById('mem-wife-pnr').value.trim();
+
+            var btnId = path === 'paid' ? 'btn-choice-pay' : 'btn-choice-fifs-register';
+            var btn = document.getElementById(btnId);
             var origHTML = btn.innerHTML;
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> ' + t1('sending', 'Skickar...');
@@ -1234,8 +975,7 @@
             params.append('preferredTime', document.getElementById('req-preferred-time').value.trim());
             params.append('husbandPnr', husbandPnr);
             params.append('wifePnr', wifePnr);
-            params.append('husbandMember', membershipState.husband.member ? 'true' : 'false');
-            params.append('wifeMember', membershipState.wife.member ? 'true' : 'false');
+            params.append('path', path);
             params.append('gasUrl', 'https://script.google.com/macros/s/AKfycbyBdihaThtMfp_qYi16SRr9gP9fd9X9a7yO-PNZLCxMVfukwN9Wja2AN_tPT1HuIqBP/exec');
 
             // Append files
@@ -1264,20 +1004,32 @@
                 });
             })
             .then(function(result) {
-                btn.disabled = false;
-                btn.innerHTML = origHTML;
-                if (result.success) {
-                    try { localStorage.setItem('marriage-email', email); } catch(e) {}
-                    try { localStorage.setItem('marriage-husband-pnr', husbandPnr); } catch(e) {}
-                    try { localStorage.setItem('marriage-wife-pnr', wifePnr); } catch(e) {}
-                    try { localStorage.setItem('marriage-phone', phone); } catch(e) {}
-                    try { localStorage.setItem('marriage-husband-member', membershipState.husband.member ? 'true' : 'false'); } catch(e) {}
-                    try { localStorage.setItem('marriage-wife-member', membershipState.wife.member ? 'true' : 'false'); } catch(e) {}
-                    document.getElementById('request-form-wrapper').style.display = 'none';
+                if (!result.success) {
+                    btn.disabled = false;
+                    btn.innerHTML = origHTML;
+                    alert(t1('error-server', 'Något gick fel: ') + (result.error || 'Okänt fel') + '\n' + t1('error-contact-mosque', 'Vänligen försök igen eller kontakta moskén direkt.'));
+                    return;
+                }
+                try { localStorage.setItem('marriage-email', email); } catch(e) {}
+                try { localStorage.setItem('marriage-husband-pnr', husbandPnr); } catch(e) {}
+                try { localStorage.setItem('marriage-wife-pnr', wifePnr); } catch(e) {}
+                try { localStorage.setItem('marriage-phone', phone); } catch(e) {}
+                try { localStorage.setItem('marriage-path', path); } catch(e) {}
+                // Step 2 derives isMember from these; member path = no fee (member), paid path = not member
+                try { localStorage.setItem('marriage-husband-member', path === 'member' ? 'true' : 'false'); } catch(e) {}
+                try { localStorage.setItem('marriage-wife-member', path === 'member' ? 'true' : 'false'); } catch(e) {}
+
+                if (path === 'paid') {
+                    // Redirect to the Stripe Payment Link (1 200 SEK). After payment,
+                    // Stripe redirects the user back to /marriage/?step=2 (dashboard config).
+                    var stripeUrl = 'https://buy.stripe.com/5kQdR93Nl2Jy6Vd5oEfw407'
+                        + '?prefilled_email=' + encodeURIComponent(email)
+                        + '&client_reference_id=' + encodeURIComponent(pnrDigits(husbandPnr));
+                    window.location.href = stripeUrl;
+                } else {
+                    document.getElementById('request-choice').style.display = 'none';
                     document.getElementById('request-success').style.display = 'flex';
                     document.getElementById('request-success').scrollIntoView({ behavior: 'smooth' });
-                } else {
-                    alert(t1('error-server', 'Något gick fel: ') + (result.error || 'Okänt fel') + '\n' + t1('error-contact-mosque', 'Vänligen försök igen eller kontakta moskén direkt.'));
                 }
             })
             .catch(function(err) {
@@ -1287,6 +1039,20 @@
                 alert(t1('error-connection', 'Något gick fel vid anslutningen. Vänligen kontrollera din internetanslutning och försök igen.'));
             });
         };
+
+        // Choice buttons
+        var btnChoicePay = document.getElementById('btn-choice-pay');
+        if (btnChoicePay) {
+            btnChoicePay.addEventListener('click', function() { window.sendRequest('paid'); });
+        }
+        var btnChoiceFifs = document.getElementById('btn-choice-fifs-register');
+        if (btnChoiceFifs) {
+            btnChoiceFifs.addEventListener('click', function() { window.sendRequest('member'); });
+        }
+        var btnChoiceBack = document.getElementById('btn-choice-back');
+        if (btnChoiceBack) {
+            btnChoiceBack.addEventListener('click', function() { window.hideRequestChoice(); });
+        }
     })();
     </script>
 
