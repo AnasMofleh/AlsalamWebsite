@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <base href="/">
+  <title>حضور الطلاب — مدرسة السلام</title>
+
+  <!-- Fonts: Tajawal (Arabic) + Open Sans (Latin fallback) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+
+  <!-- Bootstrap (local, same build as the rest of the site) -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+  <style>
+    :root {
+      --sa-green: #196F15;
+      --sa-green-dark: #145311;
+      --sa-blue: #15546F;
+      --sa-bg: #eef3ee;
+      --sa-border: #dde5dd;
+    }
+    body {
+      font-family: 'Tajawal', 'Open Sans', sans-serif;
+      background: var(--sa-bg);
+      color: #22332a;
+      min-height: 100vh;
+    }
+    .btn-sa-primary { background: var(--sa-green); color: #fff; border: none; font-weight: 700; }
+    .btn-sa-primary:hover, .btn-sa-primary:focus { background: var(--sa-green-dark); color: #fff; }
+
+    /* ── Login ── */
+    .login-screen {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #196F15 0%, #0f4a0d 100%);
+      padding: 16px;
+    }
+    .login-card {
+      background: #fff; border-radius: 16px; padding: 32px 24px;
+      width: 100%; max-width: 420px; text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    }
+    .login-logo { max-height: 72px; margin-bottom: 12px; }
+    .login-card h1 { font-size: 1.35rem; font-weight: 800; margin-bottom: 2px; }
+    .login-sub { color: #6b7a70; margin-bottom: 20px; font-size: .95rem; }
+    .login-card form { text-align: right; }
+    .login-error { margin-top: 12px; color: #a33; font-size: .9rem; }
+
+    /* ── Topbar ── */
+    .topbar { background: var(--sa-green); color: #fff; }
+    .topbar-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-block: 8px; flex-wrap: wrap; gap: 8px;
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; }
+    .topbar-brand img { max-height: 44px; background: #fff; border-radius: 8px; padding: 3px; }
+    .topbar-title { font-weight: 800; font-size: 1.05rem; }
+    .topbar-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .topbar-date { font-size: .9rem; opacity: .95; }
+    .btn-light-sm {
+      background: #fff; color: var(--sa-green); border: none; border-radius: 8px;
+      padding: 6px 14px; font-weight: 700; font-size: .85rem; cursor: pointer;
+    }
+    .btn-light-sm:hover { background: #eef3ee; }
+
+    /* ── Class cards ── */
+    .page-wrap { max-width: 720px; margin: 0 auto; padding: 16px 12px 32px; }
+    .att-class-card {
+      background: #fff; border: 1px solid var(--sa-border); border-radius: 14px;
+      margin-bottom: 16px; overflow: hidden;
+    }
+    .att-class-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px; background: #f4f8f4; border-bottom: 1px solid var(--sa-border);
+    }
+    .att-class-name { font-weight: 800; font-size: 1.05rem; }
+    .day-badge {
+      background: var(--sa-blue); color: #fff; border-radius: 999px;
+      padding: 4px 14px; font-size: .8rem; font-weight: 700;
+    }
+    .att-day-note {
+      background: #fdf6e3; color: #7a5c13; font-size: .85rem; font-weight: 700;
+      padding: 8px 16px; border-bottom: 1px solid #f0e6c8;
+    }
+    .att-table { width: 100%; border-collapse: collapse; }
+    .att-table th {
+      text-align: right; font-size: .8rem; color: #84998b; font-weight: 800;
+      padding: 10px 16px; border-bottom: 1px solid var(--sa-border); background: #fbfdfb;
+    }
+    .att-table td { padding: 10px 16px; border-bottom: 1px solid #eef3ee; }
+    .att-row { cursor: pointer; }
+    .att-row:hover { background: #f4f8f4; }
+    .att-name { font-weight: 700; font-size: .95rem; }
+    .chip { font-size: .7rem; font-weight: 700; border-radius: 999px; padding: 2px 10px; }
+    .chip.on { background: var(--sa-blue); color: #fff; }
+    .chip.off { background: #eef1ee; color: #84998b; }
+    .att-check { width: 22px; height: 22px; accent-color: var(--sa-green); cursor: pointer; }
+    .att-check:disabled { cursor: not-allowed; opacity: .45; }
+    .empty-state {
+      background: #fff; border: 1px dashed #c9d5c9; border-radius: 14px;
+      text-align: center; color: #84998b; padding: 40px 16px;
+    }
+
+    /* ── Student modal ── */
+    .stu-detail-row { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid #eef3ee; }
+    .stu-detail-row:last-child { border-bottom: none; }
+    .stu-detail-label { color: #84998b; font-size: .85rem; font-weight: 700; flex: 0 0 110px; }
+    .stu-detail-value { font-weight: 700; text-align: left; flex: 1; }
+    .stu-detail-value a { color: var(--sa-blue); text-decoration: none; font-weight: 700; }
+    .stu-detail-value a:hover { text-decoration: underline; }
+
+    /* ── Feedback toast ── */
+    .feedback {
+      position: fixed; bottom: 18px; left: 50%; transform: translate(-50%, 20px);
+      background: #22332a; color: #fff; padding: 10px 20px; border-radius: 999px;
+      font-size: .9rem; opacity: 0; pointer-events: none; transition: all .25s;
+      z-index: 2000; max-width: 90vw; text-align: center;
+    }
+    .feedback.show { opacity: 1; transform: translate(-50%, 0); }
+    .feedback.error { background: #9c2b2b; }
+    .feedback.success { background: var(--sa-green); }
+  </style>
+</head>
+<body>
+
+  <!-- ── Login screen ── -->
+  <div id="teacher-login-screen" class="login-screen">
+    <div class="login-card">
+      <img src="/img/Al-Salam-Center-Logo.png" alt="شعار المركز" class="login-logo">
+      <h1>صفحة المعلم</h1>
+      <p class="login-sub">تسجيل حضور طلاب مدرسة السلام</p>
+      <form id="teacher-login-form" autocomplete="off">
+        <label class="form-label" for="teacher-pnr">رقم الشخص</label>
+        <input type="text" class="form-control form-control-lg" id="teacher-pnr" dir="ltr" inputmode="numeric" placeholder="ÅÅÅÅMMDD-XXXX" autocomplete="username">
+        <label class="form-label mt-3" for="teacher-password">كلمة المرور</label>
+        <input type="password" class="form-control form-control-lg" id="teacher-password" autocomplete="current-password">
+        <button type="submit" class="btn btn-sa-primary btn-lg w-100 mt-3" id="teacher-login-btn">دخول</button>
+        <div class="login-error" id="teacher-login-error" hidden></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── Dashboard ── -->
+  <div id="teacher-dashboard" hidden>
+    <nav class="topbar">
+      <div class="topbar-inner container-fluid">
+        <div class="topbar-brand">
+          <img src="/img/Al-Salam-Center-Logo.png" alt="شعار المركز">
+          <span class="topbar-title" id="teacher-name-label">حضور الطلاب</span>
+        </div>
+        <div class="topbar-meta">
+          <span class="topbar-date" id="teacher-today-label"></span>
+          <button class="btn-light-sm" id="teacher-logout-btn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="page-wrap" id="teacher-classes"></div>
+  </div>
+
+  <!-- ── Student detail modal (read-only) ── -->
+  <div class="modal fade" id="teacher-student-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="teacher-student-modal-title">بيانات الطالب</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+        </div>
+        <div class="modal-body" id="teacher-student-modal-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Feedback toast ── -->
+  <div class="feedback" id="teacher-feedback"></div>
+
+  <!-- Bootstrap bundle (same version the admin page uses) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+  (function () {
+    'use strict';
+
+    // ▸▸ DEPLOYMENT: paste the /exec URL of the deployed Code.gs web app here ◂◂
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbwJJPkcuyKhTOVQ0RMGcPVcI3IeVFmpWjYoLYryUajgguonZ6SVLCcJr2MH_OXOKEcWFw/exec';
+
+    const SESSION_KEY = 'alsalam_school_teacher_token';
+    let boardData = null;
+
+    const $ = function (id) { return document.getElementById(id); };
+
+    function escapeHTML(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+
+    const ERROR_MESSAGES = {
+      auth: 'انتهت صلاحية الجلسة — سجل الدخول مجدداً',
+      invalid_login: 'رقم الشخص أو كلمة المرور غير صحيحة',
+      not_class_day: 'التسجيل متاح فقط في يوم الفصل',
+      forbidden: 'غير مصرح لك بهذا الفصل',
+      class_not_found: 'الفصل غير موجود',
+      student_not_found: 'الطالب غير موجود'
+    };
+
+    function errText(res) {
+      return (res && res.error && ERROR_MESSAGES[res.error]) || (res && res.error) || 'خطأ غير معروف';
+    }
+
+    let feedbackTimer = null;
+    function feedback(msg, type) {
+      const el = $('teacher-feedback');
+      el.textContent = msg;
+      el.className = 'feedback show ' + (type || 'info');
+      clearTimeout(feedbackTimer);
+      feedbackTimer = setTimeout(function () { el.classList.remove('show'); }, 3500);
+    }
+
+    function setLoading(btn, on) {
+      if (on) {
+        btn.dataset.orig = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span>';
+      } else if (btn.dataset.orig) {
+        btn.disabled = false;
+        btn.innerHTML = btn.dataset.orig;
+      }
+    }
+
+    // Bootstrap 5.0 compatibility: getOrCreateInstance only exists from 5.1
+    function showModal(el) {
+      if (typeof bootstrap.Modal.getOrCreateInstance === 'function') {
+        bootstrap.Modal.getOrCreateInstance(el).show();
+      } else {
+        new bootstrap.Modal(el).show();
+      }
+    }
+
+    // ── API wrapper ──
+    async function api(action, params, opts) {
+      const body = new URLSearchParams();
+      body.set('action', action);
+      Object.keys(params || {}).forEach(function (k) { body.set(k, params[k]); });
+      if (!opts || opts.noAuth !== true) {
+        const token = sessionStorage.getItem(SESSION_KEY);
+        if (token) body.set('token', token);
+      }
+
+      let res;
+      try {
+        res = await fetch(GAS_URL, {
+          method: 'POST',
+          body: body.toString(),
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        });
+      } catch (e) {
+        feedback('تعذر الاتصال بالخادم — تحقق من الاتصال بالإنترنت', 'error');
+        throw e;
+      }
+
+      let data;
+      try {
+        data = await res.json();
+      } catch (e) {
+        feedback('استجابة غير صالحة من الخادم', 'error');
+        throw e;
+      }
+
+      if (data && data.error === 'auth') {
+        sessionStorage.removeItem(SESSION_KEY);
+        showLogin();
+        feedback('انتهت صلاحية الجلسة — سجل الدخول مجدداً', 'error');
+        throw new Error('auth');
+      }
+      return data;
+    }
+
+    // ── Login / logout ──
+    async function handleLogin() {
+      const btn = $('teacher-login-btn');
+      const pnr = $('teacher-pnr').value.trim();
+      const password = $('teacher-password').value;
+      const errEl = $('teacher-login-error');
+      if (!pnr || !password) { errEl.textContent = 'أدخل رقم الشخص وكلمة المرور'; errEl.hidden = false; return; }
+      errEl.hidden = true;
+      setLoading(btn, true);
+      try {
+        const res = await api('teacher-login', { pnr: pnr, password: password }, { noAuth: true });
+        if (res && res.success) {
+          sessionStorage.setItem(SESSION_KEY, res.token);
+          $('teacher-password').value = '';
+          await enterDashboard();
+        } else {
+          errEl.textContent = errText(res);
+          errEl.hidden = false;
+        }
+      } catch (e) { /* surfaced by api() */ }
+      finally { setLoading(btn, false); }
+    }
+
+    function handleLogout() {
+      sessionStorage.removeItem(SESSION_KEY);
+      showLogin();
+    }
+
+    function showLogin() {
+      $('teacher-login-screen').hidden = false;
+      $('teacher-dashboard').hidden = true;
+    }
+
+    async function enterDashboard() {
+      $('teacher-login-screen').hidden = true;
+      $('teacher-dashboard').hidden = false;
+      const res = await api('teacher-board', {});
+      if (!res || !res.success) {
+        feedback(errText(res), 'error');
+        return;
+      }
+      boardData = res;
+      $('teacher-name-label').textContent = res.teacher && res.teacher.name ? res.teacher.name : 'حضور الطلاب';
+      const dayAr = res.todayDay === 'Lördag' ? 'السبت' : (res.todayDay === 'Söndag' ? 'الأحد' : '');
+      $('teacher-today-label').textContent = dayAr ? dayAr + ' — ' + res.today : res.today;
+      renderClasses(res);
+    }
+
+    // ── Class rendering ──
+    function renderClasses(data) {
+      const wrap = $('teacher-classes');
+      wrap.innerHTML = '';
+
+      if (!data.classes.length) {
+        wrap.innerHTML = '<div class="empty-state"><i class="fas fa-info-circle d-block mb-2"></i>لا توجد فصول مسجلة لهذا المعلم — تواصل مع الإدارة</div>';
+        return;
+      }
+
+      data.classes.forEach(function (cls) {
+        const isToday = cls.day === data.todayDay;
+        const card = document.createElement('div');
+        card.className = 'att-class-card';
+
+        let html = '<div class="att-class-header">'
+          + '<div class="att-class-name"><bdi dir="auto">' + escapeHTML(cls.name) + '</bdi></div>'
+          + '<span class="day-badge">' + (cls.day === 'Lördag' ? 'السبت' : 'الأحد') + '</span>'
+          + '</div>';
+        if (!isToday) {
+          html += '<div class="att-day-note">اليوم ليس يوم الفصل — التسجيل متاح يوم '
+            + (cls.day === 'Lördag' ? 'السبت' : 'الأحد') + ' فقط</div>';
+        }
+        html += '<table class="att-table"><thead><tr><th>الاسم</th><th>الكتب</th><th>الحضور</th></tr></thead><tbody>';
+
+        cls.students.forEach(function (st) {
+          const att = cls.attendance && cls.attendance[st.pnr];
+          const noPnr = !st.pnr;
+          html += '<tr class="att-row" data-pnr="' + escapeHTML(st.pnr) + '" data-klass="' + escapeHTML(cls.name) + '">'
+            + '<td class="att-name"><bdi dir="auto">' + escapeHTML(st.name) + '</bdi></td>'
+            + '<td>' + (st.books === 'J' ? '<span class="chip on">نعم</span>' : '<span class="chip off">لا</span>') + '</td>'
+            + '<td><input type="checkbox" class="att-check"' + (att === 'J' ? ' checked' : '')
+            + ((isToday && !noPnr) ? '' : ' disabled')
+            + (noPnr ? ' title="لا يوجد رقم شخص — لا يمكن تسجيل الحضور"' : '') + '></td>'
+            + '</tr>';
+        });
+        html += '</tbody></table>';
+        card.innerHTML = html;
+
+        card.querySelectorAll('.att-row').forEach(function (row) {
+          row.addEventListener('click', function (e) {
+            if (e.target.classList.contains('att-check')) return;
+            openStudentModal(cls, row.dataset.pnr);
+          });
+        });
+        card.querySelectorAll('.att-check').forEach(function (chk) {
+          chk.addEventListener('change', function () {
+            const row = chk.closest('.att-row');
+            toggleAttendance(row.dataset.klass, row.dataset.pnr, chk.checked);
+          });
+        });
+
+        wrap.appendChild(card);
+      });
+    }
+
+    async function toggleAttendance(klass, pnr, checked) {
+      const res = await api('mark-attendance', {
+        klass: klass,
+        pnr: pnr,
+        present: checked ? 'J' : 'N'
+      });
+      if (res && res.success) {
+        // update local board data so a re-render keeps the state
+        const cls = boardData && boardData.classes.find(function (c) { return c.name === klass; });
+        if (cls) { cls.attendance = cls.attendance || {}; cls.attendance[pnr] = res.present; }
+      } else {
+        // revert the checkbox
+        const row = document.querySelector('.att-row[data-klass="' + CSS.escape(klass) + '"][data-pnr="' + CSS.escape(pnr) + '"]');
+        const chk = row && row.querySelector('.att-check');
+        if (chk) chk.checked = !checked;
+        feedback(errText(res), 'error');
+      }
+    }
+
+    function openStudentModal(cls, pnr) {
+      const st = cls.students.find(function (s) { return s.pnr === pnr; });
+      if (!st) return;
+      $('teacher-student-modal-title').textContent = st.name || 'بيانات الطالب';
+
+      function row(label, valueHtml) {
+        return '<div class="stu-detail-row"><div class="stu-detail-label">' + label + '</div>'
+          + '<div class="stu-detail-value">' + valueHtml + '</div></div>';
+      }
+      function phoneLink(p) {
+        if (!p) return '<span class="text-muted">—</span>';
+        return '<a href="tel:' + escapeHTML(p) + '">' + escapeHTML(p) + '</a>';
+      }
+
+      $('teacher-student-modal-body').innerHTML =
+        row('الاسم', '<bdi dir="auto">' + escapeHTML(st.name) + '</bdi>')
+        + row('الكتب', st.books === 'J' ? '<span class="chip on">استلم الكتب</span>' : '<span class="chip off">لم يستلم</span>')
+        + row('هاتف الأب', phoneLink(st.fatherPhone))
+        + row('هاتف الأم', phoneLink(st.motherPhone))
+        + row('العنوان', escapeHTML([st.address, st.zip, st.city].filter(Boolean).join('، ') || '—'));
+
+      showModal($('teacher-student-modal'));
+    }
+
+    // ── Wire up ──
+    $('teacher-login-form').addEventListener('submit', function (e) { e.preventDefault(); handleLogin(); });
+    $('teacher-logout-btn').addEventListener('click', handleLogout);
+
+    // Session restore
+    if (sessionStorage.getItem(SESSION_KEY)) {
+      enterDashboard();
+    } else {
+      showLogin();
+    }
+  })();
+  </script>
+</body>
+</html>

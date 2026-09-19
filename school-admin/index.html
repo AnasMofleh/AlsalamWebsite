@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <base href="/">
+  <title>إدارة مدرسة السلام</title>
+
+  <!-- Fonts: Tajawal (Arabic) + Open Sans (Latin fallback) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+
+  <!-- Bootstrap (local, same build as the rest of the site) -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+  <style>
+    :root {
+      --sa-green: #196F15;
+      --sa-green-dark: #145311;
+      --sa-blue: #15546F;
+      --sa-bg: #eef3ee;
+      --sa-border: #dde5dd;
+    }
+    body {
+      font-family: 'Tajawal', 'Open Sans', sans-serif;
+      background: var(--sa-bg);
+      color: #22332a;
+      min-height: 100vh;
+    }
+    .btn-sa-primary { background: var(--sa-green); color: #fff; border: none; font-weight: 700; }
+    .btn-sa-primary:hover, .btn-sa-primary:focus { background: var(--sa-green-dark); color: #fff; }
+    .btn-outline { border: 1px solid #c9d5c9; background: #fff; color: #33473c; font-weight: 700; }
+    .btn-outline:hover { background: #f0f5f0; color: #22332a; }
+    .btn-outline-danger { border: 1px solid #e3c3c3; background: #fff; color: #a33; font-weight: 700; }
+    .btn-outline-danger:hover { background: #fdf1f1; color: #a33; }
+
+    /* ── Login ── */
+    .login-screen {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #196F15 0%, #0f4a0d 100%);
+      padding: 16px;
+    }
+    .login-card {
+      background: #fff; border-radius: 16px; padding: 32px 24px;
+      width: 100%; max-width: 420px; text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    }
+    .login-logo { max-height: 72px; margin-bottom: 12px; }
+    .login-card h1 { font-size: 1.35rem; font-weight: 800; margin-bottom: 2px; }
+    .login-sub { color: #6b7a70; margin-bottom: 20px; font-size: .95rem; }
+    .login-card form { text-align: right; }
+    .login-error { margin-top: 12px; color: #a33; font-size: .9rem; }
+
+    /* ── Topbar ── */
+    .topbar { background: var(--sa-green); color: #fff; }
+    .topbar-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-block: 8px; flex-wrap: wrap; gap: 8px;
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; }
+    .topbar-brand img { max-height: 44px; background: #fff; border-radius: 8px; padding: 3px; }
+    .topbar-title { font-weight: 800; font-size: 1.05rem; }
+    .topbar-link { color: #fff; text-decoration: none; font-size: .9rem; opacity: .9; }
+    .topbar-link:hover { color: #fff; opacity: 1; }
+
+    /* ── Toolbar ── */
+    .toolbar { background: #fff; border-bottom: 1px solid var(--sa-border); position: sticky; top: 0; z-index: 1020; }
+    .toolbar-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding-block: 10px; }
+    .board-tabs { display: flex; background: #e8efe8; border-radius: 10px; padding: 3px; gap: 3px; }
+    .board-tab {
+      border: none; background: transparent; padding: 6px 18px; border-radius: 8px;
+      font-weight: 700; color: #4b5f52; cursor: pointer; font-family: inherit;
+    }
+    .board-tab.active { background: var(--sa-green); color: #fff; }
+    .search-wrap { position: relative; flex: 1 1 200px; min-width: 160px; }
+    .search-wrap i { position: absolute; inset-inline-start: 12px; top: 50%; transform: translateY(-50%); color: #8aa08f; }
+    .search-wrap input {
+      width: 100%; border: 1px solid #c9d5c9; border-radius: 10px;
+      padding: 8px 12px; padding-inline-start: 36px; font-family: inherit;
+    }
+    .search-wrap input:focus { outline: none; border-color: var(--sa-green); }
+    .toolbar-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-inline-start: auto; }
+
+    /* ── Kanban ── */
+    .board-area { padding: 14px 12px 24px; }
+    .kanban-board-scroll {
+      display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory;
+      padding-bottom: 12px; align-items: flex-start;
+    }
+    .kanban-column {
+      flex: 0 0 min(85vw, 300px); background: #e6ece6; border-radius: 12px;
+      scroll-snap-align: start; display: flex; flex-direction: column;
+      max-height: calc(100vh - 200px);
+    }
+    .kanban-column-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px 6px; gap: 6px; }
+    .kanban-column-title { font-weight: 800; font-size: .95rem; display: flex; align-items: center; gap: 6px; }
+    .kanban-count { background: #fff; border-radius: 999px; padding: 1px 9px; font-size: .75rem; color: #4b5f52; font-weight: 700; }
+    .kanban-column-actions { display: flex; gap: 4px; }
+    .icon-btn {
+      border: none; background: #fff; border-radius: 8px; width: 28px; height: 28px;
+      color: #55685b; cursor: pointer; font-size: .8rem;
+    }
+    .icon-btn:hover { background: #dfe9df; }
+    .icon-btn.danger { color: #a33; }
+    .kanban-column-actions .icon-btn { width: 26px; height: 26px; font-size: .7rem; }
+    .kanban-list {
+      list-style: none; margin: 0; padding: 2px 8px 10px; overflow-y: auto;
+      display: flex; flex-direction: column; gap: 8px; min-height: 40px; flex: 1;
+    }
+    .kanban-card {
+      background: #fff; border: 1px solid #e3e9e3; border-radius: 10px;
+      padding: 10px 12px; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    }
+    .kanban-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,.12); border-color: #cfe0cf; }
+    .kanban-card-name { font-weight: 700; font-size: .95rem; margin-bottom: 8px; }
+    .kanban-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+    .chip { font-size: .7rem; font-weight: 700; border-radius: 999px; padding: 2px 10px; }
+    .chip.on.chip-paid { background: var(--sa-green); color: #fff; }
+    .chip.on.chip-books { background: var(--sa-blue); color: #fff; }
+    .chip.off { background: #eef1ee; color: #84998b; }
+    .kanban-ghost { opacity: .45; }
+    .kanban-drag { box-shadow: 0 8px 20px rgba(0,0,0,.2) !important; }
+    .board-empty { text-align: center; color: #84998b; padding: 40px 0; font-size: 1rem; }
+
+    /* ── Management panels ── */
+    .panel-section { background: #fff; border: 1px solid var(--sa-border); border-radius: 14px; padding: 16px; margin: 12px; }
+    .panel-section h2 { font-size: 1.1rem; font-weight: 800; margin-bottom: 12px; }
+    .add-form { background: #f4f8f4; border-radius: 10px; padding: 12px; margin-bottom: 14px; }
+    .form-label { font-weight: 700; font-size: .85rem; color: #4b5f52; }
+    .mgmt-list { display: flex; flex-direction: column; gap: 8px; }
+    .mgmt-day-head { font-weight: 800; color: #84998b; font-size: .85rem; margin-top: 6px; }
+    .mgmt-row {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      border: 1px solid #e3e9e3; border-radius: 10px; padding: 8px 12px; background: #fff;
+    }
+    .mgmt-name { font-weight: 700; flex: 1 1 120px; }
+    .mgmt-teacher-select { flex: 0 1 200px; min-width: 150px; }
+    .mgmt-actions { display: flex; gap: 6px; }
+    .mgmt-sub { color: #6b7a70; font-size: .85rem; }
+    .empty-note { color: #84998b; text-align: center; padding: 16px 0; }
+    .teacher-link-box {
+      margin-top: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+      background: #f4f8f4; border-radius: 10px; padding: 10px 12px; font-size: .9rem;
+    }
+    .teacher-link-box code {
+      direction: ltr; background: #fff; padding: 4px 10px; border-radius: 6px;
+      border: 1px solid var(--sa-border); font-size: .85rem;
+    }
+
+    /* ── Student modal ── */
+    .section-title { font-weight: 800; color: var(--sa-blue); font-size: .95rem; }
+    .modal .form-label .fa-lock { color: #84998b; font-size: .75rem; }
+
+    /* ── Feedback toast ── */
+    .feedback {
+      position: fixed; bottom: 18px; left: 50%; transform: translate(-50%, 20px);
+      background: #22332a; color: #fff; padding: 10px 20px; border-radius: 999px;
+      font-size: .9rem; opacity: 0; pointer-events: none; transition: all .25s;
+      z-index: 2000; max-width: 90vw; text-align: center;
+    }
+    .feedback.show { opacity: 1; transform: translate(-50%, 0); }
+    .feedback.error { background: #9c2b2b; }
+    .feedback.success { background: var(--sa-green); }
+  </style>
+</head>
+<body>
+
+  <!-- ── Login screen ── -->
+  <div id="admin-login-screen" class="login-screen">
+    <div class="login-card">
+      <img src="/img/Al-Salam-Center-Logo.png" alt="شعار المركز" class="login-logo">
+      <h1>إدارة مدرسة السلام</h1>
+      <p class="login-sub">لوحة إدارة تسجيل المدرسة</p>
+      <form id="admin-login-form" autocomplete="off">
+        <label class="form-label" for="admin-password">كلمة المرور</label>
+        <input type="password" class="form-control form-control-lg" id="admin-password" autocomplete="current-password">
+        <button type="submit" class="btn btn-sa-primary btn-lg w-100 mt-3" id="admin-login-btn">دخول</button>
+        <div class="login-error" id="admin-login-error" hidden></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── Dashboard ── -->
+  <div id="admin-dashboard" hidden>
+    <nav class="topbar">
+      <div class="topbar-inner container-fluid">
+        <div class="topbar-brand">
+          <img src="/img/Al-Salam-Center-Logo.png" alt="شعار المركز">
+          <span class="topbar-title">إدارة مدرسة السلام</span>
+        </div>
+        <a href="/" class="topbar-link"><i class="fas fa-arrow-right"></i> العودة للموقع</a>
+      </div>
+    </nav>
+
+    <div class="toolbar">
+      <div class="toolbar-row container-fluid">
+        <div class="board-tabs" role="tablist">
+          <button class="board-tab active" id="tab-lordag" data-day="Lördag">السبت</button>
+          <button class="board-tab" id="tab-sondag" data-day="Söndag">الأحد</button>
+        </div>
+        <div class="search-wrap">
+          <i class="fas fa-search"></i>
+          <input type="text" id="kanban-search" placeholder="ابحث عن طالب..." autocomplete="off">
+        </div>
+        <div class="toolbar-actions">
+          <button class="btn btn-outline btn-sm" id="refresh-btn" title="تحديث"><i class="fas fa-sync-alt"></i></button>
+          <button class="btn btn-sa-primary btn-sm" id="add-student-btn"><i class="fas fa-plus"></i> إضافة طالب</button>
+          <button class="btn btn-outline btn-sm" id="toggle-classes-btn">إدارة الفصول</button>
+          <button class="btn btn-outline btn-sm" id="toggle-teachers-btn">إدارة المعلمين</button>
+          <button class="btn btn-outline-danger btn-sm" id="admin-logout-btn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="board-area" id="kanban-board"></div>
+
+    <!-- Class management -->
+    <section id="classes-panel" class="panel-section" hidden>
+      <h2>إدارة الفصول</h2>
+      <div class="add-form">
+        <div class="row g-2 align-items-end">
+          <div class="col-12 col-md-3">
+            <label class="form-label" for="add-class-name">اسم الفصل</label>
+            <input type="text" class="form-control" id="add-class-name" placeholder="مثال: المستوى الأول أ">
+          </div>
+          <div class="col-12 col-md-3">
+            <label class="form-label d-block">اليوم</label>
+            <div class="d-flex gap-3 pt-2">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="add-class-day" id="add-class-day-lordag" value="Lördag" checked>
+                <label class="form-check-label" for="add-class-day-lordag">السبت</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="add-class-day" id="add-class-day-sondag" value="Söndag">
+                <label class="form-check-label" for="add-class-day-sondag">الأحد</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-3">
+            <label class="form-label" for="add-class-teacher">المعلم</label>
+            <select class="form-select" id="add-class-teacher"></select>
+          </div>
+          <div class="col-12 col-md-3">
+            <button class="btn btn-sa-primary w-100" id="add-class-btn">إضافة فصل</button>
+          </div>
+        </div>
+      </div>
+      <div id="classes-list" class="mgmt-list"></div>
+    </section>
+
+    <!-- Teacher management -->
+    <section id="teachers-panel" class="panel-section" hidden>
+      <h2>إدارة المعلمين</h2>
+      <div class="add-form">
+        <div class="row g-2 align-items-end">
+          <div class="col-12 col-md-3">
+            <label class="form-label" for="add-teacher-name">اسم المعلم</label>
+            <input type="text" class="form-control" id="add-teacher-name">
+          </div>
+          <div class="col-12 col-md-3">
+            <label class="form-label" for="add-teacher-pnr">رقم الشخص</label>
+            <input type="text" class="form-control" id="add-teacher-pnr" dir="ltr" inputmode="numeric" placeholder="ÅÅÅÅMMDD-XXXX">
+          </div>
+          <div class="col-12 col-md-2">
+            <label class="form-label" for="add-teacher-phone">رقم الهاتف</label>
+            <input type="tel" class="form-control" id="add-teacher-phone" dir="ltr">
+          </div>
+          <div class="col-12 col-md-2">
+            <label class="form-label" for="add-teacher-password">كلمة المرور</label>
+            <input type="text" class="form-control" id="add-teacher-password" dir="ltr" autocomplete="new-password">
+          </div>
+          <div class="col-12 col-md-2">
+            <button class="btn btn-sa-primary w-100" id="add-teacher-btn">إضافة معلم</button>
+          </div>
+        </div>
+      </div>
+      <div id="teachers-list" class="mgmt-list"></div>
+      <div class="teacher-link-box">
+        <span>رابط صفحة المعلمين:</span>
+        <code id="teacher-link-text">/school-admin/teacher.html</code>
+        <button class="btn btn-outline btn-sm" id="copy-teacher-link-btn"><i class="fas fa-copy"></i> نسخ الرابط</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- ── Student detail modal ── -->
+  <div class="modal fade" id="student-modal" tabindex="-1" aria-labelledby="student-modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="student-modal-title">بيانات الطالب</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-12 col-md-4">
+              <label class="form-label" for="m-firstName">الاسم الأول للطفل</label>
+              <input type="text" class="form-control" id="m-firstName">
+            </div>
+            <div class="col-12 col-md-4">
+              <label class="form-label" for="m-lastName">اسم العائلة</label>
+              <input type="text" class="form-control" id="m-lastName">
+            </div>
+            <div class="col-12 col-md-4">
+              <label class="form-label" for="m-ssn"><i class="fas fa-lock"></i> رقم شخص الطفل <span class="pnr-lock-note">(غير قابل للتعديل)</span></label>
+              <input type="text" class="form-control" id="m-ssn" disabled dir="ltr" inputmode="numeric">
+            </div>
+
+            <div class="col-12 col-md-4">
+              <label class="form-label" for="m-skoldag">يوم الدوام</label>
+              <select class="form-select" id="m-skoldag">
+                <option value="Lördag">السبت</option>
+                <option value="Söndag">الأحد</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-4" id="m-klass-col">
+              <label class="form-label" for="m-klass-select">الانتقال إلى فصل</label>
+              <select class="form-select" id="m-klass-select"></select>
+            </div>
+            <div class="col-12 col-md-4 d-flex align-items-end gap-4 pb-2">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="m-paid">
+                <label class="form-check-label" for="m-paid">دفع شهري</label>
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="m-books">
+                <label class="form-check-label" for="m-books">استلم الكتب</label>
+              </div>
+            </div>
+
+            <div class="col-12"><hr class="my-1"><div class="section-title">بيانات الأب</div></div>
+            <div class="col-12 col-md-3">
+              <label class="form-label" for="m-fatherName">اسم الأب</label>
+              <input type="text" class="form-control" id="m-fatherName">
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label" for="m-fatherPhone">هاتف الأب</label>
+              <input type="tel" class="form-control" id="m-fatherPhone" dir="ltr">
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label" for="m-fatherEmail">بريد الأب</label>
+              <input type="email" class="form-control" id="m-fatherEmail" dir="ltr">
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label" for="m-fatherSsn"><i class="fas fa-lock"></i> رقم شخص الأب <span class="pnr-lock-note">(غير قابل للتعديل)</span></label>
+              <input type="text" class="form-control" id="m-fatherSsn" disabled dir="ltr" inputmode="numeric">
+            </div>
+
+            <div class="col-12"><hr class="my-1"><div class="section-title">بيانات الأم</div></div>
+            <div class="col-12 col-md-3">
+              <label class="form-label" for="m-motherName">اسم الأم</label>
+              <input type="text" class="form-control" id="m-motherName">
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label" for="m-motherPhone">هاتف الأم</label>
+              <input type="tel" class="form-control" id="m-motherPhone" dir="ltr">
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label" for="m-motherEmail">بريد الأم</label>
+              <input type="email" class="form-control" id="m-motherEmail" dir="ltr">
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label" for="m-motherSsn"><i class="fas fa-lock"></i> رقم شخص الأم <span class="pnr-lock-note">(غير قابل للتعديل)</span></label>
+              <input type="text" class="form-control" id="m-motherSsn" disabled dir="ltr" inputmode="numeric">
+            </div>
+
+            <div class="col-12"><hr class="my-1"><div class="section-title">العنوان</div></div>
+            <div class="col-12 col-md-8">
+              <label class="form-label" for="m-address">العنوان</label>
+              <input type="text" class="form-control" id="m-address">
+            </div>
+            <div class="col-12 col-md-2">
+              <label class="form-label" for="m-zip">الرمز البريدي</label>
+              <input type="text" class="form-control" id="m-zip" dir="ltr" inputmode="numeric">
+            </div>
+            <div class="col-12 col-md-2">
+              <label class="form-label" for="m-city">المدينة</label>
+              <input type="text" class="form-control" id="m-city">
+            </div>
+
+            <div class="col-12" id="m-registered-col">
+              <div class="mgmt-sub" id="m-registered"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">إلغاء</button>
+          <button type="button" class="btn btn-sa-primary" id="modal-save-btn">حفظ التعديلات</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Feedback toast ── -->
+  <div class="feedback" id="admin-feedback"></div>
+
+  <!-- Bootstrap bundle (same version the admin page uses) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- SortableJS (touch-friendly drag & drop) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.6/Sortable.min.js"></script>
+
+  <script>
+  (function () {
+    'use strict';
+
+    // ▸▸ DEPLOYMENT: paste the /exec URL of the deployed Code.gs web app here ◂◂
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbwJJPkcuyKhTOVQ0RMGcPVcI3IeVFmpWjYoLYryUajgguonZ6SVLCcJr2MH_OXOKEcWFw/exec';
+
+    const SESSION_KEY = 'alsalam_school_admin_token';
+    const state = {
+      students: [],
+      classes: [],
+      teachers: [],
+      boardDay: 'Lördag',
+      query: '',
+      sortables: []
+    };
+    let modalStudent = null;
+
+    const $ = function (id) { return document.getElementById(id); };
+
+    // ── Small helpers ──
+    function escapeHTML(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+
+    function normArabic(s) {
+      return String(s || '').toLowerCase()
+        .replace(/[ً-ْٰ]/g, '')
+        .replace(/[أإآ]/g, 'ا')
+        .replace(/ة/g, 'ه')
+        .replace(/ى/g, 'ي')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    const ERROR_MESSAGES = {
+      auth: 'انتهت صلاحية الجلسة — سجل الدخول مجدداً',
+      invalid_password: 'كلمة المرور غير صحيحة',
+      invalid_login: 'بيانات الدخول غير صحيحة',
+      row_changed: 'تغيرت البيانات من جهة أخرى — تم تحديث اللوحة',
+      class_not_found: 'الفصل غير موجود',
+      duplicate_class: 'يوجد فصل بهذا الاسم مسبقاً',
+      duplicate_teacher: 'يوجد معلم بهذا الرقم مسبقاً',
+      weak_password: 'كلمة المرور قصيرة (6 أحرف على الأقل)',
+      invalid_pnr: 'رقم الشخص غير صحيح',
+      not_class_day: 'التسجيل متاح فقط في يوم الفصل',
+      forbidden: 'غير مصرح لك بهذا الفصل',
+      student_not_found: 'الطالب غير موجود',
+      missing_name: 'الاسم مطلوب',
+      teacher_not_found: 'المعلم غير موجود',
+      pnr_locked: 'لا يمكن تعديل أرقام الشخص',
+      duplicate_student: 'يوجد طالب بهذا الرقم مسبقاً — عدّل بطاقته بدلاً من ذلك',
+      invalid_skoldag: 'قيمة يوم الدوام غير صحيحة',
+      invalid_day: 'اليوم غير صحيح'
+    };
+
+    function errText(res) {
+      return (res && res.error && ERROR_MESSAGES[res.error]) || (res && res.error) || 'خطأ غير معروف';
+    }
+
+    let feedbackTimer = null;
+    function feedback(msg, type) {
+      const el = $('admin-feedback');
+      el.textContent = msg;
+      el.className = 'feedback show ' + (type || 'info');
+      clearTimeout(feedbackTimer);
+      feedbackTimer = setTimeout(function () { el.classList.remove('show'); }, 3500);
+    }
+
+    function setLoading(btn, on) {
+      if (on) {
+        btn.dataset.orig = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span>';
+      } else if (btn.dataset.orig) {
+        btn.disabled = false;
+        btn.innerHTML = btn.dataset.orig;
+      }
+    }
+
+    // Bootstrap 5.0 compatibility: getOrCreateInstance only exists from 5.1
+    function showModal(el) {
+      if (typeof bootstrap.Modal.getOrCreateInstance === 'function') {
+        bootstrap.Modal.getOrCreateInstance(el).show();
+      } else {
+        new bootstrap.Modal(el).show();
+      }
+    }
+    function hideModal(el) {
+      const inst = bootstrap.Modal.getInstance(el);
+      if (inst) inst.hide();
+    }
+
+    // ── API wrapper ──
+    async function api(action, params, opts) {
+      const body = new URLSearchParams();
+      body.set('action', action);
+      Object.keys(params || {}).forEach(function (k) { body.set(k, params[k]); });
+      if (!opts || opts.noAuth !== true) {
+        const token = sessionStorage.getItem(SESSION_KEY);
+        if (token) body.set('token', token);
+      }
+
+      let res;
+      try {
+        res = await fetch(GAS_URL, {
+          method: 'POST',
+          body: body.toString(),
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        });
+      } catch (e) {
+        feedback('تعذر الاتصال بالخادم — تحقق من الاتصال بالإنترنت', 'error');
+        throw e;
+      }
+
+      let data;
+      try {
+        data = await res.json();
+      } catch (e) {
+        feedback('استجابة غير صالحة من الخادم', 'error');
+        throw e;
+      }
+
+      if (data && data.error === 'auth') {
+        sessionStorage.removeItem(SESSION_KEY);
+        showLogin();
+        feedback('انتهت صلاحية الجلسة — سجل الدخول مجدداً', 'error');
+        throw new Error('auth');
+      }
+      return data;
+    }
+
+    // ── Login / logout ──
+    async function handleLogin() {
+      const btn = $('admin-login-btn');
+      const password = $('admin-password').value;
+      const errEl = $('admin-login-error');
+      if (!password) { errEl.textContent = 'أدخل كلمة المرور'; errEl.hidden = false; return; }
+      errEl.hidden = true;
+      setLoading(btn, true);
+      try {
+        const res = await api('admin-login', { password: password }, { noAuth: true });
+        if (res && res.success) {
+          sessionStorage.setItem(SESSION_KEY, res.token);
+          $('admin-password').value = '';
+          showDashboard();
+          await loadAll();
+        } else {
+          errEl.textContent = errText(res);
+          errEl.hidden = false;
+        }
+      } catch (e) { /* surfaced by api() */ }
+      finally { setLoading(btn, false); }
+    }
+
+    function handleLogout() {
+      sessionStorage.removeItem(SESSION_KEY);
+      showLogin();
+    }
+
+    function showLogin() {
+      $('admin-login-screen').hidden = false;
+      $('admin-dashboard').hidden = true;
+    }
+
+    function showDashboard() {
+      $('admin-login-screen').hidden = true;
+      $('admin-dashboard').hidden = false;
+    }
+
+    async function loadAll() {
+      try {
+        const [boardRes, classesRes, teachersRes] = await Promise.all([
+          api('get-board', {}),
+          api('list-classes', {}),
+          api('list-teachers', {})
+        ]);
+        if (boardRes && boardRes.success) state.students = boardRes.students || [];
+        if (classesRes && classesRes.success) state.classes = classesRes.classes || [];
+        if (teachersRes && teachersRes.success) state.teachers = teachersRes.teachers || [];
+        renderBoard();
+        renderClasses();
+        renderTeachers();
+      } catch (e) { /* surfaced by api() */ }
+    }
+
+    // ── Kanban board ──
+    function destroySortables() {
+      state.sortables.forEach(function (s) { try { s.destroy(); } catch (e) { /* noop */ } });
+      state.sortables = [];
+    }
+
+    function renderBoard() {
+      const board = $('kanban-board');
+      destroySortables();
+
+      if (!state.students.length) {
+        board.innerHTML = '<div class="board-empty">لا يوجد طلاب بعد — ستظهر التسجيلات الجديدة هنا تلقائياً</div>';
+        return;
+      }
+
+      const day = state.boardDay;
+      const dayClasses = state.classes.filter(function (c) { return c.day === day; });
+      const knownClassNames = new Set(state.classes.map(function (c) { return c.name; }));
+
+      board.innerHTML = '';
+      const wrap = document.createElement('div');
+      wrap.className = 'kanban-board-scroll';
+
+      const newKids = state.students.filter(function (s) {
+        return !s.klass && (!s.skoldag || s.skoldag === day);
+      });
+      wrap.appendChild(buildColumn('', 'طلاب جدد', newKids, false));
+
+      dayClasses.forEach(function (c) {
+        const kids = state.students.filter(function (s) { return s.klass === c.name; });
+        wrap.appendChild(buildColumn(c.name, c.name, kids, true));
+      });
+
+      // Safety net: students whose klass no longer matches any class
+      // (e.g. the class row was edited manually in the sheet).
+      const orphanKids = state.students.filter(function (s) {
+        return s.klass && !knownClassNames.has(s.klass) && (!s.skoldag || s.skoldag === day);
+      });
+      if (orphanKids.length) {
+        wrap.appendChild(buildColumn('__orphan__', 'غير مصنف', orphanKids, false));
+      }
+
+      board.appendChild(wrap);
+      initSortables();
+      applyFilter();
+    }
+
+    function buildColumn(klassKey, title, kids, isRealClass) {
+      const col = document.createElement('div');
+      col.className = 'kanban-column';
+      col.dataset.klass = klassKey;
+
+      const header = document.createElement('div');
+      header.className = 'kanban-column-header';
+      const t = document.createElement('div');
+      t.className = 'kanban-column-title';
+      t.appendChild(document.createTextNode(title));
+      const count = document.createElement('span');
+      count.className = 'kanban-count';
+      count.textContent = kids.length;
+      t.appendChild(count);
+      header.appendChild(t);
+
+      if (isRealClass) {
+        const actions = document.createElement('div');
+        actions.className = 'kanban-column-actions';
+        const rBtn = document.createElement('button');
+        rBtn.className = 'icon-btn';
+        rBtn.title = 'إعادة تسمية الفصل';
+        rBtn.innerHTML = '<i class="fas fa-pen"></i>';
+        rBtn.addEventListener('click', function () { renameClass(klassKey); });
+        const dBtn = document.createElement('button');
+        dBtn.className = 'icon-btn danger';
+        dBtn.title = 'حذف الفصل';
+        dBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+        dBtn.addEventListener('click', function () { deleteClass(klassKey); });
+        actions.appendChild(rBtn);
+        actions.appendChild(dBtn);
+        header.appendChild(actions);
+      }
+      col.appendChild(header);
+
+      const list = document.createElement('ul');
+      list.className = 'kanban-list';
+      kids.slice().sort(function (a, b) {
+        return (a.name || '').localeCompare(b.name || '', 'ar');
+      }).forEach(function (s) { list.appendChild(buildCard(s)); });
+      col.appendChild(list);
+      return col;
+    }
+
+    function buildCard(s) {
+      const li = document.createElement('li');
+      li.className = 'kanban-card';
+      li.dataset.row = s.row;
+      li.dataset.ssn = s.ssn || '';
+      li.dataset.search = normArabic([
+        s.name, s.firstName, s.lastName,
+        s.fatherName, s.motherName, s.fatherPhone, s.motherPhone
+      ].join(' '));
+
+      const nameEl = document.createElement('div');
+      nameEl.className = 'kanban-card-name';
+      nameEl.innerHTML = '<bdi dir="auto">' + escapeHTML(s.name || (s.firstName + ' ' + s.lastName).trim()) + '</bdi>';
+      li.appendChild(nameEl);
+
+      const chips = document.createElement('div');
+      chips.className = 'kanban-chips';
+      const paid = document.createElement('span');
+      paid.className = 'chip chip-paid ' + (s.paid === 'J' ? 'on' : 'off');
+      paid.textContent = 'دفع شهري';
+      const books = document.createElement('span');
+      books.className = 'chip chip-books ' + (s.books === 'J' ? 'on' : 'off');
+      books.textContent = 'كتب';
+      chips.appendChild(paid);
+      chips.appendChild(books);
+      li.appendChild(chips);
+
+      li.addEventListener('click', function () { openStudentModal(s); });
+      return li;
+    }
+
+    function initSortables() {
+      document.querySelectorAll('.kanban-list').forEach(function (listEl) {
+        state.sortables.push(new Sortable(listEl, {
+          group: 'kanban',
+          animation: 150,
+          ghostClass: 'kanban-ghost',
+          dragClass: 'kanban-drag',
+          delay: 150,
+          delayOnTouchOnly: true,
+          scroll: true,
+          scrollSensitivity: 60,
+          scrollSpeed: 12,
+          onEnd: onCardDrop
+        }));
+      });
+    }
+
+    function onCardDrop(evt) {
+      if (evt.from === evt.to) return; // same-column reorder is cosmetic
+      const item = evt.item;
+      const row = parseInt(item.dataset.row, 10);
+      const ssn = item.dataset.ssn || '';
+      const colEl = evt.to.closest('.kanban-column');
+      const klassKey = colEl ? colEl.dataset.klass : '';
+      moveStudent(row, ssn, klassKey === '__orphan__' ? '' : klassKey);
+    }
+
+    async function moveStudent(row, ssn, klass) {
+      const res = await api('set-klass', {
+        row: String(row),
+        ssn: ssn,
+        klass: klass || '',
+        boardDay: state.boardDay
+      });
+      if (res && res.success) {
+        feedback('تم نقل الطالب', 'success');
+      } else {
+        feedback(errText(res), 'error');
+      }
+      await refreshBoard();
+    }
+
+    async function refreshBoard() {
+      const board = $('kanban-board');
+      const scroller = board.querySelector('.kanban-board-scroll');
+      const left = scroller ? scroller.scrollLeft : 0;
+      const res = await api('get-board', {});
+      if (res && res.success) {
+        state.students = res.students || [];
+        renderBoard();
+        const scroller2 = board.querySelector('.kanban-board-scroll');
+        if (scroller2) scroller2.scrollLeft = left;
+      }
+    }
+
+    function switchBoard(day) {
+      state.boardDay = day;
+      $('tab-lordag').classList.toggle('active', day === 'Lördag');
+      $('tab-sondag').classList.toggle('active', day === 'Söndag');
+      renderBoard();
+    }
+
+    function applyFilter() {
+      const q = normArabic(state.query.trim());
+      document.querySelectorAll('.kanban-card').forEach(function (card) {
+        const hay = normArabic(card.dataset.search || '');
+        card.style.display = (!q || hay.indexOf(q) !== -1) ? '' : 'none';
+      });
+      document.querySelectorAll('.kanban-column').forEach(function (col) {
+        let visible = 0;
+        col.querySelectorAll('.kanban-card').forEach(function (card) {
+          if (card.style.display !== 'none') visible++;
+        });
+        const badge = col.querySelector('.kanban-count');
+        if (badge) badge.textContent = visible;
+      });
+    }
+
+    // ── Student modal ──
+    function openStudentModal(s) {
+      modalStudent = s;
+      // Edit mode: PNRs locked, lock notes visible, move + registered shown
+      $('student-modal-title').textContent = 'بيانات الطالب';
+      $('modal-save-btn').textContent = 'حفظ التعديلات';
+      ['m-ssn', 'm-fatherSsn', 'm-motherSsn'].forEach(function (id) { $(id).disabled = true; });
+      document.querySelectorAll('.pnr-lock-note').forEach(function (el) { el.hidden = false; });
+      $('m-klass-col').hidden = false;
+      $('m-registered-col').hidden = false;
+
+      $('m-firstName').value = s.firstName || '';
+      $('m-lastName').value = s.lastName || '';
+      $('m-ssn').value = s.ssn || '';
+      $('m-skoldag').value = (s.skoldag === 'Söndag') ? 'Söndag' : 'Lördag';
+      $('m-paid').checked = s.paid === 'J';
+      $('m-books').checked = s.books === 'J';
+      $('m-fatherName').value = s.fatherName || '';
+      $('m-fatherPhone').value = s.fatherPhone || '';
+      $('m-fatherEmail').value = s.fatherEmail || '';
+      $('m-fatherSsn').value = s.fatherSsn || '';
+      $('m-motherName').value = s.motherName || '';
+      $('m-motherPhone').value = s.motherPhone || '';
+      $('m-motherEmail').value = s.motherEmail || '';
+      $('m-motherSsn').value = s.motherSsn || '';
+      $('m-address').value = s.address || '';
+      $('m-zip').value = s.zip || '';
+      $('m-city').value = s.city || '';
+      $('m-registered').textContent = s.registered ? 'تاريخ التسجيل: ' + s.registered : '';
+
+      const sel = $('m-klass-select');
+      const dayClasses = state.classes.filter(function (c) { return c.day === state.boardDay; });
+      sel.innerHTML = '<option value="">طلاب جدد</option>' + dayClasses.map(function (c) {
+        return '<option value="' + escapeHTML(c.name) + '">' + escapeHTML(c.name) + '</option>';
+      }).join('');
+      sel.value = s.klass || '';
+
+      showModal($('student-modal'));
+    }
+
+    async function saveStudent() {
+      if (!modalStudent) { await submitNewStudent(); return; }
+      const fields = {
+        firstName: $('m-firstName').value.trim(),
+        lastName: $('m-lastName').value.trim(),
+        skoldag: $('m-skoldag').value,
+        paid: $('m-paid').checked ? 'J' : '',
+        books: $('m-books').checked ? 'J' : '',
+        fatherName: $('m-fatherName').value.trim(),
+        fatherPhone: $('m-fatherPhone').value.trim(),
+        fatherEmail: $('m-fatherEmail').value.trim(),
+        motherName: $('m-motherName').value.trim(),
+        motherPhone: $('m-motherPhone').value.trim(),
+        motherEmail: $('m-motherEmail').value.trim(),
+        address: $('m-address').value.trim(),
+        zip: $('m-zip').value.trim(),
+        city: $('m-city').value.trim()
+      };
+      const btn = $('modal-save-btn');
+      setLoading(btn, true);
+      try {
+        const res = await api('update-student', {
+          row: String(modalStudent.row),
+          ssn: modalStudent.ssn || '',
+          fields: JSON.stringify(fields)
+        });
+        if (res && res.success) {
+          const st = state.students.find(function (x) { return x.row === modalStudent.row; });
+          if (st) Object.assign(st, res.student);
+          hideModal($('student-modal'));
+          renderBoard();
+          feedback('تم حفظ التعديلات', 'success');
+        } else {
+          feedback(errText(res), 'error');
+        }
+      } catch (e) { /* surfaced by api() */ }
+      finally { setLoading(btn, false); }
+    }
+
+    async function modalMoveStudent(value) {
+      if (!modalStudent) return;
+      const res = await api('set-klass', {
+        row: String(modalStudent.row),
+        ssn: modalStudent.ssn || '',
+        klass: value || '',
+        boardDay: state.boardDay
+      });
+      if (res && res.success) {
+        const st = state.students.find(function (x) { return x.row === modalStudent.row; });
+        if (st) Object.assign(st, res.student);
+        renderBoard();
+        hideModal($('student-modal'));
+        feedback('تم نقل الطالب', 'success');
+      } else {
+        feedback(errText(res), 'error');
+        $('m-klass-select').value = modalStudent.klass || '';
+      }
+    }
+
+    // ── Add mode (manual student creation) ──
+    function openAddStudentModal() {
+      modalStudent = null;
+      $('student-modal-title').textContent = 'إضافة طالب جديد';
+      $('modal-save-btn').textContent = 'إضافة الطالب';
+
+      ['m-firstName', 'm-lastName', 'm-ssn', 'm-fatherName', 'm-fatherPhone', 'm-fatherEmail',
+       'm-fatherSsn', 'm-motherName', 'm-motherPhone', 'm-motherEmail', 'm-motherSsn',
+       'm-address', 'm-zip', 'm-city'].forEach(function (id) { $(id).value = ''; });
+      $('m-skoldag').value = state.boardDay;
+      $('m-paid').checked = false;
+      $('m-books').checked = false;
+      $('m-registered').textContent = '';
+
+      // Add mode: PNRs editable, lock notes hidden, move + registered hidden
+      ['m-ssn', 'm-fatherSsn', 'm-motherSsn'].forEach(function (id) { $(id).disabled = false; });
+      document.querySelectorAll('.pnr-lock-note').forEach(function (el) { el.hidden = true; });
+      $('m-klass-col').hidden = true;
+      $('m-registered-col').hidden = true;
+
+      showModal($('student-modal'));
+    }
+
+    async function submitNewStudent() {
+      const firstName = $('m-firstName').value.trim();
+      const lastName = $('m-lastName').value.trim();
+      if (!firstName && !lastName) { feedback('أدخل اسم الطالب', 'error'); return; }
+
+      // PNRs optional, but when filled must be 10 or 12 digits
+      function pnrOrEmpty(id) {
+        const d = $('m-' + id).value.replace(/[^0-9]/g, '');
+        if (!d) return '';
+        return (d.length === 10 || d.length === 12) ? d : 'INVALID';
+      }
+      const ssn = pnrOrEmpty('ssn');
+      const fatherSsn = pnrOrEmpty('fatherSsn');
+      const motherSsn = pnrOrEmpty('motherSsn');
+      if (ssn === 'INVALID' || fatherSsn === 'INVALID' || motherSsn === 'INVALID') {
+        feedback('رقم شخص غير صحيح (10 أو 12 رقماً)', 'error');
+        return;
+      }
+
+      const btn = $('modal-save-btn');
+      setLoading(btn, true);
+      try {
+        const res = await api('add-student', {
+          firstName: firstName,
+          lastName: lastName,
+          ssn: ssn,
+          skoldag: $('m-skoldag').value,
+          paid: $('m-paid').checked ? 'J' : '',
+          books: $('m-books').checked ? 'J' : '',
+          fatherName: $('m-fatherName').value.trim(),
+          fatherSsn: fatherSsn,
+          fatherPhone: $('m-fatherPhone').value.trim(),
+          fatherEmail: $('m-fatherEmail').value.trim(),
+          motherName: $('m-motherName').value.trim(),
+          motherSsn: motherSsn,
+          motherPhone: $('m-motherPhone').value.trim(),
+          motherEmail: $('m-motherEmail').value.trim(),
+          address: $('m-address').value.trim(),
+          zip: $('m-zip').value.trim(),
+          city: $('m-city').value.trim()
+        });
+        if (res && res.success) {
+          state.students.push(res.student);
+          hideModal($('student-modal'));
+          renderBoard();
+          feedback('تمت إضافة الطالب', 'success');
+        } else {
+          feedback(errText(res), 'error');
+        }
+      } catch (e) { /* surfaced by api() */ }
+      finally { setLoading(btn, false); }
+    }
+
+    // ── Class management ──
+    function teacherOptions(selectedPnr) {
+      return '<option value="">بدون معلم</option>' + state.teachers.map(function (t) {
+        return '<option value="' + escapeHTML(t.pnr) + '"' +
+          (t.pnr === selectedPnr ? ' selected' : '') + '>' + escapeHTML(t.name) + '</option>';
+      }).join('');
+    }
+
+    function renderClasses() {
+      $('add-class-teacher').innerHTML = teacherOptions('');
+      const list = $('classes-list');
+      list.innerHTML = '';
+
+      if (!state.classes.length) {
+        list.innerHTML = '<div class="empty-note">لا توجد فصول بعد — أضف أول فصل.</div>';
+        return;
+      }
+
+      ['Lördag', 'Söndag'].forEach(function (day) {
+        const dayClasses = state.classes.filter(function (c) { return c.day === day; });
+        if (!dayClasses.length) return;
+
+        const dayHead = document.createElement('div');
+        dayHead.className = 'mgmt-day-head';
+        dayHead.textContent = day === 'Lördag' ? 'فصول السبت' : 'فصول الأحد';
+        list.appendChild(dayHead);
+
+        dayClasses.forEach(function (c) {
+          const row = document.createElement('div');
+          row.className = 'mgmt-row';
+
+          const nameEl = document.createElement('div');
+          nameEl.className = 'mgmt-name';
+          nameEl.innerHTML = '<bdi dir="auto">' + escapeHTML(c.name) + '</bdi>';
+          row.appendChild(nameEl);
+
+          const sel = document.createElement('select');
+          sel.className = 'form-select form-select-sm mgmt-teacher-select';
+          sel.innerHTML = teacherOptions(c.teacherPnr);
+          sel.addEventListener('change', function () { assignTeacher(c.name, sel.value); });
+          row.appendChild(sel);
+
+          const actions = document.createElement('div');
+          actions.className = 'mgmt-actions';
+          const rBtn = document.createElement('button');
+          rBtn.className = 'icon-btn';
+          rBtn.title = 'إعادة تسمية';
+          rBtn.innerHTML = '<i class="fas fa-pen"></i>';
+          rBtn.addEventListener('click', function () { renameClass(c.name); });
+          const dBtn = document.createElement('button');
+          dBtn.className = 'icon-btn danger';
+          dBtn.title = 'حذف';
+          dBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+          dBtn.addEventListener('click', function () { deleteClass(c.name); });
+          actions.appendChild(rBtn);
+          actions.appendChild(dBtn);
+          row.appendChild(actions);
+
+          list.appendChild(row);
+        });
+      });
+    }
+
+    async function addClass() {
+      const name = $('add-class-name').value.trim();
+      const day = document.querySelector('input[name="add-class-day"]:checked').value;
+      const teacherPnr = $('add-class-teacher').value;
+      if (!name) { feedback('أدخل اسم الفصل', 'error'); return; }
+      const res = await api('add-class', { name: name, day: day, teacherPnr: teacherPnr });
+      if (res && res.success) {
+        state.classes = res.classes;
+        $('add-class-name').value = '';
+        renderClasses();
+        renderBoard();
+        feedback('تمت إضافة الفصل', 'success');
+      } else {
+        feedback(errText(res), 'error');
+      }
+    }
+
+    async function renameClass(oldName) {
+      const newName = (window.prompt('الاسم الجديد للفصل:', oldName) || '').trim();
+      if (!newName || newName === oldName) return;
+      const res = await api('rename-class', { oldName: oldName, newName: newName });
+      if (res && res.success) {
+        state.classes = res.classes;
+        renderClasses();
+        renderBoard();
+        feedback('تمت إعادة التسمية', 'success');
+      } else {
+        feedback(errText(res), 'error');
+      }
+    }
+
+    async function deleteClass(name) {
+      if (!window.confirm('سيتم حذف الفصل وعودة طلابه إلى «طلاب جدد». متابعة؟')) return;
+      const res = await api('delete-class', { name: name });
+      if (res && res.success) {
+        state.classes = res.classes;
+        renderClasses();
+        renderBoard();
+        feedback('تم حذف الفصل', 'success');
+      } else {
+        feedback(errText(res), 'error');
+      }
+    }
+
+    async function assignTeacher(name, teacherPnr) {
+      const res = await api('update-class', { name: name, teacherPnr: teacherPnr });
+      if (res && res.success) {
+        state.classes = res.classes;
+        feedback('تم تحديث معلم الفصل', 'success');
+      } else {
+        feedback(errText(res), 'error');
+        renderClasses();
+      }
+    }
+
+    // ── Teacher management ──
+    function renderTeachers() {
+      const list = $('teachers-list');
+      list.innerHTML = '';
+
+      if (!state.teachers.length) {
+        list.innerHTML = '<div class="empty-note">لا يوجد معلمون بعد.</div>';
+        return;
+      }
+
+      state.teachers.forEach(function (t) {
+        const row = document.createElement('div');
+        row.className = 'mgmt-row';
+
+        const nameEl = document.createElement('div');
+        nameEl.className = 'mgmt-name';
+        nameEl.innerHTML = '<bdi dir="auto">' + escapeHTML(t.name) + '</bdi>';
+        row.appendChild(nameEl);
+
+        const sub = document.createElement('div');
+        sub.className = 'mgmt-sub';
+        sub.dir = 'ltr';
+        sub.textContent = t.pnr + (t.phone ? ' • ' + t.phone : '');
+        row.appendChild(sub);
+
+        const actions = document.createElement('div');
+        actions.className = 'mgmt-actions';
+        const eBtn = document.createElement('button');
+        eBtn.className = 'icon-btn';
+        eBtn.title = 'تعديل';
+        eBtn.innerHTML = '<i class="fas fa-pen"></i>';
+        eBtn.addEventListener('click', function () { editTeacher(t); });
+        const pBtn = document.createElement('button');
+        pBtn.className = 'icon-btn';
+        pBtn.title = 'إعادة تعيين كلمة المرور';
+        pBtn.innerHTML = '<i class="fas fa-key"></i>';
+        pBtn.addEventListener('click', function () { resetPassword(t); });
+        const dBtn = document.createElement('button');
+        dBtn.className = 'icon-btn danger';
+        dBtn.title = 'حذف';
+        dBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+        dBtn.addEventListener('click', function () { deleteTeacher(t); });
+        actions.appendChild(eBtn);
+        actions.appendChild(pBtn);
+        actions.appendChild(dBtn);
+        row.appendChild(actions);
+
+        list.appendChild(row);
+      });
+    }
+
+    async function addTeacher() {
+      const name = $('add-teacher-name').value.trim();
+      const pnr = $('add-teacher-pnr').value.replace(/[^0-9]/g, '');
+      const phone = $('add-teacher-phone').value.trim();
+      const password = $('add-teacher-password').value;
+
+      if (!name) { feedback('أدخل اسم المعلم', 'error'); return; }
+      if (pnr.length !== 10 && pnr.length !== 12) { feedback('رقم الشخص غير صحيح', 'error'); return; }
+      if (password.length < 6) { feedback('كلمة المرور قصيرة (6 أحرف على الأقل)', 'error'); return; }
+
+      const res = await api('add-teacher', { name: name, pnr: pnr, phone: phone, password: password });
+      if (res && res.success) {
+        state.teachers = res.teachers;
+        $('add-teacher-name').value = '';
+        $('add-teacher-pnr').value = '';
+        $('add-teacher-phone').value = '';
+        $('add-teacher-password').value = '';
+        renderTeachers();
+        renderClasses();
+        feedback('تمت إضافة المعلم', 'success');
+      } else {
+        feedback(errText(res), 'error');
+      }
+    }
+
+    async function editTeacher(t) {
+      const name = (window.prompt('اسم المعلم:', t.name) || '').trim();
+      if (!name) return;
+      const phone = (window.prompt('رقم الهاتف:', t.phone) || '').trim();
+      const res = await api('update-teacher', { pnr: t.pnr, name: name, phone: phone });
+      if (res && res.success) {
+        state.teachers = res.teachers;
+        renderTeachers();
+        renderClasses();
+        feedback('تم التعديل', 'success');
+      } else {
+        feedback(errText(res), 'error');
+      }
+    }
+
+    async function resetPassword(t) {
+      const newPassword = (window.prompt('كلمة المرور الجديدة للمعلم ' + t.name + ':', '') || '');
+      if (!newPassword) return;
+      if (newPassword.length < 6) { feedback('كلمة المرور قصيرة (6 أحرف على الأقل)', 'error'); return; }
+      const res = await api('reset-teacher-password', { pnr: t.pnr, newPassword: newPassword });
+      if (res && res.success) {
+        feedback('تم تعيين كلمة المرور الجديدة', 'success');
+      } else {
+        feedback(errText(res), 'error');
+      }
+    }
+
+    async function deleteTeacher(t) {
+      if (!window.confirm('سيتم حذف المعلم وإلغاء تكليفه من فصوله. متابعة؟')) return;
+      const res = await api('delete-teacher', { pnr: t.pnr });
+      if (res && res.success) {
+        state.teachers = res.teachers;
+        renderTeachers();
+        renderClasses();
+        feedback('تم حذف المعلم', 'success');
+      } else {
+        feedback(errText(res), 'error');
+      }
+    }
+
+    function copyTeacherLink() {
+      const url = location.origin + '/school-admin/teacher.html';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(
+          function () { feedback('تم نسخ رابط صفحة المعلمين', 'success'); },
+          function () { window.prompt('انسخ الرابط:', url); }
+        );
+      } else {
+        window.prompt('انسخ الرابط:', url);
+      }
+    }
+
+    function togglePanel(id) {
+      const el = $(id);
+      el.hidden = !el.hidden;
+    }
+
+    // ── Wire up ──
+    $('admin-login-form').addEventListener('submit', function (e) { e.preventDefault(); handleLogin(); });
+    $('admin-logout-btn').addEventListener('click', handleLogout);
+    $('tab-lordag').addEventListener('click', function () { switchBoard('Lördag'); });
+    $('tab-sondag').addEventListener('click', function () { switchBoard('Söndag'); });
+    $('kanban-search').addEventListener('input', function (e) {
+      state.query = e.target.value;
+      applyFilter();
+    });
+    $('refresh-btn').addEventListener('click', loadAll);
+    $('add-student-btn').addEventListener('click', openAddStudentModal);
+    $('toggle-classes-btn').addEventListener('click', function () { togglePanel('classes-panel'); });
+    $('toggle-teachers-btn').addEventListener('click', function () { togglePanel('teachers-panel'); });
+    $('add-class-btn').addEventListener('click', addClass);
+    $('add-teacher-btn').addEventListener('click', addTeacher);
+    $('copy-teacher-link-btn').addEventListener('click', copyTeacherLink);
+    $('modal-save-btn').addEventListener('click', saveStudent);
+    $('m-klass-select').addEventListener('change', function (e) { modalMoveStudent(e.target.value); });
+
+    // Session restore
+    if (sessionStorage.getItem(SESSION_KEY)) {
+      showDashboard();
+      loadAll();
+    } else {
+      showLogin();
+    }
+  })();
+  </script>
+</body>
+</html>
