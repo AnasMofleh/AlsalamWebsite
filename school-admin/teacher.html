@@ -88,6 +88,15 @@
       background: #fdf6e3; color: #7a5c13; font-size: .85rem; font-weight: 700;
       padding: 8px 16px; border-bottom: 1px solid #f0e6c8;
     }
+    .att-session-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      padding: 10px 16px; background: #fbfdfb; border-bottom: 1px solid var(--sa-border);
+      font-weight: 800; font-size: .9rem; color: #4b5f52;
+    }
+    .session-today-badge {
+      background: var(--sa-green); color: #fff; border-radius: 999px;
+      padding: 2px 10px; font-size: .7rem; font-weight: 700;
+    }
     .att-table { width: 100%; border-collapse: collapse; }
     .att-table th {
       text-align: right; font-size: .8rem; color: #84998b; font-weight: 800;
@@ -156,6 +165,7 @@
         </div>
         <div class="topbar-meta">
           <span class="topbar-date" id="teacher-today-label"></span>
+          <button class="btn-light-sm" id="teacher-share-btn"><i class="fas fa-share-alt"></i> مشاركة</button>
           <button class="btn-light-sm" id="teacher-logout-btn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
         </div>
       </div>
@@ -204,7 +214,7 @@
     const ERROR_MESSAGES = {
       auth: 'انتهت صلاحية الجلسة — سجل الدخول مجدداً',
       invalid_login: 'رقم الشخص أو كلمة المرور غير صحيحة',
-      not_class_day: 'التسجيل متاح فقط في يوم الفصل',
+      invalid_date: 'التاريخ غير صالح لهذا الفصل',
       forbidden: 'غير مصرح لك بهذا الفصل',
       class_not_found: 'الفصل غير موجود',
       student_not_found: 'الطالب غير موجود'
@@ -330,7 +340,7 @@
       renderClasses(res);
     }
 
-    // ── Class rendering ──
+    // ── Class rendering (two sessions per class: last week + this week) ──
     function renderClasses(data) {
       const wrap = $('teacher-classes');
       wrap.innerHTML = '';
@@ -341,7 +351,6 @@
       }
 
       data.classes.forEach(function (cls) {
-        const isToday = cls.day === data.todayDay;
         const card = document.createElement('div');
         card.className = 'att-class-card';
 
@@ -349,24 +358,30 @@
           + '<div class="att-class-name"><bdi dir="auto">' + escapeHTML(cls.name) + '</bdi></div>'
           + '<span class="day-badge">' + (cls.day === 'Lördag' ? 'السبت' : 'الأحد') + '</span>'
           + '</div>';
-        if (!isToday) {
-          html += '<div class="att-day-note">اليوم ليس يوم الفصل — التسجيل متاح يوم '
-            + (cls.day === 'Lördag' ? 'السبت' : 'الأحد') + ' فقط</div>';
-        }
-        html += '<table class="att-table"><thead><tr><th>الاسم</th><th>الكتب</th><th>الحضور</th></tr></thead><tbody>';
 
-        cls.students.forEach(function (st) {
-          const att = cls.attendance && cls.attendance[st.pnr];
-          const noPnr = !st.pnr;
-          html += '<tr class="att-row" data-pnr="' + escapeHTML(st.pnr) + '" data-klass="' + escapeHTML(cls.name) + '">'
-            + '<td class="att-name"><bdi dir="auto">' + escapeHTML(st.name) + '</bdi></td>'
-            + '<td>' + (st.books === 'J' ? '<span class="chip on">نعم</span>' : '<span class="chip off">لا</span>') + '</td>'
-            + '<td><input type="checkbox" class="att-check"' + (att === 'J' ? ' checked' : '')
-            + ((isToday && !noPnr) ? '' : ' disabled')
-            + (noPnr ? ' title="لا يوجد رقم شخص — لا يمكن تسجيل الحضور"' : '') + '></td>'
-            + '</tr>';
+        cls.sessions.forEach(function (se) {
+          const dayName = cls.day === 'Lördag' ? 'السبت' : 'الأحد';
+          html += '<div class="att-session-head">'
+            + '<span>' + dayName + ' — <span dir="ltr">' + escapeHTML(se.date) + '</span></span>'
+            + (se.isToday ? '<span class="session-today-badge">اليوم</span>' : '')
+            + '</div>';
+          html += '<table class="att-table"><thead><tr><th>الاسم</th><th>الكتب</th><th>الحضور</th></tr></thead><tbody>';
+
+          const attMap = (cls.attendance && cls.attendance[se.date]) || {};
+          cls.students.forEach(function (st) {
+            const att = attMap[st.pnr];
+            const noPnr = !st.pnr;
+            html += '<tr class="att-row" data-pnr="' + escapeHTML(st.pnr) + '" data-klass="' + escapeHTML(cls.name) + '" data-date="' + escapeHTML(se.date) + '">'
+              + '<td class="att-name"><bdi dir="auto">' + escapeHTML(st.name) + '</bdi></td>'
+              + '<td>' + (st.books === 'J' ? '<span class="chip on">نعم</span>' : '<span class="chip off">لا</span>') + '</td>'
+              + '<td><input type="checkbox" class="att-check"' + (att === 'J' ? ' checked' : '')
+              + (noPnr ? ' disabled' : '')
+              + (noPnr ? ' title="لا يوجد رقم شخص — لا يمكن تسجيل الحضور"' : '') + '></td>'
+              + '</tr>';
+          });
+          html += '</tbody></table>';
         });
-        html += '</tbody></table>';
+
         card.innerHTML = html;
 
         card.querySelectorAll('.att-row').forEach(function (row) {
@@ -378,7 +393,7 @@
         card.querySelectorAll('.att-check').forEach(function (chk) {
           chk.addEventListener('change', function () {
             const row = chk.closest('.att-row');
-            toggleAttendance(row.dataset.klass, row.dataset.pnr, chk.checked);
+            toggleAttendance(row.dataset.klass, row.dataset.pnr, chk.checked, row.dataset.date);
           });
         });
 
@@ -386,19 +401,24 @@
       });
     }
 
-    async function toggleAttendance(klass, pnr, checked) {
+    async function toggleAttendance(klass, pnr, checked, date) {
       const res = await api('mark-attendance', {
         klass: klass,
         pnr: pnr,
-        present: checked ? 'J' : 'N'
+        present: checked ? 'J' : 'N',
+        date: date
       });
       if (res && res.success) {
         // update local board data so a re-render keeps the state
         const cls = boardData && boardData.classes.find(function (c) { return c.name === klass; });
-        if (cls) { cls.attendance = cls.attendance || {}; cls.attendance[pnr] = res.present; }
+        if (cls) {
+          cls.attendance = cls.attendance || {};
+          cls.attendance[date] = cls.attendance[date] || {};
+          cls.attendance[date][pnr] = res.present;
+        }
       } else {
         // revert the checkbox
-        const row = document.querySelector('.att-row[data-klass="' + CSS.escape(klass) + '"][data-pnr="' + CSS.escape(pnr) + '"]');
+        const row = document.querySelector('.att-row[data-klass="' + CSS.escape(klass) + '"][data-pnr="' + CSS.escape(pnr) + '"][data-date="' + CSS.escape(date) + '"]');
         const chk = row && row.querySelector('.att-check');
         if (chk) chk.checked = !checked;
         feedback(errText(res), 'error');
@@ -429,11 +449,31 @@
       showModal($('teacher-student-modal'));
     }
 
+    // ── Assistant share link ──
+    async function shareWithAssistant() {
+      const res = await api('share-teacher', {});
+      if (!res || !res.success) { feedback(errText(res), 'error'); return; }
+      const url = location.origin + '/school-admin/teacher.html?share=' + encodeURIComponent(res.token);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(
+          function () { feedback('تم نسخ رابط المشاركة — صالح لمدة 30 يوماً', 'success'); },
+          function () { window.prompt('انسخ رابط المشاركة:', url); }
+        );
+      } else {
+        window.prompt('انسخ رابط المشاركة:', url);
+      }
+    }
+
     // ── Wire up ──
     $('teacher-login-form').addEventListener('submit', function (e) { e.preventDefault(); handleLogin(); });
     $('teacher-logout-btn').addEventListener('click', handleLogout);
+    $('teacher-share-btn').addEventListener('click', shareWithAssistant);
 
-    // Session restore
+    // Session restore — an assistant share link (?share=...) skips the login.
+    const shareParam = new URLSearchParams(location.search).get('share');
+    if (shareParam) {
+      sessionStorage.setItem(SESSION_KEY, shareParam);
+    }
     if (sessionStorage.getItem(SESSION_KEY)) {
       enterDashboard();
     } else {
