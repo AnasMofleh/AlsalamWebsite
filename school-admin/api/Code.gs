@@ -32,17 +32,17 @@
  *    child) and deploy a NEW VERSION of that web app — otherwise
  *    re-registrations wipe class and book data.
  *
- * NOTE: attendance can only be recorded on the class's own day
- * (Saturday classes on Saturdays, Sunday classes on Sundays).
- * A forgotten day cannot be back-filled from the app — the admin edits
- * the Närvaro tab directly in the sheet.
+ * NOTE: attendance can be recorded for this week's or last week's
+ * class-day (the two sessions shown to the teacher) — no day restriction.
+ * Older dates can be corrected directly in the Närvaro tab.
  */
 
 const SCHOOL_SHEET = 'Alsalam Skola Website';
 const TAB_KLASSER  = 'Klasser';
 const TAB_LARARE   = 'Lärare';
 const TAB_NARVARO  = 'Närvaro';
-const TOKEN_TTL_MS = 12 * 60 * 60 * 1000; // 12 hours
+const TOKEN_TTL_MS = 12 * 60 * 60 * 1000; // 12 hours (admin/teacher sessions)
+const SHARE_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days (assistant share links)
 
 const HEADER_FIELDS = [
   'Barnet Förnamn', 'Barnet Efternamn', 'Barnets Personnummer', 'Barnets namn',
@@ -125,6 +125,8 @@ function doPost(e) {
         return json(guardTeacher(params, function(pnr) { return teacherBoard(doc, pnr); }));
       case 'mark-attendance':
         return json(guardTeacher(params, function(pnr) { return markAttendance(doc, pnr, params); }));
+      case 'share-teacher':
+        return json(guardTeacher(params, function(pnr) { return { success: true, token: signToken('share:' + pnr, SHARE_TTL_MS) }; }));
 
       default:
         return json({ success: false, error: 'Unknown action: ' + action });
@@ -145,10 +147,13 @@ function guardAdmin(params, fn) {
 
 function guardTeacher(params, fn) {
   const t = verifyToken(getParam(params, 'token'));
-  if (!t || t.subject === 'admin' || t.subject.length !== 10) {
-    return { success: false, error: 'auth' };
-  }
-  return fn(t.subject);
+  if (!t || t.subject === 'admin') return { success: false, error: 'auth' };
+  // Teacher sessions use the bare PNR as subject; assistant share links
+  // use "share:" + PNR — both map to the same teacher identity.
+  let pnr = t.subject;
+  if (pnr.indexOf('share:') === 0) pnr = pnr.substring(6);
+  if (pnr.length !== 10) return { success: false, error: 'auth' };
+  return fn(pnr);
 }
 
 // ── Schema bootstrap (runs on every request, cheap) ─────────────
@@ -178,6 +183,16 @@ function ensureSchema(doc) {
   ensureTab(doc, TAB_KLASSER, ['Klass', 'Dag', 'LärarePNR', 'Sortering']);
   ensureTab(doc, TAB_LARARE, ['Namn', 'Personnummer', 'Salt', 'LösenordHash', 'Telefon']);
   ensureTab(doc, TAB_NARVARO, ['Datum', 'Dag', 'Klass', 'BarnetsPersonnummer', 'BarnetsNamn', 'Närvarande']);
+
+  // Older Klasser tabs were created without the color column — append it.
+  const klassTab = doc.getSheetByName(TAB_KLASSER);
+  const kLastCol = klassTab.getLastColumn();
+  if (kLastCol > 0) {
+    const kHeaders = klassTab.getRange(1, 1, 1, kLastCol).getValues()[0];
+    if (kHeaders.indexOf('Färg') === -1) {
+      klassTab.getRange(1, kLastCol + 1).setValue('Färg');
+    }
+  }
 }
 
 function ensureTab(doc, name, headersArr) {
@@ -305,7 +320,8 @@ function setKlass(doc, params) {
   const boardDay = getParam(params, 'boardDay');
 
   if (!row || row < 2) return { success: false, error: 'invalid_row' };
-  if (boardDay !== 'Lördag' && boardDay !== 'Söndag') return { success: false, error: 'invalid_day' };
+  // boardDay '' = the combined "all" board: keep the current skoldag.
+  if (boardDay !== '' && boardDay !== 'Lördag' && boardDay !== 'Söndag') return { success: false, error: 'invalid_day' };
 
   const info = getSchoolInfo(doc);
   const sheet = info.sheet, col = info.col;
@@ -316,17 +332,18 @@ function setKlass(doc, params) {
   }
 
   const classes = readClasses(doc);
-  let newDay = boardDay;
 
   if (klass !== '') {
     const cls = classes.find(function(c) { return c.name.toLowerCase() === klass.toLowerCase(); });
     if (!cls) return { success: false, error: 'class_not_found' };
     sheet.getRange(row, col['klass'] + 1).setValue(cls.name);
-    newDay = cls.day;
+    sheet.getRange(row, col['skoldag'] + 1).setValue(cls.day);
   } else {
     sheet.getRange(row, col['klass'] + 1).setValue('');
+    if (boardDay !== '') {
+      sheet.getRange(row, col['skoldag'] + 1).setValue(boardDay);
+    }
   }
-  sheet.getRange(row, col['skoldag'] + 1).setValue(newDay);
 
   return { success: true, student: readStudentAt(sheet, col, row) };
 }
@@ -389,9 +406,11 @@ function addClass(doc, params) {
   const name = getParam(params, 'name').trim();
   const day = getParam(params, 'day');
   const teacherPnr = normPnr(getParam(params, 'teacherPnr'));
+  const color = getParam(params, 'color').trim();
 
   if (!name) return { success: false, error: 'missing_name' };
   if (day !== 'Lördag' && day !== 'Söndag') return { success: false, error: 'invalid_day' };
+  if (color !== '' && !/^#[0-9a-fA-F]{6}$/.test(color)) return { success: false, error: 'invalid_color' };
 
   const classes = readClasses(doc);
   if (classes.some(function(c) { return c.name.toLowerCase() === name.toLowerCase(); })) {
@@ -399,7 +418,7 @@ function addClass(doc, params) {
   }
 
   const maxSort = classes.reduce(function(m, c) { return Math.max(m, c.sort); }, 0);
-  doc.getSheetByName(TAB_KLASSER).appendRow([name, day, teacherPnr, maxSort + 1]);
+  doc.getSheetByName(TAB_KLASSER).appendRow([name, day, teacherPnr, maxSort + 1, color]);
 
   return { success: true, classes: cleanClasses(readClasses(doc)) };
 }
@@ -461,7 +480,16 @@ function updateClass(doc, params) {
   const cls = classes.find(function(c) { return c.name.toLowerCase() === name.toLowerCase(); });
   if (!cls) return { success: false, error: 'class_not_found' };
 
-  doc.getSheetByName(TAB_KLASSER).getRange(cls.sheetRow, 3).setValue(teacherPnr);
+  const tab = doc.getSheetByName(TAB_KLASSER);
+  tab.getRange(cls.sheetRow, 3).setValue(teacherPnr);
+
+  // Color is optional in the API — only written when the param is present.
+  if (Object.prototype.hasOwnProperty.call(params, 'color')) {
+    const color = getParam(params, 'color').trim();
+    if (color !== '' && !/^#[0-9a-fA-F]{6}$/.test(color)) return { success: false, error: 'invalid_color' };
+    tab.getRange(cls.sheetRow, 5).setValue(color);
+  }
+
   return { success: true, classes: cleanClasses(readClasses(doc)) };
 }
 
@@ -550,7 +578,7 @@ function teacherBoard(doc, pnr) {
   const students = readStudents(doc).students;
   const today = todayStr();
   const todayDay = todayDayLabel();
-  const narvaro = readNarvaro(doc).filter(function(n) { return n.date === today; });
+  const narvaro = readNarvaro(doc);
 
   const outClasses = classes.map(function(c) {
     const kids = students
@@ -565,11 +593,21 @@ function teacherBoard(doc, pnr) {
       });
     kids.sort(function(a, b) { return (a.name || '').localeCompare(b.name || '', 'ar'); });
 
+    // Two sessions per class: last week's class-day and this week's.
+    const s = sessionDates(c.day);
+    const sessions = [
+      { date: s.lastWeek, isToday: s.lastWeek === today },
+      { date: s.thisWeek, isToday: s.thisWeek === today }
+    ];
     const attendance = {};
-    narvaro.filter(function(n) { return n.klass === c.name; })
-      .forEach(function(n) { attendance[n.pnr] = n.present; });
+    sessions.forEach(function(se) {
+      const map = {};
+      narvaro.filter(function(n) { return n.klass === c.name && n.date === se.date; })
+        .forEach(function(n) { map[n.pnr] = n.present; });
+      attendance[se.date] = map;
+    });
 
-    return { name: c.name, day: c.day, students: kids, attendance: attendance };
+    return { name: c.name, day: c.day, sessions: sessions, attendance: attendance, students: kids };
   });
 
   return {
@@ -584,6 +622,7 @@ function teacherBoard(doc, pnr) {
 function markAttendance(doc, teacherPnr, params) {
   const klassName = getParam(params, 'klass').trim();
   const childPnr = normPnr(getParam(params, 'pnr'));
+  const date = getParam(params, 'date').trim();
   const presentRaw = getParam(params, 'present');
   const present = (presentRaw === 'J' || presentRaw === '1' || presentRaw === 'true') ? 'J' : 'N';
 
@@ -591,28 +630,30 @@ function markAttendance(doc, teacherPnr, params) {
   if (!cls) return { success: false, error: 'class_not_found' };
   if (cls.teacherPnr !== teacherPnr) return { success: false, error: 'forbidden' };
 
-  // Attendance only on the class's own day (server-authoritative date).
-  const todayDay = todayDayLabel();
-  if (cls.day !== todayDay) return { success: false, error: 'not_class_day' };
+  // Flexible attendance: allowed for this week's or last week's class-day
+  // (the two sessions shown in the teacher view). Server-authoritative.
+  const s = sessionDates(cls.day);
+  if (date !== s.thisWeek && date !== s.lastWeek) {
+    return { success: false, error: 'invalid_date' };
+  }
 
   const student = readStudents(doc).students.find(function(s) {
     return normPnr(s.ssn) === childPnr && s.klass === cls.name;
   });
   if (!student) return { success: false, error: 'student_not_found' };
 
-  const today = todayStr();
   const existing = readNarvaro(doc).find(function(n) {
-    return n.date === today && n.klass === cls.name && n.pnr === childPnr;
+    return n.date === date && n.klass === cls.name && n.pnr === childPnr;
   });
 
   const tab = doc.getSheetByName(TAB_NARVARO);
   if (existing) {
     tab.getRange(existing.sheetRow, 6).setValue(present);
   } else {
-    tab.appendRow([today, cls.day, cls.name, childPnr, student.name, present]);
+    tab.appendRow([date, cls.day, cls.name, childPnr, student.name, present]);
   }
 
-  return { success: true, present: present, date: today };
+  return { success: true, present: present, date: date };
 }
 
 // ── Sheet readers ───────────────────────────────────────────────
@@ -698,7 +739,7 @@ function verifyRowSsn(sheet, col, row, expectedSsn) {
 function readClasses(doc) {
   const tab = doc.getSheetByName(TAB_KLASSER);
   const lastRow = tab.getLastRow();
-  const data = lastRow > 1 ? tab.getRange(2, 1, lastRow - 1, 4).getValues() : [];
+  const data = lastRow > 1 ? tab.getRange(2, 1, lastRow - 1, 5).getValues() : [];
   const out = [];
   for (let i = 0; i < data.length; i++) {
     const r = data[i];
@@ -709,6 +750,7 @@ function readClasses(doc) {
       day: String(r[1] || '').trim(),
       teacherPnr: normPnr(String(r[2] || '')),
       sort: parseInt(r[3], 10) || 0,
+      color: String(r[4] || '').trim(),
       sheetRow: i + 2
     });
   }
@@ -718,7 +760,7 @@ function readClasses(doc) {
 
 function cleanClasses(classes) {
   return classes.map(function(c) {
-    return { name: c.name, day: c.day, teacherPnr: c.teacherPnr, sort: c.sort };
+    return { name: c.name, day: c.day, teacherPnr: c.teacherPnr, sort: c.sort, color: c.color };
   });
 }
 
@@ -771,8 +813,8 @@ function readNarvaro(doc) {
 }
 
 // ── Tokens ──────────────────────────────────────────────────────
-function signToken(subject) {
-  const expiryMs = Date.now() + TOKEN_TTL_MS;
+function signToken(subject, ttlMs) {
+  const expiryMs = Date.now() + (ttlMs || TOKEN_TTL_MS);
   const payload = subject + '.' + expiryMs;
   return payload + '.' + hmacHex(payload);
 }
@@ -864,4 +906,36 @@ function todayDayLabel() {
   if (eee === 'Sat') return 'Lördag';
   if (eee === 'Sun') return 'Söndag';
   return '';
+}
+
+// Day-of-week of a "yyyy-MM-dd" string (0 = Sunday .. 6 = Saturday).
+// Computed from the date components only — independent of any timezone.
+function dowOfDateStr(dateStr) {
+  const p = String(dateStr).split('-');
+  let y = parseInt(p[0], 10);
+  const m = parseInt(p[1], 10);
+  const d = parseInt(p[2], 10);
+  const t = [0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4];
+  y -= (m < 3) ? 1 : 0;
+  return (y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) + t[m - 1] + d) % 7;
+}
+
+// Date arithmetic on "yyyy-MM-dd" strings. Constructed at noon so that
+// any timezone offset between the script tz and Stockholm keeps the
+// same calendar day.
+function addDaysToDateStr(dateStr, days) {
+  const p = String(dateStr).split('-');
+  const d = new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10) + days, 12, 0, 0);
+  return Utilities.formatDate(d, 'Europe/Stockholm', 'yyyy-MM-dd');
+}
+
+// The two attendance sessions shown to a teacher: last week's class-day
+// and this week's class-day.
+function sessionDates(day) {
+  const today = todayStr();
+  const classDow = day === 'Lördag' ? 6 : 0;
+  const todayDow = dowOfDateStr(today);
+  const thisWeek = addDaysToDateStr(today, classDow - todayDow);
+  const lastWeek = addDaysToDateStr(thisWeek, -7);
+  return { thisWeek: thisWeek, lastWeek: lastWeek };
 }

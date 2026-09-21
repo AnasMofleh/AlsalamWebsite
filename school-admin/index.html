@@ -96,9 +96,12 @@
       flex: 0 0 min(85vw, 300px); background: #e6ece6; border-radius: 12px;
       scroll-snap-align: start; display: flex; flex-direction: column;
       max-height: calc(100vh - 200px);
+      border-top: 5px solid var(--col-color, var(--sa-green));
     }
     .kanban-column-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px 6px; gap: 6px; }
     .kanban-column-title { font-weight: 800; font-size: .95rem; display: flex; align-items: center; gap: 6px; }
+    .col-dot { width: 10px; height: 10px; border-radius: 999px; background: var(--col-color, var(--sa-green)); flex: none; }
+    .day-badge-sm { background: var(--sa-blue); color: #fff; border-radius: 999px; padding: 0 8px; font-size: .65rem; font-weight: 700; }
     .kanban-count { background: #fff; border-radius: 999px; padding: 1px 9px; font-size: .75rem; color: #4b5f52; font-weight: 700; }
     .kanban-column-actions { display: flex; gap: 4px; }
     .icon-btn {
@@ -140,6 +143,7 @@
     }
     .mgmt-name { font-weight: 700; flex: 1 1 120px; }
     .mgmt-teacher-select { flex: 0 1 200px; min-width: 150px; }
+    .mgmt-color { width: 36px; height: 30px; border: 1px solid #c9d5c9; border-radius: 6px; padding: 2px; background: #fff; cursor: pointer; }
     .mgmt-actions { display: flex; gap: 6px; }
     .mgmt-sub { color: #6b7a70; font-size: .85rem; }
     .empty-note { color: #84998b; text-align: center; padding: 16px 0; }
@@ -202,6 +206,7 @@
         <div class="board-tabs" role="tablist">
           <button class="board-tab active" id="tab-lordag" data-day="Lördag">السبت</button>
           <button class="board-tab" id="tab-sondag" data-day="Söndag">الأحد</button>
+          <button class="board-tab" id="tab-both" data-day="all">الكل</button>
         </div>
         <div class="search-wrap">
           <i class="fas fa-search"></i>
@@ -228,7 +233,7 @@
             <label class="form-label" for="add-class-name">اسم الفصل</label>
             <input type="text" class="form-control" id="add-class-name" placeholder="مثال: المستوى الأول أ">
           </div>
-          <div class="col-12 col-md-3">
+          <div class="col-12 col-md-2">
             <label class="form-label d-block">اليوم</label>
             <div class="d-flex gap-3 pt-2">
               <div class="form-check">
@@ -245,7 +250,11 @@
             <label class="form-label" for="add-class-teacher">المعلم</label>
             <select class="form-select" id="add-class-teacher"></select>
           </div>
-          <div class="col-12 col-md-3">
+          <div class="col-6 col-md-2">
+            <label class="form-label" for="add-class-color">اللون</label>
+            <input type="color" class="form-control form-control-color" id="add-class-color" value="#196F15">
+          </div>
+          <div class="col-12 col-md-2">
             <button class="btn btn-sa-primary w-100" id="add-class-btn">إضافة فصل</button>
           </div>
         </div>
@@ -459,7 +468,9 @@
       pnr_locked: 'لا يمكن تعديل أرقام الشخص',
       duplicate_student: 'يوجد طالب بهذا الرقم مسبقاً — عدّل بطاقته بدلاً من ذلك',
       invalid_skoldag: 'قيمة يوم الدوام غير صحيحة',
-      invalid_day: 'اليوم غير صحيح'
+      invalid_day: 'اليوم غير صحيح',
+      invalid_color: 'اللون غير صالح',
+      invalid_date: 'التاريخ غير صالح لهذا الفصل'
     };
 
     function errText(res) {
@@ -608,47 +619,56 @@
       }
 
       const day = state.boardDay;
-      const dayClasses = state.classes.filter(function (c) { return c.day === day; });
+      const isAll = day === 'all';
       const knownClassNames = new Set(state.classes.map(function (c) { return c.name; }));
+      // Anything not in a known class belongs in "طلاب جدد" (no orphan column).
+      const isUnclassified = function (s) {
+        return !s.klass || !knownClassNames.has(s.klass);
+      };
+      const dayName = function (d) { return d === 'Lördag' ? 'السبت' : 'الأحد'; };
 
       board.innerHTML = '';
       const wrap = document.createElement('div');
       wrap.className = 'kanban-board-scroll';
 
       const newKids = state.students.filter(function (s) {
-        return !s.klass && (!s.skoldag || s.skoldag === day);
+        return isUnclassified(s) && (isAll || !s.skoldag || s.skoldag === day);
       });
-      wrap.appendChild(buildColumn('', 'طلاب جدد', newKids, false));
+      wrap.appendChild(buildColumn('', 'طلاب جدد', newKids, false, '', ''));
 
-      dayClasses.forEach(function (c) {
-        const kids = state.students.filter(function (s) { return s.klass === c.name; });
-        wrap.appendChild(buildColumn(c.name, c.name, kids, true));
+      const dayGroups = isAll ? ['Lördag', 'Söndag'] : [day];
+      dayGroups.forEach(function (d) {
+        state.classes.filter(function (c) { return c.day === d; }).forEach(function (c) {
+          const kids = state.students.filter(function (s) { return s.klass === c.name; });
+          wrap.appendChild(buildColumn(c.name, c.name, kids, true, c.color || '', isAll ? dayName(d) : ''));
+        });
       });
-
-      // Safety net: students whose klass no longer matches any class
-      // (e.g. the class row was edited manually in the sheet).
-      const orphanKids = state.students.filter(function (s) {
-        return s.klass && !knownClassNames.has(s.klass) && (!s.skoldag || s.skoldag === day);
-      });
-      if (orphanKids.length) {
-        wrap.appendChild(buildColumn('__orphan__', 'غير مصنف', orphanKids, false));
-      }
 
       board.appendChild(wrap);
       initSortables();
       applyFilter();
     }
 
-    function buildColumn(klassKey, title, kids, isRealClass) {
+    function buildColumn(klassKey, title, kids, isRealClass, color, dayLabel) {
       const col = document.createElement('div');
       col.className = 'kanban-column';
       col.dataset.klass = klassKey;
+      if (color) col.style.setProperty('--col-color', color);
 
       const header = document.createElement('div');
       header.className = 'kanban-column-header';
       const t = document.createElement('div');
       t.className = 'kanban-column-title';
+      const dot = document.createElement('span');
+      dot.className = 'col-dot';
+      t.appendChild(dot);
       t.appendChild(document.createTextNode(title));
+      if (dayLabel) {
+        const db = document.createElement('span');
+        db.className = 'day-badge-sm';
+        db.textContent = dayLabel;
+        t.appendChild(db);
+      }
       const count = document.createElement('span');
       count.className = 'kanban-count';
       count.textContent = kids.length;
@@ -738,7 +758,7 @@
       const ssn = item.dataset.ssn || '';
       const colEl = evt.to.closest('.kanban-column');
       const klassKey = colEl ? colEl.dataset.klass : '';
-      moveStudent(row, ssn, klassKey === '__orphan__' ? '' : klassKey);
+      moveStudent(row, ssn, klassKey || '');
     }
 
     async function moveStudent(row, ssn, klass) {
@@ -746,7 +766,7 @@
         row: String(row),
         ssn: ssn,
         klass: klass || '',
-        boardDay: state.boardDay
+        boardDay: state.boardDay === 'all' ? '' : state.boardDay
       });
       if (res && res.success) {
         feedback('تم نقل الطالب', 'success');
@@ -773,6 +793,7 @@
       state.boardDay = day;
       $('tab-lordag').classList.toggle('active', day === 'Lördag');
       $('tab-sondag').classList.toggle('active', day === 'Söndag');
+      $('tab-both').classList.toggle('active', day === 'all');
       renderBoard();
     }
 
@@ -823,10 +844,18 @@
       $('m-registered').textContent = s.registered ? 'تاريخ التسجيل: ' + s.registered : '';
 
       const sel = $('m-klass-select');
-      const dayClasses = state.classes.filter(function (c) { return c.day === state.boardDay; });
-      sel.innerHTML = '<option value="">طلاب جدد</option>' + dayClasses.map(function (c) {
-        return '<option value="' + escapeHTML(c.name) + '">' + escapeHTML(c.name) + '</option>';
-      }).join('');
+      let optionsHtml = '<option value="">طلاب جدد</option>';
+      if (state.boardDay === 'all') {
+        const dayName = function (d) { return d === 'Lördag' ? 'السبت' : 'الأحد'; };
+        optionsHtml += state.classes.map(function (c) {
+          return '<option value="' + escapeHTML(c.name) + '">' + escapeHTML(c.name) + ' (' + dayName(c.day) + ')</option>';
+        }).join('');
+      } else {
+        optionsHtml += state.classes.filter(function (c) { return c.day === state.boardDay; }).map(function (c) {
+          return '<option value="' + escapeHTML(c.name) + '">' + escapeHTML(c.name) + '</option>';
+        }).join('');
+      }
+      sel.innerHTML = optionsHtml;
       sel.value = s.klass || '';
 
       showModal($('student-modal'));
@@ -877,7 +906,7 @@
         row: String(modalStudent.row),
         ssn: modalStudent.ssn || '',
         klass: value || '',
-        boardDay: state.boardDay
+        boardDay: state.boardDay === 'all' ? '' : state.boardDay
       });
       if (res && res.success) {
         const st = state.students.find(function (x) { return x.row === modalStudent.row; });
@@ -900,7 +929,7 @@
       ['m-firstName', 'm-lastName', 'm-ssn', 'm-fatherName', 'm-fatherPhone', 'm-fatherEmail',
        'm-fatherSsn', 'm-motherName', 'm-motherPhone', 'm-motherEmail', 'm-motherSsn',
        'm-address', 'm-zip', 'm-city'].forEach(function (id) { $(id).value = ''; });
-      $('m-skoldag').value = state.boardDay;
+      $('m-skoldag').value = state.boardDay === 'all' ? 'Lördag' : state.boardDay;
       $('m-paid').checked = false;
       $('m-books').checked = false;
       $('m-registered').textContent = '';
@@ -1003,6 +1032,16 @@
           nameEl.innerHTML = '<bdi dir="auto">' + escapeHTML(c.name) + '</bdi>';
           row.appendChild(nameEl);
 
+          const colorInput = document.createElement('input');
+          colorInput.type = 'color';
+          colorInput.className = 'mgmt-color';
+          colorInput.title = 'لون الفصل';
+          colorInput.value = c.color || '#196F15';
+          colorInput.addEventListener('change', function () {
+            setClassColor(c.name, colorInput.value, c.teacherPnr);
+          });
+          row.appendChild(colorInput);
+
           const sel = document.createElement('select');
           sel.className = 'form-select form-select-sm mgmt-teacher-select';
           sel.innerHTML = teacherOptions(c.teacherPnr);
@@ -1034,8 +1073,9 @@
       const name = $('add-class-name').value.trim();
       const day = document.querySelector('input[name="add-class-day"]:checked').value;
       const teacherPnr = $('add-class-teacher').value;
+      const color = $('add-class-color').value;
       if (!name) { feedback('أدخل اسم الفصل', 'error'); return; }
-      const res = await api('add-class', { name: name, day: day, teacherPnr: teacherPnr });
+      const res = await api('add-class', { name: name, day: day, teacherPnr: teacherPnr, color: color });
       if (res && res.success) {
         state.classes = res.classes;
         $('add-class-name').value = '';
@@ -1044,6 +1084,18 @@
         feedback('تمت إضافة الفصل', 'success');
       } else {
         feedback(errText(res), 'error');
+      }
+    }
+
+    async function setClassColor(name, color, teacherPnr) {
+      const res = await api('update-class', { name: name, teacherPnr: teacherPnr || '', color: color });
+      if (res && res.success) {
+        state.classes = res.classes;
+        renderBoard();
+        feedback('تم تحديث لون الفصل', 'success');
+      } else {
+        feedback(errText(res), 'error');
+        renderClasses();
       }
     }
 
@@ -1223,6 +1275,7 @@
     $('admin-logout-btn').addEventListener('click', handleLogout);
     $('tab-lordag').addEventListener('click', function () { switchBoard('Lördag'); });
     $('tab-sondag').addEventListener('click', function () { switchBoard('Söndag'); });
+    $('tab-both').addEventListener('click', function () { switchBoard('all'); });
     $('kanban-search').addEventListener('input', function (e) {
       state.query = e.target.value;
       applyFilter();
