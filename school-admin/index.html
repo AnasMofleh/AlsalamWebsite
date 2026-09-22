@@ -121,6 +121,14 @@
     }
     .kanban-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,.12); border-color: #cfe0cf; }
     .kanban-card-name { font-weight: 700; font-size: .95rem; margin-bottom: 8px; }
+    .kanban-card-phones {
+      font-size: .78rem; color: #5b6f62; margin-bottom: 8px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      direction: ltr; text-align: right;
+    }
+    .kanban-card-phones a { color: var(--sa-blue); text-decoration: none; font-weight: 700; }
+    .kanban-card-phones a:hover { text-decoration: underline; }
+    .kanban-card-phones .sep { color: #b3c2b7; }
     .kanban-chips { display: flex; gap: 6px; flex-wrap: wrap; }
     .chip { font-size: .7rem; font-weight: 700; border-radius: 999px; padding: 2px 10px; }
     .chip.on.chip-paid { background: var(--sa-green); color: #fff; }
@@ -450,6 +458,15 @@
         .trim();
     }
 
+    // Phone search: digit-only form + the same digits without a leading
+    // zero (Swedish numbers are often stored as 701234567 instead of
+    // 0701234567) — both variants go into the card's search text.
+    function normPhoneForSearch(s) {
+      const d = String(s || '').replace(/[^0-9]/g, '');
+      if (!d) return '';
+      return d + ' ' + (d.charAt(0) === '0' ? d.substring(1) : d);
+    }
+
     const ERROR_MESSAGES = {
       auth: 'انتهت صلاحية الجلسة — سجل الدخول مجدداً',
       invalid_password: 'كلمة المرور غير صحيحة',
@@ -710,13 +727,33 @@
       li.dataset.ssn = s.ssn || '';
       li.dataset.search = normArabic([
         s.name, s.firstName, s.lastName,
-        s.fatherName, s.motherName, s.fatherPhone, s.motherPhone
-      ].join(' '));
+        s.fatherName, s.motherName
+      ].join(' ')) + ' ' + normPhoneForSearch(s.fatherPhone) + ' ' + normPhoneForSearch(s.motherPhone);
 
       const nameEl = document.createElement('div');
       nameEl.className = 'kanban-card-name';
       nameEl.innerHTML = '<bdi dir="auto">' + escapeHTML(s.name || (s.firstName + ' ' + s.lastName).trim()) + '</bdi>';
       li.appendChild(nameEl);
+
+      // One-line parent phone numbers as tap-to-call links
+      const phoneParts = [];
+      if (s.fatherPhone) {
+        phoneParts.push('أب: <a href="tel:' + escapeHTML(s.fatherPhone.replace(/[^0-9+]/g, '')) + '">'
+          + escapeHTML(s.fatherPhone.trim()) + '</a>');
+      }
+      if (s.motherPhone) {
+        phoneParts.push('أم: <a href="tel:' + escapeHTML(s.motherPhone.replace(/[^0-9+]/g, '')) + '">'
+          + escapeHTML(s.motherPhone.trim()) + '</a>');
+      }
+      if (phoneParts.length) {
+        const phones = document.createElement('div');
+        phones.className = 'kanban-card-phones';
+        phones.innerHTML = phoneParts.join(' <span class="sep">•</span> ');
+        phones.addEventListener('click', function (e) {
+          if (e.target.tagName === 'A') e.stopPropagation(); // dial, don't open the modal
+        });
+        li.appendChild(phones);
+      }
 
       const chips = document.createElement('div');
       chips.className = 'kanban-chips';
@@ -798,10 +835,25 @@
     }
 
     function applyFilter() {
-      const q = normArabic(state.query.trim());
+      const raw = state.query.trim();
+      const phoneQuery = /^[0-9+\-() ]+$/.test(raw) && /\d/.test(raw);
+      const qDigits = phoneQuery ? raw.replace(/[^0-9]/g, '') : '';
+      // Try the query both with and without a leading zero, so a number
+      // stored as 701234567 matches "0701234567" and vice versa.
+      const qVariants = phoneQuery
+        ? [qDigits, (qDigits.charAt(0) === '0' ? qDigits.substring(1) : '0' + qDigits)].filter(function (v) { return v !== ''; })
+        : [];
+      const qText = phoneQuery ? '' : normArabic(raw);
+
       document.querySelectorAll('.kanban-card').forEach(function (card) {
-        const hay = normArabic(card.dataset.search || '');
-        card.style.display = (!q || hay.indexOf(q) !== -1) ? '' : 'none';
+        const hay = card.dataset.search || '';
+        let match;
+        if (phoneQuery) {
+          match = qVariants.some(function (v) { return hay.indexOf(v) !== -1; });
+        } else {
+          match = !qText || hay.indexOf(qText) !== -1;
+        }
+        card.style.display = match ? '' : 'none';
       });
       document.querySelectorAll('.kanban-column').forEach(function (col) {
         let visible = 0;
