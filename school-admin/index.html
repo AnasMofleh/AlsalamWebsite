@@ -85,6 +85,31 @@
     }
     .search-wrap input:focus { outline: none; border-color: var(--sa-green); }
     .toolbar-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-inline-start: auto; }
+    #filter-btn.active { background: var(--sa-green); color: #fff; border-color: var(--sa-green); }
+    #filter-btn-day { font-weight: 800; }
+
+    /* ── Filter panel ── */
+    .filter-panel { background: #fff; border-bottom: 1px solid var(--sa-border); padding: 10px 12px 12px; }
+    .filter-group { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+    .filter-group:last-of-type { margin-bottom: 12px; }
+    .filter-label { font-weight: 800; font-size: .85rem; color: #4b5f52; min-width: 80px; }
+
+    /* ── Hidden classes strip ── */
+    .hidden-strip {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+      background: #fff; border: 1px dashed #c9d5c9; border-radius: 12px;
+      padding: 10px 14px; margin-top: 12px;
+    }
+    .hidden-strip-label { font-weight: 800; font-size: .8rem; color: #84998b; }
+    .hidden-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #eef1ee; border-radius: 999px; padding: 3px 6px 3px 12px;
+      font-size: .8rem; font-weight: 700; color: #4b5f52;
+    }
+    .hidden-chip button {
+      border: none; background: #fff; border-radius: 999px; width: 22px; height: 22px;
+      color: var(--sa-green); cursor: pointer; font-size: .7rem;
+    }
 
     /* ── Kanban ── */
     .board-area { padding: 14px 12px 24px; }
@@ -131,9 +156,11 @@
     .kanban-card-phones .sep { color: #b3c2b7; }
     .kanban-chips { display: flex; gap: 6px; flex-wrap: wrap; }
     .chip { font-size: .7rem; font-weight: 700; border-radius: 999px; padding: 2px 10px; }
-    .chip.on.chip-paid { background: var(--sa-green); color: #fff; }
     .chip.on.chip-books { background: var(--sa-blue); color: #fff; }
     .chip.off { background: #eef1ee; color: #84998b; }
+    .chip.pay-S { background: var(--sa-green); color: #fff; }
+    .chip.pay-K { background: #8a6d1f; color: #fff; }
+    .chip.pay-none { background: #eef1ee; color: #84998b; }
     .kanban-ghost { opacity: .45; }
     .kanban-drag { box-shadow: 0 8px 20px rgba(0,0,0,.2) !important; }
     .board-empty { text-align: center; color: #84998b; padding: 40px 0; font-size: 1rem; }
@@ -211,11 +238,7 @@
 
     <div class="toolbar">
       <div class="toolbar-row container-fluid">
-        <div class="board-tabs" role="tablist">
-          <button class="board-tab active" id="tab-lordag" data-day="Lördag">السبت</button>
-          <button class="board-tab" id="tab-sondag" data-day="Söndag">الأحد</button>
-          <button class="board-tab" id="tab-both" data-day="all">الكل</button>
-        </div>
+        <button class="btn btn-outline btn-sm" id="filter-btn"><i class="fas fa-filter"></i> تصفية · <span id="filter-btn-day">السبت</span></button>
         <div class="search-wrap">
           <i class="fas fa-search"></i>
           <input type="text" id="kanban-search" placeholder="ابحث عن طالب..." autocomplete="off">
@@ -227,6 +250,34 @@
           <button class="btn btn-outline btn-sm" id="toggle-teachers-btn">إدارة المعلمين</button>
           <button class="btn btn-outline-danger btn-sm" id="admin-logout-btn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
         </div>
+      </div>
+      <div class="filter-panel" id="filter-panel" hidden>
+        <div class="filter-group">
+          <span class="filter-label">اليوم</span>
+          <div class="board-tabs" role="tablist">
+            <button class="board-tab active" id="tab-lordag" data-day="Lördag">السبت</button>
+            <button class="board-tab" id="tab-sondag" data-day="Söndag">الأحد</button>
+            <button class="board-tab" id="tab-both" data-day="all">الكل</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">الكتب</span>
+          <div class="board-tabs">
+            <button class="board-tab active" id="books-all" data-books="all">الكل</button>
+            <button class="board-tab" id="books-with" data-books="with">مع كتب</button>
+            <button class="board-tab" id="books-without" data-books="without">بدون كتب</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">الدفع الشهري</span>
+          <div class="board-tabs">
+            <button class="board-tab active" id="pay-all" data-pay="all">الكل</button>
+            <button class="board-tab" id="pay-S" data-pay="S">سويش</button>
+            <button class="board-tab" id="pay-K" data-pay="K">كاش</button>
+            <button class="board-tab" id="pay-none" data-pay="none">بدون</button>
+          </div>
+        </div>
+        <button class="btn btn-outline btn-sm" id="filter-clear-btn">مسح الفلاتر</button>
       </div>
     </div>
 
@@ -339,11 +390,15 @@
               <label class="form-label" for="m-klass-select">الانتقال إلى فصل</label>
               <select class="form-select" id="m-klass-select"></select>
             </div>
-            <div class="col-12 col-md-4 d-flex align-items-end gap-4 pb-2">
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="m-paid">
-                <label class="form-check-label" for="m-paid">دفع شهري</label>
-              </div>
+            <div class="col-12 col-md-4">
+              <label class="form-label" for="m-payment">الدفع الشهري</label>
+              <select class="form-select" id="m-payment">
+                <option value="">بدون دفع شهري</option>
+                <option value="S">سويش</option>
+                <option value="K">كاش</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-4 d-flex align-items-end pb-2">
               <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" id="m-books">
                 <label class="form-check-label" for="m-books">استلم الكتب</label>
@@ -435,11 +490,30 @@
       teachers: [],
       boardDay: 'Lördag',
       query: '',
+      booksFilter: 'all',
+      paymentFilter: 'all',
+      hiddenClasses: loadHiddenClasses(),
       sortables: []
     };
     let modalStudent = null;
 
     const $ = function (id) { return document.getElementById(id); };
+
+    // ── Hidden classes (browser-local only) ──
+    function loadHiddenClasses() {
+      try {
+        const raw = localStorage.getItem('alsalam_school_hidden_classes');
+        return new Set(raw ? JSON.parse(raw) : []);
+      } catch (e) {
+        return new Set();
+      }
+    }
+
+    function saveHiddenClasses() {
+      try {
+        localStorage.setItem('alsalam_school_hidden_classes', JSON.stringify(Array.from(state.hiddenClasses)));
+      } catch (e) { /* noop */ }
+    }
 
     // ── Small helpers ──
     function escapeHTML(s) {
@@ -655,15 +729,52 @@
 
       const dayGroups = isAll ? ['Lördag', 'Söndag'] : [day];
       dayGroups.forEach(function (d) {
-        state.classes.filter(function (c) { return c.day === d; }).forEach(function (c) {
+        state.classes.filter(function (c) {
+          return c.day === d && !state.hiddenClasses.has(c.name);
+        }).forEach(function (c) {
           const kids = state.students.filter(function (s) { return s.klass === c.name; });
           wrap.appendChild(buildColumn(c.name, c.name, kids, true, c.color || '', isAll ? dayName(d) : ''));
         });
       });
 
       board.appendChild(wrap);
+
+      // Hidden classes collapse into a restore strip (browser-local).
+      const hiddenList = state.classes.filter(function (c) { return state.hiddenClasses.has(c.name); });
+      if (hiddenList.length) {
+        board.appendChild(buildHiddenStrip(hiddenList));
+      }
+
       initSortables();
       applyFilter();
+    }
+
+    function buildHiddenStrip(hiddenList) {
+      const strip = document.createElement('div');
+      strip.className = 'hidden-strip';
+      const label = document.createElement('span');
+      label.className = 'hidden-strip-label';
+      label.textContent = 'فصول مخفية:';
+      strip.appendChild(label);
+      hiddenList.forEach(function (c) {
+        const chip = document.createElement('span');
+        chip.className = 'hidden-chip';
+        chip.appendChild(document.createTextNode(c.name));
+        const btn = document.createElement('button');
+        btn.title = 'إظهار الفصل';
+        btn.innerHTML = '<i class="fas fa-eye"></i>';
+        btn.addEventListener('click', function () { toggleClassHidden(c.name); });
+        chip.appendChild(btn);
+        strip.appendChild(chip);
+      });
+      return strip;
+    }
+
+    function toggleClassHidden(name) {
+      if (state.hiddenClasses.has(name)) state.hiddenClasses.delete(name);
+      else state.hiddenClasses.add(name);
+      saveHiddenClasses();
+      renderBoard();
     }
 
     function buildColumn(klassKey, title, kids, isRealClass, color, dayLabel) {
@@ -695,6 +806,11 @@
       if (isRealClass) {
         const actions = document.createElement('div');
         actions.className = 'kanban-column-actions';
+        const eyeBtn = document.createElement('button');
+        eyeBtn.className = 'icon-btn';
+        eyeBtn.title = 'إخفاء الفصل';
+        eyeBtn.innerHTML = '<i class="fas fa-eye-slash"></i>';
+        eyeBtn.addEventListener('click', function () { toggleClassHidden(klassKey); });
         const rBtn = document.createElement('button');
         rBtn.className = 'icon-btn';
         rBtn.title = 'إعادة تسمية الفصل';
@@ -705,6 +821,7 @@
         dBtn.title = 'حذف الفصل';
         dBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
         dBtn.addEventListener('click', function () { deleteClass(klassKey); });
+        actions.appendChild(eyeBtn);
         actions.appendChild(rBtn);
         actions.appendChild(dBtn);
         header.appendChild(actions);
@@ -729,6 +846,8 @@
         s.name, s.firstName, s.lastName,
         s.fatherName, s.motherName
       ].join(' ')) + ' ' + normPhoneForSearch(s.fatherPhone) + ' ' + normPhoneForSearch(s.motherPhone);
+      li.dataset.books = s.books || '';
+      li.dataset.payment = s.payment || '';
 
       const nameEl = document.createElement('div');
       nameEl.className = 'kanban-card-name';
@@ -757,13 +876,14 @@
 
       const chips = document.createElement('div');
       chips.className = 'kanban-chips';
-      const paid = document.createElement('span');
-      paid.className = 'chip chip-paid ' + (s.paid === 'J' ? 'on' : 'off');
-      paid.textContent = 'دفع شهري';
+      const pay = document.createElement('span');
+      if (s.payment === 'S') { pay.className = 'chip pay-S'; pay.textContent = 'سويش'; }
+      else if (s.payment === 'K') { pay.className = 'chip pay-K'; pay.textContent = 'كاش'; }
+      else { pay.className = 'chip pay-none'; pay.textContent = 'بدون دفع'; }
       const books = document.createElement('span');
       books.className = 'chip chip-books ' + (s.books === 'J' ? 'on' : 'off');
       books.textContent = 'كتب';
-      chips.appendChild(paid);
+      chips.appendChild(pay);
       chips.appendChild(books);
       li.appendChild(chips);
 
@@ -781,8 +901,10 @@
           delay: 150,
           delayOnTouchOnly: true,
           scroll: true,
-          scrollSensitivity: 60,
-          scrollSpeed: 12,
+          bubbleScroll: true,
+          forceAutoScrollFallback: true,
+          scrollSensitivity: 90,
+          scrollSpeed: 15,
           onEnd: onCardDrop
         }));
       });
@@ -831,6 +953,8 @@
       $('tab-lordag').classList.toggle('active', day === 'Lördag');
       $('tab-sondag').classList.toggle('active', day === 'Söndag');
       $('tab-both').classList.toggle('active', day === 'all');
+      const dayNames = { 'Lördag': 'السبت', 'Söndag': 'الأحد', 'all': 'الكل' };
+      $('filter-btn-day').textContent = dayNames[day] || day;
       renderBoard();
     }
 
@@ -853,6 +977,16 @@
         } else {
           match = !qText || hay.indexOf(qText) !== -1;
         }
+        if (match && state.booksFilter !== 'all') {
+          match = (card.dataset.books === 'J') === (state.booksFilter === 'with');
+        }
+        if (match && state.paymentFilter !== 'all') {
+          if (state.paymentFilter === 'none') {
+            match = card.dataset.payment === '';
+          } else {
+            match = card.dataset.payment === state.paymentFilter;
+          }
+        }
         card.style.display = match ? '' : 'none';
       });
       document.querySelectorAll('.kanban-column').forEach(function (col) {
@@ -863,6 +997,25 @@
         const badge = col.querySelector('.kanban-count');
         if (badge) badge.textContent = visible;
       });
+    }
+
+    function setBooksFilter(v) {
+      state.booksFilter = v;
+      document.querySelectorAll('[data-books]').forEach(function (b) { b.classList.toggle('active', b.dataset.books === v); });
+      applyFilter();
+      updateFilterBtn();
+    }
+
+    function setPaymentFilter(v) {
+      state.paymentFilter = v;
+      document.querySelectorAll('[data-pay]').forEach(function (b) { b.classList.toggle('active', b.dataset.pay === v); });
+      applyFilter();
+      updateFilterBtn();
+    }
+
+    function updateFilterBtn() {
+      const active = state.booksFilter !== 'all' || state.paymentFilter !== 'all';
+      $('filter-btn').classList.toggle('active', active);
     }
 
     // ── Student modal ──
@@ -880,7 +1033,7 @@
       $('m-lastName').value = s.lastName || '';
       $('m-ssn').value = s.ssn || '';
       $('m-skoldag').value = (s.skoldag === 'Söndag') ? 'Söndag' : 'Lördag';
-      $('m-paid').checked = s.paid === 'J';
+      $('m-payment').value = s.payment || '';
       $('m-books').checked = s.books === 'J';
       $('m-fatherName').value = s.fatherName || '';
       $('m-fatherPhone').value = s.fatherPhone || '';
@@ -896,14 +1049,15 @@
       $('m-registered').textContent = s.registered ? 'تاريخ التسجيل: ' + s.registered : '';
 
       const sel = $('m-klass-select');
+      const visibleClasses = state.classes.filter(function (c) { return !state.hiddenClasses.has(c.name); });
       let optionsHtml = '<option value="">طلاب جدد</option>';
       if (state.boardDay === 'all') {
         const dayName = function (d) { return d === 'Lördag' ? 'السبت' : 'الأحد'; };
-        optionsHtml += state.classes.map(function (c) {
+        optionsHtml += visibleClasses.map(function (c) {
           return '<option value="' + escapeHTML(c.name) + '">' + escapeHTML(c.name) + ' (' + dayName(c.day) + ')</option>';
         }).join('');
       } else {
-        optionsHtml += state.classes.filter(function (c) { return c.day === state.boardDay; }).map(function (c) {
+        optionsHtml += visibleClasses.filter(function (c) { return c.day === state.boardDay; }).map(function (c) {
           return '<option value="' + escapeHTML(c.name) + '">' + escapeHTML(c.name) + '</option>';
         }).join('');
       }
@@ -919,7 +1073,7 @@
         firstName: $('m-firstName').value.trim(),
         lastName: $('m-lastName').value.trim(),
         skoldag: $('m-skoldag').value,
-        paid: $('m-paid').checked ? 'J' : '',
+        payment: $('m-payment').value,
         books: $('m-books').checked ? 'J' : '',
         fatherName: $('m-fatherName').value.trim(),
         fatherPhone: $('m-fatherPhone').value.trim(),
@@ -982,7 +1136,7 @@
        'm-fatherSsn', 'm-motherName', 'm-motherPhone', 'm-motherEmail', 'm-motherSsn',
        'm-address', 'm-zip', 'm-city'].forEach(function (id) { $(id).value = ''; });
       $('m-skoldag').value = state.boardDay === 'all' ? 'Lördag' : state.boardDay;
-      $('m-paid').checked = false;
+      $('m-payment').value = '';
       $('m-books').checked = false;
       $('m-registered').textContent = '';
 
@@ -1022,7 +1176,7 @@
           lastName: lastName,
           ssn: ssn,
           skoldag: $('m-skoldag').value,
-          paid: $('m-paid').checked ? 'J' : '',
+          payment: $('m-payment').value,
           books: $('m-books').checked ? 'J' : '',
           fatherName: $('m-fatherName').value.trim(),
           fatherSsn: fatherSsn,
@@ -1334,6 +1488,20 @@
     });
     $('refresh-btn').addEventListener('click', loadAll);
     $('add-student-btn').addEventListener('click', openAddStudentModal);
+    $('filter-btn').addEventListener('click', function () {
+      const panel = $('filter-panel');
+      panel.hidden = !panel.hidden;
+    });
+    $('filter-clear-btn').addEventListener('click', function () {
+      setBooksFilter('all');
+      setPaymentFilter('all');
+    });
+    document.querySelectorAll('[data-books]').forEach(function (btn) {
+      btn.addEventListener('click', function () { setBooksFilter(btn.dataset.books); });
+    });
+    document.querySelectorAll('[data-pay]').forEach(function (btn) {
+      btn.addEventListener('click', function () { setPaymentFilter(btn.dataset.pay); });
+    });
     $('toggle-classes-btn').addEventListener('click', function () { togglePanel('classes-panel'); });
     $('toggle-teachers-btn').addEventListener('click', function () { togglePanel('teachers-panel'); });
     $('add-class-btn').addEventListener('click', addClass);
