@@ -290,7 +290,7 @@ function updateStudent(doc, params) {
       value = (value === true || value === 'J' || value === 'j' || value === 1 || value === '1' || value === 'TRUE') ? 'J' : '';
     } else if (key === 'payment') {
       const pv = String(value || '').trim().toUpperCase();
-      value = (pv === 'S' || pv === 'J') ? 'S' : (pv === 'K' ? 'K' : '');
+      value = (pv === 'J' || pv === 'S' || pv === 'K') ? pv : '';
     } else if (key === 'skoldag') {
       if (value !== 'Lördag' && value !== 'Söndag') return { success: false, error: 'invalid_skoldag' };
     } else {
@@ -359,7 +359,7 @@ function addStudent(doc, params) {
   const flag = function(v) { return (v === 'J' || v === '1' || v === 'true') ? 'J' : ''; };
   const normalizePayment = function(v) {
     const pv = String(v || '').trim().toUpperCase();
-    return (pv === 'S' || pv === 'J') ? 'S' : (pv === 'K' ? 'K' : '');
+    return (pv === 'J' || pv === 'S' || pv === 'K') ? pv : '';
   };
 
   if (!firstName && !lastName) return { success: false, error: 'missing_name' };
@@ -705,13 +705,12 @@ function rowToStudent(rowNum, row, col) {
     if (v === true || v === 'J' || v === 'j' || String(v).toUpperCase() === 'TRUE') return 'J';
     return '';
   }
-  // Payment method: S = Swish, K = cash, '' = none.
-  // Legacy 'J' (paid via the old Stripe flow) maps to S — it means "paid".
+  // Payment method: J = automatic recurring payment (autogiro setup),
+  // S = manual Swish, K = cash, '' = not paying.
   function paymentValue() {
     if (col['Månatligbetalning'] === -1) return '';
     const v = String(row[col['Månatligbetalning']] || '').trim().toUpperCase();
-    if (v === 'S' || v === 'J') return 'S';
-    if (v === 'K') return 'K';
+    if (v === 'J' || v === 'S' || v === 'K') return v;
     return '';
   }
   return {
