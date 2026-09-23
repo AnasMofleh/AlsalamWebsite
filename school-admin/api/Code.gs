@@ -259,13 +259,13 @@ function updateStudent(doc, params) {
     return { success: false, error: 'pnr_locked' };
   }
 
-  const ALLOWED = ['firstName', 'lastName', 'skoldag', 'books', 'paid',
+  const ALLOWED = ['firstName', 'lastName', 'skoldag', 'books', 'payment',
     'fatherName', 'fatherPhone', 'fatherEmail',
     'motherName', 'motherPhone', 'motherEmail',
     'address', 'zip', 'city'];
   const HEADER_OF = {
     firstName: 'Barnet Förnamn', lastName: 'Barnet Efternamn',
-    skoldag: 'skoldag', books: 'Böcker', paid: 'Månatligbetalning',
+    skoldag: 'skoldag', books: 'Böcker', payment: 'Månatligbetalning',
     fatherName: 'Pappans Namn', fatherPhone: 'Pappans Mobilnummer', fatherEmail: 'Pappans Email',
     motherName: 'Mammans Namn', motherPhone: 'Mammans Mobilnummer', motherEmail: 'Mammans Email',
     address: 'Adress', zip: 'Postnummer', city: 'Postort'
@@ -286,8 +286,11 @@ function updateStudent(doc, params) {
     let value = fields[key];
     if (value === null || value === undefined) value = '';
 
-    if (key === 'books' || key === 'paid') {
+    if (key === 'books') {
       value = (value === true || value === 'J' || value === 'j' || value === 1 || value === '1' || value === 'TRUE') ? 'J' : '';
+    } else if (key === 'payment') {
+      const pv = String(value || '').trim().toUpperCase();
+      value = (pv === 'S' || pv === 'J') ? 'S' : (pv === 'K' ? 'K' : '');
     } else if (key === 'skoldag') {
       if (value !== 'Lördag' && value !== 'Söndag') return { success: false, error: 'invalid_skoldag' };
     } else {
@@ -354,6 +357,10 @@ function addStudent(doc, params) {
   const ssn = normPnr(getParam(params, 'ssn'));
   const skoldag = getParam(params, 'skoldag');
   const flag = function(v) { return (v === 'J' || v === '1' || v === 'true') ? 'J' : ''; };
+  const normalizePayment = function(v) {
+    const pv = String(v || '').trim().toUpperCase();
+    return (pv === 'S' || pv === 'J') ? 'S' : (pv === 'K' ? 'K' : '');
+  };
 
   if (!firstName && !lastName) return { success: false, error: 'missing_name' };
   if (skoldag !== 'Lördag' && skoldag !== 'Söndag') return { success: false, error: 'invalid_skoldag' };
@@ -379,7 +386,7 @@ function addStudent(doc, params) {
   put('Barnets namn', (firstName + ' ' + lastName).trim());
   put('skoldag', skoldag);
   put('Böcker', flag(getParam(params, 'books')));
-  put('Månatligbetalning', flag(getParam(params, 'paid')));
+  put('Månatligbetalning', normalizePayment(getParam(params, 'payment')));
   put('Pappans Namn', getParam(params, 'fatherName').trim());
   put('Pappans Personnummer', normPnr(getParam(params, 'fatherSsn')));
   put('Pappans Mobilnummer', getParam(params, 'fatherPhone').trim());
@@ -698,6 +705,15 @@ function rowToStudent(rowNum, row, col) {
     if (v === true || v === 'J' || v === 'j' || String(v).toUpperCase() === 'TRUE') return 'J';
     return '';
   }
+  // Payment method: S = Swish, K = cash, '' = none.
+  // Legacy 'J' (paid via the old Stripe flow) maps to S — it means "paid".
+  function paymentValue() {
+    if (col['Månatligbetalning'] === -1) return '';
+    const v = String(row[col['Månatligbetalning']] || '').trim().toUpperCase();
+    if (v === 'S' || v === 'J') return 'S';
+    if (v === 'K') return 'K';
+    return '';
+  }
   return {
     row: rowNum,
     ssn: g('Barnets Personnummer'),
@@ -707,7 +723,7 @@ function rowToStudent(rowNum, row, col) {
     skoldag: g('skoldag'),
     klass: g('klass'),
     books: isFlag('Böcker'),
-    paid: isFlag('Månatligbetalning'),
+    payment: paymentValue(),
     fatherName: g('Pappans Namn'),
     fatherSsn: g('Pappans Personnummer'),
     fatherPhone: g('Pappans Mobilnummer'),
