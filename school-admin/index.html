@@ -276,6 +276,7 @@
             <button class="board-tab" id="pay-J" data-pay="J">تلقائي</button>
             <button class="board-tab" id="pay-S" data-pay="S">سويش</button>
             <button class="board-tab" id="pay-K" data-pay="K">كاش</button>
+            <button class="board-tab" id="pay-J" data-pay="J">أوتوغيرو</button>
             <button class="board-tab" id="pay-none" data-pay="none">بدون</button>
           </div>
         </div>
@@ -399,6 +400,7 @@
                 <option value="J">تلقائي</option>
                 <option value="S">سويش</option>
                 <option value="K">كاش</option>
+                <option value="J">أوتوغيرو</option>
               </select>
             </div>
             <div class="col-12 col-md-4 d-flex align-items-end pb-2">
@@ -883,6 +885,7 @@
       if (s.payment === 'J') { pay.className = 'chip pay-J'; pay.textContent = 'تلقائي'; }
       else if (s.payment === 'S') { pay.className = 'chip pay-S'; pay.textContent = 'سويش'; }
       else if (s.payment === 'K') { pay.className = 'chip pay-K'; pay.textContent = 'كاش'; }
+      else if (s.payment === 'J') { pay.className = 'chip pay-J'; pay.textContent = 'أوتوغيرو'; }
       else { pay.className = 'chip pay-none'; pay.textContent = 'بدون دفع'; }
       const books = document.createElement('span');
       books.className = 'chip chip-books ' + (s.books === 'J' ? 'on' : 'off');

@@ -97,6 +97,22 @@
       background: var(--sa-green); color: #fff; border-radius: 999px;
       padding: 2px 10px; font-size: .7rem; font-weight: 700;
     }
+    .att-date-bar {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+      padding: 8px 16px; border-bottom: 1px solid var(--sa-border); background: #fff;
+    }
+    .att-date-label { font-size: .8rem; font-weight: 800; color: #4b5f52; }
+    .att-date-input {
+      border: 1px solid #c9d5c9; border-radius: 8px; padding: 5px 10px;
+      font-family: inherit; color: #22332a; direction: ltr;
+    }
+    .att-quick {
+      border: 1px solid #c9d5c9; background: #fff; color: #33473c;
+      font-weight: 700; font-size: .75rem; border-radius: 8px;
+      padding: 5px 10px; cursor: pointer; font-family: inherit;
+    }
+    .att-quick:hover { background: #f0f5f0; }
+    .att-quick.reset { color: #a33; border-color: #e3c3c3; }
     .att-table { width: 100%; border-collapse: collapse; }
     .att-table th {
       text-align: right; font-size: .8rem; color: #84998b; font-weight: 800;
@@ -202,8 +218,21 @@
 
     const SESSION_KEY = 'alsalam_school_teacher_token';
     let boardData = null;
+    let pickedDates = {};   // className -> 'yyyy-MM-dd' (in-memory only)
+    let boardReqSeq = 0;    // discard stale board responses
 
     const $ = function (id) { return document.getElementById(id); };
+
+    // ── Client-side date helpers (UX only — the server validates too) ──
+    function classDowOf(day) { return day === 'Lördag' ? 6 : 0; }
+    function dowOfDateStrLocal(dateStr) {
+      const p = String(dateStr).split('-');
+      return new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10)).getDay();
+    }
+    function isValidPick(cls, date) {
+      return /^\d{4}-\d{2}-\d{2}$/.test(date)
+        && dowOfDateStrLocal(date) === classDowOf(cls.day) && date <= cls.thisWeek;
+    }
 
     function escapeHTML(s) {
       return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -317,6 +346,7 @@
 
     function handleLogout() {
       sessionStorage.removeItem(SESSION_KEY);
+      pickedDates = {};
       showLogin();
     }
 
@@ -328,7 +358,15 @@
     async function enterDashboard() {
       $('teacher-login-screen').hidden = true;
       $('teacher-dashboard').hidden = false;
-      const res = await api('teacher-board', {});
+      await refreshBoardWithDates();
+    }
+
+    // ── Board fetch (sends every picked date in one request) ──
+    async function refreshBoardWithDates() {
+      const seq = ++boardReqSeq;
+      const dates = Object.keys(pickedDates).map(function (k) { return pickedDates[k]; });
+      const res = await api('teacher-board', dates.length ? { dates: dates.join(',') } : {});
+      if (seq !== boardReqSeq) return; // a newer pick arrived mid-fetch
       if (!res || !res.success) {
         feedback(errText(res), 'error');
         return;
@@ -340,7 +378,22 @@
       renderClasses(res);
     }
 
-    // ── Class rendering (two sessions per class: last week + this week) ──
+    function onPickDate(cls, value) {
+      value = value || '';
+      if (!value) {
+        delete pickedDates[cls.name];
+      } else if (!isValidPick(cls, value)) {
+        feedback('التاريخ غير صالح لهذا الفصل — يجب أن يكون ' + (cls.day === 'Lördag' ? 'سبتاً' : 'أحداً') + ' وليس في المستقبل', 'error');
+        const input = document.querySelector('.att-date-input[data-klass="' + CSS.escape(cls.name) + '"]');
+        if (input) input.value = pickedDates[cls.name] || '';
+        return;
+      } else {
+        pickedDates[cls.name] = value;
+      }
+      refreshBoardWithDates();
+    }
+
+    // ── Class rendering (picked date, or default last week + this week) ──
     function renderClasses(data) {
       const wrap = $('teacher-classes');
       wrap.innerHTML = '';
@@ -358,6 +411,22 @@
           + '<div class="att-class-name"><bdi dir="auto">' + escapeHTML(cls.name) + '</bdi></div>'
           + '<span class="day-badge">' + (cls.day === 'Lördag' ? 'السبت' : 'الأحد') + '</span>'
           + '</div>';
+
+        // Per-class date bar: pick any past/current class-day. pickedDates
+        // is in-memory only — a page reload returns to the two default sessions.
+        const picked = pickedDates[cls.name] || '';
+        html += '<div class="att-date-bar">'
+          + '<span class="att-date-label">تاريخ الحصة</span>'
+          + '<input type="date" class="att-date-input" data-klass="' + escapeHTML(cls.name) + '"'
+          + ' max="' + escapeHTML(cls.thisWeek) + '" value="' + escapeHTML(picked) + '" dir="ltr">'
+          + '<button class="att-quick" data-jump="' + escapeHTML(cls.thisWeek) + '">هذا الأسبوع</button>'
+          + '<button class="att-quick" data-jump="' + escapeHTML(cls.lastWeek) + '">الأسبوع الماضي</button>'
+          + (picked ? '<button class="att-quick reset">إعادة تعيين</button>' : '')
+          + '</div>';
+        if (picked && !cls.sessions.some(function (se) { return se.date === picked; })) {
+          html += '<div class="att-day-note"><i class="fas fa-info-circle"></i> '
+            + 'التاريخ المختار لا يناسب يوم هذا الفصل — تُعرض الحصص الافتراضية</div>';
+        }
 
         cls.sessions.forEach(function (se) {
           const dayName = cls.day === 'Lördag' ? 'السبت' : 'الأحد';
@@ -396,6 +465,14 @@
             toggleAttendance(row.dataset.klass, row.dataset.pnr, chk.checked, row.dataset.date);
           });
         });
+
+        const dateInput = card.querySelector('.att-date-input');
+        if (dateInput) dateInput.addEventListener('change', function () { onPickDate(cls, this.value); });
+        card.querySelectorAll('.att-quick[data-jump]').forEach(function (btn) {
+          btn.addEventListener('click', function () { onPickDate(cls, btn.dataset.jump); });
+        });
+        const resetBtn = card.querySelector('.att-quick.reset');
+        if (resetBtn) resetBtn.addEventListener('click', function () { onPickDate(cls, ''); });
 
         wrap.appendChild(card);
       });
