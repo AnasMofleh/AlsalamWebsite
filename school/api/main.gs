@@ -319,7 +319,9 @@ function applyPaymentUpdate(sheet, headers, matched, email) {
   const dateCol       = headers.indexOf('RegistreringsDatum');
 
   for (const m of matched) {
-    if (payCol !== -1)  sheet.getRange(m.row, payCol + 1).setValue('J');
+    // 'S' (Swish) — the admin portal now displays 'J' as Autogiro, so new
+    // card payments must not reuse 'J' (that letter is reserved for Autogiro).
+    if (payCol !== -1)  sheet.getRange(m.row, payCol + 1).setValue('S');
     if (dateCol !== -1) sheet.getRange(m.row, dateCol + 1).setValue(formatDate(new Date()));
 
     // Fill the first empty parent-email column

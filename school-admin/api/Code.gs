@@ -32,9 +32,9 @@
  *    child) and deploy a NEW VERSION of that web app — otherwise
  *    re-registrations wipe class and book data.
  *
- * NOTE: attendance can be recorded for this week's or last week's
- * class-day (the two sessions shown to the teacher) — no day restriction.
- * Older dates can be corrected directly in the Närvaro tab.
+ * NOTE: attendance can be recorded for any past date whose weekday
+ * matches the class day, up to this week's class-day. The teacher page
+ * has a per-class date picker; the server validates authoritatively.
  */
 
 const SCHOOL_SHEET = 'Alsalam Skola Website';
@@ -122,7 +122,7 @@ function doPost(e) {
         return json(guardAdmin(params, function() { return resetTeacherPassword(doc, params); }));
 
       case 'teacher-board':
-        return json(guardTeacher(params, function(pnr) { return teacherBoard(doc, pnr); }));
+        return json(guardTeacher(params, function(pnr) { return teacherBoard(doc, pnr, params); }));
       case 'mark-attendance':
         return json(guardTeacher(params, function(pnr) { return markAttendance(doc, pnr, params); }));
       case 'share-teacher':
@@ -290,7 +290,7 @@ function updateStudent(doc, params) {
       value = (value === true || value === 'J' || value === 'j' || value === 1 || value === '1' || value === 'TRUE') ? 'J' : '';
     } else if (key === 'payment') {
       const pv = String(value || '').trim().toUpperCase();
-      value = (pv === 'S' || pv === 'J') ? 'S' : (pv === 'K' ? 'K' : '');
+      value = (pv === 'S' || pv === 'K' || pv === 'J') ? pv : '';
     } else if (key === 'skoldag') {
       if (value !== 'Lördag' && value !== 'Söndag') return { success: false, error: 'invalid_skoldag' };
     } else {
@@ -359,7 +359,7 @@ function addStudent(doc, params) {
   const flag = function(v) { return (v === 'J' || v === '1' || v === 'true') ? 'J' : ''; };
   const normalizePayment = function(v) {
     const pv = String(v || '').trim().toUpperCase();
-    return (pv === 'S' || pv === 'J') ? 'S' : (pv === 'K' ? 'K' : '');
+    return (pv === 'S' || pv === 'K' || pv === 'J') ? pv : '';
   };
 
   if (!firstName && !lastName) return { success: false, error: 'missing_name' };
@@ -577,7 +577,7 @@ function resetTeacherPassword(doc, params) {
 }
 
 // ── Actions: teacher board + attendance ─────────────────────────
-function teacherBoard(doc, pnr) {
+function teacherBoard(doc, pnr, params) {
   const teacher = readTeachers(doc).find(function(t) { return t.pnr === pnr; });
   if (!teacher) return { success: false, error: 'auth' };
 
@@ -586,6 +586,9 @@ function teacherBoard(doc, pnr) {
   const today = todayStr();
   const todayDay = todayDayLabel();
   const narvaro = readNarvaro(doc);
+  // Optional comma-separated dates picked in the UI — one fetch can carry
+  // picks for several classes (e.g. a Saturday and a Sunday class).
+  const pickedDates = parseDateList(getParam(params || {}, 'dates'));
 
   const outClasses = classes.map(function(c) {
     const kids = students
@@ -600,12 +603,12 @@ function teacherBoard(doc, pnr) {
       });
     kids.sort(function(a, b) { return (a.name || '').localeCompare(b.name || '', 'ar'); });
 
-    // Two sessions per class: last week's class-day and this week's.
+    // Sessions: any picked date valid for this class (chronological);
+    // otherwise the default two sessions (last week's + this week's).
     const s = sessionDates(c.day);
-    const sessions = [
-      { date: s.lastWeek, isToday: s.lastWeek === today },
-      { date: s.thisWeek, isToday: s.thisWeek === today }
-    ];
+    const picked = pickedDates.filter(function(d) { return isValidSessionDate(c, d); }).sort();
+    const sessionDateList = picked.length ? picked : [s.lastWeek, s.thisWeek];
+    const sessions = sessionDateList.map(function(d) { return { date: d, isToday: d === today }; });
     const attendance = {};
     sessions.forEach(function(se) {
       const map = {};
@@ -614,7 +617,8 @@ function teacherBoard(doc, pnr) {
       attendance[se.date] = map;
     });
 
-    return { name: c.name, day: c.day, sessions: sessions, attendance: attendance, students: kids };
+    return { name: c.name, day: c.day, thisWeek: s.thisWeek, lastWeek: s.lastWeek,
+             sessions: sessions, attendance: attendance, students: kids };
   });
 
   return {
@@ -632,15 +636,15 @@ function markAttendance(doc, teacherPnr, params) {
   const date = getParam(params, 'date').trim();
   const presentRaw = getParam(params, 'present');
   const present = (presentRaw === 'J' || presentRaw === '1' || presentRaw === 'true') ? 'J' : 'N';
+  if (!childPnr) return { success: false, error: 'student_not_found' };
 
   const cls = readClasses(doc).find(function(c) { return c.name === klassName; });
   if (!cls) return { success: false, error: 'class_not_found' };
   if (cls.teacherPnr !== teacherPnr) return { success: false, error: 'forbidden' };
 
-  // Flexible attendance: allowed for this week's or last week's class-day
-  // (the two sessions shown in the teacher view). Server-authoritative.
-  const s = sessionDates(cls.day);
-  if (date !== s.thisWeek && date !== s.lastWeek) {
+  // Flexible attendance: any past date whose weekday matches the class
+  // day, up to this week's class-day. Server-authoritative.
+  if (!isValidSessionDate(cls, date)) {
     return { success: false, error: 'invalid_date' };
   }
 
@@ -705,13 +709,11 @@ function rowToStudent(rowNum, row, col) {
     if (v === true || v === 'J' || v === 'j' || String(v).toUpperCase() === 'TRUE') return 'J';
     return '';
   }
-  // Payment method: S = Swish, K = cash, '' = none.
-  // Legacy 'J' (paid via the old Stripe flow) maps to S — it means "paid".
+  // Payment method: S = Swish, K = cash, J = Autogiro, '' = none.
   function paymentValue() {
     if (col['Månatligbetalning'] === -1) return '';
     const v = String(row[col['Månatligbetalning']] || '').trim().toUpperCase();
-    if (v === 'S' || v === 'J') return 'S';
-    if (v === 'K') return 'K';
+    if (v === 'S' || v === 'K' || v === 'J') return v;
     return '';
   }
   return {
@@ -954,4 +956,26 @@ function sessionDates(day) {
   const thisWeek = addDaysToDateStr(today, classDow - todayDow);
   const lastWeek = addDaysToDateStr(thisWeek, -7);
   return { thisWeek: thisWeek, lastWeek: lastWeek };
+}
+
+// "yyyy-MM-dd, yyyy-MM-dd" -> real calendar dates only, deduped.
+function parseDateList(v) {
+  const out = [];
+  String(v || '').split(',').forEach(function(s) {
+    const d = s.trim();
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) return;
+    if (addDaysToDateStr(d, 0) !== d) return;   // rejects 2026-02-30 etc.
+    if (out.indexOf(d) === -1) out.push(d);
+  });
+  return out;
+}
+
+// Server-authoritative: valid yyyy-MM-dd, weekday matches the class day,
+// date <= this week's class-day (today or later this week is allowed).
+function isValidSessionDate(cls, date) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return false;
+  if (addDaysToDateStr(date, 0) !== date) return false;
+  const classDow = cls.day === 'Lördag' ? 6 : 0;
+  if (dowOfDateStr(date) !== classDow) return false;
+  return date <= sessionDates(cls.day).thisWeek;
 }
