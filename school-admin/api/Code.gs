@@ -290,7 +290,9 @@ function updateStudent(doc, params) {
       value = (value === true || value === 'J' || value === 'j' || value === 1 || value === '1' || value === 'TRUE') ? 'J' : '';
     } else if (key === 'payment') {
       const pv = String(value || '').trim().toUpperCase();
-      value = (pv === 'S' || pv === 'K' || pv === 'J') ? pv : '';
+
+      value = (pv === 'J' || pv === 'S' || pv === 'K') ? pv : '';
+
     } else if (key === 'skoldag') {
       if (value !== 'Lördag' && value !== 'Söndag') return { success: false, error: 'invalid_skoldag' };
     } else {
@@ -359,7 +361,7 @@ function addStudent(doc, params) {
   const flag = function(v) { return (v === 'J' || v === '1' || v === 'true') ? 'J' : ''; };
   const normalizePayment = function(v) {
     const pv = String(v || '').trim().toUpperCase();
-    return (pv === 'S' || pv === 'K' || pv === 'J') ? pv : '';
+    return (pv === 'J' || pv === 'S' || pv === 'K') ? pv : '';
   };
 
   if (!firstName && !lastName) return { success: false, error: 'missing_name' };
@@ -709,11 +711,13 @@ function rowToStudent(rowNum, row, col) {
     if (v === true || v === 'J' || v === 'j' || String(v).toUpperCase() === 'TRUE') return 'J';
     return '';
   }
-  // Payment method: S = Swish, K = cash, J = Autogiro, '' = none.
+
+  // Payment method: J = automatic recurring payment (autogiro setup),
+  // S = manual Swish, K = cash, '' = not paying.
   function paymentValue() {
     if (col['Månatligbetalning'] === -1) return '';
     const v = String(row[col['Månatligbetalning']] || '').trim().toUpperCase();
-    if (v === 'S' || v === 'K' || v === 'J') return v;
+    if (v === 'J' || v === 'S' || v === 'K') return v;
     return '';
   }
   return {
