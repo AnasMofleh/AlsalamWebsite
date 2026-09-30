@@ -86,11 +86,16 @@
                                             <div class="mb-2">
                                                 <i class="fas fa-users fa-2x text-success"></i>
                                             </div>
-                                            <h5 class="mb-3" data-i18n="marriage.choice-member-title">Betala senare</h5>
-                                            <a id="btn-choice-fifs-register" href="#" target="_blank" rel="noopener" class="btn btn-outline-success btn-lg w-100">
+                                            <h5 class="mb-3" data-i18n="marriage.choice-member-title">Bli medlem — betala inget</h5>
+                                            <button type="button" id="btn-choice-fifs-register" class="btn btn-outline-success btn-lg w-100">
                                                 <i class="fas fa-external-link-alt me-1"></i><span data-i18n="marriage.membership-register-link">Registrera dig hos FIFS</span>
-                                            </a>
+                                            </button>
                                             <small class="text-muted mt-3" data-i18n="marriage.choice-member-description">Bli medlem i moskén via FIFS så behöver ni inte betala någon avgift nu.</small>
+                                            <small class="text-muted mt-2" data-i18n="marriage.choice-member-note">(ett nytt fönster öppnas där ni registrerar er — därefter kan ni komma tillbaka hit och fortsätta utan att betala)</small>
+                                            <div id="fifs-continue-panel" style="display:none;">
+                                                <button type="button" class="btn btn-success btn-lg w-100 mt-3" id="btn-choice-fifs-continue" data-i18n="marriage.choice-member-continue">Jag har registrerat mig — fortsätt</button>
+                                                <div id="fifs-continue-status" class="alert alert-warning mt-3 mb-0 py-2" style="display:none;" data-i18n="marriage.choice-member-pending">Registreringen kan ta en stund att aktiveras. Försök igen om en liten stund, eller välj att betala nu i stället.</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -881,13 +886,31 @@
             return 'https://medlem.fifs.se/registrera/' + pnr.replace(/[^0-9]/g, '') + '/SCH';
         }
 
-        // ── Pay vs. pay-later choice (shown after the form validates) ──
+        // FIFS membership proxy — same endpoint as the school flow.
+        window.fetchFifsMembership = function(pnr) {
+            return fetch('https://script.google.com/macros/s/AKfycbxZ08tC4z_P815a44QCUYxZTAvRnYay3W6k3XENWH5-X0T07l4fFiqdJJS1zrd0uOv64g/exec?pnr=' + encodeURIComponent(pnr))
+                .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
+        };
+
+        // Resolves true only when the husband is a FIFS member. Conservative:
+        // bypass PNR = member; malformed PNR, proxy errors and
+        // {error, isMember:false} responses all resolve false — never reject.
+        window.isFifsMember = function(pnr) {
+            if (window.isBypassPnr(pnr)) return Promise.resolve(true);
+            if (!/^\d{8}-\d{4}$/.test(pnr)) return Promise.resolve(false);
+            return window.fetchFifsMembership(pnr)
+                .then(function(r) { return !!r.isMember; })
+                .catch(function(err) {
+                    console.error('FIFS check error:', err);
+                    return false; // network/API error: treat as not member
+                });
+        };
+
+        // ── Choice screen (shown only when the husband is not a FIFS member) ──
         window.showRequestChoice = function() {
-            var husbandPnr = document.getElementById('mem-husband-pnr').value.trim();
-            var fifsLink = document.getElementById('btn-choice-fifs-register');
-            if (fifsLink && /^\d{8}-\d{4}$/.test(husbandPnr)) {
-                fifsLink.href = buildFifsRegUrl(husbandPnr);
-            }
+            // Reset the continue panel so a fresh choice is presented every time.
+            document.getElementById('fifs-continue-panel').style.display = 'none';
+            document.getElementById('fifs-continue-status').style.display = 'none';
             document.getElementById('request-form-wrapper').style.display = 'none';
             document.getElementById('request-choice').style.display = 'flex';
             document.getElementById('request-choice').scrollIntoView({ behavior: 'smooth' });
@@ -910,7 +933,8 @@
         };
 
         // ── Submit request ───────────────────────────────────────
-        // Validates the form, then shows the pay-vs-member choice screen.
+        // Validates the form, checks the husband's FIFS membership,
+        // then shows the choice screen only for non-members.
         window.submitRequest = function() {
             var email       = document.getElementById('req-email').value.trim();
             var phone       = document.getElementById('req-phone').value.trim();
@@ -949,18 +973,37 @@
                 return;
             }
 
-            window.showRequestChoice();
+            // Check the husband's FIFS membership before deciding the path.
+            var nextBtn = document.getElementById('btn-marriage-next');
+            var origHTML = nextBtn.innerHTML;
+            nextBtn.disabled = true;
+            nextBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> ' + t1('checking', 'Kontrollerar...');
+
+            window.isFifsMember(husbandPnr).then(function(isMember) {
+                nextBtn.disabled = false;
+                nextBtn.innerHTML = origHTML; // restore before sendRequest snapshots it
+                if (isMember) {
+                    // Member: skip the choice screen and submit directly as 'member'.
+                    window.sendRequest('member', 'btn-marriage-next');
+                } else {
+                    window.showRequestChoice();
+                }
+            });
         };
 
-        // Sends the request with the chosen path: 'paid' (Stripe) or 'member' (FIFS)
-        window.sendRequest = function(path) {
+        // Sends the request with the chosen path: 'paid' (Stripe) or 'member' (FIFS).
+        // btnId = the button to show the spinner on (form submit, pay, or continue).
+        window.sendRequest = function(path, btnId) {
             var email       = document.getElementById('req-email').value.trim();
             var phone       = document.getElementById('req-phone').value.trim();
             var husbandPnr  = document.getElementById('mem-husband-pnr').value.trim();
             var wifePnr     = document.getElementById('mem-wife-pnr').value.trim();
 
-            var btnId = path === 'paid' ? 'btn-choice-pay' : 'btn-choice-fifs-register';
+            if (!btnId) {
+                btnId = path === 'paid' ? 'btn-choice-pay' : 'btn-choice-fifs-continue';
+            }
             var btn = document.getElementById(btnId);
+            if (!btn) return;
             var origHTML = btn.innerHTML;
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> ' + t1('sending', 'Skickar...');
@@ -1028,6 +1071,7 @@
                     window.location.href = stripeUrl;
                 } else {
                     document.getElementById('request-choice').style.display = 'none';
+                    document.getElementById('request-form-wrapper').style.display = 'none';
                     document.getElementById('request-success').style.display = 'flex';
                     document.getElementById('request-success').scrollIntoView({ behavior: 'smooth' });
                 }
@@ -1040,14 +1084,50 @@
             });
         };
 
+        // Opens the FIFS registration page in a new window/tab WITHOUT submitting anything.
+        window.openFifsRegistration = function() {
+            var husbandPnr = document.getElementById('mem-husband-pnr').value.trim();
+            var win = window.open(buildFifsRegUrl(husbandPnr), '_blank', 'noopener');
+            if (!win) {
+                // Popup blocked: the re-check on continue is what matters anyway.
+                document.getElementById('fifs-continue-status').style.display = 'block';
+            }
+            document.getElementById('fifs-continue-panel').style.display = 'block';
+        };
+
+        // Re-checks the husband's FIFS membership and submits as 'member' only if active.
+        window.recheckMembershipAndContinue = function() {
+            var btn = document.getElementById('btn-choice-fifs-continue');
+            var origHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> ' + t1('checking', 'Kontrollerar...');
+            document.getElementById('fifs-continue-status').style.display = 'none';
+
+            var husbandPnr = document.getElementById('mem-husband-pnr').value.trim();
+            window.isFifsMember(husbandPnr).then(function(isMember) {
+                btn.disabled = false;
+                btn.innerHTML = origHTML;
+                if (isMember) {
+                    window.sendRequest('member', 'btn-choice-fifs-continue');
+                } else {
+                    // Not active yet (or cache/network issue): allow retry or pay.
+                    document.getElementById('fifs-continue-status').style.display = 'block';
+                }
+            });
+        };
+
         // Choice buttons
         var btnChoicePay = document.getElementById('btn-choice-pay');
         if (btnChoicePay) {
-            btnChoicePay.addEventListener('click', function() { window.sendRequest('paid'); });
+            btnChoicePay.addEventListener('click', function() { window.sendRequest('paid', 'btn-choice-pay'); });
         }
         var btnChoiceFifs = document.getElementById('btn-choice-fifs-register');
         if (btnChoiceFifs) {
-            btnChoiceFifs.addEventListener('click', function() { window.sendRequest('member'); });
+            btnChoiceFifs.addEventListener('click', function() { window.openFifsRegistration(); });
+        }
+        var btnChoiceFifsContinue = document.getElementById('btn-choice-fifs-continue');
+        if (btnChoiceFifsContinue) {
+            btnChoiceFifsContinue.addEventListener('click', function() { window.recheckMembershipAndContinue(); });
         }
         var btnChoiceBack = document.getElementById('btn-choice-back');
         if (btnChoiceBack) {
@@ -1065,7 +1145,7 @@
         .contract-language-toolbar button.active { background: #15546f; color: #fff; border-color: #15546f; }
         .contract-sheet-wrap { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 20px; }
         .contract-sheet { width: 100%; max-width: 210mm; margin: 0 auto; background: #fff; border: 1px solid #c7bcae; padding: 50px 20px 16px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,.12); overflow: hidden; }
-        .contract-sheet::before, .contract-sheet::after { content: ""; position: absolute; width: clamp(150px, 18vw, 210px); height: clamp(150px, 18vw, 210px); background: url("/marriage/img/corner_upper_left.png") no-repeat center / contain; pointer-events: none; z-index: 0; }
+        .contract-sheet::before, .contract-sheet::after { content: ""; position: absolute; width: clamp(150px, 18vw, 210px); height: clamp(150px, 18vw, 210px); background: url("/img/corner_upper_left.png") no-repeat center / contain; pointer-events: none; z-index: 0; }
         .contract-sheet::before { top: clamp(-28px, -2.5vw, -12px); left: clamp(-28px, -2.5vw, -12px); }
         .contract-sheet::after { top: clamp(-28px, -2.5vw, -12px); right: clamp(-28px, -2.5vw, -12px); transform: rotate(90deg); }
         .contract-sheet > * { position: relative; z-index: 1; }
