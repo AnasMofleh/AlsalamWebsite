@@ -350,7 +350,7 @@
     "field-notes": "Message / Requests (optional)",
     "field-notes-placeholder": "E.g. preferred date, time, or other information...",
     "upload-heading": "Upload Documents",
-    "upload-hint": "Upload images or PDF files. Passport, driver's license, or other valid ID accepted. Max 20 MB per file. All four documents must be uploaded.",
+    "upload-hint": "Upload images or PDF files. Passport, driver's license, or other valid ID accepted. Images are compressed automatically. Max 40 MB per image, 20 MB per PDF, about 40 MB in total. All four documents must be uploaded.",
     "upload-wife-id": "Bride's ID card *",
     "upload-husband-id": "Groom's ID card *",
     "upload-wife-folk": "Bride's folkbokföringsbevis *",
@@ -405,7 +405,16 @@
       "email-sent": "A copy has been sent to your email!",
       "error-server": "Something went wrong: ",
       "error-contact-mosque": "Please try again or contact the mosque directly.",
-      "error-connection": "Connection error. Please check your internet connection and try again."
+      "error-connection": "Connection error. Please check your internet connection and try again.",
+      "file-too-large-pdf": "The file is too large (max 20 MB).",
+      "file-too-large-image": "The image is too large (max 40 MB).",
+      "file-type-invalid": "Only images (JPG, PNG, HEIC) or PDF files are accepted.",
+      "file-read-error": "Could not read the file. Please try again.",
+      "file-compress-failed": "Could not process the image. Please try another image or upload a PDF.",
+      "file-still-too-large": "The image is still too large after compression. Please try a lower-resolution image.",
+      "payload-too-large": "The documents together are too large (max about 40 MB in total). Please take new photos with lower resolution. Largest files: ",
+      "error-invalid-response": "The server did not respond correctly",
+      "processing-image": "Processing image..."
     }
   },
   "statsPage": {

@@ -349,7 +349,7 @@
     "field-notes": "Meddelande / Önskemål (valfritt)",
     "field-notes-placeholder": "T.ex. önskemål om datum, tid eller övrig information...",
     "upload-heading": "Ladda upp dokument",
-    "upload-hint": "Ladda upp bilder eller PDF-filer. Pass, körkort eller annan giltig ID-handling accepteras. Max 20 MB per fil. Alla fyra dokument måste laddas upp.",
+    "upload-hint": "Ladda upp bilder eller PDF-filer. Pass, körkort eller annan giltig ID-handling accepteras. Bilder komprimeras automatiskt. Max 40 MB per bild, 20 MB per PDF och ca 40 MB totalt. Alla fyra dokument måste laddas upp.",
     "upload-wife-id": "Brudens ID-kort *",
     "upload-husband-id": "Brudgummens ID-kort *",
     "upload-wife-folk": "Brudens folkbokföringsbevis *",
@@ -404,7 +404,16 @@
       "email-sent": "Kopia har skickats till din e-post!",
       "error-server": "Något gick fel: ",
       "error-contact-mosque": "Vänligen försök igen eller kontakta moskén direkt.",
-      "error-connection": "Något gick fel vid anslutningen. Vänligen kontrollera din internetanslutning och försök igen."
+      "error-connection": "Något gick fel vid anslutningen. Vänligen kontrollera din internetanslutning och försök igen.",
+      "file-too-large-pdf": "Filen är för stor (max 20 MB).",
+      "file-too-large-image": "Bilden är för stor (max 40 MB).",
+      "file-type-invalid": "Endast bilder (JPG, PNG, HEIC) eller PDF-filer accepteras.",
+      "file-read-error": "Kunde inte läsa filen. Försök igen.",
+      "file-compress-failed": "Kunde inte bearbeta bilden. Försök med en annan bild eller ladda upp en PDF.",
+      "file-still-too-large": "Bilden är fortfarande för stor efter komprimering. Försök med en bild med lägre upplösning.",
+      "payload-too-large": "Dokumenten är tillsammans för stora (max ca 40 MB totalt). Ta gärna nya bilder med lägre upplösning. Största filer: ",
+      "error-invalid-response": "Servern svarade inte korrekt",
+      "processing-image": "Bearbetar bild..."
     }
   },
   "statsPage": {
