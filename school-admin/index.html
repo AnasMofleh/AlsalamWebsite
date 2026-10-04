@@ -162,6 +162,14 @@
     .chip.pay-S { background: var(--sa-green); color: #fff; }
     .chip.pay-K { background: #8a6d1f; color: #fff; }
     .chip.pay-none { background: #b3261e; color: #fff; }
+    .book-paid-toggle {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: .7rem; font-weight: 700; border-radius: 999px;
+      padding: 3px 9px; background: #eef1ee; color: #84998b;
+      cursor: pointer; user-select: none; touch-action: manipulation;
+    }
+    .book-paid-toggle.on { background: var(--sa-blue); color: #fff; }
+    .book-paid-toggle input { margin: 0; width: 13px; height: 13px; accent-color: var(--sa-green); cursor: pointer; }
     .kanban-ghost { opacity: .45; }
     .kanban-drag { box-shadow: 0 8px 20px rgba(0,0,0,.2) !important; }
     .board-empty { text-align: center; color: #84998b; padding: 40px 0; font-size: 1rem; }
@@ -408,6 +416,16 @@
                 <input class="form-check-input" type="checkbox" id="m-books">
                 <label class="form-check-label" for="m-books">استلم الكتب</label>
               </div>
+            </div>
+            <div class="col-12 col-md-4 d-flex align-items-end pb-2">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="m-bookPaid">
+                <label class="form-check-label" for="m-bookPaid">دفع الكتب</label>
+              </div>
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="m-notes">ملاحظات</label>
+              <textarea class="form-control" id="m-notes" rows="3"></textarea>
             </div>
 
             <div class="col-12"><hr class="my-1"><div class="section-title">بيانات الأب</div></div>
@@ -887,15 +905,54 @@
       else if (s.payment === 'K') { pay.className = 'chip pay-K'; pay.textContent = 'كاش'; }
       else if (s.payment === 'J') { pay.className = 'chip pay-J'; pay.textContent = 'أوتوغيرو'; }
       else { pay.className = 'chip pay-none'; pay.textContent = 'بدون دفع'; }
-      const books = document.createElement('span');
-      books.className = 'chip chip-books ' + (s.books === 'J' ? 'on' : 'off');
-      books.textContent = 'كتب';
+      const paidToggle = document.createElement('label');
+      paidToggle.className = 'book-paid-toggle' + (s.bookPaid === 'J' ? ' on' : '');
+      const paidInput = document.createElement('input');
+      paidInput.type = 'checkbox';
+      paidInput.checked = s.bookPaid === 'J';
+      paidInput.title = 'دفع الكتب';
+      paidToggle.appendChild(paidInput);
+      paidToggle.appendChild(document.createTextNode('دفع الكتب'));
       chips.appendChild(pay);
-      chips.appendChild(books);
+      chips.appendChild(paidToggle);
       li.appendChild(chips);
+
+      // Never start a Sortable drag and never open the modal from the toggle.
+      ['mousedown', 'touchstart', 'click'].forEach(function (ev) {
+        paidToggle.addEventListener(ev, function (e) { e.stopPropagation(); });
+      });
+      paidInput.addEventListener('change', function () {
+        toggleBookPaid(s, paidInput, paidToggle);
+      });
 
       li.addEventListener('click', function () { openStudentModal(s); });
       return li;
+    }
+
+    async function toggleBookPaid(s, input, label) {
+      input.disabled = true;
+      try {
+        const res = await api('update-student', {
+          row: String(s.row),
+          ssn: s.ssn || '',
+          fields: JSON.stringify({ bookPaid: input.checked ? 'J' : '' })
+        });
+        if (res && res.success) {
+          // Patch local board state by row (the card's closure `s` can be stale
+          // after the board was reloaded).
+          const st = state.students.find(function (x) { return x.row === s.row; });
+          if (st) Object.assign(st, res.student);
+          const on = res.student && res.student.bookPaid === 'J';
+          input.checked = on;
+          label.classList.toggle('on', on);
+          // Silent success — matches the teacher attendance toggle UX.
+        } else {
+          input.checked = !input.checked; // revert
+          label.classList.toggle('on', input.checked);
+          feedback(errText(res), 'error');
+        }
+      } catch (e) { /* surfaced by api() */ }
+      finally { input.disabled = false; }
     }
 
     function initSortables() {
@@ -1042,6 +1099,8 @@
       $('m-skoldag').value = (s.skoldag === 'Söndag') ? 'Söndag' : 'Lördag';
       $('m-payment').value = s.payment || '';
       $('m-books').checked = s.books === 'J';
+      $('m-bookPaid').checked = s.bookPaid === 'J';
+      $('m-notes').value = s.notes || '';
       $('m-fatherName').value = s.fatherName || '';
       $('m-fatherPhone').value = s.fatherPhone || '';
       $('m-fatherEmail').value = s.fatherEmail || '';
@@ -1082,6 +1141,8 @@
         skoldag: $('m-skoldag').value,
         payment: $('m-payment').value,
         books: $('m-books').checked ? 'J' : '',
+        bookPaid: $('m-bookPaid').checked ? 'J' : '',
+        notes: $('m-notes').value.trim(),
         fatherName: $('m-fatherName').value.trim(),
         fatherPhone: $('m-fatherPhone').value.trim(),
         fatherEmail: $('m-fatherEmail').value.trim(),
@@ -1141,10 +1202,11 @@
 
       ['m-firstName', 'm-lastName', 'm-ssn', 'm-fatherName', 'm-fatherPhone', 'm-fatherEmail',
        'm-fatherSsn', 'm-motherName', 'm-motherPhone', 'm-motherEmail', 'm-motherSsn',
-       'm-address', 'm-zip', 'm-city'].forEach(function (id) { $(id).value = ''; });
+       'm-address', 'm-zip', 'm-city', 'm-notes'].forEach(function (id) { $(id).value = ''; });
       $('m-skoldag').value = state.boardDay === 'all' ? 'Lördag' : state.boardDay;
       $('m-payment').value = '';
       $('m-books').checked = false;
+      $('m-bookPaid').checked = false;
       $('m-registered').textContent = '';
 
       // Add mode: PNRs editable, lock notes hidden, move + registered hidden
@@ -1185,6 +1247,8 @@
           skoldag: $('m-skoldag').value,
           payment: $('m-payment').value,
           books: $('m-books').checked ? 'J' : '',
+          bookPaid: $('m-bookPaid').checked ? 'J' : '',
+          notes: $('m-notes').value.trim(),
           fatherName: $('m-fatherName').value.trim(),
           fatherSsn: fatherSsn,
           fatherPhone: $('m-fatherPhone').value.trim(),

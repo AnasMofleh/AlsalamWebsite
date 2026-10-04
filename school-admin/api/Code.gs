@@ -46,7 +46,7 @@ const SHARE_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days (assistant share links
 
 const HEADER_FIELDS = [
   'Barnet Förnamn', 'Barnet Efternamn', 'Barnets Personnummer', 'Barnets namn',
-  'skoldag', 'klass', 'Böcker', 'Månatligbetalning',
+  'skoldag', 'klass', 'Böcker', 'Månatligbetalning', 'Böcker Betald', 'Anteckningar',
   'Pappans Namn', 'Pappans Personnummer', 'Pappans Mobilnummer', 'Pappans Email',
   'Mammans Namn', 'Mammans Personnummer', 'Mammans Mobilnummer', 'Mammans Email',
   'Adress', 'Postnummer', 'Postort', 'RegistreringsDatum'
@@ -173,12 +173,30 @@ function ensureSchema(doc) {
   // existing header index stays stable for the registration backend.
   const headers = school.getRange(1, 1, 1, lastCol).getValues()[0];
   let col = lastCol;
-  ['klass', 'Böcker'].forEach(function(h) {
+  let backfillBookPaid = false;
+  ['klass', 'Böcker', 'Böcker Betald', 'Anteckningar'].forEach(function(h) {
     if (headers.indexOf(h) === -1) {
       col += 1;
       school.getRange(1, col).setValue(h);
+      if (h === 'Böcker Betald') backfillBookPaid = true;
     }
   });
+
+  // One-time backfill: students who already received the books (Böcker='J')
+  // have paid for them by definition — mirror the flag into Böcker Betald.
+  // Runs only on the request that first appended the header (idempotent).
+  if (backfillBookPaid) {
+    const fresh = school.getRange(1, 1, 1, col).getValues()[0]; // re-read AFTER appends
+    const booksIdx = fresh.indexOf('Böcker');
+    const paidIdx = fresh.indexOf('Böcker Betald');
+    const lastRow = school.getLastRow();
+    if (booksIdx !== -1 && paidIdx !== -1 && lastRow > 1) {
+      const rows = lastRow - 1;
+      const data = school.getRange(2, 1, rows, col).getValues();
+      const out = data.map(function(r) { return [flagValue(r[booksIdx])]; });
+      school.getRange(2, paidIdx + 1, rows, 1).setValues(out); // single batch write
+    }
+  }
 
   ensureTab(doc, TAB_KLASSER, ['Klass', 'Dag', 'LärarePNR', 'Sortering']);
   ensureTab(doc, TAB_LARARE, ['Namn', 'Personnummer', 'Salt', 'LösenordHash', 'Telefon']);
@@ -259,13 +277,14 @@ function updateStudent(doc, params) {
     return { success: false, error: 'pnr_locked' };
   }
 
-  const ALLOWED = ['firstName', 'lastName', 'skoldag', 'books', 'payment',
+  const ALLOWED = ['firstName', 'lastName', 'skoldag', 'books', 'bookPaid', 'notes', 'payment',
     'fatherName', 'fatherPhone', 'fatherEmail',
     'motherName', 'motherPhone', 'motherEmail',
     'address', 'zip', 'city'];
   const HEADER_OF = {
     firstName: 'Barnet Förnamn', lastName: 'Barnet Efternamn',
-    skoldag: 'skoldag', books: 'Böcker', payment: 'Månatligbetalning',
+    skoldag: 'skoldag', books: 'Böcker', bookPaid: 'Böcker Betald', notes: 'Anteckningar',
+    payment: 'Månatligbetalning',
     fatherName: 'Pappans Namn', fatherPhone: 'Pappans Mobilnummer', fatherEmail: 'Pappans Email',
     motherName: 'Mammans Namn', motherPhone: 'Mammans Mobilnummer', motherEmail: 'Mammans Email',
     address: 'Adress', zip: 'Postnummer', city: 'Postort'
@@ -286,8 +305,8 @@ function updateStudent(doc, params) {
     let value = fields[key];
     if (value === null || value === undefined) value = '';
 
-    if (key === 'books') {
-      value = (value === true || value === 'J' || value === 'j' || value === 1 || value === '1' || value === 'TRUE') ? 'J' : '';
+    if (key === 'books' || key === 'bookPaid') {
+      value = flagValue(value);
     } else if (key === 'payment') {
       const pv = String(value || '').trim().toUpperCase();
 
@@ -388,6 +407,8 @@ function addStudent(doc, params) {
   put('Barnets namn', (firstName + ' ' + lastName).trim());
   put('skoldag', skoldag);
   put('Böcker', flag(getParam(params, 'books')));
+  put('Böcker Betald', flag(getParam(params, 'bookPaid')));
+  put('Anteckningar', getParam(params, 'notes').trim());
   put('Månatligbetalning', normalizePayment(getParam(params, 'payment')));
   put('Pappans Namn', getParam(params, 'fatherName').trim());
   put('Pappans Personnummer', normPnr(getParam(params, 'fatherSsn')));
@@ -729,6 +750,8 @@ function rowToStudent(rowNum, row, col) {
     skoldag: g('skoldag'),
     klass: g('klass'),
     books: isFlag('Böcker'),
+    bookPaid: isFlag('Böcker Betald'),
+    notes: g('Anteckningar'),
     payment: paymentValue(),
     fatherName: g('Pappans Namn'),
     fatherSsn: g('Pappans Personnummer'),
@@ -909,6 +932,13 @@ function normPnr(v) {
   const d = String(v || '').replace(/[^0-9]/g, '');
   if (d.length === 12 && (d.indexOf('19') === 0 || d.indexOf('20') === 0)) return d.substring(2);
   return d;
+}
+
+// Coerce any truthy-ish value to the sheet flag convention: 'J' or ''.
+function flagValue(v) {
+  if (v === true || v === 1 || v === '1') return 'J';
+  const s = String(v == null ? '' : v).trim().toUpperCase();
+  return (s === 'J' || s === 'TRUE') ? 'J' : '';
 }
 
 function bytesToHex(bytes) {
