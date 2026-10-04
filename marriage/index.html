@@ -208,7 +208,7 @@
 
                                 <!-- Document Upload -->
                                 <h5 class="mb-3 fw-bold" data-i18n="marriage.upload-heading">Ladda upp dokument</h5>
-                                <p class="text-muted small mb-3" data-i18n="marriage.upload-hint">Ladda upp bilder eller PDF-filer. Pass, körkort eller annan giltig ID-handling accepteras. Max 20 MB per fil. Alla fyra dokument måste laddas upp.</p>
+                                <p class="text-muted small mb-3" data-i18n="marriage.upload-hint">Ladda upp bilder eller PDF-filer. Pass, körkort eller annan giltig ID-handling accepteras. Bilder komprimeras automatiskt. Max 40 MB per bild, 20 MB per PDF och ca 40 MB totalt. Alla fyra dokument måste laddas upp.</p>
 
                                 <div class="row g-3 mb-4">
                                     <div class="col-md-6">
@@ -609,6 +609,24 @@
             border-color: #dc3545;
             background: #fff5f5;
         }
+        /* Green check badge on successfully chosen files */
+        .upload-zone.has-file::after {
+            content: '\2713';
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            width: 22px;
+            height: 22px;
+            background: #198754;
+            color: #fff;
+            border-radius: 50%;
+            font-size: 13px;
+            font-weight: bold;
+            line-height: 22px;
+            text-align: center;
+            z-index: 3;
+            pointer-events: none;
+        }
         .upload-input {
             position: absolute;
             inset: 0;
@@ -685,6 +703,29 @@
         }
         .upload-zone.loading .upload-spinner {
             display: block;
+        }
+        /* Page-level loading overlay (image processing / request sending) */
+        #page-loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255,255,255,.82);
+            z-index: 1050;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .page-loading-box {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0,0,0,.12);
+            padding: 28px 40px;
+            text-align: center;
+            min-width: 220px;
+        }
+        .page-loading-box .spinner-border {
+            width: 2.5rem;
+            height: 2.5rem;
         }
         /* Membership check text shown under personnummer field */
         .membership-text {
@@ -770,6 +811,127 @@
         // ── File upload handling ─────────────────────────────────
         const uploadedFiles = {}; // { docKey: { base64, mime, name } }
 
+        // ── Upload size & compression limits ─────────────────────
+        const MAX_PDF_BYTES        = 20 * 1024 * 1024;  // PDFs: pass-through gate
+        const MAX_IMAGE_SRC_BYTES  = 40 * 1024 * 1024;  // raw image gate (oversized iOS-transcoded JPEGs must still be compressible)
+        const MAX_COMPRESSED_BYTES = 10 * 1024 * 1024;  // post-compression per-file cap
+        const MAX_PAYLOAD_BYTES    = 40 * 1024 * 1024;  // aggregate body budget (under GAS ~50MB limit)
+        const IMAGE_MAX_EDGE       = 3000;              // long-edge cap (highest quality — ~250 dpi for A4)
+        const IMAGE_QUALITY        = 0.85;              // JPEG export quality
+        // Quality ladder retries if the result is still over MAX_COMPRESSED_BYTES
+        const RETRY_STEPS = [ { edge: 3000, quality: 0.70 }, { edge: 2200, quality: 0.70 } ];
+
+        // ── Page-level loading overlay ───────────────────────────
+        function showPageLoading(msg) {
+            const overlay = document.getElementById('page-loading-overlay');
+            if (!overlay) return;
+            const text = document.getElementById('page-loading-text');
+            if (text && msg) text.textContent = msg;
+            overlay.style.display = 'flex';
+        }
+        function hidePageLoading() {
+            const overlay = document.getElementById('page-loading-overlay');
+            if (overlay) overlay.style.display = 'none';
+        }
+
+        // ── File type detection (iOS Files-app files can have empty type) ──
+        function isImageFile(file) {
+            return (file.type || '').toLowerCase().indexOf('image/') === 0
+                || /\.(jpe?g|png|webp|heic|heif|gif|bmp)$/i.test(file.name || '');
+        }
+        function isPdfFile(file) {
+            return file.type === 'application/pdf' || /\.pdf$/i.test(file.name || '');
+        }
+        function isHeicFile(file) {
+            return file.type === 'image/heic' || file.type === 'image/heif'
+                || /\.(heic|heif)$/i.test(file.name || '');
+        }
+
+        // Shared per-zone error display
+        function showUploadError(input, zone, nameEl, msg) {
+            input.value = '';                 // allow re-picking the same file
+            zone.classList.remove('loading', 'has-file');
+            zone.classList.add('has-error');
+            nameEl.textContent = msg;
+            nameEl.style.color = '#dc3545';
+            zone.querySelector('.upload-preview').style.display = 'flex';
+            zone.querySelector('.upload-prompt').style.display = 'none';
+        }
+
+        // ── Image compression helpers ────────────────────────────
+        function readFileAsDataUrl(file) {
+            return new Promise(function(resolve, reject) {
+                const reader = new FileReader();
+                reader.onload = function() { resolve(reader.result); };
+                reader.onerror = function() { reject({ code: 'read-error' }); };
+                reader.readAsDataURL(file);
+            });
+        }
+        function loadImageBitmap(file) {
+            return new Promise(function(resolve) {
+                if (!window.createImageBitmap) { resolve(null); return; }
+                createImageBitmap(file, { imageOrientation: 'from-image' })
+                    .then(function(bmp) { resolve(bmp); })
+                    .catch(function() { resolve(null); }); // fall through to <img> decode
+            });
+        }
+        function loadImageElement(file) {
+            return new Promise(function(resolve, reject) {
+                const url = URL.createObjectURL(file);
+                const img = new Image();
+                img.onload = function() { resolve(img); };
+                img.onerror = function() {
+                    URL.revokeObjectURL(url);
+                    reject({ code: 'decode-failed' });
+                };
+                img.src = url;
+            });
+        }
+        function canvasToBlob(canvas, quality) {
+            return new Promise(function(resolve) {
+                canvas.toBlob(resolve, 'image/jpeg', quality);
+            });
+        }
+        // Compress an image file to a JPEG data URL (≤ MAX_COMPRESSED_BYTES).
+        // Throws { code: 'decode-failed' } if the image cannot be decoded,
+        // { code: 'still-too-large' } if it stays too big after the quality ladder,
+        // or { code: 'read-error' } on export/read failure.
+        async function compressImageFile(file) {
+            let source = await loadImageBitmap(file);
+            if (!source) source = await loadImageElement(file);
+            try {
+                const width  = source.width  || source.naturalWidth  || 0;
+                const height = source.height || source.naturalHeight || 0;
+                if (!width || !height) throw { code: 'decode-failed' };
+
+                const attempts = [{ edge: IMAGE_MAX_EDGE, quality: IMAGE_QUALITY }].concat(RETRY_STEPS);
+                let produced = false;
+                for (let i = 0; i < attempts.length; i++) {
+                    const attempt = attempts[i];
+                    const scale = Math.min(1, attempt.edge / Math.max(width, height));
+                    const w = Math.max(1, Math.round(width * scale));
+                    const h = Math.max(1, Math.round(height * scale));
+                    const canvas = document.createElement('canvas');
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.fillStyle = '#fff';  // JPEG has no alpha — avoid black background for transparent PNGs
+                    ctx.fillRect(0, 0, w, h);
+                    ctx.imageSmoothingQuality = 'high';
+                    ctx.drawImage(source, 0, 0, w, h);
+                    const blob = await canvasToBlob(canvas, attempt.quality);
+                    if (!blob) continue;
+                    produced = true;
+                    if (blob.size <= MAX_COMPRESSED_BYTES) {
+                        return await readFileAsDataUrl(blob);
+                    }
+                }
+                throw produced ? { code: 'still-too-large' } : { code: 'read-error' };
+            } finally {
+                if (source && typeof source.close === 'function') source.close();
+            }
+        }
+
         function setupUploadZone(zone) {
             const input = zone.querySelector('.upload-input');
             const preview = zone.querySelector('.upload-preview');
@@ -818,41 +980,87 @@
         function handleFile(input, file, zone, docKey, thumb, nameEl) {
             zone.classList.remove('has-error');
 
-            // Validate size (10MB max)
-            const maxSize = 20 * 1024 * 1024;
-            if (file.size > maxSize) {
-                zone.classList.add('has-error');
-                nameEl.textContent = 'Filen är för stor (max 20 MB)';
-                nameEl.style.color = '#dc3545';
-                zone.querySelector('.upload-preview').style.display = 'flex';
-                zone.querySelector('.upload-prompt').style.display = 'none';
+            // Re-picking replaces any previously uploaded file for this doc
+            delete uploadedFiles[docKey];
+
+            // Type gate — images (JPG, PNG, HEIC, ...) or PDF only
+            if (!isImageFile(file) && !isPdfFile(file)) {
+                showUploadError(input, zone, nameEl, t1('file-type-invalid', 'Endast bilder (JPG, PNG, HEIC) eller PDF-filer accepteras.'));
+                thumb.src = '';
                 return;
             }
 
-            // Read file as base64
-            zone.classList.add('loading');
-            const reader = new FileReader();
-            reader.onload = function() {
+            // Raw size gate (images get compressed afterwards, so allow larger sources)
+            if (isPdfFile(file) && file.size > MAX_PDF_BYTES) {
+                showUploadError(input, zone, nameEl, t1('file-too-large-pdf', 'Filen är för stor (max 20 MB).'));
+                thumb.src = '';
+                return;
+            }
+            if (!isPdfFile(file) && file.size > MAX_IMAGE_SRC_BYTES) {
+                showUploadError(input, zone, nameEl, t1('file-too-large-image', 'Bilden är för stor (max 40 MB).'));
+                thumb.src = '';
+                return;
+            }
+
+            // Shared success path
+            const finishFile = function(dataUrl, mime) {
                 zone.classList.remove('loading');
                 zone.classList.add('has-file');
-
-                const dataUrl = reader.result;
                 uploadedFiles[docKey] = {
                     base64: dataUrl,
-                    mime: file.type || 'application/octet-stream',
+                    mime: mime,
                     name: file.name
                 };
-
-                // Show preview
-                if (file.type.startsWith('image/')) {
-                    thumb.src = dataUrl;
-                } else {
+                if (mime === 'application/pdf') {
                     thumb.src = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><rect fill="%23e5e7eb" width="48" height="48" rx="8"/><text x="24" y="28" text-anchor="middle" font-size="14" fill="%236b7280">PDF</text></svg>');
+                } else {
+                    thumb.src = dataUrl;
                 }
                 nameEl.textContent = file.name;
                 nameEl.style.color = '#198754';
             };
-            reader.readAsDataURL(file);
+
+            zone.classList.add('loading');
+
+            if (isPdfFile(file)) {
+                // PDF: pass through as-is
+                readFileAsDataUrl(file).then(function(dataUrl) {
+                    finishFile(dataUrl, 'application/pdf');
+                }).catch(function() {
+                    showUploadError(input, zone, nameEl, t1('file-read-error', 'Kunde inte läsa filen. Försök igen.'));
+                    thumb.src = '';
+                });
+                return;
+            }
+
+            // Image: compress in the browser before upload (fixes oversized iPhone photos)
+            showPageLoading(t1('processing-image', 'Bearbetar bild...'));
+            compressImageFile(file).then(function(dataUrl) {
+                hidePageLoading();
+                finishFile(dataUrl, 'image/jpeg');
+            }).catch(function(err) {
+                hidePageLoading();
+                if (err && err.code === 'decode-failed' && isHeicFile(file)) {
+                    // HEIC the browser can't decode (e.g. desktop Chrome) — send the original
+                    readFileAsDataUrl(file).then(function(dataUrl) {
+                        finishFile(dataUrl, file.type || 'image/heic');
+                    }).catch(function() {
+                        showUploadError(input, zone, nameEl, t1('file-read-error', 'Kunde inte läsa filen. Försök igen.'));
+                        thumb.src = '';
+                    });
+                    return;
+                }
+                let msg;
+                if (err && err.code === 'still-too-large') {
+                    msg = t1('file-still-too-large', 'Bilden är fortfarande för stor efter komprimering. Försök med en bild med lägre upplösning.');
+                } else if (err && err.code === 'decode-failed') {
+                    msg = t1('file-compress-failed', 'Kunde inte bearbeta bilden. Försök med en annan bild eller ladda upp en PDF.');
+                } else {
+                    msg = t1('file-read-error', 'Kunde inte läsa filen. Försök igen.');
+                }
+                showUploadError(input, zone, nameEl, msg);
+                thumb.src = '';
+            });
         }
 
         // "Skicka förfrågan"
@@ -1028,31 +1236,47 @@
                 params.append(k + 'Mime', f.mime);
             });
 
+            // Aggregate payload budget — GAS rejects web-app POST bodies above ~50 MB.
+            // URLSearchParams.toString() length is a near-exact body-size estimate.
+            if (params.toString().length > MAX_PAYLOAD_BYTES) {
+                btn.disabled = false;
+                btn.innerHTML = origHTML;
+                var fileList = Object.keys(uploadedFiles).map(function(k) {
+                    var f = uploadedFiles[k];
+                    var b64Len = f.base64.length - f.base64.indexOf(',') - 1;
+                    return { name: f.name, bytes: Math.round(b64Len * 0.75) };
+                }).sort(function(a, b) { return b.bytes - a.bytes; }).slice(0, 3)
+                  .map(function(f) { return f.name + ' (' + Math.max(1, Math.round(f.bytes / 1048576)) + ' MB)'; });
+                alert(t1('payload-too-large', 'Dokumenten är tillsammans för stora (max ca 40 MB totalt). Ta gärna nya bilder med lägre upplösning. Största filer: ') + fileList.join(', '));
+                return;
+            }
+
+            showPageLoading(t1('sending', 'Skickar...'));
             fetch('https://script.google.com/macros/s/AKfycbyBdihaThtMfp_qYi16SRr9gP9fd9X9a7yO-PNZLCxMVfukwN9Wja2AN_tPT1HuIqBP/exec', {
                 method: 'POST',
                 body: params
             })
             .then(function(r) {
-                // GAS may return HTML (from redirect) instead of JSON.
-                // Read as text first and try to parse — if it's not JSON,
-                // treat HTTP 2xx as success since the server already processed it.
+                // GAS error/quota pages come back as HTML with HTTP 200 —
+                // never treat a non-JSON response as success.
                 return r.text().then(function(text) {
                     try {
                         return JSON.parse(text);
                     } catch (e) {
-                        console.error('GAS svarade inte med JSON:', text.substring(0, 500));
-                        if (r.ok) return { success: true, _fallback: true };
-                        throw new Error('Serverfel: ' + text.substring(0, 200));
+                        console.error('GAS svarade inte med JSON (HTTP ' + r.status + '):', text.substring(0, 500));
+                        return { success: false, error: t1('error-invalid-response', 'Servern svarade inte korrekt') + ' (HTTP ' + r.status + ').' };
                     }
                 });
             })
             .then(function(result) {
                 if (!result.success) {
+                    hidePageLoading();
                     btn.disabled = false;
                     btn.innerHTML = origHTML;
                     alert(t1('error-server', 'Något gick fel: ') + (result.error || 'Okänt fel') + '\n' + t1('error-contact-mosque', 'Vänligen försök igen eller kontakta moskén direkt.'));
                     return;
                 }
+                hidePageLoading();
                 try { localStorage.setItem('marriage-email', email); } catch(e) {}
                 try { localStorage.setItem('marriage-husband-pnr', husbandPnr); } catch(e) {}
                 try { localStorage.setItem('marriage-wife-pnr', wifePnr); } catch(e) {}
@@ -1077,6 +1301,7 @@
                 }
             })
             .catch(function(err) {
+                hidePageLoading();
                 btn.disabled = false;
                 btn.innerHTML = origHTML;
                 console.error('Submit error:', err);
@@ -1572,7 +1797,10 @@
                 .then(function(r) {
                     return r.text().then(function(text) {
                         try { return JSON.parse(text); }
-                        catch(e) { if (r.ok) return { success: true }; throw new Error(text.substring(0, 200)); }
+                        catch(e) {
+                            console.error('GAS svarade inte med JSON (HTTP ' + r.status + '):', text.substring(0, 500));
+                            return { success: false, error: 'Serverfel (HTTP ' + r.status + ')' };
+                        }
                     });
                 })
                 .then(function(result) {
@@ -1906,6 +2134,14 @@
         });
     })();
     </script>
+
+    <!-- Page-level loading overlay (shown while images are processed / request is sent) -->
+    <div id="page-loading-overlay" style="display:none;">
+        <div class="page-loading-box">
+            <div class="spinner-border text-primary mb-3" role="status"></div>
+            <div id="page-loading-text" class="fw-bold">Skickar...</div>
+        </div>
+    </div>
 
     <!-- i18n module (exposed as global `loadLanguage`) -->
     <script type="module" src="/langugaes/js/i18n.js" defer></script>

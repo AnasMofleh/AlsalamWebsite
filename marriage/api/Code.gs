@@ -47,9 +47,13 @@ function getMarriageSheetId() {
 }
 var ROOT_FOLDER_ID = '19k773mFMvLlQRswYWgKL2bghyNI4IZLe';
 
+// Server-side document limits (client compresses images to ≤10 MB and sends PDFs as-is).
+var MAX_DOC_BYTES = 20 * 1024 * 1024;
+var ALLOWED_DOC_MIMES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif', 'application/pdf', 'application/octet-stream'];
+
 // Bump this on every change to this file and verify after redeploying:
 // open <url>?action=version — it must return the new version number.
-var CODE_VERSION = '11';
+var CODE_VERSION = '12';
 
 // ── Main entry points ──────────────────────────────────────────
 
@@ -178,22 +182,37 @@ function handleSubmitRequest(e) {
     { param: 'husbandFolkDoc', filename: 'Brudgum-Folkbokforingsbevis' }
   ];
 
+  // Save uploaded documents — fail loudly so the frontend never shows
+  // a success screen while documents are missing from Drive.
+  const failedDocs = [];
   docDefs.forEach(function(def) {
     const data = e.parameter[def.param];
-    if (data) {
-      try {
-        const blob = Utilities.newBlob(
-          Utilities.base64Decode(data.split(',')[1] || data),
-          e.parameter[def.param + 'Mime'] || 'application/octet-stream',
-          def.filename
-        );
-        const file = coupleFolder.createFile(blob);
-        file.setDescription('Uploaded on ' + now.toISOString());
-      } catch (ex) {
-        // Silently continue
+    if (!data) {
+      failedDocs.push(def.filename + ' (saknas)');
+      return;
+    }
+    try {
+      const mime = (e.parameter[def.param + 'Mime'] || 'application/octet-stream').toLowerCase();
+      if (ALLOWED_DOC_MIMES.indexOf(mime) === -1 && mime.indexOf('image/') !== 0) {
+        failedDocs.push(def.filename + ' (otillåten filtyp)');
+        return;
       }
+      const bytes = Utilities.base64Decode(String(data).split(',')[1] || String(data));
+      if (bytes.length > MAX_DOC_BYTES) {
+        failedDocs.push(def.filename + ' (för stor)');
+        return;
+      }
+      const blob = Utilities.newBlob(bytes, mime, def.filename);
+      const file = coupleFolder.createFile(blob);
+      file.setDescription('Uploaded on ' + now.toISOString());
+    } catch (ex) {
+      failedDocs.push(def.filename + ' (' + ex.toString() + ')');
     }
   });
+
+  if (failedDocs.length > 0) {
+    return jsonResponse({ success: false, error: 'Kunde inte spara dokument: ' + failedDocs.join('; ') });
+  }
 
   // Extract phone digits for links
   const phoneDigits = phone.replace(/\D/g, '');
