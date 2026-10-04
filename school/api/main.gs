@@ -213,11 +213,15 @@ function processRegistration(sheet, headers, params) {
 
     if (idx !== -1) {
       // Preserve admin-managed columns that the form does not know about
-      // (set by the school-admin kanban: class assignment and books flag).
+      // (set by the school-admin kanban: class assignment, books flags, notes).
       const klassCol = headers.indexOf('klass');
       const booksCol = headers.indexOf('Böcker');
+      const bookPaidCol = headers.indexOf('Böcker Betald');
+      const notesCol = headers.indexOf('Anteckningar');
       if (klassCol !== -1) newRow[klassCol] = existing[idx][klassCol];
       if (booksCol !== -1) newRow[booksCol] = existing[idx][booksCol];
+      if (bookPaidCol !== -1) newRow[bookPaidCol] = existing[idx][bookPaidCol];
+      if (notesCol !== -1) newRow[notesCol] = existing[idx][notesCol];
       sheet.getRange(idx + 2, 1, 1, headers.length).setValues([newRow]);
       updated++;
     } else {
