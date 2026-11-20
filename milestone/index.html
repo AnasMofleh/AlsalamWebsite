@@ -553,7 +553,7 @@
     <div class="stat-row"><span class="dot dot-rest"></span><span id="remainingLine">Kvar: 4 500 000 kr</span></div>
 
     <div class="motivation" id="motivation">
-      Fortsätt donera och följ vår resa till vår nya moské!
+      Fortsätt donera och följ vår resa till vår moské!
     </div>
 
       <div class="qr-group">
@@ -624,12 +624,12 @@
       } else if (tier === '1m') {
         salamText = sv ? 'Alhamdulillah! Vi har nått:' : 'الحمد لله! وصلنا إلى:';
         motivation = sv
-          ? 'Alhamdulillah! Tack vare er generositet, fortsätt donera och följ vår resa till vår nya moské!'
+          ? 'Alhamdulillah! Tack vare er generositet, fortsätt donera och följ vår resa till vår moské!'
           : 'الحمد لله! بفضل كرمكم، واصلوا التبرع وتابعوا رحلتنا إلى مسجدنا الجديد!';
       } else {
         salamText = sv ? 'Alhamdulillah! Vi har nått:' : 'الحمد لله! وصلنا إلى:';
         motivation = sv
-          ? 'Fortsätt donera och följ vår resa till vår nya moské!'
+          ? 'Fortsätt donera och följ vår resa till vår moské!'
           : 'واصلوا التبرع وتابعوا رحلتنا إلى مسجدنا الجديد!';
       }
 
@@ -655,19 +655,19 @@
         var tags;
         if (svLang) {
           if (tier === 'goal') {
-            lines.push('MÅLET ÄR NÅTT! 🎉 ' + formatMark(C.goal) + ' miljoner kronor insamlade till vår nya moské!');
+            lines.push('MÅLET ÄR NÅTT! 🎉 ' + formatMark(C.goal) + ' miljoner kronor insamlade till vår moské!');
             lines.push('Alhamdulillah — tack till varje givare, må Allah belöna er mångfaldigt.');
             lines.push('Följ bygget på alsalamcenter.se');
           } else if (tier === '1m') {
             lines.push(markLine
-              ? 'ALHAMDULILLAH! 🎉 Vi har nått ' + markLine + ' miljoner kronor i insamlingen till vår nya moské!'
-              : 'ALHAMDULILLAH! 🎉 Vi har samlat in ' + formatAmount(C.amount) + ' kr i insamlingen till vår nya moské!');
+              ? 'ALHAMDULILLAH! 🎉 Vi har nått ' + markLine + ' miljoner kronor i insamlingen till vår moské!'
+              : 'ALHAMDULILLAH! 🎉 Vi har samlat in ' + formatAmount(C.amount) + ' kr i insamlingen till vår moské!');
             lines.push('Nu är vi uppe i ' + formatPct(pct) + ' % av målet på ' + formatAmount(C.goal) + ' kr — tack till varje givare, må Allah belöna er.');
             lines.push('Hjälp oss sprida ordet — dela, donera och följ vår resa på alsalamcenter.se');
           } else {
             lines.push(markLine
-              ? 'Alhamdulillah! Vi har nått ' + markLine + ' miljoner kr i insamlingen till vår nya moské! 💚'
-              : 'Alhamdulillah! Vi har samlat in ' + formatAmount(C.amount) + ' kr till vår nya moské! 💚');
+              ? 'Alhamdulillah! Vi har nått ' + markLine + ' miljoner kr i insamlingen till vår moské! 💚'
+              : 'Alhamdulillah! Vi har samlat in ' + formatAmount(C.amount) + ' kr till vår moské! 💚');
             lines.push('Totalt: ' + formatAmount(C.amount) + ' kr — ' + formatPct(pct) + ' % av målet på ' + formatAmount(C.goal) + ' kr.');
             lines.push('Varje krona för oss närmare vår egen moské. Vill du vara med? Swisha valfritt belopp till 123 5000 559 eller ge på alsalamcenter.se');
           }

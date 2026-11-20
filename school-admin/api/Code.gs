@@ -125,6 +125,8 @@ function doPost(e) {
         return json(guardTeacher(params, function(pnr) { return teacherBoard(doc, pnr, params); }));
       case 'mark-attendance':
         return json(guardTeacher(params, function(pnr) { return markAttendance(doc, pnr, params); }));
+      case 'mark-attendance-batch':
+        return json(guardTeacher(params, function(pnr) { return markAttendanceBatch(doc, pnr, params); }));
       case 'share-teacher':
         return json(guardTeacher(params, function(pnr) { return { success: true, token: signToken('share:' + pnr, SHARE_TTL_MS) }; }));
 
@@ -653,41 +655,103 @@ function teacherBoard(doc, pnr, params) {
   };
 }
 
-function markAttendance(doc, teacherPnr, params) {
-  const klassName = getParam(params, 'klass').trim();
-  const childPnr = normPnr(getParam(params, 'pnr'));
-  const date = getParam(params, 'date').trim();
-  const presentRaw = getParam(params, 'present');
-  const present = (presentRaw === 'J' || presentRaw === '1' || presentRaw === 'true') ? 'J' : 'N';
-  if (!childPnr) return { success: false, error: 'student_not_found' };
-
-  const cls = readClasses(doc).find(function(c) { return c.name === klassName; });
+// Shared write path: validation + upsert for one attendance record.
+// ctx = { classes, students, narvaro } read once by the caller.
+function writeAttendanceRecord(doc, teacherPnr, ctx, rec) {
+  const cls = ctx.classes.find(function(c) { return c.name === rec.klass; });
   if (!cls) return { success: false, error: 'class_not_found' };
   if (cls.teacherPnr !== teacherPnr) return { success: false, error: 'forbidden' };
 
   // Flexible attendance: any past date whose weekday matches the class
   // day, up to this week's class-day. Server-authoritative.
-  if (!isValidSessionDate(cls, date)) {
+  if (!isValidSessionDate(cls, rec.date)) {
     return { success: false, error: 'invalid_date' };
   }
 
-  const student = readStudents(doc).students.find(function(s) {
-    return normPnr(s.ssn) === childPnr && s.klass === cls.name;
+  const student = ctx.students.find(function(s) {
+    return normPnr(s.ssn) === rec.pnr && s.klass === cls.name;
   });
   if (!student) return { success: false, error: 'student_not_found' };
 
-  const existing = readNarvaro(doc).find(function(n) {
-    return n.date === date && n.klass === cls.name && n.pnr === childPnr;
+  const existing = ctx.narvaro.find(function(n) {
+    return n.date === rec.date && n.klass === cls.name && n.pnr === rec.pnr;
   });
 
   const tab = doc.getSheetByName(TAB_NARVARO);
   if (existing) {
-    tab.getRange(existing.sheetRow, 6).setValue(present);
+    tab.getRange(existing.sheetRow, 6).setValue(rec.present);
   } else {
-    tab.appendRow([date, cls.day, cls.name, childPnr, student.name, present]);
+    tab.appendRow([rec.date, cls.day, cls.name, rec.pnr, student.name, rec.present]);
   }
 
-  return { success: true, present: present, date: date };
+  return { success: true, present: rec.present, date: rec.date };
+}
+
+function markAttendance(doc, teacherPnr, params) {
+  const klass = getParam(params, 'klass').trim();
+  const pnr = normPnr(getParam(params, 'pnr'));
+  const date = getParam(params, 'date').trim();
+  const presentRaw = getParam(params, 'present');
+  const present = (presentRaw === 'J' || presentRaw === '1' || presentRaw === 'true') ? 'J' : 'N';
+  if (!pnr) return { success: false, error: 'student_not_found' };
+
+  const ctx = {
+    classes: readClasses(doc),
+    students: readStudents(doc).students,
+    narvaro: readNarvaro(doc)
+  };
+  return writeAttendanceRecord(doc, teacherPnr, ctx, { klass: klass, date: date, pnr: pnr, present: present });
+}
+
+// Batch write: payload = JSON array of {klass, pnr, date, present}.
+// Per-record validation failures are collected in "errors" — the batch
+// itself succeeds (success: true) so the client can reconcile per record.
+function markAttendanceBatch(doc, teacherPnr, params) {
+  let records;
+  try {
+    records = JSON.parse(getParam(params, 'payload'));
+  } catch (e) {
+    return { success: false, error: 'invalid_payload' };
+  }
+  if (!Array.isArray(records) || records.length === 0 || records.length > 500) {
+    return { success: false, error: 'invalid_payload' };
+  }
+
+  // Normalize and shape-check every record upfront: never partially write
+  // a malformed batch. Dedupe by key, keeping the last record (prevents
+  // double Närvaro rows for the same student/session).
+  const seen = {};
+  for (let i = 0; i < records.length; i++) {
+    const r = records[i];
+    if (!r || typeof r !== 'object') return { success: false, error: 'invalid_payload' };
+    const rec = {
+      klass: String(r.klass || '').trim(),
+      date: String(r.date || '').trim(),
+      pnr: normPnr(r.pnr),
+      present: (r.present === 'J' || r.present === '1' || r.present === true) ? 'J' : 'N'
+    };
+    if (!rec.klass || !rec.date || !rec.pnr) return { success: false, error: 'invalid_payload' };
+    seen[JSON.stringify([rec.klass, rec.date, rec.pnr])] = rec;
+  }
+  const deduped = Object.keys(seen).map(function(k) { return seen[k]; });
+
+  const ctx = {
+    classes: readClasses(doc),
+    students: readStudents(doc).students,
+    narvaro: readNarvaro(doc)
+  };
+
+  const saved = [];
+  const errors = [];
+  deduped.forEach(function(rec) {
+    const result = writeAttendanceRecord(doc, teacherPnr, ctx, rec);
+    if (result.success) {
+      saved.push({ klass: rec.klass, date: rec.date, pnr: rec.pnr, present: rec.present });
+    } else {
+      errors.push({ klass: rec.klass, date: rec.date, pnr: rec.pnr, error: result.error });
+    }
+  });
+  return { success: true, saved: saved, errors: errors };
 }
 
 // ── Sheet readers ───────────────────────────────────────────────
