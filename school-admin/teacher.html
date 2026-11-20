@@ -34,6 +34,7 @@
     }
     .btn-sa-primary { background: var(--sa-green); color: #fff; border: none; font-weight: 700; }
     .btn-sa-primary:hover, .btn-sa-primary:focus { background: var(--sa-green-dark); color: #fff; }
+    .btn-sa-primary:disabled { opacity: .55; cursor: not-allowed; }
 
     /* ── Login ── */
     .login-screen {
@@ -69,8 +70,20 @@
     }
     .btn-light-sm:hover { background: #eef3ee; }
 
+    /* ── Save attendance bar ── */
+    .save-bar {
+      position: fixed; bottom: 0; inset-inline: 0; z-index: 1500;
+      background: rgba(255,255,255,.97); border-top: 1px solid var(--sa-border);
+      box-shadow: 0 -2px 10px rgba(0,0,0,.08);
+      display: flex; justify-content: center; padding: 10px 12px;
+    }
+    .save-badge {
+      background: #fff; color: var(--sa-green); border-radius: 999px;
+      padding: 0 8px; font-size: .75rem; margin-inline-start: 6px; font-weight: 800;
+    }
+
     /* ── Class cards ── */
-    .page-wrap { max-width: 720px; margin: 0 auto; padding: 16px 12px 32px; }
+    .page-wrap { max-width: 720px; margin: 0 auto; padding: 16px 12px 110px; }
     .att-class-card {
       background: #fff; border: 1px solid var(--sa-border); border-radius: 14px;
       margin-bottom: 16px; overflow: hidden;
@@ -142,7 +155,7 @@
 
     /* ── Feedback toast ── */
     .feedback {
-      position: fixed; bottom: 18px; left: 50%; transform: translate(-50%, 20px);
+      position: fixed; bottom: 86px; left: 50%; transform: translate(-50%, 20px);
       background: #22332a; color: #fff; padding: 10px 20px; border-radius: 999px;
       font-size: .9rem; opacity: 0; pointer-events: none; transition: all .25s;
       z-index: 2000; max-width: 90vw; text-align: center;
@@ -187,6 +200,13 @@
       </div>
     </nav>
 
+    <div class="save-bar">
+      <button class="btn btn-sa-primary" id="teacher-save-btn" disabled>
+        <i class="fas fa-save"></i> حفظ الحضور
+        <span class="save-badge" id="teacher-save-count" hidden></span>
+      </button>
+    </div>
+
     <div class="page-wrap" id="teacher-classes"></div>
   </div>
 
@@ -220,6 +240,12 @@
     let boardData = null;
     let pickedDates = {};   // className -> 'yyyy-MM-dd' (in-memory only)
     let boardReqSeq = 0;    // discard stale board responses
+    let pendingChanges = {}; // pendingKey(klass,date,pnr) -> { klass, date, pnr, present: 'J'|'N' }
+    let saveInFlight = false;
+
+    function pendingKey(klass, date, pnr) {
+      return JSON.stringify([klass, date, pnr]);
+    }
 
     const $ = function (id) { return document.getElementById(id); };
 
@@ -246,7 +272,8 @@
       invalid_date: 'التاريخ غير صالح لهذا الفصل',
       forbidden: 'غير مصرح لك بهذا الفصل',
       class_not_found: 'الفصل غير موجود',
-      student_not_found: 'الطالب غير موجود'
+      student_not_found: 'الطالب غير موجود',
+      invalid_payload: 'بيانات غير صالحة — أعد المحاولة'
     };
 
     function errText(res) {
@@ -351,6 +378,7 @@
     }
 
     function showLogin() {
+      pendingChanges = {};
       $('teacher-login-screen').hidden = false;
       $('teacher-dashboard').hidden = true;
     }
@@ -438,7 +466,8 @@
 
           const attMap = (cls.attendance && cls.attendance[se.date]) || {};
           cls.students.forEach(function (st) {
-            const att = attMap[st.pnr];
+            const pendingRec = pendingChanges[pendingKey(cls.name, se.date, st.pnr)];
+            const att = pendingRec ? pendingRec.present : attMap[st.pnr];
             const noPnr = !st.pnr;
             html += '<tr class="att-row" data-pnr="' + escapeHTML(st.pnr) + '" data-klass="' + escapeHTML(cls.name) + '" data-date="' + escapeHTML(se.date) + '">'
               + '<td class="att-name"><bdi dir="auto">' + escapeHTML(st.name) + '</bdi></td>'
@@ -462,7 +491,7 @@
         card.querySelectorAll('.att-check').forEach(function (chk) {
           chk.addEventListener('change', function () {
             const row = chk.closest('.att-row');
-            toggleAttendance(row.dataset.klass, row.dataset.pnr, chk.checked, row.dataset.date);
+            onAttendanceChange(row.dataset.klass, row.dataset.pnr, chk.checked, row.dataset.date);
           });
         });
 
@@ -478,27 +507,77 @@
       });
     }
 
-    async function toggleAttendance(klass, pnr, checked, date) {
-      const res = await api('mark-attendance', {
-        klass: klass,
-        pnr: pnr,
-        present: checked ? 'J' : 'N',
-        date: date
-      });
-      if (res && res.success) {
-        // update local board data so a re-render keeps the state
-        const cls = boardData && boardData.classes.find(function (c) { return c.name === klass; });
-        if (cls) {
-          cls.attendance = cls.attendance || {};
-          cls.attendance[date] = cls.attendance[date] || {};
-          cls.attendance[date][pnr] = res.present;
-        }
+    function onAttendanceChange(klass, pnr, checked, date) {
+      if (!pnr) return;
+      const present = checked ? 'J' : 'N';
+      const cls = boardData && boardData.classes.find(function (c) { return c.name === klass; });
+      const saved = (cls && cls.attendance && cls.attendance[date] && cls.attendance[date][pnr]) || 'N';
+      const key = pendingKey(klass, date, pnr);
+      if (present === saved) {
+        delete pendingChanges[key];
       } else {
-        // revert the checkbox
-        const row = document.querySelector('.att-row[data-klass="' + CSS.escape(klass) + '"][data-pnr="' + CSS.escape(pnr) + '"][data-date="' + CSS.escape(date) + '"]');
-        const chk = row && row.querySelector('.att-check');
-        if (chk) chk.checked = !checked;
-        feedback(errText(res), 'error');
+        pendingChanges[key] = { klass: klass, date: date, pnr: pnr, present: present };
+      }
+      updateSaveButton();
+    }
+
+    function updateSaveButton() {
+      const countEl = $('teacher-save-count');
+      if (!countEl) return; // badge is out of the DOM while the button shows its spinner
+      const n = Object.keys(pendingChanges).length;
+      countEl.textContent = n;
+      countEl.hidden = n === 0;
+      $('teacher-save-btn').disabled = n === 0;
+    }
+
+    async function savePendingAttendance() {
+      if (saveInFlight) return;
+      const keys = Object.keys(pendingChanges);
+      if (!keys.length) return;
+      const records = keys.map(function (k) { return pendingChanges[k]; });
+      saveInFlight = true;
+      setLoading($('teacher-save-btn'), true);
+      try {
+        const res = await api('mark-attendance-batch', { payload: JSON.stringify(records) });
+        if (!res || !res.success) {
+          feedback(errText(res), 'error');
+          return;
+        }
+        const savedKeys = {};
+        (res.saved || []).forEach(function (r) {
+          savedKeys[pendingKey(r.klass, r.date, r.pnr)] = r;
+        });
+        let savedCount = 0;
+        keys.forEach(function (k) {
+          const rec = savedKeys[k];
+          if (rec) {
+            savedCount++;
+            // Update local board state to the saved value.
+            const cls = boardData && boardData.classes.find(function (c) { return c.name === rec.klass; });
+            if (cls) {
+              cls.attendance = cls.attendance || {};
+              cls.attendance[rec.date] = cls.attendance[rec.date] || {};
+              cls.attendance[rec.date][rec.pnr] = rec.present;
+            }
+            // Clear the pending entry only if the user hasn't re-modified it
+            // while the save was in flight.
+            const cur = pendingChanges[k];
+            if (cur && cur.klass === rec.klass && cur.date === rec.date && cur.pnr === rec.pnr && cur.present === rec.present) {
+              delete pendingChanges[k];
+            }
+          }
+        });
+        const failedCount = keys.length - savedCount;
+        if (failedCount === 0) {
+          feedback('تم حفظ الحضور', 'success');
+        } else {
+          feedback('تم حفظ ' + savedCount + ' — تعذر حفظ ' + failedCount, 'error');
+        }
+        renderClasses(boardData);
+      } finally {
+        setLoading($('teacher-save-btn'), false);
+        saveInFlight = false;
+        updateSaveButton();
       }
     }
 
@@ -545,6 +624,7 @@
     $('teacher-login-form').addEventListener('submit', function (e) { e.preventDefault(); handleLogin(); });
     $('teacher-logout-btn').addEventListener('click', handleLogout);
     $('teacher-share-btn').addEventListener('click', shareWithAssistant);
+    $('teacher-save-btn').addEventListener('click', savePendingAttendance);
 
     // Session restore — an assistant share link (?share=...) skips the login.
     const shareParam = new URLSearchParams(location.search).get('share');
