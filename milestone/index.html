@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="sv" dir="ltr">
 <head>
+    <link rel="icon" type="image/png" href="/img/Al-Salam-Center-Logo.png">
+    <link rel="apple-touch-icon" href="/img/Al-Salam-Center-Logo.png">
+
 <!--
   Milestone card for social media. Open with query params, e.g.:
     /milestone/?amount=5500000&mark=5500000&tier=500k&lang=sv
@@ -16,6 +19,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Alsalam Center — Insamlingsmilstolpe</title>
+<script src="/js/config.js"></script>
 <script>
   // Read query params BEFORE first paint so the final state renders
   // immediately (no flash of the demo values).
@@ -29,14 +33,14 @@
     }
     var tiers = ['500k', '800k', '1m', 'goal'];
     var tier = tiers.indexOf(params.get('tier')) >= 0 ? params.get('tier') : '500k';
-    var lang = params.get('lang') === 'ar' ? 'ar' : 'sv';
+    var lang = (params.get('lang') === 'ar' || params.get('lang') === 'en') ? params.get('lang') : 'sv';
     document.documentElement.lang = lang;
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.dataset.tier = tier;
     window.CARD = {
       amount: num('amount', 5500000),
       mark: num('mark', 0),
-      goal: num('goal', 10000000),
+      goal: num('goal', (window.CAMPAIGN && window.CAMPAIGN.goal) || 10000000),
       tier: tier,
       lang: lang
     };
@@ -577,6 +581,11 @@
         <div class="caption-text" id="captionAr"></div>
         <button class="copy-btn" id="copyAr" type="button">نسخ</button>
       </div>
+      <div class="caption-card">
+        <div class="caption-lang">English</div>
+        <div class="caption-text" id="captionEn"></div>
+        <button class="copy-btn" id="copyEn" type="button">Copy</button>
+      </div>
     </div>
   </section>
 
@@ -584,6 +593,7 @@
     (function () {
       var C = window.CARD;
       var sv = C.lang === 'sv';
+      var en = C.lang === 'en';
 
       function el(id) { return document.getElementById(id); }
 
@@ -615,22 +625,29 @@
       var pct = Math.min(100, Math.round((C.amount / C.goal) * 1000) / 10);
       var tier = C.tier;
 
+      var pick = function (obj) { return sv ? obj.sv : (en ? obj.en : obj.ar); };
       var salamText, motivation;
       if (tier === 'goal') {
-        salamText = sv ? 'Alhamdulillah! Målet är nått:' : 'الحمد لله! تحقق الهدف:';
-        motivation = sv
-          ? 'Alhamdulillah! Tack till varje givare, må Allah belöna er. Följ bygget på alsalamcenter.se'
-          : 'الحمد لله! شكرًا لكل متبرع، جزاكم الله خيرًا. تابعوا البناء على alsalamcenter.se';
+        salamText = pick({ sv: 'Alhamdulillah! Målet är nått:', en: 'Alhamdulillah! Goal reached:', ar: 'الحمد لله! تحقق الهدف:' });
+        motivation = pick({
+          sv: 'Alhamdulillah! Tack till varje givare, må Allah belöna er. Följ resan på alsalamcenter.se',
+          en: 'Alhamdulillah! Thank you to every donor, may Allah reward you. Follow the journey at alsalamcenter.se',
+          ar: 'الحمد لله! شكرًا لكل متبرع، جزاكم الله خيرًا. تابعوا الرحلة على alsalamcenter.se'
+        });
       } else if (tier === '1m') {
-        salamText = sv ? 'Alhamdulillah! Vi har nått:' : 'الحمد لله! وصلنا إلى:';
-        motivation = sv
-          ? 'Alhamdulillah! Tack vare er generositet, fortsätt donera och följ vår resa till vår moské!'
-          : 'الحمد لله! بفضل كرمكم، واصلوا التبرع وتابعوا رحلتنا إلى مسجدنا الجديد!';
+        salamText = pick({ sv: 'Alhamdulillah! Vi har nått:', en: 'Alhamdulillah! We have reached:', ar: 'الحمد لله! وصلنا إلى:' });
+        motivation = pick({
+          sv: 'Alhamdulillah! Tack vare er generositet, fortsätt donera och följ vår resa till waqfen!',
+          en: 'Alhamdulillah! Thanks to your generosity, keep donating and follow our journey to the waqf!',
+          ar: 'الحمد لله! بفضل كرمكم، واصلوا التبرع وتابعوا رحلتنا إلى الوقف!'
+        });
       } else {
-        salamText = sv ? 'Alhamdulillah! Vi har nått:' : 'الحمد لله! وصلنا إلى:';
-        motivation = sv
-          ? 'Fortsätt donera och följ vår resa till vår moské!'
-          : 'واصلوا التبرع وتابعوا رحلتنا إلى مسجدنا الجديد!';
+        salamText = pick({ sv: 'Alhamdulillah! Vi har nått:', en: 'Alhamdulillah! We have reached:', ar: 'الحمد لله! وصلنا إلى:' });
+        motivation = pick({
+          sv: 'Fortsätt donera och följ vår resa till waqfen!',
+          en: 'Keep donating and follow our journey to the waqf!',
+          ar: 'واصلوا التبرع وتابعوا رحلتنا إلى الوقف!'
+        });
       }
 
       var remaining = Math.max(0, C.goal - C.amount);
@@ -638,69 +655,93 @@
 
       el('salam').textContent = salamText;
       el('heroAmount').textContent = formatAmount(C.amount);
-      el('heroUnit').textContent = sv ? 'kr' : 'كرونة';
+      el('heroUnit').textContent = C.lang === 'ar' ? 'كرونة' : 'kr';
       el('donutValue').setAttribute('stroke-dasharray',
         (Math.max(0, Math.min(100, pct)) / 100 * circumference) + ' ' + circumference);
-      el('donutPct').textContent = sv ? formatPct(pct) + ' %' : formatPct(pct) + '٪';
+      el('donutPct').textContent = C.lang === 'ar' ? formatPct(pct) + '٪' : formatPct(pct) + ' %';
       el('remainingLine').textContent = sv
         ? 'Kvar: ' + formatAmount(remaining) + ' kr'
-        : 'المتبقي: ' + formatAmount(remaining) + ' كرونة';
+        : (en ? 'Left: ' + formatAmount(remaining) + ' kr'
+              : 'المتبقي: ' + formatAmount(remaining) + ' كرونة');
       el('motivation').textContent = motivation;
 
       // ── Share captions for social media (below the card) ──────
       var markLine = C.mark > 0 ? formatMark(C.mark) : null;
 
-      function buildCaption(svLang) {
+      function buildCaption(langKey) {
         var lines = [];
         var tags;
-        if (svLang) {
+        var goalLine = formatMark(C.goal);
+        var donateLine = 'Swisha 123 5000 559, Bankgiro 5349 1643 eller ge på alsalamcenter.se';
+        if (langKey === 'sv') {
           if (tier === 'goal') {
-            lines.push('MÅLET ÄR NÅTT! 🎉 ' + formatMark(C.goal) + ' miljoner kronor insamlade till vår moské!');
+            lines.push('MÅLET ÄR NÅTT! 🎉 ' + goalLine + ' miljoner kronor insamlade till waqfen!');
             lines.push('Alhamdulillah — tack till varje givare, må Allah belöna er mångfaldigt.');
-            lines.push('Följ bygget på alsalamcenter.se');
+            lines.push('Följ resan på alsalamcenter.se/waqf');
           } else if (tier === '1m') {
             lines.push(markLine
-              ? 'ALHAMDULILLAH! 🎉 Vi har nått ' + markLine + ' miljoner kronor i insamlingen till vår moské!'
-              : 'ALHAMDULILLAH! 🎉 Vi har samlat in ' + formatAmount(C.amount) + ' kr i insamlingen till vår moské!');
+              ? 'ALHAMDULILLAH! 🎉 Vi har nått ' + markLine + ' miljoner kronor i insamlingen till Folkets Hus-waqfen!'
+              : 'ALHAMDULILLAH! 🎉 Vi har samlat in ' + formatAmount(C.amount) + ' kr i insamlingen till Folkets Hus-waqfen!');
             lines.push('Nu är vi uppe i ' + formatPct(pct) + ' % av målet på ' + formatAmount(C.goal) + ' kr — tack till varje givare, må Allah belöna er.');
             lines.push('Hjälp oss sprida ordet — dela, donera och följ vår resa på alsalamcenter.se');
           } else {
             lines.push(markLine
-              ? 'Alhamdulillah! Vi har nått ' + markLine + ' miljoner kr i insamlingen till vår moské! 💚'
-              : 'Alhamdulillah! Vi har samlat in ' + formatAmount(C.amount) + ' kr till vår moské! 💚');
+              ? 'Alhamdulillah! Vi har nått ' + markLine + ' miljoner kr i insamlingen till Folkets Hus! 💚'
+              : 'Alhamdulillah! Vi har samlat in ' + formatAmount(C.amount) + ' kr till Folkets Hus! 💚');
             lines.push('Totalt: ' + formatAmount(C.amount) + ' kr — ' + formatPct(pct) + ' % av målet på ' + formatAmount(C.goal) + ' kr.');
-            lines.push('Varje krona för oss närmare vår egen moské. Vill du vara med? Swisha valfritt belopp till 123 5000 559 eller ge på alsalamcenter.se');
+            lines.push('Varje krona för oss närmare vår egen byggnad. Vill du vara med? ' + donateLine);
           }
-          tags = '#AlsalamCenter #Helsingborg #Moské #Islam #Sverige #Insamling #Donera #Swish #Sadaqah #Alhamdulillah';
-        } else {
+          tags = '#AlsalamCenter #Waqf #FolketsHus #Helsingborg #Ramadan2027 #Donera #Swish #SadaqahJariyah #Alhamdulillah';
+        } else if (langKey === 'en') {
           if (tier === 'goal') {
-            lines.push('تحقق الهدف! 🎉 جمعنا ' + formatMark(C.goal) + ' ملايين كرونة لبناء مسجدنا الجديد!');
-            lines.push('الحمد لله — شكرًا لكل متبرع، جزاكم الله خيرًا الجزاء.');
-            lines.push('تابعوا البناء على alsalamcenter.se');
+            lines.push('GOAL REACHED! 🎉 ' + goalLine + ' million SEK raised for the waqf!');
+            lines.push('Alhamdulillah — thank you to every donor, may Allah reward you abundantly.');
+            lines.push('Follow the journey at alsalamcenter.se/waqf');
           } else if (tier === '1m') {
             lines.push(markLine
-              ? 'الحمد لله! 🎉 وصلنا إلى ' + markLine + ' ملايين كرونة في حملة جمع التبرعات لبناء مسجدنا الجديد!'
-              : 'الحمد لله! 🎉 جمعنا ' + formatAmount(C.amount) + ' كرونة في حملة جمع التبرعات لبناء مسجدنا الجديد!');
+              ? 'ALHAMDULILLAH! 🎉 We have reached ' + markLine + ' million SEK for the Folkets Hus waqf!'
+              : 'ALHAMDULILLAH! 🎉 We have raised ' + formatAmount(C.amount) + ' kr for the Folkets Hus waqf!');
+            lines.push('We are at ' + formatPct(pct) + '% of the ' + formatAmount(C.goal) + ' kr goal — thank you to every donor, may Allah reward you.');
+            lines.push('Help us spread the word — share, donate and follow our journey at alsalamcenter.se');
+          } else {
+            lines.push(markLine
+              ? 'Alhamdulillah! We have reached ' + markLine + ' million SEK for Folkets Hus! 💚'
+              : 'Alhamdulillah! We have raised ' + formatAmount(C.amount) + ' kr for Folkets Hus! 💚');
+            lines.push('Total: ' + formatAmount(C.amount) + ' kr — ' + formatPct(pct) + '% of the ' + formatAmount(C.goal) + ' kr goal.');
+            lines.push('Every krona brings us closer to our own building. Want to join? Swish 123 5000 559, Bankgiro 5349 1643 or give at alsalamcenter.se');
+          }
+          tags = '#AlsalamCenter #Waqf #FolketsHus #Helsingborg #Ramadan2027 #Donate #Swish #SadaqahJariyah #Alhamdulillah';
+        } else {
+          if (tier === 'goal') {
+            lines.push('تحقق الهدف! 🎉 جمعنا ' + goalLine + ' ملايين كرونة لوقف بيت الشعب!');
+            lines.push('الحمد لله — شكرًا لكل متبرع، جزاكم الله خيرًا الجزاء.');
+            lines.push('تابعوا الرحلة على alsalamcenter.se/waqf');
+          } else if (tier === '1m') {
+            lines.push(markLine
+              ? 'الحمد لله! 🎉 وصلنا إلى ' + markLine + ' ملايين كرونة في حملة وقف بيت الشعب!'
+              : 'الحمد لله! 🎉 جمعنا ' + formatAmount(C.amount) + ' كرونة في حملة وقف بيت الشعب!');
             lines.push('وصلنا إلى ' + formatPct(pct) + '٪ من هدفنا البالغ ' + formatAmount(C.goal) + ' كرونة — شكرًا لكل متبرع، جزاكم الله خيرًا.');
             lines.push('ساعدونا في نشر الخبر — شاركوا وتبرعوا وتابعوا رحلتنا على alsalamcenter.se');
           } else {
             lines.push(markLine
-              ? 'الحمد لله! وصلنا إلى ' + markLine + ' ملايين كرونة في حملة جمع التبرعات لبناء مسجدنا الجديد! 💚'
-              : 'الحمد لله! جمعنا ' + formatAmount(C.amount) + ' كرونة لبناء مسجدنا الجديد! 💚');
+              ? 'الحمد لله! وصلنا إلى ' + markLine + ' ملايين كرونة في حملة وقف بيت الشعب! 💚'
+              : 'الحمد لله! جمعنا ' + formatAmount(C.amount) + ' كرونة لحملة وقف بيت الشعب! 💚');
             lines.push('جمعنا حتى الآن ' + formatAmount(C.amount) + ' كرونة — ' + formatPct(pct) + '٪ من هدفنا البالغ ' + formatAmount(C.goal) + ' كرونة.');
-            lines.push('كل كرونة تقرّبنا من مسجدنا الخاص. تريد المشاركة؟ تبرع عبر Swish على الرقم 123 5000 559 أو عبر alsalamcenter.se');
+            lines.push('كل كرونة تقرّبنا من مبنانا الخاص. تريد المشاركة؟ تبرع عبر Swish على 123 5000 559 أو Bankgiro 5349 1643 أو عبر alsalamcenter.se');
           }
-          tags = '#مركز_السلام #هلسينغبوري #مسجد #الإسلام #السويد #صدقة #تبرع #الحمد_لله #ما_شاء_الله';
+          tags = '#وقف_السلام #بيت_الشعب #هلسينغبوري #رمضان2027 #صدقة_جارية #تبرع #الحمد_لله';
         }
         lines.push('');
         lines.push(tags);
         return lines.join('\n');
       }
 
-      el('captionSv').textContent = buildCaption(true);
-      el('captionAr').textContent = buildCaption(false);
+      el('captionSv').textContent = buildCaption('sv');
+      el('captionEn').textContent = buildCaption('en');
+      el('captionAr').textContent = buildCaption('ar');
 
       setupCopyButton('copySv', 'captionSv', 'Kopiera');
+      setupCopyButton('copyEn', 'captionEn', 'Copy');
       setupCopyButton('copyAr', 'captionAr', 'نسخ');
 
       function setupCopyButton(btnId, textId, label) {
