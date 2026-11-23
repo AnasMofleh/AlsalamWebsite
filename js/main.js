@@ -131,7 +131,7 @@
         },
     });
 
-    const goal = 10000000;
+    const goal = (window.CAMPAIGN && window.CAMPAIGN.goal) || 10000000;
     const SWISH_API_URL = "https://script.google.com/macros/s/AKfycbxLXBaGS2rdrrvtFAxMGCAeK2elGSfbvRmjtxBhjbORf9gdHBHduzOXIzP2FCI501cMWA/exec";
     const STRIPE_API_URL = "https://script.google.com/macros/s/AKfycby4xd1YkqdDe-xvshIuMpj53wCLM9kUClwb84Qtx5amrPd6xrUjKjJxiYSdEppweq4/exec";
     const $total = $("#stats-preview-total");
@@ -156,16 +156,15 @@
 
         const targetGoal = Number(snapshot.goal ?? goal ?? 0);
         const pct = targetGoal > 0 ? Math.min((totalAlltime / targetGoal) * 100, 100) : 0;
-        const nextMilestone = Math.min(Math.floor(totalAlltime / 1000000) + 1, 10);
-        const nextMilestoneTarget = nextMilestone * 1000000;
-        const leftToMilestone = Math.max(nextMilestoneTarget - totalAlltime, 0);
+        const goalM = Math.round(targetGoal / 1000000);
+        const leftToGoal = Math.max(targetGoal - totalAlltime, 0);
 
         $total.text(`${totalAlltime.toLocaleString(locale)} kr`);
         $progress.css("width", `${pct.toFixed(1)}%`);
         $percentage.text(`${pct.toFixed(1)}%`);
         if ($milestoneLeft.length) {
             $milestoneLeft.text(
-                `Nästa milstolpe: ${nextMilestone} M • kvar ${leftToMilestone.toLocaleString(locale)} SEK`
+                `Kvar till målet (${goalM} M): ${leftToGoal.toLocaleString(locale)} SEK`
             );
         }
 
