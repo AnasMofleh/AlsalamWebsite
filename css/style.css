@@ -3257,3 +3257,14 @@ body {
 
 
 /* Responsive adjustments */
+/* ── Bankgiro display + copy button (Waqf campaign) ── */
+.bankgiro-number { font-size: 2rem; font-weight: 800; letter-spacing: .06em; color: #15546F; direction: ltr; text-align: center; margin: 10px 0; }
+.bankgiro-copy-btn { border: 1px solid #c9d5c9; background: #fff; color: #33473c; font-weight: 700; border-radius: 10px; padding: 6px 18px; cursor: pointer; }
+.bankgiro-copy-btn.copied { background: #196F15; color: #fff; border-color: #196F15; }
+
+/* ── Campaign countdown (homepage + /waqf) ── */
+.campaign-countdown { display: flex; gap: 10px; flex-wrap: wrap; }
+.cd-box { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25); border-radius: 14px; min-width: 74px; padding: 10px 12px; text-align: center; }
+.cd-num { display: block; font-size: 1.7rem; font-weight: 800; line-height: 1.1; }
+.cd-label { font-size: .72rem; opacity: .85; text-transform: uppercase; letter-spacing: .04em; }
+.countdown-ramadan-day { font-size: 1.3rem; font-weight: 800; color: #F1C152; }

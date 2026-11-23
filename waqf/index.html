@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="sv">
+
+<head>
+    <base href="/">
+    <meta charset="utf-8">
+    <title data-i18n="waqf.title">Al-Salam Waqf — Folkets Hus Helsingborg</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="description" content="Al-Salam Center i Helsingborg samlar in 10 miljoner kronor (fas 1 av 50 M) för att köpa Folkets Hus vid Södergatan 65–67 och göra det till en permanent waqf. Donera via Swish 1235000559 eller Bankgiro 5349 1643.">
+    <link rel="canonical" href="https://alsalamcenter.se/waqf/">
+    <link rel="icon" type="image/png" href="/img/Al-Salam-Center-Logo.png">
+    <link rel="apple-touch-icon" href="/img/Al-Salam-Center-Logo.png">
+
+    <!-- Open Graph / Twitter (AI + social crawlers read these) -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Al-Salam Center i Helsingborg">
+    <meta property="og:title" content="Al-Salam Waqf — Folkets Hus Helsingborg">
+    <meta property="og:description" content="Hjälp oss köpa Folkets Hus och göra det till en permanent waqf. Fas 1: 10 miljoner kronor. Swish 1235000559 · Bankgiro 5349 1643.">
+    <meta property="og:url" content="https://alsalamcenter.se/waqf/">
+    <meta property="og:image" content="https://alsalamcenter.se/waqf/assets/og-image.png">
+    <meta property="og:locale" content="sv_SE">
+    <meta property="og:locale:alternate" content="ar_AR">
+    <meta property="og:locale:alternate" content="en_GB">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Al-Salam Waqf — Folkets Hus Helsingborg">
+    <meta name="twitter:description" content="Fas 1: 10 miljoner kronor till köpet av Folkets Hus. Swish 1235000559 · Bankgiro 5349 1643.">
+    <meta name="twitter:image" content="https://alsalamcenter.se/waqf/assets/og-image.png">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <style>
+        .waqf-hero {
+            background: linear-gradient(135deg, #0f4a0d 0%, #196F15 45%, #15546F 100%);
+            color: #fff;
+            border-radius: 24px;
+            padding: 48px 28px;
+            position: relative;
+            overflow: hidden;
+        }
+        .waqf-hero .waqf-slogan {
+            font-family: 'Pacifico', cursive;
+            color: #F1C152;
+            font-size: 1.4rem;
+        }
+        .waqf-hero h1 { font-weight: 800; font-size: 2.2rem; }
+        .waqf-hero p.waqf-hero-sub { opacity: .92; max-width: 640px; font-size: 1.05rem; }
+        .waqf-hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+        .waqf-hero .btn-waqf-gold {
+            background: #F1C152; color: #22332a; border: none; font-weight: 800;
+            border-radius: 12px; padding: 12px 26px;
+        }
+        .waqf-hero .btn-waqf-ghost {
+            background: rgba(255,255,255,.12); color: #fff; border: 1px solid rgba(255,255,255,.35);
+            font-weight: 700; border-radius: 12px; padding: 12px 22px;
+        }
+
+        .campaign-countdown { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+        .cd-box {
+            background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25);
+            border-radius: 14px; min-width: 74px; padding: 10px 12px; text-align: center;
+        }
+        .cd-num { display: block; font-size: 1.7rem; font-weight: 800; line-height: 1.1; }
+        .cd-label { font-size: .72rem; opacity: .85; text-transform: uppercase; letter-spacing: .04em; }
+        .countdown-ramadan-day { font-size: 1.3rem; font-weight: 800; color: #F1C152; }
+
+        .waqf-section-label {
+            color: var(--buttons, #15546F); font-weight: 800; letter-spacing: .08em;
+            text-transform: uppercase; font-size: .8rem;
+        }
+        .waqf-section-title { font-weight: 800; margin-top: 4px; }
+        .waqf-card {
+            background: #fff; border: 1px solid #e6ece6; border-radius: 20px;
+            padding: 28px 24px; height: 100%; box-shadow: 0 2px 14px rgba(0,0,0,.05);
+        }
+        .waqf-fact-icon {
+            width: 52px; height: 52px; border-radius: 14px; display: flex;
+            align-items: center; justify-content: center; font-size: 1.3rem;
+            background: #eef6ee; color: #196F15; margin-bottom: 12px;
+        }
+        .waqf-fact-value { font-weight: 800; font-size: 1.02rem; }
+        .waqf-fact-label { color: #6b7a70; font-size: .82rem; }
+
+        .waqf-phase-num {
+            width: 46px; height: 46px; border-radius: 50%; background: #196F15; color: #fff;
+            font-weight: 800; font-size: 1.15rem; display: flex; align-items: center;
+            justify-content: center; margin-bottom: 14px;
+        }
+        .waqf-phase { border-inline-start: 3px solid #e6ece6; padding-inline-start: 20px; }
+        .waqf-phase h5 { font-weight: 800; }
+        .waqf-budget-banner {
+            background: #fff8e6; border: 1px solid #f0e0ac; border-radius: 16px;
+            padding: 16px 22px; font-weight: 700; color: #7a5c13; text-align: center;
+        }
+
+        .waqf-progress-bar { height: 22px; background: #eef3ee; border-radius: 999px; overflow: hidden; }
+        .waqf-progress-fill {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, #196F15, #198754);
+            border-radius: 999px; transition: width .8s ease;
+        }
+        .waqf-tier-amount { font-size: 1.8rem; font-weight: 800; color: #196F15; }
+        .waqf-tier .donation-btn { width: 100%; margin-top: 14px; }
+
+        .waqf-bankgiro-number {
+            font-size: 2rem; font-weight: 800; letter-spacing: .06em; color: #15546F;
+            direction: ltr; text-align: center; margin: 10px 0;
+        }
+        .waqf-copy-btn {
+            border: 1px solid #c9d5c9; background: #fff; color: #33473c; font-weight: 700;
+            border-radius: 10px; padding: 6px 18px; cursor: pointer;
+        }
+        .waqf-copy-btn.copied { background: #196F15; color: #fff; border-color: #196F15; }
+
+        .waqf-accordion .accordion-button { font-weight: 700; }
+        .waqf-accordion .accordion-button:not(.collapsed) { background: #eef6ee; color: #196F15; }
+        .waqf-share-row { display: flex; gap: 10px; flex-wrap: wrap; }
+        .waqf-share-btn {
+            width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; color: #fff; font-size: 1.1rem; text-decoration: none;
+        }
+        .waqf-share-btn.wa { background: #25D366; }
+        .waqf-share-btn.fb { background: #1877F2; }
+        .waqf-share-btn.x  { background: #111; }
+        .waqf-share-btn.native { background: #15546F; }
+    </style>
+</head>
+
+<body class="donation-page-body">
+    <!-- Header Start -->
+    <div id="header-placeholder"></div>
+    <!-- Header End -->
+
+    <main class="container donation-page mt-5 pt-5">
+
+        <!-- ── Hero ── -->
+        <section class="waqf-hero wow fadeInUp" data-wow-delay="0.05s">
+            <span class="waqf-slogan" data-i18n="waqf.hero-slogan">Den första regndroppen</span>
+            <h1 class="mt-2" data-i18n="waqf.hero-title">En permanent waqf i Helsingborgs hjärta</h1>
+            <p class="waqf-hero-sub mt-3" data-i18n="waqf.hero-sub">Hjälp oss köpa Folkets Hus vid Gustav Adolfs torg — ett självförsörjande centrum för bön, utbildning och gemenskap i generationer.</p>
+            <div class="waqf-hero-actions">
+                <a class="btn btn-waqf-gold" href="#donate" data-i18n="waqf.hero-cta-donate">Donera nu</a>
+                <a class="btn btn-waqf-ghost" href="#story" data-i18n="waqf.hero-cta-story">Läs om projektet</a>
+            </div>
+            <p class="mt-4 mb-0 opacity-75" data-i18n="waqf.countdown-label">Ramadan 2027 börjar om</p>
+            <div class="campaign-countdown" data-countdown="ramadan">
+                <div class="cd-box"><span class="cd-num" data-cd="days">0</span><span class="cd-label" data-i18n="waqf.countdown.days">Dagar</span></div>
+                <div class="cd-box"><span class="cd-num" data-cd="hours">00</span><span class="cd-label" data-i18n="waqf.countdown.hours">Timmar</span></div>
+                <div class="cd-box"><span class="cd-num" data-cd="minutes">00</span><span class="cd-label" data-i18n="waqf.countdown.minutes">Minuter</span></div>
+                <div class="cd-box"><span class="cd-num" data-cd="seconds">00</span><span class="cd-label" data-i18n="waqf.countdown.seconds">Sekunder</span></div>
+            </div>
+        </section>
+
+        <!-- ── Story ── -->
+        <section id="story" class="mt-5">
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-6">
+                    <span class="waqf-section-label" data-i18n="waqf.story-label">Varför waqf?</span>
+                    <h2 class="waqf-section-title" data-i18n="waqf.story-title">En evig investering — sadaqah jariyah</h2>
+                    <p class="text-muted mt-3" data-i18n="waqf.story-body">Vår nuvarande moské hyrs med osäkra kontrakt och räcker inte till fredagsbönen, Ramadan eller högtiderna. Helsingborg växer — över 12 000 muslimer bor i staden. Genom att köpa Folkets Hus och göra det till en waqf (islamisk stiftelse) får butiker och kontor betala driften, så att centret blir självförsörjande och tjänar kommande generationer. Varje gåva är sadaqah jariyah — en belöning som fortsätter för varje bön och varje lektion i byggnaden.</p>
+                    <p class="mt-3 fst-italic" data-i18n="waqf.story-hadith">"Den som vägleder till det goda får samma belöning som den som utför det." (Muslim)</p>
+                </div>
+                <div class="col-lg-6">
+                    <img src="/img/Al-Salam-Insida.jpg" alt="Al-Salam Center" class="img-fluid rounded-4 shadow-sm">
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Facts ── -->
+        <section class="mt-5">
+            <span class="waqf-section-label" data-i18n="waqf.facts-label">Folkets Hus</span>
+            <h2 class="waqf-section-title" data-i18n="waqf.facts-title">Byggnaden vi ska köpa</h2>
+            <div class="row g-3 mt-1">
+                <div class="col-6 col-md-4">
+                    <div class="waqf-card">
+                        <div class="waqf-fact-icon"><i class="fas fa-ruler-combined"></i></div>
+                        <div class="waqf-fact-value" dir="ltr">4 887 m²</div>
+                        <div class="waqf-fact-label" data-i18n="waqf.fact-area-label">Total yta</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4">
+                    <div class="waqf-card">
+                        <div class="waqf-fact-icon"><i class="fas fa-building"></i></div>
+                        <div class="waqf-fact-value" data-i18n="waqf.fact-floors-value">5 våningar + vind</div>
+                        <div class="waqf-fact-label" data-i18n="waqf.fact-floors-label">Vinden kan bli 4 lägenheter</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4">
+                    <div class="waqf-card">
+                        <div class="waqf-fact-icon"><i class="fas fa-door-open"></i></div>
+                        <div class="waqf-fact-value" data-i18n="waqf.fact-halls-value">Sal A, B & C</div>
+                        <div class="waqf-fact-label" data-i18n="waqf.fact-halls-label">Sal A är renoverad i originalskick</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4">
+                    <div class="waqf-card">
+                        <div class="waqf-fact-icon"><i class="fas fa-store"></i></div>
+                        <div class="waqf-fact-value" data-i18n="waqf.fact-shops-value">6 butiker + kontor</div>
+                        <div class="waqf-fact-label" data-i18n="waqf.fact-shops-label">Hyresintäkter gör centret självförsörjande</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4">
+                    <div class="waqf-card">
+                        <div class="waqf-fact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="waqf-fact-value" data-i18n="waqf.fact-location-value">Södergatan 65–67</div>
+                        <div class="waqf-fact-label" data-i18n="waqf.fact-location-label">Vid Gustav Adolfs torg, mitt i stan</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4">
+                    <div class="waqf-card">
+                        <div class="waqf-fact-icon"><i class="fas fa-landmark"></i></div>
+                        <div class="waqf-fact-value" data-i18n="waqf.fact-built-value">Folkets Hus i ~70 år</div>
+                        <div class="waqf-fact-label" data-i18n="waqf.fact-built-label">En byggnad med plats i stadens minne</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Phases ── -->
+        <section class="mt-5">
+            <span class="waqf-section-label" data-i18n="waqf.phases-label">Projektplanen</span>
+            <h2 class="waqf-section-title" data-i18n="waqf.phases-title">50 miljoner — en 5-årsplan</h2>
+            <div class="row g-4 mt-1">
+                <div class="col-lg-4">
+                    <div class="waqf-card waqf-phase">
+                        <div class="waqf-phase-num">1</div>
+                        <h5 data-i18n="waqf.phase1-title">Fas 1 — 10 miljoner första året</h5>
+                        <p class="text-muted mb-0" data-i18n="waqf.phase1-body">Med handpenningen säkrad skriver vi köpekontrakt och äganderätten överförs. Ramadan 2027 är den stora insamlingsmånaden.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="waqf-card waqf-phase">
+                        <div class="waqf-phase-num">2</div>
+                        <h5 data-i18n="waqf.phase2-title">Fas 2 — kontrakt och köp</h5>
+                        <p class="text-muted mb-0" data-i18n="waqf.phase2-body">Förhandling med säljaren och avtal om hur resterande betalningar ska läggas upp.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="waqf-card waqf-phase">
+                        <div class="waqf-phase-num">3</div>
+                        <h5 data-i18n="waqf.phase3-title">Fas 3 — fyra års avbetalning</h5>
+                        <p class="text-muted mb-0" data-i18n="waqf.phase3-body">Resten av köpesumman betalas över fyra år — till stor del av byggnadens egna hyresintäkter.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="waqf-budget-banner mt-4" data-i18n="waqf.budget-note">Total budget: 50 000 000 kr · Fas 1 (pågår): 10 000 000 kr · Org.nr 802513-6808</div>
+        </section>
+
+        <!-- ── Live progress ── -->
+        <section id="progress" class="mt-5">
+            <div class="waqf-card">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div>
+                        <span class="waqf-section-label" data-i18n="waqf.progress-label">Insamlingen</span>
+                        <h2 class="waqf-section-title mb-0" data-i18n="waqf.progress-title">Live — kvar till målet</h2>
+                    </div>
+                    <a href="/stats" class="btn btn-outline-success" data-i18n="waqf.progress-link">Se hela statistiken</a>
+                </div>
+                <div class="row text-center mt-4">
+                    <div class="col-6">
+                        <div class="text-muted" data-i18n="waqf.progress-raised">Insamlat</div>
+                        <h3 class="mb-1" id="waqf-total" dir="ltr">—</h3>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-muted" data-i18n="waqf.progress-left">Kvar till 10 M</div>
+                        <h3 class="mb-1" id="waqf-left" dir="ltr">—</h3>
+                    </div>
+                </div>
+                <div class="waqf-progress-bar mt-4">
+                    <div class="waqf-progress-fill" id="waqf-bar"></div>
+                </div>
+                <div class="d-flex justify-content-between text-muted mt-2">
+                    <small id="waqf-pct">0 %</small>
+                    <small><span dir="ltr" id="waqf-goal-label">10 000 000 kr</span></small>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Tiers ── -->
+        <section class="mt-5">
+            <span class="waqf-section-label" data-i18n="waqf.tiers-label">Sätt att bidra</span>
+            <h2 class="waqf-section-title" data-i18n="waqf.tiers-title">Två vägar att bygga</h2>
+            <div class="row g-4 mt-1">
+                <div class="col-lg-6">
+                    <div class="waqf-card waqf-tier text-center">
+                        <i class="fas fa-vector-square fa-2x" style="color:#196F15"></i>
+                        <h4 class="mt-3 mb-1" data-i18n="waqf.tier-square-title">Adoptera en kvadratmeter</h4>
+                        <div class="waqf-tier-amount" dir="ltr">3 000 kr / m²</div>
+                        <p class="text-muted" data-i18n="waqf.tier-square-body">4 887 m² ska fyllas — 3 000 kr ger dig en kvadratmeter av waqf-byggnaden. Perfekt för barnbidragsdagen eller en familjegåva.</p>
+                        <button class="donation-btn" onclick="openWaqfSwish(3000)" data-i18n="waqf.tier-square-cta">Swisha 3 000 kr</button>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="waqf-card waqf-tier text-center">
+                        <i class="fas fa-star fa-2x" style="color:#F1C152"></i>
+                        <h4 class="mt-3 mb-1" data-i18n="waqf.tier-founder-title">Grundarmedlem</h4>
+                        <div class="waqf-tier-amount" dir="ltr">25 000 kr</div>
+                        <p class="text-muted" data-i18n="waqf.tier-founder-body">Grundarmedlemmarna bär projektet — ditt namn hedras bland waqfens grundare. En dags lön kan bli en evig investering.</p>
+                        <button class="donation-btn" onclick="openWaqfSwish(25000)" data-i18n="waqf.tier-founder-cta">Swisha 25 000 kr</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Donate rails ── -->
+        <section id="donate" class="mt-5">
+            <span class="waqf-section-label" data-i18n="waqf.donate-label">Donera</span>
+            <h2 class="waqf-section-title" data-i18n="waqf.donate-title">Alla sätt att ge</h2>
+            <div class="row g-4 mt-1">
+                <div class="col-md-6 col-lg-3">
+                    <div class="waqf-card text-center h-100">
+                        <i class="fas fa-university fa-2x" style="color:#15546F"></i>
+                        <h5 class="mt-3" data-i18n="waqf.donate-bankgiro-title">Bankgiro</h5>
+                        <div class="waqf-bankgiro-number" id="waqf-bankgiro-number">5349 1643</div>
+                        <button class="waqf-copy-btn" id="waqf-bankgiro-copy" data-i18n="waqf.donate-bankgiro-copy">Kopiera</button>
+                        <p class="text-muted small mt-3 mb-0" data-i18n="waqf.donate-bankgiro-body">Märk gåvan "Waqf" — fungerar från hela världen.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="waqf-card text-center h-100">
+                        <i class="fas fa-mobile-alt fa-2x" style="color:#196F15"></i>
+                        <h5 class="mt-3" data-i18n="waqf.donate-swish-title">Swish</h5>
+                        <img src="/img/swishwakfQR.png" alt="Swish QR" class="img-fluid my-2" style="max-width:120px">
+                        <button class="donation-btn w-100" onclick="openWaqfSwish(null)" data-i18n="waqf.donate-swish-cta">Öppna Swish</button>
+                        <p class="text-muted small mt-2 mb-0" dir="ltr">123 5000 559</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="waqf-card text-center h-100">
+                        <i class="fas fa-credit-card fa-2x" style="color:#15546F"></i>
+                        <h5 class="mt-3" data-i18n="waqf.donate-card-title">Kort & andra sätt</h5>
+                        <p class="text-muted" data-i18n="waqf.donate-card-body">Säkert kortbetalning via Stripe — välj belopp själv.</p>
+                        <a href="/donations/#one-time" class="donation-btn w-100" data-i18n="waqf.donate-card-cta">Donera med kort</a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="waqf-card text-center h-100">
+                        <i class="fas fa-sync-alt fa-2x" style="color:#F1C152"></i>
+                        <h5 class="mt-3" data-i18n="waqf.donate-monthly-title">Månadsgivare</h5>
+                        <p class="text-muted" data-i18n="waqf.donate-monthly-body">En automatisk månadsgåva bygger waqfen över tid.</p>
+                        <a href="/donations/#monthly" class="donation-btn w-100" data-i18n="waqf.donate-monthly-cta">Bli månadsgivare</a>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center text-muted mt-3 mb-0" data-i18n="waqf.donate-note">Alla belopp redovisas i svenska kronor (SEK).</p>
+        </section>
+
+        <!-- ── FAQ ── -->
+        <section class="mt-5">
+            <span class="waqf-section-label" data-i18n="waqf.faq-label">Frågor & svar</span>
+            <h2 class="waqf-section-title" data-i18n="waqf.faq-title">Vanliga frågor</h2>
+            <div class="accordion waqf-accordion mt-3" id="waqf-faq">
+                <div class="accordion-item">
+                    <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" data-i18n="waqf.faq-q1">Vad är en waqf?</button></h2>
+                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#waqf-faq">
+                        <div class="accordion-body" data-i18n="waqf.faq-a1">En waqf är en islamisk stiftelse: kapitalet bevaras för alltid och avkastningen tjänar samhället — här i form av en byggnad vars hyresintäkter finansierar moskén, skolan och aktiviteterna.</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" data-i18n="waqf.faq-q2">Varför kostar projektet 50 miljoner?</button></h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#waqf-faq">
+                        <div class="accordion-body" data-i18n="waqf.faq-a2">50 M kr är den beräknade köpeskillingen för en 4 887 m² stor fastighet i centrala Helsingborg med butiker, kontor och tre salar. De löpande hyresintäkterna gör att waqfen sedan bär sina egna kostnader.</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" data-i18n="waqf.faq-q3">Varför 10 miljoner först?</button></h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#waqf-faq">
+                        <div class="accordion-body" data-i18n="waqf.faq-a3">10 M kr är handpenningen som behövs för att skriva köpekontrakt och överföra äganderätten. Resten betalas enligt en fyraårsplan.</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" data-i18n="waqf.faq-q4">Gäller gåvan som zakat eller sadaqah?</button></h2>
+                    <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#waqf-faq">
+                        <div class="accordion-body" data-i18n="waqf.faq-a4">Waqf-gåvor är sadaqah jariyah — en löpande välgörenhet vars belöning fortsätter. Zakat al-Fitr och zakat på förmögenhet hanteras separat av moskén.</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5" data-i18n="waqf.faq-q5">Hur vet jag att pengarna används rätt?</button></h2>
+                    <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#waqf-faq">
+                        <div class="accordion-body" data-i18n="waqf.faq-a5">Insamlingen redovisas live på alsalamcenter.se/stats och varje fredag i moskén. Föreningen är registrerad hos Skatteverket med organisationsnummer 802513-6808.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Contact / volunteer ── -->
+        <section class="mt-5 mb-4">
+            <div class="waqf-card text-center">
+                <span class="waqf-section-label" data-i18n="waqf.contact-label">Kontakt</span>
+                <h2 class="waqf-section-title" data-i18n="waqf.contact-title">Vill du hjälpa till?</h2>
+                <p class="text-muted mx-auto" style="max-width:560px" data-i18n="waqf.contact-body">Vi söker volontärer till Ramadan-turnén, sociala medier och ekonomin. Hör av dig!</p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a class="btn btn-primary" href="mailto:info@alsalamcenter.se" dir="ltr">info@alsalamcenter.se</a>
+                    <a class="btn btn-outline-primary" href="tel:+46737395490" dir="ltr">+46 73 739 54 90</a>
+                    <a class="btn btn-outline-success" href="mailto:info@alsalamcenter.se?subject=Volont%C3%A4r%20Ramadan%202027" data-i18n="waqf.contact-volunteer">Anmäl dig som volontär</a>
+                </div>
+                <div class="mt-4">
+                    <span class="text-muted" data-i18n="waqf.share-label">Dela kampanjen:</span>
+                    <div class="waqf-share-row justify-content-center mt-2">
+                        <a class="waqf-share-btn wa" href="https://wa.me/?text=Hj%C3%A4lp%20Al-Salam%20Center%20k%C3%B6pa%20Folkets%20Hus%20%E2%80%94%20https%3A%2F%2Falsalamcenter.se%2Fwaqf%2F" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a class="waqf-share-btn fb" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Falsalamcenter.se%2Fwaqf%2F" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a class="waqf-share-btn x" href="https://x.com/intent/post?url=https%3A%2F%2Falsalamcenter.se%2Fwaqf%2F" target="_blank" rel="noopener" aria-label="X"><i class="fab fa-x-twitter"></i></a>
+                        <button class="waqf-share-btn native border-0" id="waqf-native-share" aria-label="Dela"><i class="fas fa-share-alt"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Swish Popup (desktop fallback) -->
+    <div id="swish-popup" class="popup" style="display: none;">
+        <div class="popup-content">
+            <button class="close-btn" onclick="hideSwishPopup()">X</button>
+            <h4 style="text-align: center;" data-i18n="donations.swish-popup-title">Swish kräver mobil</h4>
+            <p data-i18n="donations.swish-popup-description">Swish-betalning fungerar endast på mobiltelefoner med Swish-appen installerad.</p>
+            <p data-i18n="donations.swish-popup-alternative">Alternativt kan du skanna QR-koden nedan:</p>
+            <img src="/img/swishwakfQR.png" alt="Swish QR" style="width: 100%; max-width: 200px; margin: 10px auto 10px; display: block;" />
+            <button class="donation-btn" onclick="hideSwishPopup()" data-i18n="donations.close">Stäng</button>
+        </div>
+    </div>
+
+    <!-- Footer Start -->
+    <div id="contact-us-placeholder"></div>
+    <!-- Footer End -->
+
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Campaign config + countdown + template JS -->
+    <script src="/js/config.js"></script>
+    <script src="/js/countdown.js"></script>
+    <script src="js/main.js"></script>
+
+    <!-- i18n module -->
+    <script type="module" src="/langugaes/js/i18n.js" defer></script>
+
+    <!-- Load Header and Footer -->
+    <script>
+        $(function () {
+            $("#header-placeholder").load("/header.html", function () {
+                if (window.reapplyTranslations) setTimeout(() => window.reapplyTranslations(), 50);
+            });
+            $("#contact-us-placeholder").load("/contact-us.html", function () {
+                if (window.reapplyTranslations) setTimeout(() => window.reapplyTranslations(), 50);
+            });
+        });
+    </script>
+
+    <script>
+        // ── Swish with optional amount prefill (Sweden-only rail) ──
+        function isMobileDevice() {
+            return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+        }
+        function openWaqfSwish(amount) {
+            var C = window.CAMPAIGN || {};
+            var data = {
+                version: 1,
+                payee: { value: C.swish || '1235000559' },
+                message: { value: 'Waqf Alsalam' }
+            };
+            if (amount) data.amount = { value: amount };
+            var payload = encodeURIComponent(JSON.stringify(data));
+            if (isMobileDevice()) {
+                window.location.href = 'swish://payment?data=' + payload;
+            } else {
+                document.getElementById('swish-popup').style.display = 'flex';
+            }
+        }
+        function hideSwishPopup() {
+            document.getElementById('swish-popup').style.display = 'none';
+        }
+
+        // ── Bankgiro copy button ──
+        (function () {
+            var btn = document.getElementById('waqf-bankgiro-copy');
+            var num = document.getElementById('waqf-bankgiro-number');
+            if (!btn || !num) return;
+            btn.addEventListener('click', function () {
+                var text = num.textContent.trim();
+                function done() {
+                    var t = (typeof window.getTranslation === 'function')
+                        ? window.getTranslation('waqf.donate-bankgiro-copied', 'Kopierad!')
+                        : 'Kopierad!';
+                    btn.textContent = t + ' ✓';
+                    btn.classList.add('copied');
+                    setTimeout(function () {
+                        var orig = (typeof window.getTranslation === 'function')
+                            ? window.getTranslation('waqf.donate-bankgiro-copy', 'Kopiera')
+                            : 'Kopiera';
+                        btn.textContent = orig;
+                        btn.classList.remove('copied');
+                    }, 2500);
+                }
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(done, done);
+                } else {
+                    done();
+                }
+            });
+        })();
+
+        // ── Native share (Web Share API) ──
+        (function () {
+            var btn = document.getElementById('waqf-native-share');
+            if (!btn) return;
+            if (!navigator.share) { btn.style.display = 'none'; return; }
+            btn.addEventListener('click', function () {
+                navigator.share({
+                    title: document.title,
+                    text: 'Hjälp Al-Salam Center köpa Folkets Hus — alsalamcenter.se/waqf',
+                    url: 'https://alsalamcenter.se/waqf/'
+                }).catch(function () {});
+            });
+        })();
+
+        // ── Live progress (Swish + Stripe stats endpoints) ──
+        (function () {
+            var totalEl = document.getElementById('waqf-total');
+            if (!totalEl) return;
+            var C = window.CAMPAIGN || {};
+            var barEl = document.getElementById('waqf-bar');
+            var pctEl = document.getElementById('waqf-pct');
+            var leftEl = document.getElementById('waqf-left');
+            var goalLabelEl = document.getElementById('waqf-goal-label');
+            var goal = C.goal || 10000000;
+            var cacheKey = 'waqf-stats-snapshot';
+            var cacheTtl = 5 * 60 * 1000;
+
+            function fmt(n) {
+                return Math.round(n).toLocaleString('sv-SE').replace(/ /g, ' ') + ' kr';
+            }
+            function parseAmount(v) {
+                if (typeof v === 'number') return v;
+                var s = String(v == null ? '' : v).trim();
+                if (!s) return 0;
+                var n = Number(s.replace(/\s| /g, '').replace(/,/g, '.').replace(/[^\d.-]/g, ''));
+                return isNaN(n) ? 0 : n;
+            }
+            function parseStripeTotal(raw) {
+                var payload = raw && raw.data ? raw.data : raw;
+                if (!payload) return 0;
+                if (Array.isArray(payload)) {
+                    return payload.reduce(function (sum, p) { return sum + parseAmount(p.Amount ?? p.amount ?? 0); }, 0);
+                }
+                return parseAmount(payload.total_stripe ?? payload.total_card ?? payload.totalAmount ?? 0);
+            }
+            function apply(total) {
+                totalEl.textContent = fmt(total);
+                var pct = goal > 0 ? Math.min((total / goal) * 100, 100) : 0;
+                barEl.style.width = pct.toFixed(1) + '%';
+                pctEl.textContent = pct.toFixed(1) + ' %';
+                leftEl.textContent = fmt(Math.max(goal - total, 0));
+            }
+            function hydrate() {
+                try {
+                    var cached = localStorage.getItem(cacheKey);
+                    if (!cached) return;
+                    var snap = JSON.parse(cached);
+                    if (!snap || !snap.updated_at) return;
+                    if (Date.now() - snap.updated_at > cacheTtl) return;
+                    apply(Number(snap.totalAmount) || 0);
+                } catch (e) { /* ignore */ }
+            }
+            function persist(total) {
+                try {
+                    localStorage.setItem(cacheKey, JSON.stringify({ totalAmount: total, updated_at: Date.now() }));
+                } catch (e) { /* ignore */ }
+            }
+            async function fetchStats() {
+                try {
+                    var [swishRes, stripeRes] = await Promise.allSettled([
+                        fetch(C.statsSwishUrl),
+                        fetch(C.statsStripeUrl)
+                    ]);
+                    if (swishRes.status !== 'fulfilled' || !swishRes.value.ok) return;
+                    var swishData = await swishRes.value.json();
+                    var payload = swishData && swishData.data ? swishData.data : swishData;
+                    var swishTotal = parseAmount((payload && (payload.totalAmount ?? payload.total_alltime)) ?? 0);
+                    var stripeTotal = 0;
+                    if (stripeRes.status === 'fulfilled' && stripeRes.value.ok) {
+                        stripeTotal = parseStripeTotal(await stripeRes.value.json());
+                    }
+                    var total = swishTotal + stripeTotal;
+                    apply(total);
+                    persist(total);
+                } catch (e) {
+                    console.warn('Waqf stats fetch failed', e);
+                }
+            }
+            if (goalLabelEl) goalLabelEl.textContent = fmt(goal);
+            hydrate();
+            fetchStats();
+            setInterval(fetchStats, 15000);
+        })();
+    </script>
+
+    <!-- Structured data for search engines + AI assistants -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "NGO",
+      "name": "Al-Salam Center i Helsingborg",
+      "url": "https://alsalamcenter.se/waqf/",
+      "email": "info@alsalamcenter.se",
+      "telephone": "+46737395490",
+      "identifier": "802513-6808",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Södergatan 65-67",
+        "postalCode": "252 25",
+        "addressLocality": "Helsingborg",
+        "addressCountry": "SE"
+      },
+      "funding": {
+        "@type": "MonetaryAmount",
+        "currency": "SEK",
+        "value": "50000000",
+        "description": "Total budget for the Folkets Hus waqf purchase"
+      }
+    }
+    </script>
+</body>
+
+</html>
