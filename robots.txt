@@ -1,0 +1,38 @@
+# Al-Salam Center i Helsingborg — alsalamcenter.se
+# Public site, GitHub Pages. Private/internal paths are disallowed below.
+
+User-agent: *
+Allow: /
+
+# AI assistants & search: explicitly allowed (they may read llms.txt too)
+User-agent: GPTBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Claude-Web
+Allow: /
+User-agent: anthropic-ai
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+User-agent: CCBot
+Allow: /
+User-agent: meta-externalagent
+Allow: /
+
+# Internal / private paths
+Disallow: /admin/
+Disallow: /school-admin/
+Disallow: /donation_redirect/
+Disallow: /milestone/
+Disallow: /ramadan2027/
+
+Sitemap: https://alsalamcenter.se/sitemap.xml

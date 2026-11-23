@@ -1,0 +1,31 @@
+# Al-Salam Center i Helsingborg — alsalamcenter.se
+
+> Al-Salam Center i Helsingborg is an Islamic association in Helsingborg, Sweden (org.nr 802513-6808, registered 2018-01-10, address Södergatan 65, 252 25 Helsingborg). The centre runs a mosque, Qur'an school and community programs, and is running a waqf campaign to buy the Folkets Hus building (Södergatan 65–67) and turn it into a permanent, self-sustaining Islamic endowment.
+
+Key facts about the Al-Salam Waqf campaign:
+
+- The campaign buys the historic Folkets Hus building in central Helsingborg: 4,887 m², 5 floors + attic, halls A/B/C, 6 street-facing shops and offices whose rental income makes the centre self-sustaining.
+- Total budget: 50,000,000 SEK. Phase 1 (current): raise 10,000,000 SEK to sign the purchase agreement and transfer ownership. Phase 3: the remainder is paid over a four-year plan.
+- Donation tiers: "Adopt a Square Meter" (3,000 SEK per m²) and "Founding Member" (25,000 SEK).
+- Ways to donate: Swish 1235000559 · Bankgiro 5349 1643 (mark the gift "Waqf") · card/Stripe and monthly giving via the donations page.
+- Live fundraising progress is published at /stats (Swish + card payments, updated in real time) and reviewed every Friday in the mosque.
+- Ramadan 2027 (starting around 2027-02-07) is the main fundraising push; volunteers also run a collection tour to ~200 mosques across Sweden plus trips to Germany, Norway and Denmark.
+- Contact: info@alsalamcenter.se · +46 73 739 54 90 · Instagram @alsalamcenterhelsingborg.
+
+## Main pages
+
+- [Home](https://alsalamcenter.se/): overview, prayer times widget, live donation counter.
+- [Waqf campaign](https://alsalamcenter.se/waqf/): the Folkets Hus purchase — story, building facts, phase plan, live progress, donation tiers, FAQ (SV/EN/AR).
+- [Donations](https://alsalamcenter.se/donations/): Swish, card (Stripe), monthly giving, Bankgiro, and tax-return membership check.
+- [Live statistics](https://alsalamcenter.se/stats/): real-time fundraising dashboard with milestone progress.
+- [Company sponsorship](https://alsalamcenter.se/company/): corporate sponsorship tiers (Guld/Silver/Brons).
+- [School](https://alsalamcenter.se/school/): registration for the Qur'an and Arabic school (160 kr/month via autogiro).
+- [Marriage](https://alsalamcenter.se/marriage/): marriage services booking.
+- [School visits](https://alsalamcenter.se/skolbesok/): school visit bookings.
+- [Membership check](https://alsalamcenter.se/membership-check/): Swedish PNR membership status via FIFS.
+
+## Services
+
+- Five daily prayers, Friday sermon (Jumu'ah), Eid prayers, Ramadan programs and iftar.
+- Weekly study circles, Qur'an and Arabic school for children, family counselling, youth activities, training courses.
+- Prayer times are computed for Helsingborg and displayed on the home page with a Hijri calendar.
