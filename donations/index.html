@@ -2,6 +2,9 @@
 <html lang="en">
 
 <head>
+    <link rel="icon" type="image/png" href="/img/Al-Salam-Center-Logo.png">
+    <link rel="apple-touch-icon" href="/img/Al-Salam-Center-Logo.png">
+
     <base href="/">
     <meta charset="utf-8">
     <title>Al-Salam Moské</title>
@@ -251,6 +254,19 @@
             </div>
 
             <p class="donation-footer-note" data-i18n="donations.footer-note">Thank you for helping the mosque remain open, welcoming, and active.</p>
+
+            <!-- Bankgiro (Waqf campaign) -->
+            <div class="row justify-content-center mt-4">
+                <div class="col-lg-8 donation-box donation-box-wide text-center">
+                    <div class="donation-card-content">
+                        <h4><i class="fas fa-university me-2" style="color:#15546F"></i><span data-i18n="donations.bankgiro-title">Bankgiro</span></h4>
+                        <p data-i18n="donations.bankgiro-body">Märk gåvan "Waqf" — fungerar från hela världen.</p>
+                    </div>
+                    <div class="bankgiro-number" id="donations-bankgiro-number">5349 1643</div>
+                    <button class="bankgiro-copy-btn" id="donations-bankgiro-copy" type="button" data-i18n="donations.bankgiro-copy">Kopiera</button>
+                    <p class="mt-3 mb-0"><a href="/waqf" class="fw-bold" style="color:#196F15" data-i18n="donations.waqf-link">Läs om Waqf-projektet →</a></p>
+                </div>
+            </div>
         </section>
     </div>
 
@@ -267,6 +283,7 @@
             <p data-i18n="donations.swish-popup-alternative">Alternativt kan du skanna QR-koden nedan:</p>
             <img src="img/swishwakfQR.png" alt="Swish QR"
                 style="width: 100%; max-width: 200px; margin: 10px auto 10px; display: block;" />
+            <p style="text-align: center;" data-i18n="donations.swish-popup-bankgiro">Eller via Bankgiro 5349 1643 (märk "Waqf").</p>
 
             <!-- Close Button -->
             <button class="donation-btn" onclick="hideSwishPopup()" data-i18n="donations.close">Stäng</button>
@@ -280,16 +297,16 @@
             <h4 class="donation-form-title" data-i18n="donations.card-modal-title">Make a Donation</h4>
 
             <div class="donation-amount-grid" id="donation-amount-grid">
-                <button class="donation-amount-chip" type="button" data-amount="50">50 €</button>
-                <button class="donation-amount-chip" type="button" data-amount="150">150 €</button>
-                <button class="donation-amount-chip" type="button" data-amount="300">300 €</button>
-                <button class="donation-amount-chip" type="button" data-amount="500">500 €</button>
-                <button class="donation-amount-chip" type="button" data-amount="1000">1000 €</button>
-                <button class="donation-amount-chip" type="button" data-amount="2500">2500 €</button>
+                <button class="donation-amount-chip" type="button" data-amount="50">50 kr</button>
+                <button class="donation-amount-chip" type="button" data-amount="150">150 kr</button>
+                <button class="donation-amount-chip" type="button" data-amount="300">300 kr</button>
+                <button class="donation-amount-chip" type="button" data-amount="500">500 kr</button>
+                <button class="donation-amount-chip" type="button" data-amount="1000">1000 kr</button>
+                <button class="donation-amount-chip" type="button" data-amount="2500">2500 kr</button>
             </div>
 
             <div class="donation-form-field">
-                <label for="card-donation-amount" data-i18n="donations.card-modal-custom-amount">Custom amount (€)</label>
+                <label for="card-donation-amount" data-i18n="donations.card-modal-custom-amount">Custom amount (kr)</label>
                 <input id="card-donation-amount" type="number" min="0" inputmode="numeric"
                     data-i18n-placeholder="donations.card-modal-custom-placeholder" placeholder="Enter amount">
             </div>
@@ -371,7 +388,7 @@
                     version: 1,
                     payee: { value: swishNumber },
                     //amount: { value: 200 },         // Optional: pre-fill an amount
-                    message: { value: "Från hemsidan" }
+                    message: { value: "Waqf Alsalam" }
                 })
             );
 
@@ -385,6 +402,35 @@
         function hideSwishPopup() {
             document.getElementById("swish-popup").style.display = "none";
         }
+
+        // Bankgiro copy button
+        (function () {
+            var btn = document.getElementById("donations-bankgiro-copy");
+            var num = document.getElementById("donations-bankgiro-number");
+            if (!btn || !num) return;
+            btn.addEventListener("click", function () {
+                var text = num.textContent.trim();
+                function done() {
+                    var t = (typeof window.getTranslation === "function")
+                        ? window.getTranslation("donations.bankgiro-copied", "Kopierad!")
+                        : "Kopierad!";
+                    btn.textContent = t + " ✓";
+                    btn.classList.add("copied");
+                    setTimeout(function () {
+                        var orig = (typeof window.getTranslation === "function")
+                            ? window.getTranslation("donations.bankgiro-copy", "Kopiera")
+                            : "Kopiera";
+                        btn.textContent = orig;
+                        btn.classList.remove("copied");
+                    }, 2500);
+                }
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(done, done);
+                } else {
+                    done();
+                }
+            });
+        })();
     </script>
 
     <script>
@@ -483,7 +529,7 @@
         }
 
         function updateCardDonationLabel() {
-            const template = getTranslatedTemplate('donations.card-modal-donate-button', 'Donate {{amount}} €');
+            const template = getTranslatedTemplate('donations.card-modal-donate-button', 'Donate {{amount}} kr');
             donationSubmitLabel.textContent = template.replace('{{amount}}', formatDonationAmount(cardDonationState.selectedAmount || 0));
             donationSubmit.disabled = cardDonationState.selectedAmount <= 0 || cardDonationState.isSubmitting;
         }
