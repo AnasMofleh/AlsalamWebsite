@@ -3268,3 +3268,7 @@ body {
 .cd-num { display: block; font-size: 1.7rem; font-weight: 800; line-height: 1.1; }
 .cd-label { font-size: .72rem; opacity: .85; text-transform: uppercase; letter-spacing: .04em; }
 .countdown-ramadan-day { font-size: 1.3rem; font-weight: 800; color: #F1C152; }
+
+/* ── Merged homepage campaign card (banner + live stats) ── */
+.waqf-banner-card .stats-preview-bar { background: rgba(255,255,255,.25); }
+.waqf-banner-card .stats-preview-fill { background: linear-gradient(90deg, #F1C152, #ffe08a); }
