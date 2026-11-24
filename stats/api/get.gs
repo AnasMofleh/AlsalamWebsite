@@ -3,47 +3,14 @@ function doGet(e) {
     var sheet = getOrCreateSheet_('Sheet1');
     ensureHeader_(sheet);
 
-    // ── Manual Bankgiro channel ─────────────────────────────────
-    // Bank transfers don't hit the Swish webhook. Volunteers enter
-    // reconciled amounts weekly in the "Bankgiro" sheet
-    // (columns: Datum | Belopp | Notering) and they are added to the
-    // dashboard totals here.
-    var bankgiroSheet = getOrCreateSheet_('Bankgiro');
-    if (bankgiroSheet.getLastRow() === 0) {
-      bankgiroSheet.getRange(1, 1, 1, 3).setValues([['Datum', 'Belopp', 'Notering']]);
-    }
-    var bankgiro = getBankgiroTotals_(bankgiroSheet);
-
-    var summary = buildSummary_(sheet, bankgiro);
+    var summary = buildSummary_(sheet);
     return json_({ ok: true, data: summary });
   } catch (err) {
     return json_({ ok: false, error: String(err) });
   }
 }
 
-function getBankgiroTotals_(sheet) {
-  try {
-    var lastRow = sheet.getLastRow();
-    if (lastRow < 2) return { total: 0, today: 0 };
-    var values = sheet.getRange(2, 1, lastRow - 1, 2).getValues();
-    var tz = Session.getScriptTimeZone();
-    var today = Utilities.formatDate(new Date(), tz, 'yyyy-MM-dd');
-    var total = 0, todaySum = 0;
-    for (var i = 0; i < values.length; i++) {
-      var amt = parseAmountValue_(values[i][1]);
-      if (!amt) continue;
-      total += amt;
-      var d = formatDateValue_(values[i][0], tz);
-      if (d === today) todaySum += amt;
-    }
-    return { total: round2_(total), today: round2_(todaySum) };
-  } catch (e) {
-    return { total: 0, today: 0 };
-  }
-}
-
-function buildSummary_(sheet, bankgiro) {
-  bankgiro = bankgiro || { total: 0, today: 0 };
+function buildSummary_(sheet) {
   var lastRow = sheet.getLastRow();
 
   // ── Read pre-computed aggregates from formula cells (row 1, cols H–K) ──
@@ -73,10 +40,9 @@ function buildSummary_(sheet, bankgiro) {
   }
 
   return {
-    totalAmount: round2_(totalAmount + bankgiro.total),
-    bankgiroTotal: bankgiro.total,
+    totalAmount: round2_(totalAmount),
     last5: last5,
-    todayTotal: round2_(todayTotal + bankgiro.today),
+    todayTotal: round2_(todayTotal),
     todayHighest: round2_(todayHighest),
     todayCount: todayCount
   };
