@@ -473,6 +473,63 @@
         .admin-category-card.selected.cat-mat       { border-color: #2e7d32; background: #e8f5e9; }
         .admin-category-card.selected.cat-annat     { border-color: #7b1fa2; background: #f3e5f5; }
 
+        /* ── Tool navigation tiles ──────────────── */
+        .admin-tool-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .admin-tool-card {
+            background: #fff;
+            border: 2px solid #dee2e6;
+            border-radius: 16px;
+            padding: 24px 16px;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: all 0.25s;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+        }
+
+        .admin-tool-card:hover {
+            border-color: #b0c4cd;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        }
+
+        .admin-tool-card.current {
+            border-color: var(--admin-primary);
+            background: #f0f6f9;
+            box-shadow: 0 0 0 4px rgba(21,84,111,0.12);
+            cursor: default;
+        }
+
+        .admin-tool-card .cat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 1.6rem;
+        }
+
+        .admin-tool-card .cat-label {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #333;
+        }
+
+        @media (max-width: 576px) {
+            .admin-tool-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* ── Upload Button ───────────────────────── */
         .admin-submit-btn {
             width: 100%;
@@ -671,8 +728,8 @@
             <div class="login-icon">
                 <i class="fas fa-lock"></i>
             </div>
-            <h2>Admin — Kvitton</h2>
-            <p>Ange lösenord för att hantera kvittouppladdningar</p>
+            <h2>Admin — Verktyg</h2>
+            <p>Ange lösenord för att hantera kvitton, milstolpar och certifikat</p>
 
             <div class="input-group">
                 <input type="password" id="admin-password" placeholder="Lösenord" autocomplete="off">
@@ -700,6 +757,22 @@
             <button class="admin-logout-btn" onclick="handleLogout()">
                 <i class="fas fa-sign-out-alt me-1"></i> Logga ut
             </button>
+        </div>
+
+        <!-- Tool navigation -->
+        <div class="admin-tool-grid">
+            <a class="admin-tool-card current" href="/admin/">
+                <div class="cat-icon" style="background:#e8f0f4;color:#15546F;"><i class="fas fa-receipt"></i></div>
+                <div class="cat-label">Kvitto</div>
+            </a>
+            <a class="admin-tool-card" href="/admin/milestone.html">
+                <div class="cat-icon" style="background:#fff3e0;color:#e67e22;"><i class="fas fa-images"></i></div>
+                <div class="cat-label">Milstolpe</div>
+            </a>
+            <a class="admin-tool-card" href="/admin/certificate.html">
+                <div class="cat-icon" style="background:#e8f5e9;color:#2e7d32;"><i class="fas fa-award"></i></div>
+                <div class="cat-label">Certifikat</div>
+            </a>
         </div>
 
         <!-- Upload Zone -->
@@ -911,6 +984,7 @@
 
                 if (result.success && result.authenticated) {
                     sessionStorage.setItem(SESSION_KEY, '1');
+                    sessionStorage.setItem('alsalam_admin_password', pw);
                     $loginError.style.display = 'none';
                     showDashboard();
                 } else {
@@ -932,6 +1006,7 @@
 
         window.handleLogout = function() {
             sessionStorage.removeItem(SESSION_KEY);
+            sessionStorage.removeItem('alsalam_admin_password');
             $dashboard.style.display = 'none';
             $loginScreen.style.display = 'flex';
             $password.value = '';
