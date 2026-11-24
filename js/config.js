@@ -1,7 +1,7 @@
 // ────────────────────────────────────────────────────────────────
 // Al-Salam Waqf Campaign — single source of truth
 // Load this BEFORE js/main.js on every page that shows campaign
-// numbers (homepage, /waqf, /stats, /milestone, /donations).
+// numbers (homepage, /waqf, /stats, /admin, /donations).
 // ────────────────────────────────────────────────────────────────
 window.CAMPAIGN = {
   // Phase-1 fundraising goal (SEK) — first year of the 5-year,
@@ -47,7 +47,7 @@ window.CAMPAIGN = {
     waqf: '/waqf/',
     donations: '/donations/',
     stats: '/stats/',
-    milestone: '/milestone/',
+    milestone: '/admin/milestone.html',
     email: 'info@alsalamcenter.se',
     phone: '+46 73 739 54 90'
   }
