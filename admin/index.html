@@ -761,7 +761,7 @@
 
         <!-- Tool navigation -->
         <div class="admin-tool-grid">
-            <a class="admin-tool-card current" href="/admin/">
+            <a class="admin-tool-card" id="kvitto-tool-card" href="/admin/" onclick="openKvitto(event)">
                 <div class="cat-icon" style="background:#e8f0f4;color:#15546F;"><i class="fas fa-receipt"></i></div>
                 <div class="cat-label">Kvitto</div>
             </a>
@@ -775,6 +775,8 @@
             </a>
         </div>
 
+        <!-- Kvitto panel (shown when entering the Kvitto tool) -->
+        <div id="kvitto-panel" style="display:none;">
         <!-- Upload Zone -->
         <div class="admin-upload-card">
             <h5><i class="fas fa-cloud-upload-alt me-2"></i> Välj fil</h5>
@@ -858,6 +860,7 @@
                 <div class="admin-recent-empty">Inga uppladdningar ännu</div>
             </div>
         </div>
+        </div><!-- /kvitto-panel -->
     </div>
 
     <!-- Footer Start -->
@@ -1020,6 +1023,18 @@
             loadRecentUploads();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+
+        // ── Kvitto tool ─────────────────────────────
+        // The upload panel is hidden until the Kvitto tool is opened.
+        window.openKvitto = function(e) {
+            e.preventDefault();
+            document.getElementById('kvitto-panel').style.display = 'block';
+            document.querySelectorAll('.admin-tool-card').forEach(function(c) {
+                c.classList.remove('current');
+            });
+            document.getElementById('kvitto-tool-card').classList.add('current');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
 
         // ── Upload Zone ─────────────────────────────
         function setupUploadZone() {
