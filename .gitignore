@@ -2,3 +2,7 @@
 # Apps Script deploy (gas/README.md): never commit clasp credentials
 .clasprc.json
 .clasp.json
+
+# OS / editor files
+.DS_Store
+.vscode/settings.json
