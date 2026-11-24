@@ -530,22 +530,10 @@
     }
   }
 </style>
-<style>
-  .admin-toolbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 52px; display: flex; align-items: center; gap: 16px; padding: 0 20px; background: #15546F; color: #fff; font-family: 'Segoe UI', 'Open Sans', sans-serif; }
-  .admin-toolbar a { color: #fff; text-decoration: none; font-weight: 700; }
-  .admin-toolbar a:hover { opacity: .8; }
-  .admin-toolbar-title { font-weight: 800; letter-spacing: .02em; }
-  .admin-toolbar-logout { margin-inline-start: auto; background: rgba(255,255,255,.15); color: #fff; border: 1px solid rgba(255,255,255,.35); border-radius: 8px; padding: 6px 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
-  body { padding-top: 52px; }
-</style>
+
 
 </head>
 <body>
-<div class="admin-toolbar">
-  <a href="/admin/">&larr; Admin</a>
-  <span class="admin-toolbar-title">Milstolpesverktyg</span>
-  <button type="button" class="admin-toolbar-logout" onclick="sessionStorage.removeItem('alsalam_admin_auth');sessionStorage.removeItem('alsalam_admin_password');location.href='/admin/';">Logga ut</button>
-</div>
 
   <div class="card">
     <div class="bg-photo"></div>
