@@ -1,27 +1,48 @@
-Al-Salam Center Website
+Alsalam Center I Helsingborg — Website
 
-This repository contains the public website for Al-Salam Center in Helsingborg, Sweden. The site is built as a static HTML, CSS, and JavaScript website and is deployed on:
+This repository contains the public website for Alsalam Center I Helsingborg, Sweden. The site is built as a static HTML, CSS, and JavaScript website, hosted on GitHub Pages (custom domain in CNAME), and deployed on:
 
 https://alsalamcenter.se
 
+Merging to main publishes the site automatically. There is no build step.
+
 Main features
 
-- Homepage with shared header, footer, and sponsors section
-- Donations page with Swish and Stripe-based donation flows
-- School registration flow (with integrated success page)
-- Company sponsorship page
-- Marriage application page
-- Sponsors page
-- Live donation statistics page
+- Homepage with prayer times (bönetider), the waqf campaign card with live donation total, shared header, footer, and sponsors section
+- Waqf campaign page (/waqf/) for the Folkets Hus purchase: story, building facts, phase plan, live progress, donation tiers (3 000 kr per m², 25 000 kr founding member), Bankgiro/Swish/card, FAQ
+- Donations page with Swish, Stripe (one-time and monthly), Bankgiro 5349 1643, and tax-return membership check
+- Live donation statistics page (/stats/) for the mosque TV screen, with settings for dark mode, Swish QR, slides, font size, and showing/hiding sponsors
+- School registration, school admin (classes, teachers) and teacher attendance (/school-admin/)
+- Company sponsorship, marriage application, school visits, sponsors, and membership check pages
+- Admin portal (/admin/, password protected) with three tools:
+  - Kvitto: upload receipts to Google Drive (receipts/YYYY/category/)
+  - Milstolpe: social media milestone card generator (moved from the public /milestone/ URL, which now redirects to /admin/)
+  - Certifikat: donor certificates in Swedish, English, Arabic, Somali and Albanian, sent to the donor by email as a PDF (3 000 kr = 1 m²) and archived in Drive (certificates/YYYY/)
 - Swedish, English, and Arabic translations
+- Search and AI discoverability: sitemap.xml, robots.txt, llms.txt, Open Graph tags
 
 Project structure
 
 - index.html is the homepage
 - header.html is the shared site header
 - contact-us.html is the shared footer and contact section
-- company/, donations/, donation_redirect/, school/, marriage/, sponsors/, and stats/ contain the route-based pages
+- waqf/, donations/, donation_redirect/, stats/, company/, school/, school-admin/, marriage/, sponsors/, skolbesok/, membership-check/ contain the route-based pages
+- admin/ contains the admin portal (index.html, milestone.html, certificate.html)
+- ramadan2027/ redirects to /waqf/ (short link for printed material)
+- js/config.js is the single source of truth for the campaign: goal, Bankgiro and Swish numbers, Stripe rails, stats endpoints, Ramadan dates
+- js/countdown.js is the Ramadan countdown used on /waqf/
+- img/certificate_background.png is the donor certificate background (replace the file to change the design)
 - langugaes/ contains translation JSON files and the translation loader used by the site
+
+Backends (Google Apps Script)
+
+Server code lives next to the pages in api/ folders. Each one is a separate Apps Script web app. The repository is the source of truth: after changing a file, paste it into its Apps Script project and redeploy with a new version (Deploy → Manage deployments → Edit → Version: New version → Deploy). The /exec URL stays the same.
+
+- admin/api/Code.gs — admin login, receipt upload, donor certificates (email + Drive). Needs the ADMIN_PASSWORD script property. Uses MailApp and UrlFetchApp: the first time, run any function in the editor once to approve the permissions. Email is sent from the script owner's Google account (about 100 recipients per day on a normal account).
+- stats/api/Code.gs and stats/api/get.gs — Swish donation ingestion and the live totals shown on /stats/ and the homepage. Only Swish and card payments are counted; Bankgiro gifts are not added to the live total.
+- school-admin/api/Code.gs — school admin and teacher attendance
+- school/api/main.gs — school registration
+- marriage/api/Code.gs, membership-check/api/, bonetider/api/ — their respective pages
 
 Translations
 
@@ -31,6 +52,12 @@ The website supports multiple languages through the files in the langugaes folde
 - en.json
 - ar.json
 - js/i18n.js
+
+The admin pages are Swedish only. Donor certificates have their own copy in five languages inside admin/certificate.html (preview) and admin/api/Code.gs (emailed PDF); keep the two in sync.
+
+Naming
+
+Use "Alsalam Center I Helsingborg" as the organisation name in site copy and emails. Certificate titles use the waqf name "Alsalam Wakf in Helsingborg" (Arabic: وقف السلام في هلسنبوري).
 
 Local development
 
