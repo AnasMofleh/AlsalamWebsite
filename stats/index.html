@@ -6,8 +6,15 @@
     <meta charset="utf-8">
     <title>Al-Salam Donations Stats</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
+    <meta name="description" content="Live insamlingsstatistik för Al-Salam Waqf-kampanjen — Swish och kort. Mål: 10 000 000 kr (fas 1 av köpet av Folkets Hus, Helsingborg).">
+    <link rel="icon" type="image/png" href="/img/Al-Salam-Center-Logo.png">
+    <link rel="apple-touch-icon" href="/img/Al-Salam-Center-Logo.png">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Al-Salam Waqf — Live statistik">
+    <meta property="og:description" content="Följ insamlingen live — mål 10 000 000 kr (fas 1). Swish 1235000559 · Bankgiro 5349 1643.">
+    <meta property="og:url" content="https://alsalamcenter.se/stats/">
+    <meta property="og:image" content="https://alsalamcenter.se/waqf/assets/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -979,7 +986,7 @@
 
                     <div class="d-flex justify-content-between text-muted mt-2">
                         <small><span dir="ltr">0 kr</span></small>
-                        <small><span dir="ltr">10 000 000 kr</span></small>
+                        <small><span dir="ltr" id="goalLabel">10 000 000 kr</span></small>
                     </div>
 
                     <div id="milestones" class="milestones"></div>
@@ -1137,15 +1144,22 @@
     <script src="lib/easing/easing.min.js"></script>
     <script src="lib/waypoints/waypoints.min.js"></script>
     <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="/js/config.js"></script>
     <script src="js/main.js"></script>
     <script type="module" src="/langugaes/js/i18n.js" defer></script>
 
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbxLXBaGS2rdrrvtFAxMGCAeK2elGSfbvRmjtxBhjbORf9gdHBHduzOXIzP2FCI501cMWA/exec";
-        const CARD_API_URL = "https://script.google.com/macros/s/AKfycby4xd1YkqdDe-xvshIuMpj53wCLM9kUClwb84Qtx5amrPd6xrUjKjJxiYSdEppweq4/exec";
-        const GOAL_AMOUNT = 10000000;
+        const API_URL = (window.CAMPAIGN && window.CAMPAIGN.statsSwishUrl) || "https://script.google.com/macros/s/AKfycbxLXBaGS2rdrrvtFAxMGCAeK2elGSfbvRmjtxBhjbORf9gdHBHduzOXIzP2FCI501cMWA/exec";
+        const CARD_API_URL = (window.CAMPAIGN && window.CAMPAIGN.statsStripeUrl) || "https://script.google.com/macros/s/AKfycby4xd1YkqdDe-xvshIuMpj53wCLM9kUClwb84Qtx5amrPd6xrUjKjJxiYSdEppweq4/exec";
+        const GOAL_AMOUNT = (window.CAMPAIGN && window.CAMPAIGN.goal) || 10000000;
         const POLL_INTERVAL_MS = 5000;
         const isTvMode = true; // TV mode is always active on the stats page (?tv=1 gate removed)
+
+        // Keep the goal label in sync with CAMPAIGN.goal
+        (function () {
+            const goalLabelEl = document.getElementById("goalLabel");
+            if (goalLabelEl) goalLabelEl.textContent = GOAL_AMOUNT.toLocaleString("sv-SE").replace(/ /g, " ") + " kr";
+        })();
 
         const totalAmountEl = document.getElementById("totalAmount");
         const progressLabelEl = document.getElementById("progressLabel");
@@ -1271,7 +1285,7 @@
         }
 
         function renderMilestones(totalAmount) {
-            const milestoneSteps = [5, 6, 7, 8, 9, 10];
+            const milestoneSteps = [6, 7, 8, 9, 10];
             const nextMilestone = milestoneSteps.find((step) => totalAmount < step * 1000000) ?? 10;
             const leftLabel = (typeof window.getTranslation === 'function')
                 ? window.getTranslation('statsPage.left', 'kvar')
