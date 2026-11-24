@@ -3272,3 +3272,44 @@ body {
 /* ── Merged homepage campaign card (banner + live stats) ── */
 .waqf-banner-card .stats-preview-bar { background: rgba(255,255,255,.25); }
 .waqf-banner-card .stats-preview-fill { background: linear-gradient(90deg, #F1C152, #ffe08a); }
+
+/* ── Mobile hero: prayer widget first and full-screen, photo below ── */
+@media (max-width: 768px) {
+  .container-fluid.hero {
+    width: 100%;
+    padding: 0 0 12px 0;
+  }
+  .hero-row {
+    flex-direction: column;
+    margin: 0;
+  }
+  html[dir="rtl"] .hero-row {
+    /* override the desktop RTL row-reverse so mobile keeps widget-first */
+    flex-direction: column;
+  }
+  .hero-row .hero-rightside {
+    order: 1;
+    width: 100%;
+    max-width: none;
+  }
+  .hero-row .hero-leftside {
+    order: 2;
+  }
+  .hero-rightside .bonetider-card {
+    width: 100%;
+    /* fill the screen below the fixed header; scroll inside if needed */
+    height: calc(100vh - 64px);
+    height: calc(100svh - 64px);
+    max-height: calc(100svh - 64px);
+    min-height: 420px;
+    border-radius: 0;
+    outline: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .hero-leftside img {
+    height: 320px;
+    object-fit: cover;
+    object-position: top;
+  }
+}
