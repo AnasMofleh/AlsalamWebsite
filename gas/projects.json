@@ -1,0 +1,113 @@
+{
+  "_comment": "Google Apps Script projects deployed automatically on merge to main (see gas/README.md). dir = folder in this repo, files = files in that folder that belong to the project (empty = every .gs/.js/.html file in the folder). Manifests (appsscript.json) live in gas/manifests/<key>.json and are pulled from Google with gas/pull.mjs.",
+  "projects": [
+    {
+      "key": "admin",
+      "name": "Receipt Upload + Donation Certificates",
+      "scriptId": "1xYOivxeuUbTPkvDLdxTV7iA9GBV2IExhe3rzA5MnzzSK_P6xcvrmqWee",
+      "deploymentId": "AKfycbwjSkxeJNx8akQSNlnkEuOm-Rd8j2KbhFJsnfjb2AQ1USq3EhlHkAJ4ASXix-qdouom",
+      "dir": "admin/api",
+      "files": [
+        "Code.gs"
+      ]
+    },
+    {
+      "key": "school-admin",
+      "name": "School Admin Kanban + Teacher Attendance Backend",
+      "scriptId": "1liHSs5UlvBnD2GjuLFHdwMc62Yy8hwqnm0rCyEg-KbVv8ixWzCuOBzaE",
+      "deploymentId": "AKfycbwJJPkcuyKhTOVQ0RMGcPVcI3IeVFmpWjYoLYryUajgguonZ6SVLCcJr2MH_OXOKEcWFw",
+      "dir": "school-admin/api",
+      "files": [
+        "Code.gs"
+      ]
+    },
+    {
+      "key": "marriage",
+      "name": "Marriage Request & Contract Upload",
+      "scriptId": "1aTrE6Jp_WFwNOzJB_dCSC0oTeQsMwDTsilthnN-5IWc7fyZxlkQfSIo_",
+      "deploymentId": "AKfycbyBdihaThtMfp_qYi16SRr9gP9fd9X9a7yO-PNZLCxMVfukwN9Wja2AN_tPT1HuIqBP",
+      "dir": "marriage/api",
+      "files": [
+        "Code.gs"
+      ]
+    },
+    {
+      "key": "school",
+      "name": "Alsalam School Registration",
+      "scriptId": "1YaevJqPK5SKqRHm0yU6TBfPwRUXZ7iCYvBmCYDDxjRpaHayu3P1N_n24",
+      "deploymentId": "AKfycbxIWhMCHmcxbtHl1WLU3XFqaslc_Fxn_sRSUuLrN4x7-Up84vx_cIujORbRCupbSxmbcg",
+      "dir": "school/api",
+      "files": [
+        "main.gs"
+      ]
+    },
+    {
+      "key": "fifs-proxy",
+      "name": "FIFS Membership Proxy",
+      "scriptId": "1UjiA6h8ykrO4MxtYBvUWYghza3uHiA0L2YOGeoCkcVwe-c3ybwnCgdWJ",
+      "deploymentId": "AKfycbxZ08tC4z_P815a44QCUYxZTAvRnYay3W6k3XENWH5-X0T07l4fFiqdJJS1zrd0uOv64g",
+      "dir": "membership-check/api",
+      "files": [
+        "membership-proxy.gs"
+      ]
+    },
+    {
+      "key": "bonetider",
+      "name": "Bönetider (Prayer Times) Proxy",
+      "scriptId": "1AQwu8VmngYHJ_V-hPc8AMWYbLJkyaufuCun-KvoFvd3AFcYrCUXY6_HU",
+      "deploymentId": "AKfycbyLHYT0Nx-HdWIeJy3bTNDcb83re93shgzgyd6NN7c93ZzaRnmeXumS2Knhub4B_YVT3g",
+      "dir": "bonetider/api",
+      "files": [
+        "bonetider.gs"
+      ]
+    },
+    {
+      "key": "tv-slides",
+      "name": "TV Slides API",
+      "scriptId": "1TxSE1XE2vX7KwUNKcHjF7-iTCUD-hYk_SMUQaJOf5zBlPDkDwB-jFpSy",
+      "deploymentId": "AKfycby8B94nAOsDYBXqlpOp4UYqIDl3YlyQQZBfkxfGb91gwzHokIT0AtECQ7CC3qratjQx",
+      "dir": "stats/api",
+      "files": [
+        "slides.gs"
+      ]
+    },
+    {
+      "key": "membership-sheet",
+      "name": "Membership donator checker",
+      "scriptId": "11DPVqvlRPjM3Vyr5Mh-kevlXyyoOr1XYgyix_viSRmmneRjHbODlsPQv",
+      "deploymentId": "AKfycbzRlibFil1ukVgnxlWCALnEuY28K2JwxDncftIy7CetjwHwkoee3xj7xsbKnRTI1y9s",
+      "dir": "membership-check/api",
+      "files": [
+        "membership-sheet.gs"
+      ]
+    },
+    {
+      "key": "swish-reader",
+      "name": "Swish app reader",
+      "scriptId": "1T4AxS_9eCCo7gb7X-3Rngzoct-VB3nUm7o-F2M3sXUoQy39-9IwFUEUv",
+      "deploymentId": "AKfycbxLXBaGS2rdrrvtFAxMGCAeK2elGSfbvRmjtxBhjbORf9gdHBHduzOXIzP2FCI501cMWA",
+      "dir": "stats/api",
+      "files": [
+        "Code.gs",
+        "get.gs",
+        "testDoPost.gs"
+      ]
+    },
+    {
+      "key": "stripe-donations",
+      "name": "Stripe Donations",
+      "scriptId": "1IuavL98VmEsBImsuZ1AGSezm19SHQcbU2KZQSKK_XJM1eEgzM_bR-gIk",
+      "deploymentId": "AKfycbwz_fAOfZ_vuI7RlEzMt0i-jJtL8q-hOcAjRZrXND6otuV49mdIshBQ32oQjAIlRukL",
+      "dir": "donations/api",
+      "files": []
+    },
+    {
+      "key": "stripe-fetch",
+      "name": "Alsalam stripe fetch",
+      "scriptId": "1WiY5QDWGBmX01K65pMSrUDfBOl131u2xVx9GVtBC35rFhg4ucsZjwhTE",
+      "deploymentId": "AKfycby4xd1YkqdDe-xvshIuMpj53wCLM9kUClwb84Qtx5amrPd6xrUjKjJxiYSdEppweq4",
+      "dir": "stats/api/stripe",
+      "files": []
+    }
+  ]
+}

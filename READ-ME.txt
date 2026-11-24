@@ -36,7 +36,7 @@ Project structure
 
 Backends (Google Apps Script)
 
-Server code lives next to the pages in api/ folders. Each one is a separate Apps Script web app. The repository is the source of truth: after changing a file, paste it into its Apps Script project and redeploy with a new version (Deploy → Manage deployments → Edit → Version: New version → Deploy). The /exec URL stays the same.
+Server code lives next to the pages in api/ folders. Each one is a separate Apps Script web app, listed in gas/projects.json. The repository is the source of truth: when a change to a backend file is merged to main, the GitHub Action .github/workflows/deploy-gas.yml pushes it and publishes a new version on the existing deployment, so the /exec URL stays the same. Setup and day-to-day use: gas/README.md. Do not edit code in the online Apps Script editor; the next deploy overwrites it.
 
 - admin/api/Code.gs — admin login, receipt upload, donor certificates (email + Drive). Needs the ADMIN_PASSWORD script property. Uses MailApp and UrlFetchApp: the first time, run any function in the editor once to approve the permissions. Email is sent from the script owner's Google account (about 100 recipients per day on a normal account).
 - stats/api/Code.gs and stats/api/get.gs — Swish donation ingestion and the live totals shown on /stats/ and the homepage. Only Swish and card payments are counted; Bankgiro gifts are not added to the live total.
