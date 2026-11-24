@@ -18,7 +18,7 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Pacifico&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Pacifico&family=Noto+Naskh+Arabic:wght@400;700&family=Amiri:wght@400;700&family=Playfair+Display:ital,wght@0,700;1,700&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
@@ -101,6 +101,20 @@
             border: 1px solid #dee2e6; border-radius: 8px; overflow: hidden;
             background: #fff; box-shadow: 0 6px 24px rgba(0,0,0,0.08);
             display: flex;
+        }
+        /* Picture-based certificate: background image with text layers at
+           pixel offsets measured from the BOTTOM of the picture. */
+        .cert-preview-sheet.has-picture { aspect-ratio: auto; display: block; }
+        .cert-preview-canvas {
+            position: relative; width: 100%; overflow: hidden; background: #fff;
+        }
+        .cert-preview-canvas img.cert-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        }
+        .cert-layer {
+            position: absolute; left: 9%; right: 9%; text-align: center; margin: 0;
+            line-height: 1.2;
+            font-family: 'Noto Naskh Arabic', 'Segoe UI', Tahoma, sans-serif;
         }
         .cert-preview-sheet .cert-frame {
             flex: 1; margin: 10px; border: 3px solid #15546F; border-radius: 8px;
@@ -201,6 +215,14 @@
             <h5><i class="fas fa-eye me-2"></i> Förhandsgranskning</h5>
             <div class="cert-preview-wrap">
                 <div class="cert-preview-sheet" id="cert-preview-sheet" dir="ltr">
+                    <div class="cert-preview-canvas" id="cert-preview-canvas" style="display:none;">
+                        <img class="cert-bg" id="cert-bg-img" src="img/certificate_background.png" alt="Certifikatbakgrund">
+                        <div class="cert-layer" id="cert-layer-title"></div>
+                        <div class="cert-layer" id="cert-layer-name"></div>
+                        <div class="cert-layer" id="cert-layer-dua1"></div>
+                        <div class="cert-layer" id="cert-layer-dua2"></div>
+                        <div class="cert-layer" id="cert-layer-thanks"></div>
+                    </div>
                     <div class="cert-frame" id="cert-preview-frame"></div>
                 </div>
             </div>
@@ -266,12 +288,12 @@
                 campaign: 'till stöd för kampanjen att köpa Folkets Hus i Helsingborg',
                 dateLabel: 'Helsingborg, den',
                 months: ['januari','februari','mars','april','maj','juni','juli','augusti','september','oktober','november','december'],
-                emailSubject: 'Ditt donationsintyg — Al-Salam Center i Helsingborg',
+                emailSubject: 'Ditt donationsintyg — Alsalam Center I Helsingborg',
                 emailBody: function (name, x, y) {
                     return '<p>Assalamu alaykum ' + name + '!</p>'
-                        + '<p>Tack för din generösa gåva på <strong>' + x + ' kr</strong> till Al-Salam Center i Helsingborg, motsvarande <strong>' + y + ' m²</strong> av Folkets Hus-byggnaden.</p>'
+                        + '<p>Tack för din generösa gåva på <strong>' + x + ' kr</strong> till Alsalam Center I Helsingborg, motsvarande <strong>' + y + ' m²</strong> av Folkets Hus-byggnaden.</p>'
                         + '<p>Bifogat finns ditt donationsintyg som PDF. Må Allah belöna dig för ditt bidrag.</p>'
-                        + '<p>Med varma hälsningar,<br>Al-Salam Center i Helsingborg<br>Org.nr 802513-6808 · Södergatan 65–67, 252 25 Helsingborg<br>info@alsalamcenter.se</p>';
+                        + '<p>Med varma hälsningar,<br>Alsalam Center I Helsingborg<br>Org.nr 802513-6808 · Södergatan 65–67, 252 25 Helsingborg<br>info@alsalamcenter.se</p>';
                 }
             },
             en: {
@@ -282,12 +304,12 @@
                 campaign: 'in support of the campaign to purchase Folkets Hus in Helsingborg',
                 dateLabel: 'Helsingborg,',
                 months: ['January','February','March','April','May','June','July','August','September','October','November','December'],
-                emailSubject: 'Your donation certificate — Al-Salam Center i Helsingborg',
+                emailSubject: 'Your donation certificate — Alsalam Center I Helsingborg',
                 emailBody: function (name, x, y) {
                     return '<p>Assalamu alaykum ' + name + '!</p>'
-                        + '<p>Thank you for your generous donation of <strong>' + x + ' SEK</strong> to Al-Salam Center i Helsingborg, corresponding to <strong>' + y + ' m²</strong> of the Folkets Hus building.</p>'
+                        + '<p>Thank you for your generous donation of <strong>' + x + ' SEK</strong> to Alsalam Center I Helsingborg, corresponding to <strong>' + y + ' m²</strong> of the Folkets Hus building.</p>'
                         + '<p>Please find your donation certificate attached as a PDF. May Allah reward you for your contribution.</p>'
-                        + '<p>With warm regards,<br>Al-Salam Center i Helsingborg<br>Org.nr 802513-6808 · Södergatan 65–67, 252 25 Helsingborg<br>info@alsalamcenter.se</p>';
+                        + '<p>With warm regards,<br>Alsalam Center I Helsingborg<br>Org.nr 802513-6808 · Södergatan 65–67, 252 25 Helsingborg<br>info@alsalamcenter.se</p>';
                 }
             },
             ar: {
@@ -298,13 +320,13 @@
                 campaign: 'دعماً لحملة شراء مبنى بيت الشعب (Folkets Hus) في هلسينغبوري',
                 dateLabel: 'هلسينغبوري، بتاريخ',
                 months: ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'],
-                emailSubject: 'شهادة التبرع الخاصة بك — مركز السلام في هلسينغبوري',
+                emailSubject: 'شهادة التبرع الخاصة بك — Alsalam Center I Helsingborg',
                 emailBody: function (name, x, y) {
                     return '<div dir="rtl">'
                         + '<p>السلام عليكم ورحمة الله ' + name + '!</p>'
-                        + '<p>شكراً لتبرعكم الكريم بمبلغ <strong>' + x + ' كرونة سويدية</strong> لمركز السلام في هلسينغبوري، بما يعادل <strong>' + y + ' م²</strong> من مبنى بيت الشعب (Folkets Hus).</p>'
+                        + '<p>شكراً لتبرعكم الكريم بمبلغ <strong>' + x + ' كرونة سويدية</strong> لAlsalam Center I Helsingborg، بما يعادل <strong>' + y + ' م²</strong> من مبنى بيت الشعب (Folkets Hus).</p>'
                         + '<p>مرفق شهادة التبرع الخاصة بكم بصيغة PDF. تقبل الله منكم وأجزل لكم الأجر.</p>'
-                        + '<p>مع أطيب التحيات،<br>مركز السلام في هلسينغبوري<br>رقم المنظمة 802513-6808 · Södergatan 65–67, 252 25 Helsingborg<br>info@alsalamcenter.se</p>'
+                        + '<p>مع أطيب التحيات،<br>Alsalam Center I Helsingborg<br>رقم المنظمة 802513-6808 · Södergatan 65–67, 252 25 Helsingborg<br>info@alsalamcenter.se</p>'
                         + '</div>';
                 }
             },
@@ -316,12 +338,12 @@
                 campaign: 'iyadoo lagu taageerayo ololaha iibashada dhismaha Folkets Hus ee Helsingborg',
                 dateLabel: 'Helsingborg, taariikhda',
                 months: ['Janaayo','Febraayo','Maarso','Abriil','Maajo','Juun','Luulyo','Agoosto','Sebtembar','Oktoobar','Nofembar','Disembar'],
-                emailSubject: 'Shahaadada deeqdaada — Al-Salam Center i Helsingborg',
+                emailSubject: 'Shahaadada deeqdaada — Alsalam Center I Helsingborg',
                 emailBody: function (name, x, y) {
                     return '<p>Assalaamu calaykum ' + name + '!</p>'
-                        + '<p>Waad ku mahadsan tahay deeqdaada qiimaha leh ee <strong>' + x + ' SEK</strong> ee Al-Salam Center i Helsingborg, taas oo u dhiganta <strong>' + y + ' m²</strong> ee dhismaha Folkets Hus.</p>'
+                        + '<p>Waad ku mahadsan tahay deeqdaada qiimaha leh ee <strong>' + x + ' SEK</strong> ee Alsalam Center I Helsingborg, taas oo u dhiganta <strong>' + y + ' m²</strong> ee dhismaha Folkets Hus.</p>'
                         + '<p>Shahaadadaada deeqda oo PDF ah ayaa lifaaqan. Allaah ha kaa ajiibo deeqdaada.</p>'
-                        + '<p>Mahadnaq,<br>Al-Salam Center i Helsingborg<br>Org.nr 802513-6808 · Södergatan 65–67, 252 25 Helsingborg<br>info@alsalamcenter.se</p>';
+                        + '<p>Mahadnaq,<br>Alsalam Center I Helsingborg<br>Org.nr 802513-6808 · Södergatan 65–67, 252 25 Helsingborg<br>info@alsalamcenter.se</p>';
                 }
             },
             sq: {
@@ -332,15 +354,75 @@
                 campaign: 'në mbështetje të fushatës për blerjen e ndërtesës Folkets Hus në Helsingborg',
                 dateLabel: 'Helsingborg, më',
                 months: ['janar','shkurt','mars','prill','maj','qershor','korrik','gusht','shtator','tetor','nëntor','dhjetor'],
-                emailSubject: 'Certifikata juaj e donacionit — Al-Salam Center i Helsingborg',
+                emailSubject: 'Certifikata juaj e donacionit — Alsalam Center I Helsingborg',
                 emailBody: function (name, x, y) {
                     return '<p>Selam alejkum ' + name + '!</p>'
-                        + '<p>Faleminderit për donacionin tuaj bujar prej <strong>' + x + ' SEK</strong> për Al-Salam Center i Helsingborg, që korrespondon me <strong>' + y + ' m²</strong> të ndërtesës Folkets Hus.</p>'
+                        + '<p>Faleminderit për donacionin tuaj bujar prej <strong>' + x + ' SEK</strong> për Alsalam Center I Helsingborg, që korrespondon me <strong>' + y + ' m²</strong> të ndërtesës Folkets Hus.</p>'
                         + '<p>Certifikata juaj e donacionit gjendet bashkangjitur si PDF. Allahu ju shpërbleftë për kontributin tuaj.</p>'
-                        + '<p>Me respekt,<br>Al-Salam Center i Helsingborg<br>Org.nr 802513-6808 · Södergatan 65–67, 252 25 Helsingborg<br>info@alsalamcenter.se</p>';
+                        + '<p>Me respekt,<br>Alsalam Center I Helsingborg<br>Org.nr 802513-6808 · Södergatan 65–67, 252 25 Helsingborg<br>info@alsalamcenter.se</p>';
                 }
             }
         };
+
+        // ── Picture-based certificate (background image + fixed positions) ──
+        // Text offsets are measured in pixels from the BOTTOM of the picture.
+        // The picture lives at img/certificate_background.png — replace that file to
+        // change the design without touching this code. Until the file exists,
+        // the classic styled certificate is shown instead.
+        // Positions and font sizes are in pixels of the ORIGINAL picture
+        // (2918 × 1965) and are scaled to the preview width.
+        var PIC_POS = { title: 1128, name: 820, dua1: 525, dua2: 425, thanks: 265 };
+        var PIC_FONT = { title: 70, name: 118, dua: 60, thanks: 78 };
+        var PIC_COPY = {
+          ar: {
+            title: 'شهادة تبرع من وقف السلام في هلسنبوري',
+            dua1: function (m) {
+              if (m === '1') return 'تقبّل الله صدقتكم بمتر مربع';
+              if (m === '2') return 'تقبّل الله صدقتكم بمترين مربعين';
+              if (/^([3-9]|10)$/.test(m)) return 'تقبّل الله صدقتكم بـ ' + m + ' أمتار مربعة';
+              return 'تقبّل الله صدقتكم بـ ' + m + ' متر مربع';
+            },
+            dua2: function (x) { return 'وقيمتها ' + x + ' كرون سويدي'; },
+            thanks: 'جزاكم الله خيراً وبنى لكم بيتاً في الجنة',
+            rtl: true
+          },
+          sv: {
+            title: 'Donationsintyg från Alsalam Wakf in Helsingborg',
+            dua1: function (m) { return 'Må Allah acceptera er gåva på ' + m + ' kvadratmeter'; },
+            dua2: function (x) { return 'till ett värde av ' + x + ' kr'; },
+            thanks: 'Må Allah belöna er och bygga ett hus åt er i Paradiset',
+            rtl: false
+          },
+          en: {
+            title: 'Donation Certificate from Alsalam Wakf in Helsingborg',
+            dua1: function (m) { return 'May Allah accept your donation of ' + m + (m === '1' ? ' square metre' : ' square metres'); },
+            dua2: function (x) { return 'valued at ' + x + ' SEK'; },
+            thanks: 'May Allah reward you and build for you a house in Paradise',
+            rtl: false
+          },
+          so: {
+            title: 'Shahaadada Deeqda ee Alsalam Wakf in Helsingborg',
+            dua1: function (m) { return 'Allaah ha aqbalo sadaqadiinna ee ' + m + ' mitir labajibbaaran'; },
+            dua2: function (x) { return 'oo qiimihiisu yahay ' + x + ' SEK'; },
+            thanks: 'Allaah ha idinka abaalmariyo, gurina Jannada ha idiinka dhiso',
+            thanksSize: 62, // smaller so the longer Somali line fits on one line
+            rtl: false
+          },
+          sq: {
+            title: 'Certifikatë Donacioni nga Alsalam Wakf in Helsingborg',
+            dua1: function (m) { return 'Allahu e pranoftë sadakanë tuaj prej ' + m + (m === '1' ? ' metri katror' : ' metrash katrorë'); },
+            dua2: function (x) { return 'me vlerë ' + x + ' SEK'; },
+            thanks: 'Allahu ju shpërbleftë dhe ju ndërtoftë një shtëpi në Xhenet',
+            rtl: false
+          }
+        };
+
+        function fmtSqmPlain(lang, sqm) {
+          // 6000 kr → "2", 7500 kr → "2,5" (no forced decimals)
+          var n = Math.round(sqm * 100) / 100;
+          var decSep = lang === 'ar' ? '٫' : (lang === 'en' ? '.' : ',');
+          return String(n).replace('.', decSep);
+        }
 
         // ── State + helpers ────────────────────────────────────────
         var state = { lang: 'sv' };
@@ -350,6 +432,8 @@
         var $sqm = document.getElementById('cert-sqm');
         var $previewSheet = document.getElementById('cert-preview-sheet');
         var $previewFrame = document.getElementById('cert-preview-frame');
+        var $previewCanvas = document.getElementById('cert-preview-canvas');
+        var $certBgImg = document.getElementById('cert-bg-img');
         var $feedback = document.getElementById('cert-feedback');
         var $sendBtn = document.getElementById('cert-send-btn');
         var $history = document.getElementById('cert-history');
@@ -394,13 +478,22 @@
 
         function renderPreview() {
             var lang = state.lang;
-            var t = L[lang];
             var name = $name.value.trim() || '—';
             var amount = parseFloat($amount.value);
             var hasAmount = !isNaN(amount) && amount > 0;
             var x = hasAmount ? fmtAmount(lang, amount) : '—';
             var y = hasAmount ? fmtSqm(lang, amount / 3000) : '—';
 
+            if ($certBgImg && $certBgImg.naturalWidth > 0) {
+                renderPicturePreview(lang, name, hasAmount ? fmtSqmPlain(lang, amount / 3000) : '—', x);
+                return;
+            }
+
+            // Fallback: classic styled certificate (no background image yet)
+            var t = L[lang];
+            $previewCanvas.style.display = 'none';
+            $previewFrame.style.display = 'flex';
+            $previewSheet.classList.remove('has-picture');
             $previewSheet.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
             $previewFrame.innerHTML =
                 '<div class="cert-emblem">AL-SALAM</div>'
@@ -410,9 +503,56 @@
                 + '<p class="cert-amount">' + esc(t.amountLine(x)) + '</p>'
                 + '<p class="cert-sqm">' + esc(t.sqmLine(y)) + '</p>'
                 + '<p class="cert-campaign">' + esc(t.campaign) + '</p>'
-                + '<p class="cert-org">Al-Salam Center i Helsingborg<br>Org.nr 802513-6808<br>Södergatan 65–67, 252 25 Helsingborg, Sverige</p>'
+                + '<p class="cert-org">Alsalam Center I Helsingborg<br>Org.nr 802513-6808<br>Södergatan 65–67, 252 25 Helsingborg, Sverige</p>'
                 + '<p class="cert-date">' + esc(localizedDate(lang)) + '</p>'
-                + '<div class="cert-sign">________________________<br>Al-Salam Center i Helsingborg</div>';
+                + '<div class="cert-sign">________________________<br>Alsalam Center I Helsingborg</div>';
+        }
+
+        function renderPicturePreview(lang, name, m, x) {
+            var c = PIC_COPY[lang];
+            var w = $certBgImg.naturalWidth;
+            var h = $certBgImg.naturalHeight;
+            $previewSheet.classList.add('has-picture');
+            $previewSheet.setAttribute('dir', c.rtl ? 'rtl' : 'ltr');
+            $previewFrame.style.display = 'none';
+            $previewCanvas.style.display = 'block';
+            $previewCanvas.style.aspectRatio = w + ' / ' + h;
+
+            setLayer('cert-layer-title', c.title, PIC_POS.title, PIC_FONT.title, c.rtl, 'title');
+            setLayer('cert-layer-name', name, PIC_POS.name, PIC_FONT.name, c.rtl, 'name');
+            setLayer('cert-layer-dua1', c.dua1(m), PIC_POS.dua1, PIC_FONT.dua, c.rtl, 'dua');
+            setLayer('cert-layer-dua2', c.dua2(x), PIC_POS.dua2, PIC_FONT.dua, c.rtl, 'dua');
+            setLayer('cert-layer-thanks', c.thanks, PIC_POS.thanks, c.thanksSize || PIC_FONT.thanks, c.rtl, 'thanks');
+        }
+
+        function setLayer(id, text, bottomPx, sizePx, rtl, kind) {
+            var el = document.getElementById(id);
+            var scale = $previewCanvas.clientWidth / $certBgImg.naturalWidth;
+            el.textContent = text;
+            el.style.bottom = (bottomPx * scale) + 'px';
+            el.style.fontSize = (sizePx * scale) + 'px';
+            el.style.fontStyle = 'normal';
+            el.style.letterSpacing = '0';
+            el.style.textShadow = 'none';
+            if (kind === 'thanks') {
+                // Islamic-style calligraphy for every language
+                el.style.fontFamily = rtl ? "'Amiri','Noto Naskh Arabic',serif" : "'Aref Ruqaa','Amiri',serif";
+                el.style.color = '#a8842a';
+                el.style.fontWeight = '700';
+                el.style.whiteSpace = 'nowrap';
+            } else if (kind === 'name') {
+                // Elegant serif name: Playfair for Latin letters, Amiri for Arabic
+                el.style.fontFamily = "'Playfair Display','Amiri','Noto Naskh Arabic',serif";
+                el.style.fontWeight = '700';
+                el.style.fontStyle = rtl ? 'normal' : 'italic';
+                el.style.letterSpacing = (rtl ? 0 : 1.5 * scale) + 'px';
+                el.style.color = '#1b4a5e';
+                el.style.textShadow = '0 ' + (2 * scale) + 'px ' + (5 * scale) + 'px rgba(201,162,39,0.3)';
+            } else {
+                el.style.fontFamily = rtl ? "'Noto Naskh Arabic','Segoe UI',Tahoma,sans-serif" : "'Segoe UI','Open Sans',sans-serif";
+                el.style.color = kind === 'title' ? '#1f4f63' : '#2a4f5e';
+                el.style.fontWeight = kind === 'title' ? '700' : '500';
+            }
         }
 
         function renderSqm() {
@@ -537,6 +677,10 @@
 
         $name.addEventListener('input', renderPreview);
         $amount.addEventListener('input', function () { renderSqm(); renderPreview(); });
+
+        $certBgImg.addEventListener('load', renderPreview);
+        $certBgImg.addEventListener('error', renderPreview);
+        window.addEventListener('resize', renderPreview);
 
         renderPreview();
         renderSqm();
