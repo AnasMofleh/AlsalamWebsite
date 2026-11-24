@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="sv">
+
+<head>
+    <base href="/">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Certifikat — Al-Salam Center Admin</title>
+
+    <script>
+        // Admin-only: redirect to the portal login when not authenticated.
+        if (sessionStorage.getItem('alsalam_admin_auth') !== '1') {
+            location.replace('/admin/');
+        }
+    </script>
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Pacifico&family=Noto+Naskh+Arabic:wght@400;700&family=Amiri:wght@400;700&family=Playfair+Display:ital,wght@0,700;1,700&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --admin-primary: #15546F;
+            --admin-primary-light: #1a6b8a;
+            --admin-success: #198754;
+            --admin-bg: #f5f7fa;
+        }
+
+        body { background: var(--admin-bg); }
+
+        .cert-page { max-width: 860px; margin: 0 auto; padding: 24px 16px 80px; }
+
+        .cert-toolbar {
+            background: #fff; border-radius: 16px; padding: 14px 20px;
+            display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04); margin-bottom: 20px;
+        }
+        .cert-toolbar a { color: var(--admin-primary); text-decoration: none; font-weight: 700; }
+        .cert-toolbar-title { font-weight: 800; color: #22332a; }
+        .cert-toolbar-logout {
+            margin-inline-start: auto; background: var(--admin-primary); color: #fff;
+            border: none; border-radius: 10px; padding: 8px 16px; font-weight: 700; cursor: pointer;
+        }
+
+        .admin-card {
+            background: #fff; border-radius: 20px; padding: 28px 24px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.05); margin-bottom: 24px;
+        }
+        .admin-card h5 { font-weight: 700; color: #22332a; margin-bottom: 16px; }
+
+        .cert-form-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+        }
+        @media (max-width: 640px) { .cert-form-grid { grid-template-columns: 1fr; } }
+
+        .cert-field label { font-weight: 700; font-size: .9rem; color: #4b5f52; display: block; margin-bottom: 6px; }
+        .cert-field input {
+            width: 100%; height: 46px; padding: 0 14px;
+            border: 2px solid #dee2e6; border-radius: 12px; font-size: 1rem; font-family: inherit;
+        }
+        .cert-field input:focus {
+            outline: none; border-color: var(--admin-primary);
+            box-shadow: 0 0 0 4px rgba(21,84,111,0.08);
+        }
+
+        .cert-sqm-box {
+            margin-top: 16px; padding: 14px 20px; border-radius: 14px;
+            background: #e8f5e9; border: 1px solid #cfe8d1;
+            font-weight: 700; color: #2e7d32; display: inline-block;
+        }
+
+        .cert-lang-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+        .cert-lang-chip {
+            border: 2px solid #dee2e6; background: #fff; color: #333;
+            border-radius: 999px; padding: 8px 18px; font-weight: 700; cursor: pointer; font-family: inherit;
+        }
+        .cert-lang-chip.selected {
+            border-color: var(--admin-primary); background: #f0f6f9; color: var(--admin-primary);
+        }
+        .cert-lang-chip[data-lang="ar"] { font-family: 'Noto Naskh Arabic', sans-serif; }
+
+        .cert-preview-wrap { margin-top: 20px; }
+        .cert-preview-sheet {
+            max-width: 640px; margin: 0 auto; aspect-ratio: 210 / 297;
+            border: 1px solid #dee2e6; border-radius: 8px; overflow: hidden;
+            background: #fff; box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+            display: flex;
+        }
+        /* Picture-based certificate: background image with text layers at
+           pixel offsets measured from the BOTTOM of the picture. */
+        .cert-preview-sheet.has-picture { aspect-ratio: auto; display: block; }
+        .cert-preview-canvas {
+            position: relative; width: 100%; overflow: hidden; background: #fff;
+        }
+        .cert-preview-canvas img.cert-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        }
+        .cert-layer {
+            position: absolute; left: 9%; right: 9%; text-align: center; margin: 0;
+            line-height: 1.2;
+            font-family: 'Noto Naskh Arabic', 'Segoe UI', Tahoma, sans-serif;
+        }
+        .cert-preview-sheet .cert-frame {
+            flex: 1; margin: 10px; border: 3px solid #15546F; border-radius: 8px;
+            padding: 24px 20px; text-align: center; overflow: auto;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-family: 'Segoe UI', 'Open Sans', sans-serif; color: #123b4a;
+        }
+        .cert-preview-sheet[dir="rtl"] .cert-frame { font-family: 'Noto Naskh Arabic', 'Segoe UI', Tahoma, sans-serif; }
+        .cert-emblem { font-size: .85rem; letter-spacing: 5px; color: #15546F; font-weight: 700; margin-bottom: 14px; }
+        .cert-frame h1 { font-size: clamp(1.2rem, 3.4vw, 1.8rem); color: #15546F; margin: 0 0 12px; font-weight: 800; }
+        .cert-lead { font-size: .85rem; color: #4a6572; margin: 0 0 8px; }
+        .cert-name { font-size: clamp(1.1rem, 3vw, 1.6rem); font-weight: 800; margin: 0 0 12px; }
+        .cert-amount { font-size: .95rem; margin: 0 0 4px; }
+        .cert-sqm { font-size: .9rem; color: #1a6b8a; font-weight: 700; margin: 0 0 10px; }
+        .cert-campaign { font-size: .8rem; max-width: 420px; margin: 0 0 12px; }
+        .cert-org { font-size: .72rem; line-height: 1.6; color: #4a6572; margin: 0 0 10px; }
+        .cert-date { font-size: .75rem; margin: 0 0 14px; }
+        .cert-sign { font-size: .7rem; color: #4a6572; }
+
+        .admin-submit-btn {
+            background: var(--admin-primary); color: #fff; border: none;
+            border-radius: 14px; padding: 14px 28px; font-size: 1rem; font-weight: 700;
+            cursor: pointer; width: 100%; margin-top: 18px;
+        }
+        .admin-submit-btn:disabled { opacity: .55; cursor: not-allowed; }
+
+        .admin-feedback {
+            margin-top: 14px; padding: 14px 18px; border-radius: 14px;
+            font-weight: 600; display: none;
+        }
+        .admin-feedback.success { display: block; background: #e8f5e9; color: #1e6b28; border: 1px solid #cfe8d1; }
+        .admin-feedback.error { display: block; background: #fdecea; color: #a33; border: 1px solid #f3c6c6; }
+
+        .cert-history-item {
+            display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+            padding: 12px 0; border-bottom: 1px solid #eef1ee; font-size: .9rem;
+        }
+        .cert-history-item:last-child { border-bottom: none; }
+        .cert-history-empty { color: #84998b; font-size: .9rem; }
+
+        @media print {
+            .cert-toolbar, .admin-card.cert-chrome, #header-placeholder, #contact-us-placeholder,
+            .back-to-top, .lang-fab { display: none !important; }
+            .cert-preview-sheet { box-shadow: none; border: none; max-width: none; aspect-ratio: auto; height: auto; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Start -->
+    <div id="header-placeholder"></div>
+    <!-- Header End -->
+
+    <div class="cert-page" style="margin-top: 64px;">
+        <div class="cert-toolbar">
+            <a href="/admin/"><i class="fas fa-arrow-left me-1"></i> Admin</a>
+            <span class="cert-toolbar-title"><i class="fas fa-award me-1"></i> Certifikat — Donationsintyg</span>
+            <button type="button" class="cert-toolbar-logout"
+                onclick="sessionStorage.removeItem('alsalam_admin_auth');sessionStorage.removeItem('alsalam_admin_password');location.href='/admin/';">
+                <i class="fas fa-sign-out-alt me-1"></i> Logga ut
+            </button>
+        </div>
+
+        <!-- Form -->
+        <div class="admin-card cert-chrome">
+            <h5><i class="fas fa-user-edit me-2"></i> Givare</h5>
+            <div class="cert-form-grid">
+                <div class="cert-field">
+                    <label for="cert-name">Givarens namn</label>
+                    <input type="text" id="cert-name" placeholder="Namn" autocomplete="off">
+                </div>
+                <div class="cert-field">
+                    <label for="cert-email">E-post</label>
+                    <input type="email" id="cert-email" placeholder="namn@exempel.se" autocomplete="off" dir="ltr">
+                </div>
+                <div class="cert-field">
+                    <label for="cert-amount">Belopp (SEK)</label>
+                    <input type="number" id="cert-amount" min="1" step="0.01" placeholder="3000" autocomplete="off" dir="ltr">
+                </div>
+                <div class="cert-field">
+                    <label for="cert-sqm">Beräknad yta (3 000 kr = 1 m²)</label>
+                    <div class="cert-sqm-box" id="cert-sqm">— m²</div>
+                </div>
+            </div>
+
+            <h5 class="mt-4"><i class="fas fa-globe me-2"></i> Språk</h5>
+            <div class="cert-lang-chips" id="cert-lang-chips">
+                <button type="button" class="cert-lang-chip selected" data-lang="sv">Svenska</button>
+                <button type="button" class="cert-lang-chip" data-lang="en">English</button>
+                <button type="button" class="cert-lang-chip" data-lang="ar">العربية</button>
+                <button type="button" class="cert-lang-chip" data-lang="so">Soomaali</button>
+                <button type="button" class="cert-lang-chip" data-lang="sq">Shqip</button>
+            </div>
+        </div>
+
+        <!-- Live preview -->
+        <div class="admin-card cert-chrome">
+            <h5><i class="fas fa-eye me-2"></i> Förhandsgranskning</h5>
+            <div class="cert-preview-wrap">
+                <div class="cert-preview-sheet" id="cert-preview-sheet" dir="ltr">
+                    <div class="cert-preview-canvas" id="cert-preview-canvas" style="display:none;">
+                        <img class="cert-bg" id="cert-bg-img" src="img/certificate_background.png" alt="Certifikatbakgrund">
+                        <div class="cert-layer" id="cert-layer-title"></div>
+                        <div class="cert-layer" id="cert-layer-name"></div>
+                        <div class="cert-layer" id="cert-layer-dua1"></div>
+                        <div class="cert-layer" id="cert-layer-dua2"></div>
+                        <div class="cert-layer" id="cert-layer-thanks"></div>
+                    </div>
+                    <div class="cert-frame" id="cert-preview-frame"></div>
+                </div>
+            </div>
+            <button class="admin-submit-btn" id="cert-send-btn" onclick="handleSendCertificate()">
+                <i class="fas fa-paper-plane me-2"></i> Skicka certifikat
+            </button>
+            <div class="admin-feedback" id="cert-feedback"></div>
+        </div>
+
+        <!-- History -->
+        <div class="admin-card cert-chrome">
+            <h5><i class="fas fa-history me-2"></i> Skickade certifikat</h5>
+            <div id="cert-history"></div>
+        </div>
+    </div>
+
+    <!-- Footer Start -->
+    <div id="contact-us-placeholder"></div>
+    <!-- Footer End -->
+
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+
+    <!-- Load Header and Footer -->
+    <script>
+        $(function () {
+            $("#header-placeholder").load("/header.html", function() {
+                if (window.reapplyTranslations) {
+                    setTimeout(() => window.reapplyTranslations(), 50);
+                }
+            });
+            $("#contact-us-placeholder").load("/contact-us.html", function() {
+                if (window.reapplyTranslations) {
+                    setTimeout(() => window.reapplyTranslations(), 50);
+                }
+            });
+        });
+    </script>
+
+    <script>
+    (function () {
+        'use strict';
+
+        var GAS_URL = 'https://script.google.com/macros/s/AKfycbwjSkxeJNx8akQSNlnkEuOm-Rd8j2KbhFJsnfjb2AQ1USq3EhlHkAJ4ASXix-qdouom/exec';
+        var PASSWORD_KEY = 'alsalam_admin_password';
+        var HISTORY_KEY = 'alsalam_certificate_sent';
+
+        // ── 5-language certificate copy ─────────────────────────────
+        var L = {
+            sv: {
+                title: 'Donationsintyg',
+                presented: 'Detta intyg tilldelas',
+                amountLine: function (x) { return 'som ett varmt tack för en generös gåva på ' + x + ' kr'; },
+                sqmLine: function (y) { return 'motsvarande ' + y + ' m² av Folkets Hus-byggnaden'; },
+                campaign: 'till stöd för kampanjen att köpa Folkets Hus i Helsingborg',
+                dateLabel: 'Helsingborg, den',
+                months: ['januari','februari','mars','april','maj','juni','juli','augusti','september','oktober','november','december'],
+                emailSubject: 'Ditt donationsintyg — Alsalam Center I Helsingborg',
+                emailBody: function (name, x, y) {
+                    return '<p>Assalamu alaykum ' + name + '!</p>'
+                        + '<p>Tack för din generösa gåva på <strong>' + x + ' kr</strong> till Alsalam Center I Helsingborg, motsvarande <strong>' + y + ' m²</strong> av Folkets Hus-byggnaden.</p>'
+                        + '<p>Bifogat finns ditt donationsintyg som PDF. Må Allah belöna dig för ditt bidrag.</p>'
+                        + '<p>Med varma hälsningar,<br>Alsalam Center I Helsingborg<br>Org.nr 802513-6808 · Södergatan 65–67, 252 25 Helsingborg<br>info@alsalamcenter.se</p>';
+                }
+            },
+            en: {
+                title: 'Certificate of Donation',
+                presented: 'This certificate is presented to',
+                amountLine: function (x) { return 'in grateful recognition of a generous donation of ' + x + ' SEK'; },
+                sqmLine: function (y) { return 'corresponding to ' + y + ' m² of the Folkets Hus building'; },
+                campaign: 'in support of the campaign to purchase Folkets Hus in Helsingborg',
+                dateLabel: 'Helsingborg,',
+                months: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+                emailSubject: 'Your donation certificate — Alsalam Center I Helsingborg',
+                emailBody: function (name, x, y) {
+                    return '<p>Assalamu alaykum ' + name + '!</p>'
+                        + '<p>Thank you for your generous donation of <strong>' + x + ' SEK</strong> to Alsalam Center I Helsingborg, corresponding to <strong>' + y + ' m²</strong> of the Folkets Hus building.</p>'
+                        + '<p>Please find your donation certificate attached as a PDF. May Allah reward you for your contribution.</p>'
+                        + '<p>With warm regards,<br>Alsalam Center I Helsingborg<br>Org.nr 802513-6808 · Södergatan 65–67, 252 25 Helsingborg<br>info@alsalamcenter.se</p>';
+                }
+            },
+            ar: {
+                title: 'شهادة تبرع',
+                presented: 'تُمنح هذه الشهادة إلى',
+                amountLine: function (x) { return 'تقديراً وعرفاناً لتبرعٍ كريم بمبلغ ' + x + ' كرونة سويدية'; },
+                sqmLine: function (y) { return 'بما يعادل ' + y + ' م² من مبنى بيت الشعب (Folkets Hus)'; },
+                campaign: 'دعماً لحملة شراء مبنى بيت الشعب (Folkets Hus) في هلسينغبوري',
+                dateLabel: 'هلسينغبوري، بتاريخ',
+                months: ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'],
+                emailSubject: 'شهادة التبرع الخاصة بك — Alsalam Center I Helsingborg',
+                emailBody: function (name, x, y) {
+                    return '<div dir="rtl">'
+                        + '<p>السلام عليكم ورحمة الله ' + name + '!</p>'
+                        + '<p>شكراً لتبرعكم الكريم بمبلغ <strong>' + x + ' كرونة سويدية</strong> لAlsalam Center I Helsingborg، بما يعادل <strong>' + y + ' م²</strong> من مبنى بيت الشعب (Folkets Hus).</p>'
+                        + '<p>مرفق شهادة التبرع الخاصة بكم بصيغة PDF. تقبل الله منكم وأجزل لكم الأجر.</p>'
+                        + '<p>مع أطيب التحيات،<br>Alsalam Center I Helsingborg<br>رقم المنظمة 802513-6808 · Södergatan 65–67, 252 25 Helsingborg<br>info@alsalamcenter.se</p>'
+                        + '</div>';
+                }
+            },
+            so: {
+                title: 'Shahaadada Deeqda',
+                presented: 'Shahaadadan waxaa la siiyay',
+                amountLine: function (x) { return 'si mahadnaq ah deeq furan oo dhan ' + x + ' SEK'; },
+                sqmLine: function (y) { return 'taas oo u dhiganta ' + y + ' m² oo ka mid ah dhismaha Folkets Hus'; },
+                campaign: 'iyadoo lagu taageerayo ololaha iibashada dhismaha Folkets Hus ee Helsingborg',
+                dateLabel: 'Helsingborg, taariikhda',
+                months: ['Janaayo','Febraayo','Maarso','Abriil','Maajo','Juun','Luulyo','Agoosto','Sebtembar','Oktoobar','Nofembar','Disembar'],
+                emailSubject: 'Shahaadada deeqdaada — Alsalam Center I Helsingborg',
+                emailBody: function (name, x, y) {
+                    return '<p>Assalaamu calaykum ' + name + '!</p>'
+                        + '<p>Waad ku mahadsan tahay deeqdaada qiimaha leh ee <strong>' + x + ' SEK</strong> ee Alsalam Center I Helsingborg, taas oo u dhiganta <strong>' + y + ' m²</strong> ee dhismaha Folkets Hus.</p>'
+                        + '<p>Shahaadadaada deeqda oo PDF ah ayaa lifaaqan. Allaah ha kaa ajiibo deeqdaada.</p>'
+                        + '<p>Mahadnaq,<br>Alsalam Center I Helsingborg<br>Org.nr 802513-6808 · Södergatan 65–67, 252 25 Helsingborg<br>info@alsalamcenter.se</p>';
+                }
+            },
+            sq: {
+                title: 'Certifikatë Donacioni',
+                presented: 'Kjo certifikatë i jepet',
+                amountLine: function (x) { return 'në shenjë mirënjohjeje për një donacion bujar prej ' + x + ' SEK'; },
+                sqmLine: function (y) { return 'që korrespondon me ' + y + ' m² të ndërtesës Folkets Hus'; },
+                campaign: 'në mbështetje të fushatës për blerjen e ndërtesës Folkets Hus në Helsingborg',
+                dateLabel: 'Helsingborg, më',
+                months: ['janar','shkurt','mars','prill','maj','qershor','korrik','gusht','shtator','tetor','nëntor','dhjetor'],
+                emailSubject: 'Certifikata juaj e donacionit — Alsalam Center I Helsingborg',
+                emailBody: function (name, x, y) {
+                    return '<p>Selam alejkum ' + name + '!</p>'
+                        + '<p>Faleminderit për donacionin tuaj bujar prej <strong>' + x + ' SEK</strong> për Alsalam Center I Helsingborg, që korrespondon me <strong>' + y + ' m²</strong> të ndërtesës Folkets Hus.</p>'
+                        + '<p>Certifikata juaj e donacionit gjendet bashkangjitur si PDF. Allahu ju shpërbleftë për kontributin tuaj.</p>'
+                        + '<p>Me respekt,<br>Alsalam Center I Helsingborg<br>Org.nr 802513-6808 · Södergatan 65–67, 252 25 Helsingborg<br>info@alsalamcenter.se</p>';
+                }
+            }
+        };
+
+        // ── Picture-based certificate (background image + fixed positions) ──
+        // Text offsets are measured in pixels from the BOTTOM of the picture.
+        // The picture lives at img/certificate_background.png — replace that file to
+        // change the design without touching this code. Until the file exists,
+        // the classic styled certificate is shown instead.
+        // Positions and font sizes are in pixels of the ORIGINAL picture
+        // (2918 × 1965) and are scaled to the preview width.
+        var PIC_POS = { title: 1128, name: 820, dua1: 525, dua2: 425, thanks: 265 };
+        var PIC_FONT = { title: 70, name: 118, dua: 60, thanks: 78 };
+        var PIC_COPY = {
+          ar: {
+            title: 'شهادة تبرع من وقف السلام في هلسنبوري',
+            dua1: function (m) {
+              if (m === '1') return 'تقبّل الله صدقتكم بمتر مربع';
+              if (m === '2') return 'تقبّل الله صدقتكم بمترين مربعين';
+              if (/^([3-9]|10)$/.test(m)) return 'تقبّل الله صدقتكم بـ ' + m + ' أمتار مربعة';
+              return 'تقبّل الله صدقتكم بـ ' + m + ' متر مربع';
+            },
+            dua2: function (x) { return 'وقيمتها ' + x + ' كرون سويدي'; },
+            thanks: 'جزاكم الله خيراً وبنى لكم بيتاً في الجنة',
+            rtl: true
+          },
+          sv: {
+            title: 'Donationsintyg från Alsalam Wakf in Helsingborg',
+            dua1: function (m) { return 'Må Allah acceptera er gåva på ' + m + ' kvadratmeter'; },
+            dua2: function (x) { return 'till ett värde av ' + x + ' kr'; },
+            thanks: 'Må Allah belöna er och bygga ett hus åt er i Paradiset',
+            rtl: false
+          },
+          en: {
+            title: 'Donation Certificate from Alsalam Wakf in Helsingborg',
+            dua1: function (m) { return 'May Allah accept your donation of ' + m + (m === '1' ? ' square metre' : ' square metres'); },
+            dua2: function (x) { return 'valued at ' + x + ' SEK'; },
+            thanks: 'May Allah reward you and build for you a house in Paradise',
+            rtl: false
+          },
+          so: {
+            title: 'Shahaadada Deeqda ee Alsalam Wakf in Helsingborg',
+            dua1: function (m) { return 'Allaah ha aqbalo sadaqadiinna ee ' + m + ' mitir labajibbaaran'; },
+            dua2: function (x) { return 'oo qiimihiisu yahay ' + x + ' SEK'; },
+            thanks: 'Allaah ha idinka abaalmariyo, gurina Jannada ha idiinka dhiso',
+            thanksSize: 62, // smaller so the longer Somali line fits on one line
+            rtl: false
+          },
+          sq: {
+            title: 'Certifikatë Donacioni nga Alsalam Wakf in Helsingborg',
+            dua1: function (m) { return 'Allahu e pranoftë sadakanë tuaj prej ' + m + (m === '1' ? ' metri katror' : ' metrash katrorë'); },
+            dua2: function (x) { return 'me vlerë ' + x + ' SEK'; },
+            thanks: 'Allahu ju shpërbleftë dhe ju ndërtoftë një shtëpi në Xhenet',
+            rtl: false
+          }
+        };
+
+        function fmtSqmPlain(lang, sqm) {
+          // 6000 kr → "2", 7500 kr → "2,5" (no forced decimals)
+          var n = Math.round(sqm * 100) / 100;
+          var decSep = lang === 'ar' ? '٫' : (lang === 'en' ? '.' : ',');
+          return String(n).replace('.', decSep);
+        }
+
+        // ── State + helpers ────────────────────────────────────────
+        var state = { lang: 'sv' };
+        var $name = document.getElementById('cert-name');
+        var $email = document.getElementById('cert-email');
+        var $amount = document.getElementById('cert-amount');
+        var $sqm = document.getElementById('cert-sqm');
+        var $previewSheet = document.getElementById('cert-preview-sheet');
+        var $previewFrame = document.getElementById('cert-preview-frame');
+        var $previewCanvas = document.getElementById('cert-preview-canvas');
+        var $certBgImg = document.getElementById('cert-bg-img');
+        var $feedback = document.getElementById('cert-feedback');
+        var $sendBtn = document.getElementById('cert-send-btn');
+        var $history = document.getElementById('cert-history');
+
+        function esc(s) {
+            return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+            });
+        }
+
+        function fmtAmount(lang, amount) {
+            var n = Math.round(amount * 100) / 100;
+            var s;
+            if (lang === 'en') {
+                s = n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+            } else {
+                s = n.toLocaleString('sv-SE', { minimumFractionDigits: 0, maximumFractionDigits: 2 }).replace(/ /g, ' ');
+            }
+            return s;
+        }
+
+        function fmtSqm(lang, sqm) {
+            var n = Math.round(sqm * 100) / 100;
+            var decSep = lang === 'ar' ? '٫' : (lang === 'en' ? '.' : ',');
+            var s = String(n).replace('.', decSep);
+            if (s.indexOf(decSep) === -1) s += decSep + '0';
+            return s;
+        }
+
+        function localizedDate(lang) {
+            var d = new Date();
+            var m = L[lang].months[d.getMonth()];
+            var day = d.getDate();
+            if (lang === 'ar') {
+                return L[lang].dateLabel + ' ' + day + ' ' + m + ' ' + d.getFullYear();
+            }
+            if (lang === 'en') {
+                return L[lang].dateLabel + ' ' + m + ' ' + day + ', ' + d.getFullYear();
+            }
+            return L[lang].dateLabel + ' ' + day + ' ' + m + ' ' + d.getFullYear();
+        }
+
+        function renderPreview() {
+            var lang = state.lang;
+            var name = $name.value.trim() || '—';
+            var amount = parseFloat($amount.value);
+            var hasAmount = !isNaN(amount) && amount > 0;
+            var x = hasAmount ? fmtAmount(lang, amount) : '—';
+            var y = hasAmount ? fmtSqm(lang, amount / 3000) : '—';
+
+            if ($certBgImg && $certBgImg.naturalWidth > 0) {
+                renderPicturePreview(lang, name, hasAmount ? fmtSqmPlain(lang, amount / 3000) : '—', x);
+                return;
+            }
+
+            // Fallback: classic styled certificate (no background image yet)
+            var t = L[lang];
+            $previewCanvas.style.display = 'none';
+            $previewFrame.style.display = 'flex';
+            $previewSheet.classList.remove('has-picture');
+            $previewSheet.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+            $previewFrame.innerHTML =
+                '<div class="cert-emblem">AL-SALAM</div>'
+                + '<h1>' + esc(t.title) + '</h1>'
+                + '<p class="cert-lead">' + esc(t.presented) + '</p>'
+                + '<div class="cert-name">' + esc(name) + '</div>'
+                + '<p class="cert-amount">' + esc(t.amountLine(x)) + '</p>'
+                + '<p class="cert-sqm">' + esc(t.sqmLine(y)) + '</p>'
+                + '<p class="cert-campaign">' + esc(t.campaign) + '</p>'
+                + '<p class="cert-org">Alsalam Center I Helsingborg<br>Org.nr 802513-6808<br>Södergatan 65–67, 252 25 Helsingborg, Sverige</p>'
+                + '<p class="cert-date">' + esc(localizedDate(lang)) + '</p>'
+                + '<div class="cert-sign">________________________<br>Alsalam Center I Helsingborg</div>';
+        }
+
+        function renderPicturePreview(lang, name, m, x) {
+            var c = PIC_COPY[lang];
+            var w = $certBgImg.naturalWidth;
+            var h = $certBgImg.naturalHeight;
+            $previewSheet.classList.add('has-picture');
+            $previewSheet.setAttribute('dir', c.rtl ? 'rtl' : 'ltr');
+            $previewFrame.style.display = 'none';
+            $previewCanvas.style.display = 'block';
+            $previewCanvas.style.aspectRatio = w + ' / ' + h;
+
+            setLayer('cert-layer-title', c.title, PIC_POS.title, PIC_FONT.title, c.rtl, 'title');
+            setLayer('cert-layer-name', name, PIC_POS.name, PIC_FONT.name, c.rtl, 'name');
+            setLayer('cert-layer-dua1', c.dua1(m), PIC_POS.dua1, PIC_FONT.dua, c.rtl, 'dua');
+            setLayer('cert-layer-dua2', c.dua2(x), PIC_POS.dua2, PIC_FONT.dua, c.rtl, 'dua');
+            setLayer('cert-layer-thanks', c.thanks, PIC_POS.thanks, c.thanksSize || PIC_FONT.thanks, c.rtl, 'thanks');
+        }
+
+        function setLayer(id, text, bottomPx, sizePx, rtl, kind) {
+            var el = document.getElementById(id);
+            var scale = $previewCanvas.clientWidth / $certBgImg.naturalWidth;
+            el.textContent = text;
+            el.style.bottom = (bottomPx * scale) + 'px';
+            el.style.fontSize = (sizePx * scale) + 'px';
+            el.style.fontStyle = 'normal';
+            el.style.letterSpacing = '0';
+            el.style.textShadow = 'none';
+            if (kind === 'thanks') {
+                // Islamic-style calligraphy for every language
+                el.style.fontFamily = rtl ? "'Amiri','Noto Naskh Arabic',serif" : "'Aref Ruqaa','Amiri',serif";
+                el.style.color = '#a8842a';
+                el.style.fontWeight = '700';
+                el.style.whiteSpace = 'nowrap';
+            } else if (kind === 'name') {
+                // Elegant serif name: Playfair for Latin letters, Amiri for Arabic
+                el.style.fontFamily = "'Playfair Display','Amiri','Noto Naskh Arabic',serif";
+                el.style.fontWeight = '700';
+                el.style.fontStyle = rtl ? 'normal' : 'italic';
+                el.style.letterSpacing = (rtl ? 0 : 1.5 * scale) + 'px';
+                el.style.color = '#1b4a5e';
+                el.style.textShadow = '0 ' + (2 * scale) + 'px ' + (5 * scale) + 'px rgba(201,162,39,0.3)';
+            } else {
+                el.style.fontFamily = rtl ? "'Noto Naskh Arabic','Segoe UI',Tahoma,sans-serif" : "'Segoe UI','Open Sans',sans-serif";
+                el.style.color = kind === 'title' ? '#1f4f63' : '#2a4f5e';
+                el.style.fontWeight = kind === 'title' ? '700' : '500';
+            }
+        }
+
+        function renderSqm() {
+            var amount = parseFloat($amount.value);
+            if (isNaN(amount) || amount <= 0) {
+                $sqm.textContent = '— m²';
+                return;
+            }
+            $sqm.textContent = fmtSqm(state.lang, amount / 3000) + ' m²';
+        }
+
+        function feedback(msg, type) {
+            $feedback.className = 'admin-feedback ' + (type || 'success');
+            $feedback.innerHTML = msg;
+        }
+
+        function clearFeedback() {
+            $feedback.className = 'admin-feedback';
+            $feedback.innerHTML = '';
+        }
+
+        // ── History ────────────────────────────────────────────────
+        function saveHistory(entry) {
+            var hist = [];
+            try { hist = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); } catch (e) {}
+            hist.unshift(entry);
+            if (hist.length > 20) hist = hist.slice(0, 20);
+            try { localStorage.setItem(HISTORY_KEY, JSON.stringify(hist)); } catch (e) {}
+            renderHistory();
+        }
+
+        function renderHistory() {
+            var hist = [];
+            try { hist = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); } catch (e) {}
+            if (!hist.length) {
+                $history.innerHTML = '<div class="cert-history-empty">Inga certifikat skickade ännu.</div>';
+                return;
+            }
+            var html = '';
+            hist.forEach(function (h) {
+                var when = h.timestamp ? new Date(h.timestamp).toLocaleString('sv-SE') : '';
+                html += '<div class="cert-history-item">'
+                    + '<span><strong>' + esc(h.name) + '</strong> · ' + esc(h.amount) + ' kr · ' + esc(h.lang) + '</span>'
+                    + '<span style="color:#84998b">' + esc(when) + '</span>'
+                    + '</div>';
+            });
+            $history.innerHTML = html;
+        }
+
+        // ── Send ───────────────────────────────────────────────────
+        window.handleSendCertificate = function () {
+            clearFeedback();
+            var name = $name.value.trim();
+            var email = $email.value.trim();
+            var amount = parseFloat($amount.value);
+
+            if (!name || !email || isNaN(amount) || amount <= 0) {
+                feedback('Fyll i namn, e-post och belopp.', 'error');
+                return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+                feedback('Ogiltig e-postadress.', 'error');
+                return;
+            }
+
+            var pw = sessionStorage.getItem(PASSWORD_KEY) || '';
+            if (!pw) {
+                feedback('Ingen lösenordsnyckel — logga in på nytt i /admin/.', 'error');
+                return;
+            }
+
+            var origHTML = $sendBtn.innerHTML;
+            $sendBtn.disabled = true;
+            $sendBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Skickar...';
+
+            var params = new URLSearchParams();
+            params.append('action', 'send-certificate');
+            params.append('name', name);
+            params.append('email', email);
+            params.append('amount', String(amount));
+            params.append('lang', state.lang);
+            params.append('password', pw);
+
+            fetch(GAS_URL, { method: 'POST', body: params })
+                .then(function (r) { return r.json(); })
+                .then(function (result) {
+                    $sendBtn.disabled = false;
+                    $sendBtn.innerHTML = origHTML;
+                    if (result.success) {
+                        feedback('Certifikatet har skickats till ' + esc(email) + '!'
+                            + (result.driveWarning ? '<br><small>Observera: e-post skickad men Drive-sparning misslyckades.</small>' : ''), 'success');
+                        saveHistory({
+                            name: name, email: email, amount: String(amount), lang: state.lang, timestamp: Date.now()
+                        });
+                        $name.value = '';
+                        $email.value = '';
+                        $amount.value = '';
+                        renderPreview();
+                        renderSqm();
+                    } else {
+                        feedback(esc(result.error || 'Okänt fel. Försök igen.'), 'error');
+                    }
+                })
+                .catch(function (err) {
+                    $sendBtn.disabled = false;
+                    $sendBtn.innerHTML = origHTML;
+                    feedback('Anslutningsfel. Försök igen.', 'error');
+                    console.error(err);
+                });
+        };
+
+        // ── Wire up ────────────────────────────────────────────────
+        document.querySelectorAll('.cert-lang-chip').forEach(function (chip) {
+            chip.addEventListener('click', function () {
+                document.querySelectorAll('.cert-lang-chip').forEach(function (c) { c.classList.remove('selected'); });
+                chip.classList.add('selected');
+                state.lang = chip.getAttribute('data-lang');
+                renderPreview();
+                renderSqm();
+            });
+        });
+
+        $name.addEventListener('input', renderPreview);
+        $amount.addEventListener('input', function () { renderSqm(); renderPreview(); });
+
+        $certBgImg.addEventListener('load', renderPreview);
+        $certBgImg.addEventListener('error', renderPreview);
+        window.addEventListener('resize', renderPreview);
+
+        renderPreview();
+        renderSqm();
+        renderHistory();
+    })();
+    </script>
+
+    <!-- i18n module -->
+    <script type="module" src="/langugaes/js/i18n.js" defer></script>
+</body>
+
+</html>

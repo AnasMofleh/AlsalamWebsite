@@ -454,7 +454,8 @@
     "interval10": "10 sekunder",
     "interval15": "15 sekunder",
     "interval30": "30 sekunder",
-    "interval60": "1 minut"
+    "interval60": "1 minut",
+    "sponsors": "Visa sponsorer"
   },
   "waqf": {
     "title": "Al-Salam Waqf — Folkets Hus Helsingborg",
