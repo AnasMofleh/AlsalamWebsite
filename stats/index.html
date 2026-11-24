@@ -1084,6 +1084,14 @@
                         <span class="qr-slider"></span>
                     </label>
                 </div>
+                <div class="dropdown-divider"></div>
+                <div class="tv-menu-row">
+                    <span class="tv-menu-label" data-i18n="tvPage.sponsors">Visa sponsorer</span>
+                    <label class="theme-switch">
+                        <input id="tvSponsorsToggle" type="checkbox" aria-label="Visa sponsorer" checked>
+                        <span class="theme-slider"></span>
+                    </label>
+                </div>
                 <div id="tvSlidesMenuItems">
                 <div class="dropdown-divider"></div>
                 <div class="tv-menu-row">
@@ -1896,6 +1904,21 @@
                 tvMenuQrEl.checked = swishQrToggleEl.checked;
             });
 
+            // ── Sponsors visibility toggle ────────────────────────
+            var SPONSORS_KEY = "alsalam-tv-sponsors-enabled";
+            var tvSponsorsEl = document.getElementById("tvSponsorsToggle");
+            function applySponsorsVisibility() {
+                var enabled = localStorage.getItem(SPONSORS_KEY) !== "false"; // default: visible
+                if (tvSponsorsEl) tvSponsorsEl.checked = enabled;
+                var sponsorsWrap = document.querySelector(".stats-sponsors");
+                if (sponsorsWrap) sponsorsWrap.style.display = enabled ? "" : "none";
+            }
+            tvSponsorsEl.addEventListener("change", function () {
+                localStorage.setItem(SPONSORS_KEY, String(tvSponsorsEl.checked));
+                applySponsorsVisibility();
+            });
+            applySponsorsVisibility();
+
             // ── Font size steppers (total + side panel) ───────────
             var TOTAL_KEY = "alsalam-total-scale";
             var SIDE_KEY = "alsalam-side-scale";
@@ -2091,7 +2114,7 @@
             });
         });
 
-        initStatsSponsors();
+        if (localStorage.getItem("alsalam-tv-sponsors-enabled") !== "false") initStatsSponsors();
         initResizableLayout();
         refreshStats();
         setInterval(refreshStats, POLL_INTERVAL_MS);
