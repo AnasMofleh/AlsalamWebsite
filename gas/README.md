@@ -18,9 +18,9 @@ files changed**. It uploads the code with `clasp push`, then publishes a new ver
 | `bonetider` | Bönetider (Prayer Times) Proxy | `bonetider/api/bonetider.gs` |
 | `tv-slides` | TV Slides API | `stats/api/slides.gs` |
 | `membership-sheet` | Membership donator checker | `membership-check/api/membership-sheet.gs` |
-| `swish-reader` | Swish app reader | `stats/api/Code.gs`, `stats/api/get.gs` |
-| `stripe-donations` | Stripe Donations | `donations/api/` (pulled from Google) |
-| `stripe-fetch` | Alsalam stripe fetch | `stats/api/stripe/` (pulled from Google) |
+| `swish-reader` | Swish app reader | `stats/api/Code.gs`, `stats/api/get.gs`, `stats/api/testDoPost.gs` |
+| `stripe-donations` | Stripe Donations | `donations/api/Code.gs`, `donations/api/test.gs` |
+| `stripe-fetch` | Alsalam stripe fetch | `stats/api/stripe/Code.gs` |
 
 ## One-time setup (about 15 minutes, on your PC)
 

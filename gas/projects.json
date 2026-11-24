@@ -7,7 +7,9 @@
       "scriptId": "1xYOivxeuUbTPkvDLdxTV7iA9GBV2IExhe3rzA5MnzzSK_P6xcvrmqWee",
       "deploymentId": "AKfycbwjSkxeJNx8akQSNlnkEuOm-Rd8j2KbhFJsnfjb2AQ1USq3EhlHkAJ4ASXix-qdouom",
       "dir": "admin/api",
-      "files": ["Code.gs"]
+      "files": [
+        "Code.gs"
+      ]
     },
     {
       "key": "school-admin",
@@ -15,7 +17,9 @@
       "scriptId": "1liHSs5UlvBnD2GjuLFHdwMc62Yy8hwqnm0rCyEg-KbVv8ixWzCuOBzaE",
       "deploymentId": "AKfycbwJJPkcuyKhTOVQ0RMGcPVcI3IeVFmpWjYoLYryUajgguonZ6SVLCcJr2MH_OXOKEcWFw",
       "dir": "school-admin/api",
-      "files": ["Code.gs"]
+      "files": [
+        "Code.gs"
+      ]
     },
     {
       "key": "marriage",
@@ -23,7 +27,9 @@
       "scriptId": "1aTrE6Jp_WFwNOzJB_dCSC0oTeQsMwDTsilthnN-5IWc7fyZxlkQfSIo_",
       "deploymentId": "AKfycbyBdihaThtMfp_qYi16SRr9gP9fd9X9a7yO-PNZLCxMVfukwN9Wja2AN_tPT1HuIqBP",
       "dir": "marriage/api",
-      "files": ["Code.gs"]
+      "files": [
+        "Code.gs"
+      ]
     },
     {
       "key": "school",
@@ -31,7 +37,9 @@
       "scriptId": "1YaevJqPK5SKqRHm0yU6TBfPwRUXZ7iCYvBmCYDDxjRpaHayu3P1N_n24",
       "deploymentId": "AKfycbxIWhMCHmcxbtHl1WLU3XFqaslc_Fxn_sRSUuLrN4x7-Up84vx_cIujORbRCupbSxmbcg",
       "dir": "school/api",
-      "files": ["main.gs"]
+      "files": [
+        "main.gs"
+      ]
     },
     {
       "key": "fifs-proxy",
@@ -39,7 +47,9 @@
       "scriptId": "1UjiA6h8ykrO4MxtYBvUWYghza3uHiA0L2YOGeoCkcVwe-c3ybwnCgdWJ",
       "deploymentId": "AKfycbxZ08tC4z_P815a44QCUYxZTAvRnYay3W6k3XENWH5-X0T07l4fFiqdJJS1zrd0uOv64g",
       "dir": "membership-check/api",
-      "files": ["membership-proxy.gs"]
+      "files": [
+        "membership-proxy.gs"
+      ]
     },
     {
       "key": "bonetider",
@@ -47,7 +57,9 @@
       "scriptId": "1AQwu8VmngYHJ_V-hPc8AMWYbLJkyaufuCun-KvoFvd3AFcYrCUXY6_HU",
       "deploymentId": "AKfycbyLHYT0Nx-HdWIeJy3bTNDcb83re93shgzgyd6NN7c93ZzaRnmeXumS2Knhub4B_YVT3g",
       "dir": "bonetider/api",
-      "files": ["bonetider.gs"]
+      "files": [
+        "bonetider.gs"
+      ]
     },
     {
       "key": "tv-slides",
@@ -55,7 +67,9 @@
       "scriptId": "1TxSE1XE2vX7KwUNKcHjF7-iTCUD-hYk_SMUQaJOf5zBlPDkDwB-jFpSy",
       "deploymentId": "AKfycby8B94nAOsDYBXqlpOp4UYqIDl3YlyQQZBfkxfGb91gwzHokIT0AtECQ7CC3qratjQx",
       "dir": "stats/api",
-      "files": ["slides.gs"]
+      "files": [
+        "slides.gs"
+      ]
     },
     {
       "key": "membership-sheet",
@@ -63,7 +77,9 @@
       "scriptId": "11DPVqvlRPjM3Vyr5Mh-kevlXyyoOr1XYgyix_viSRmmneRjHbODlsPQv",
       "deploymentId": "AKfycbzRlibFil1ukVgnxlWCALnEuY28K2JwxDncftIy7CetjwHwkoee3xj7xsbKnRTI1y9s",
       "dir": "membership-check/api",
-      "files": ["membership-sheet.gs"]
+      "files": [
+        "membership-sheet.gs"
+      ]
     },
     {
       "key": "swish-reader",
@@ -71,7 +87,11 @@
       "scriptId": "1T4AxS_9eCCo7gb7X-3Rngzoct-VB3nUm7o-F2M3sXUoQy39-9IwFUEUv",
       "deploymentId": "AKfycbxLXBaGS2rdrrvtFAxMGCAeK2elGSfbvRmjtxBhjbORf9gdHBHduzOXIzP2FCI501cMWA",
       "dir": "stats/api",
-      "files": ["Code.gs", "get.gs"]
+      "files": [
+        "Code.gs",
+        "get.gs",
+        "testDoPost.gs"
+      ]
     },
     {
       "key": "stripe-donations",
