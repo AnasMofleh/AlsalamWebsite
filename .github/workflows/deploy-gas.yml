@@ -1,0 +1,72 @@
+name: Deploy Apps Script
+
+# Redeploys the Google Apps Script backends whose files changed when code
+# is merged to main. See gas/README.md for the one-time setup.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**/api/**'
+      - 'gas/**'
+  workflow_dispatch:
+    inputs:
+      projects:
+        description: 'Projects to deploy: "all" or comma-separated keys from gas/projects.json (e.g. admin,school-admin)'
+        required: true
+        default: 'all'
+      dry_run:
+        description: 'Only show what would be deployed'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-gas
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install clasp
+        run: npm install -g @google/clasp@2.4.2
+
+      - name: Write clasp credentials
+        env:
+          CLASPRC_JSON: ${{ secrets.CLASPRC_JSON }}
+        run: |
+          if [ -z "$CLASPRC_JSON" ]; then
+            echo "::error::Secret CLASPRC_JSON is missing — see gas/README.md"
+            exit 1
+          fi
+          printf '%s' "$CLASPRC_JSON" > "$HOME/.clasprc.json"
+          chmod 600 "$HOME/.clasprc.json"
+
+      - name: Deploy changed projects
+        if: github.event_name == 'push'
+        run: node gas/deploy.mjs --since "${{ github.event.before }}" --until "${{ github.sha }}"
+
+      - name: Deploy selected projects
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          PROJECTS: ${{ inputs.projects }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          ARGS=""
+          if [ "$PROJECTS" = "all" ]; then ARGS="--all"; else ARGS="--only $PROJECTS"; fi
+          if [ "$DRY_RUN" = "true" ]; then ARGS="$ARGS --dry-run"; fi
+          node gas/deploy.mjs $ARGS
+
+      - name: Remove credentials
+        if: always()
+        run: rm -f "$HOME/.clasprc.json"

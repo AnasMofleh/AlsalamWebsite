@@ -1,1 +1,4 @@
 .idea
+# Apps Script deploy (gas/README.md): never commit clasp credentials
+.clasprc.json
+.clasp.json
