@@ -1916,6 +1916,8 @@
             tvSponsorsEl.addEventListener("change", function () {
                 localStorage.setItem(SPONSORS_KEY, String(tvSponsorsEl.checked));
                 applySponsorsVisibility();
+                // Sponsors are not loaded while hidden — load them when switched back on
+                if (tvSponsorsEl.checked) initStatsSponsors();
             });
             applySponsorsVisibility();
 
